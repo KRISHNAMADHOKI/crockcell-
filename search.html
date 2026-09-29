@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Search - CROCKCELL</title><style>
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f4f4f7;
+    padding-bottom: 80px;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    text-align: center;
+    color: #4f46e5;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px 15px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-button {
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #4f46e5;
+    color: white;
+    font-weight: bold;
+}
+
+.result {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.bio {
+    color: #777;
+    margin-top: 5px;
+}
+
+.follow-button {
+    margin-top: 12px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #4f46e5;
+    color: white;
+    font-weight: bold;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    margin-top: 40px;
+}
+
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 13px 5px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+}
+
+nav a {
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    text-align: center;
+}
+
+</style></head><body><header>
+CROCKCELL
+</header><div class="container"><h2>Search 🔍</h2><div class="search-box"><input
+type="text"
+id="searchInput"
+placeholder="Search username..."
+
+«»
+
+<button
+class="search-button"
+onclick="searchUser()">
+Search
+</button>
+
+</div><div id="result"></div></div><nav><a href="home.html">
+🏠<br>Home
+</a><a href="search.html">
+🔍<br>Search
+</a><a href="create.html">
+➕<br>Create
+<a href="activity.html">
+🔔<br>Activity
+</a><a href="profile.html">
+👤<br>Profile
+</a></nav><script>
+
+function searchUser() {
+
+    let searchInput =
+        document.getElementById("searchInput");
+
+    let result =
+        document.getElementById("result");
+
+    let search =
+        searchInput.value
+        .trim()
+        .toLowerCase();
+
+
+    if (search === "") {
+
+        result.innerHTML = `
+            <div class="empty">
+                Username likho 🔍
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let savedProfile =
+        localStorage.getItem("crockcellProfile");
+
+
+    if (!savedProfile) {
+
+        result.innerHTML = `
+            <div class="empty">
+                User nahi mila 😕
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let profile;
+
+    try {
+
+        profile =
+            JSON.parse(savedProfile);
+
+    } catch (error) {
+
+        result.innerHTML = `
+            <div class="empty">
+                Profile data me problem hai 😕
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let username =
+        (profile.username || "")
+        .trim()
+        .toLowerCase();
+
+
+    if (
+        username !== "" &&
+        username.includes(search)
+    ) {
+
+        let photo =
+            profile.photo || "";
+
+
+        let following =
+            localStorage.getItem(
+                "crockcellFollowing"
+            );
+
+
+        let buttonText =
+            following === "1"
+            ? "Following ✓"
+            : "Follow";
+
+
+        result.innerHTML = `
+
+            <div class="result">
+
+                <div class="user">
+
+                    <img
+                        src="${photo}"
+                        alt="Profile"
+                    >
+
+                    <div class="user-info">
+
+                        <div class="username">
+                            @${profile.username}
+                        </div>
+
+                        <div class="bio">
+                            ${profile.bio || ""}
+                        </div>
+
+                        <button
+                            id="followButton"
+                            class="follow-button"
+                            onclick="followUser()">
+                            ${buttonText}
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    } else {
+
+        result.innerHTML = `
+
+            <div class="empty">
+                User nahi mila 😕
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+function followUser() {
+
+    localStorage.setItem(
+        "crockcellFollowing",
+        "1"
+    );
+
+
+    let button =
+        document.getElementById(
+            "followButton"
+        );
+
+
+    if (button) {
+
+        button.innerText =
+            "Following ✓";
+
+    }
+
+}
+
+</script></body></html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Profile - CROCKCELL</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f4f4f7;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    text-align: center;
+    color: #4f46e5;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px 15px;
+}
+
+.box {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.photo-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    background: #4f46e5;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+#photo {
+    display: none;
+}
+
+#preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px;
+    background: #ddd;
+}
+
+.save-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+CROCKCELL
+</header>
+
+<div class="container">
+
+<div class="box">
+
+<h2>Edit Profile ✏️</h2>
+
+<img id="preview" alt="Profile Photo">
+
+<label>Profile Photo</label>
+
+<label for="photo" class="photo-button">
+📸 Choose Photo
+</label>
+
+<input
+    type="file"
+    id="photo"
+    accept="image/*"
+>
+
+<label>Username</label>
+
+<input
+    type="text"
+    id="username"
+    placeholder="Enter username"
+>
+
+<label>Bio</label>
+
+<textarea
+    id="bio"
+    placeholder="Write your bio..."
+></textarea>
+
+<button
+    type="button"
+    class="save-button"
+    onclick="saveProfile()">
+    Save Profile
+</button>
+
+<a href="profile.html" class="back">
+← Back to Profile
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* Load old profile */
+
+let savedProfile =
+    localStorage.getItem("crockcellProfile");
+
+let oldProfile = {};
+
+if (savedProfile) {
+
+    try {
+        oldProfile = JSON.parse(savedProfile);
+    } catch (error) {
+        oldProfile = {};
+    }
+
+}
+
+document.getElementById("username").value =
+    oldProfile.username || "";
+
+document.getElementById("bio").value =
+    oldProfile.bio || "";
+
+
+/* Show old photo */
+
+if (oldProfile.photo) {
+
+    document.getElementById("preview").src =
+        oldProfile.photo;
+
+}
+
+
+/* Select new photo */
+
+document.getElementById("photo").addEventListener(
+    "change",
+    function() {
+
+        let file = this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        let reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            document.getElementById("preview").src =
+                event.target.result;
+
+        };
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* Save Profile */
+
+function saveProfile() {
+
+    let username =
+        document.getElementById("username").value.trim();
+
+    let bio =
+        document.getElementById("bio").value.trim();
+
+    let file =
+        document.getElementById("photo").files[0];
+
+
+    if (username === "") {
+
+        alert("Username likho.");
+
+        return;
+
+    }
+
+
+    /* New photo */
+
+    if (file) {
+
+        let reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            let img = new Image();
+
+            img.onload = function() {
+
+                let canvas =
+                    document.createElement("canvas");
+
+                let maxSize = 500;
+
+                let width = img.width;
+                let height = img.height;
+
+
+                if (width > height) {
+
+                    if (width > maxSize) {
+
+                        height =
+                            height * maxSize / width;
+
+                        width = maxSize;
+
+                    }
+
+                } else {
+
+                    if (height > maxSize) {
+
+                        width =
+                            width * maxSize / height;
+
+                        height = maxSize;
+
+                    }
+
+                }
+
+
+                canvas.width = width;
+                canvas.height = height;
+
+
+                let ctx =
+                    canvas.getContext("2d");
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                let compressedPhoto =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.7
+                    );
+
+
+                let profile = {
+
+                    username: username,
+
+                    bio: bio,
+
+                    photo: compressedPhoto
+
+                };
+
+
+                localStorage.setItem(
+                    "crockcellProfile",
+                    JSON.stringify(profile)
+                );
+
+
+                alert("Profile save ho gayi! 🎉");
+
+
+                window.location.href =
+                    "profile.html";
+
+            };
+
+
+            img.src = event.target.result;
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+
+    /* Photo not changed */
+
+    else {
+
+        let profile = {
+
+            username: username,
+
+            bio: bio,
+
+            photo: oldProfile.photo || ""
+
+        };
+
+
+        localStorage.setItem(
+            "crockcellProfile",
+            JSON.stringify(profile)
+        );
+
+
+        alert("Profile save ho gayi! 🎉");
+
+
+        window.location.href =
+            "profile.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

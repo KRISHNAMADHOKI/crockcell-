@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Messages - CROCKCELL</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f4f7;
+    padding-bottom: 75px;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    text-align: center;
+    color: #4f46e5;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 15px 12px;
+}
+
+.title {
+    margin-bottom: 15px;
+}
+
+.chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-user {
+    background: white;
+    padding: 14px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.chat-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.last-message {
+    color: #777;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.empty {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 15px;
+    color: #777;
+}
+
+.chat-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f4f4f7;
+    z-index: 10;
+}
+
+.chat-header {
+    background: white;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+
+.back-button {
+    border: none;
+    background: none;
+    font-size: 25px;
+}
+
+.chat-title {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.messages {
+    height: calc(100vh - 130px);
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 10px 13px;
+    border-radius: 15px;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+
+.sent {
+    align-self: flex-end;
+    background: #4f46e5;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.received {
+    align-self: flex-start;
+    background: white;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+.message-time {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.message-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.message-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 22px;
+    padding: 11px 15px;
+    outline: none;
+}
+
+.send-button {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    border-radius: 22px;
+    padding: 10px 17px;
+    font-weight: bold;
+}
+
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 13px 5px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    z-index: 5;
+}
+
+nav a {
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    text-align: center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+CROCKCELL
+</header>
+
+<div class="container">
+
+    <h3 class="title">
+        💬 Messages
+    </h3>
+
+    <div
+        id="chatList"
+        class="chat-list">
+    </div>
+
+</div>
+
+
+<!-- CHAT SCREEN -->
+
+<div
+    id="chatScreen"
+    class="chat-screen">
+
+    <div class="chat-header">
+
+        <button
+            class="back-button"
+            onclick="closeChat()">
+
+            ←
+
+        </button>
+
+        <div
+            id="chatTitle"
+            class="chat-title">
+
+            Chat
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="messages"
+        class="messages">
+    </div>
+
+
+    <div class="message-box">
+
+        <input
+            id="messageInput"
+            class="message-input"
+            type="text"
+            placeholder="Message..."
+            onkeydown="handleEnter(event)"
+        >
+
+        <button
+            class="send-button"
+            onclick="sendMessage()">
+
+            Send
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<nav>
+
+<a href="home.html">
+🏠<br>Home
+</a>
+
+<a href="search.html">
+🔍<br>Search
+</a>
+
+<a href="create.html">
+➕<br>Create
+</a>
+
+<a href="activity.html">
+🔔<br>Activity
+</a>
+
+<a href="profile.html">
+👤<br>Profile
+</a>
+
+</nav>
+
+
+<script>
+
+let currentUser = null;
+
+
+/* GET PROFILE */
+
+function getProfile() {
+
+    let data =
+        localStorage.getItem(
+            "crockcellProfile"
+        );
+
+    if (!data) {
+
+        return {
+            username: "krishna",
+            photo: ""
+        };
+
+    }
+
+    try {
+
+        return JSON.parse(data);
+
+    } catch (error) {
+
+        return {
+            username: "krishna",
+            photo: ""
+        };
+
+    }
+
+}
+
+
+/* LOAD USERS */
+
+function loadUsers() {
+
+    const chatList =
+        document.getElementById(
+            "chatList"
+        );
+
+
+    let profile =
+        getProfile();
+
+
+    /*
+        Abhi local app hai,
+        isliye saved profile ko
+        chat list me show kar rahe hain.
+    */
+
+    let username =
+        profile.username || "krishna";
+
+
+    let photo =
+        profile.photo || "";
+
+
+    let avatarHTML =
+        photo
+        ? `<img src="${photo}" alt="Profile">`
+        : `<div class="avatar">
+               ${username.charAt(0).toUpperCase()}
+           </div>`;
+
+
+    let savedMessages =
+        getMessages(username);
+
+
+    let lastMessage =
+        "Start a conversation";
+
+
+    if (savedMessages.length > 0) {
+
+        lastMessage =
+            savedMessages[
+                savedMessages.length - 1
+            ].text;
+
+    }
+
+
+    chatList.innerHTML = `
+
+        <div
+            class="chat-user"
+            onclick="openChat('${username}')">
+
+            ${avatarHTML}
+
+            <div class="user-info">
+
+                <div class="username">
+                    @${username}
+                </div>
+
+                <div class="last-message">
+                    ${lastMessage}
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* GET MESSAGES */
+
+function getMessages(username) {
+
+    let key =
+        "crockcellMessages_" +
+        username;
+
+
+    let data =
+        localStorage.getItem(key);
+
+
+    if (!data) {
+        return [];
+    }
+
+
+    try {
+
+        let messages =
+            JSON.parse(data);
+
+        if (Array.isArray(messages)) {
+
+            return messages;
+
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Message error"
+        );
+
+    }
+
+
+    return [];
+
+}
+
+
+/* SAVE MESSAGES */
+
+function saveMessages(
+    username,
+    messages
+) {
+
+    localStorage.setItem(
+
+        "crockcellMessages_" +
+        username,
+
+        JSON.stringify(messages)
+
+    );
+
+}
+
+
+/* OPEN CHAT */
+
+function openChat(username) {
+
+    currentUser =
+        username;
+
+
+    document.getElementById(
+        "chatScreen"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "chatTitle"
+    ).innerText =
+        "@" + username;
+
+
+    loadMessages();
+
+
+    setTimeout(function() {
+
+        document.getElementById(
+            "messageInput"
+        ).focus();
+
+    }, 100);
+
+}
+
+
+/* CLOSE CHAT */
+
+function closeChat() {
+
+    document.getElementById(
+        "chatScreen"
+    ).style.display = "none";
+
+
+    currentUser =
+        null;
+
+
+    loadUsers();
+
+}
+
+
+/* SHOW MESSAGES */
+
+function loadMessages() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    let messageContainer =
+        document.getElementById(
+            "messages"
+        );
+
+
+    let messages =
+        getMessages(currentUser);
+
+
+    if (messages.length === 0) {
+
+        messageContainer.innerHTML = `
+
+            <div
+                style="
+                text-align:center;
+                color:#888;
+                margin-top:30px;
+                ">
+
+                👋<br><br>
+
+                Start chatting with
+                @${currentUser}
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    messages.forEach(function(message) {
+
+        let messageClass =
+            message.sender === "me"
+            ? "sent"
+            : "received";
+
+
+        html += `
+
+            <div class="message ${messageClass}">
+
+                ${message.text}
+
+                <div class="message-time">
+
+                    ${message.time}
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    messageContainer.innerHTML =
+        html;
+
+
+    messageContainer.scrollTop =
+        messageContainer.scrollHeight;
+
+}
+
+
+/* SEND MESSAGE */
+
+function sendMessage() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    let input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    let text =
+        input.value.trim();
+
+
+    if (text === "") {
+        return;
+    }
+
+
+    let messages =
+        getMessages(currentUser);
+
+
+    let now =
+        new Date();
+
+
+    let time =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    messages.push({
+
+        sender:
+            "me",
+
+        text:
+            text,
+
+        time:
+            time
+
+    });
+
+
+    saveMessages(
+        currentUser,
+        messages
+    );
+
+
+    input.value = "";
+
+
+    loadMessages();
+
+    loadUsers();
+
+}
+
+
+/* ENTER KEY */
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        sendMessage();
+
+    }
+
+}
+
+
+/* START */
+
+loadUsers();
+
+</script>
+
+</body>
+
+</html>
