@@ -2,230 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Profile - CROCKCELL</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
-margin:0;
-background:#000;
-color:#fff;
-font-family:Arial,sans-serif;
-padding-bottom:70px
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fafafa;
+  color:#111;
 }
 
-.header{
-height:64px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 16px;
-border-bottom:1px solid #222
-}
-
-.leftHead{
-display:flex;
-align-items:center;
-gap:14px
-}
-
-.back{
-font-size:28px;
-cursor:pointer
+header{
+  height:60px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
 .logo{
-font-size:20px;
-font-weight:bold
+  font-size:22px;
+  font-weight:bold;
 }
 
-.settings{
-font-size:22px;
-cursor:pointer
+.headbtn{
+  border:0;
+  background:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.wrap{
+  max-width:700px;
+  margin:auto;
+  padding:20px 15px 80px;
 }
 
 .profile{
-padding:20px 16px 12px
-}
-
-.top{
-display:flex;
-align-items:center
+  display:flex;
+  gap:20px;
+  align-items:center;
+  padding:10px 0 25px;
 }
 
 .photo{
-width:88px;
-height:88px;
-border-radius:50%;
-object-fit:cover;
-background:#222;
-margin-right:20px
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+  border:1px solid #ddd;
 }
 
 .details{
-flex:1;
-min-width:0
+  flex:1;
 }
 
 .name{
-font-size:20px;
-font-weight:bold;
-margin-bottom:5px
+  font-size:21px;
+  font-weight:bold;
 }
 
 .username{
-font-size:14px;
-color:#999;
-margin-bottom:8px
+  color:#777;
+  margin-top:4px;
 }
 
 .bio{
-font-size:14px;
-line-height:1.4;
-white-space:pre-wrap
+  margin-top:8px;
+  font-size:14px;
 }
 
 .stats{
-display:flex;
-justify-content:space-around;
-margin-top:22px;
-text-align:center
+  display:flex;
+  gap:28px;
+  margin-top:14px;
 }
 
-.statNumber{
-font-size:18px;
-font-weight:bold
+.stat{
+  text-align:center;
 }
 
-.statText{
-font-size:12px;
-color:#999;
-margin-top:4px
+.stat b{
+  display:block;
+  font-size:18px;
+}
+
+.stat span{
+  color:#777;
+  font-size:12px;
 }
 
 .actions{
-margin-top:18px
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
 }
 
-.editBtn,
-.followBtn{
-width:100%;
-height:42px;
-border:0;
-border-radius:10px;
-font-weight:bold;
-font-size:15px;
-cursor:pointer;
-background:#fff;
-color:#000
+.action{
+  flex:1;
+  padding:10px;
+  border:0;
+  border-radius:8px;
+  background:#111;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.following{
-background:#292929;
-color:#fff
-}
-
-.tabs{
-height:52px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-top:1px solid #222;
-border-bottom:1px solid #222;
-margin-top:10px
-}
-
-.tab{
-font-size:22px
+.edit{
+  background:#eee;
+  color:#111;
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:2px;
-padding-top:2px
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:3px;
 }
 
 .post{
-width:100%;
-aspect-ratio:1/1;
-background:#151515;
-overflow:hidden;
-cursor:pointer
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  background:#ddd;
+  cursor:pointer;
 }
 
-.post img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block
-}
-
-.noPosts,
-.loading,
-.error{
-text-align:center;
-color:#888;
-padding:45px 15px
+.empty{
+  text-align:center;
+  color:#777;
+  padding:40px 10px;
 }
 
 .bottom{
-position:fixed;
-left:0;
-right:0;
-bottom:0;
-height:60px;
-background:#000;
-border-top:1px solid #222;
-display:flex;
-justify-content:space-around;
-align-items:center;
-z-index:10
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:white;
+  border-top:1px solid #ddd;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
 }
 
 .bottom a{
-color:#aaa;
-text-decoration:none;
-font-size:23px
-}
-
-.bottom a.active{
-color:#fff
+  text-decoration:none;
+  color:#111;
+  font-size:13px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
+<header>
+  <button class="headbtn" id="back">‹</button>
+  <div class="logo">CROCKCELL</div>
+  <button class="headbtn" id="settings">⚙</button>
+</header>
 
-<div class="leftHead">
-<div class="back" onclick="history.back()">‹</div>
-<div class="logo">CROCKCELL</div>
-</div>
+<div class="wrap">
 
-<div class="settings" id="settingsBtn">⚙</div>
+  <div id="profileBox">
+    Loading...
+  </div>
 
-</div>
+  <div class="actions" id="actions"></div>
 
-<div id="page">
-
-<div class="loading">
-Loading profile...
-</div>
+  <div id="postsBox">
+    <div class="empty">Loading posts...</div>
+  </div>
 
 </div>
 
 <div class="bottom">
-
-<a href="home.html">⌂</a>
-<a href="search.html">⌕</a>
-<a href="create.html">＋</a>
-<a href="activity.html">♡</a>
-<a href="profile.html" class="active">◉</a>
-
+  <a href="home.html">Home</a>
+  <a href="search.html">Search</a>
+  <a href="create.html">Create</a>
+  <a href="reels.html">Reels</a>
+  <a href="profile.html">Profile</a>
 </div>
 
 <script>
@@ -233,633 +200,678 @@ Loading profile...
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 const PROJECT_ID="crockcell-cd2e6";
 
-const BASE=
+let token=localStorage.getItem("crockcellIdToken");
+let refreshToken=localStorage.getItem("crockcellRefreshToken");
+const myUid=localStorage.getItem("crockcellUid");
+
+const base=
 `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-let token=localStorage.getItem("crockcellIdToken");
-let myUid=localStorage.getItem("crockcellUid");
-let refreshToken=localStorage.getItem("crockcellRefreshToken");
+const params=new URLSearchParams(location.search);
 
-const page=document.getElementById("page");
+let requestedUid=params.get("uid");
 
-if(!token || !myUid){
-location.href="index.html";
+if(!requestedUid){
+  requestedUid=myUid;
 }
 
-function esc(v){
-return String(v||"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+let currentUser=null;
+
+function esc(x){
+  return String(x||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-function value(field){
+function value(v){
+  if(!v)return "";
 
-if(!field)return"";
-
-if(field.stringValue!==undefined)
-return field.stringValue;
-
-if(field.integerValue!==undefined)
-return field.integerValue;
-
-return"";
+  return v.stringValue ||
+         v.integerValue ||
+         v.doubleValue ||
+         v.booleanValue ||
+         "";
 }
 
-async function refresh(){
+async function refreshTokenNow(){
 
-if(!refreshToken)return false;
+  if(!refreshToken)return false;
 
-try{
+  try{
 
-const r=await fetch(
-`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/x-www-form-urlencoded"
-},
-body:
-"grant_type=refresh_token&refresh_token="+
-encodeURIComponent(refreshToken)
-}
-);
+    const r=await fetch(
+      "https://securetoken.googleapis.com/v1/token?key="+API_KEY,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":
+          "application/x-www-form-urlencoded"
+        },
+        body:
+        "grant_type=refresh_token&refresh_token="+
+        encodeURIComponent(refreshToken)
+      }
+    );
 
-const d=await r.json();
+    const d=await r.json();
 
-if(!r.ok || !d.id_token)
-return false;
+    if(!r.ok || !d.id_token){
+      return false;
+    }
 
-token=d.id_token;
+    token=d.id_token;
 
-if(d.refresh_token)
-refreshToken=d.refresh_token;
+    refreshToken=
+      d.refresh_token || refreshToken;
 
-localStorage.setItem(
-"crockcellIdToken",
-token
-);
+    localStorage.setItem(
+      "crockcellIdToken",
+      token
+    );
 
-localStorage.setItem(
-"crockcellRefreshToken",
-refreshToken
-);
+    localStorage.setItem(
+      "crockcellRefreshToken",
+      refreshToken
+    );
 
-return true;
+    return true;
 
-}catch(e){
-return false;
-}
-}
+  }catch(e){
 
-async function firebase(path,options={}){
-
-options.headers=Object.assign(
-{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+token
-},
-options.headers||{}
-);
-
-let r=await fetch(BASE+path,options);
-
-if((r.status===401 || r.status===403)
-&& refreshToken){
-
-const ok=await refresh();
-
-if(ok){
-
-options.headers.Authorization=
-"Bearer "+token;
-
-r=await fetch(BASE+path,options);
-
-}
+    return false;
+  }
 }
 
-const text=await r.text();
 
-let data=null;
+/* USER BY UID */
 
-try{
-data=text?JSON.parse(text):null
-}catch(e){}
+async function getUserByUid(uid){
 
-if(!r.ok){
+  const query={
+    structuredQuery:{
+      from:[
+        {collectionId:"users"}
+      ],
+      where:{
+        fieldFilter:{
+          field:{
+            fieldPath:"uid"
+          },
+          op:"EQUAL",
+          value:{
+            stringValue:uid
+          }
+        }
+      },
+      limit:1
+    }
+  };
 
-throw new Error(
-data?.error?.message ||
-("Firebase error "+r.status)
-);
+  let r=await fetch(
+    base+":runQuery",
+    {
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(query)
+    }
+  );
 
+  if(r.status===401 || r.status===403){
+
+    if(await refreshTokenNow()){
+
+      return getUserByUid(uid);
+
+    }
+  }
+
+  const data=await r.json();
+
+  if(!r.ok){
+    throw new Error(
+      data.error?.message ||
+      "User search failed"
+    );
+  }
+
+  const doc=data.find(x=>x.document)?.document;
+
+  if(!doc)return null;
+
+  const f=doc.fields || {};
+
+  return {
+
+    docId:doc.name.split("/").pop(),
+
+    uid:value(f.uid) || uid,
+
+    name:value(f.name) || "User",
+
+    username:value(f.username) || "",
+
+    bio:value(f.bio) || "",
+
+    photoURL:value(f.photoURL) || "",
+
+    email:value(f.email) || ""
+
+  };
 }
 
-return data;
+
+/* FALLBACK: DOCUMENT ID */
+
+async function getUserByDocId(uid){
+
+  const r=await fetch(
+    `${base}/users/${encodeURIComponent(uid)}`,
+    {
+      headers:{
+        "Authorization":"Bearer "+token
+      }
+    }
+  );
+
+  if(r.status===401 || r.status===403){
+
+    if(await refreshTokenNow()){
+
+      return getUserByDocId(uid);
+
+    }
+  }
+
+  if(!r.ok){
+    return null;
+  }
+
+  const doc=await r.json();
+
+  const f=doc.fields || {};
+
+  return {
+
+    docId:doc.name.split("/").pop(),
+
+    uid:value(f.uid) || uid,
+
+    name:value(f.name) || "User",
+
+    username:value(f.username) || "",
+
+    bio:value(f.bio) || "",
+
+    photoURL:value(f.photoURL) || "",
+
+    email:value(f.email) || ""
+
+  };
 }
 
-function makeUser(doc){
 
-const f=doc.fields||{};
+/* GET USER */
 
-return{
-id:doc.name.split("/").pop(),
-uid:value(f.uid) || doc.name.split("/").pop(),
-name:value(f.name),
-username:value(f.username),
-bio:value(f.bio),
-photoURL:value(f.photoURL),
-email:value(f.email)
-};
+async function getUser(uid){
 
+  let user=await getUserByUid(uid);
+
+  if(user)return user;
+
+  user=await getUserByDocId(uid);
+
+  return user;
 }
 
-/*
- URL se jis user ko open karna hai
- uska ID mil raha hai.
-*/
 
-const params=new URLSearchParams(
-location.search
-);
+/* POSTS */
 
-let requestedId=params.get("uid");
+async function getPosts(uid){
 
-/*
- Agar direct profile.html khola gaya hai
- to apni profile open hogi.
-*/
+  const query={
+    structuredQuery:{
+      from:[
+        {collectionId:"posts"}
+      ],
+      where:{
+        fieldFilter:{
+          field:{
+            fieldPath:"userId"
+          },
+          op:"EQUAL",
+          value:{
+            stringValue:uid
+          }
+        }
+      },
+      limit:100
+    }
+  };
 
-if(!requestedId){
-requestedId=myUid;
+  let r=await fetch(
+    base+":runQuery",
+    {
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(query)
+    }
+  );
+
+  if(r.status===401 || r.status===403){
+
+    if(await refreshTokenNow()){
+
+      return getPosts(uid);
+
+    }
+  }
+
+  const data=await r.json();
+
+  if(!r.ok){
+    throw new Error(
+      data.error?.message ||
+      "Posts failed"
+    );
+  }
+
+  return data
+    .filter(x=>x.document)
+    .map(x=>x.document);
 }
 
-let profileUser=null;
 
-async function getUser(){
+/* FOLLOW CHECK */
 
-/*
- Pehle document ID se try
-*/
+async function checkFollow(uid){
 
-try{
+  if(uid===myUid)return false;
 
-const doc=await firebase(
-"/users/"+encodeURIComponent(requestedId),
-{
-method:"GET"
-}
-);
+  const id=myUid+"_"+uid;
 
-if(doc){
-profileUser=makeUser(doc);
-return profileUser;
-}
+  const r=await fetch(
+    `${base}/follows/${encodeURIComponent(id)}`,
+    {
+      headers:{
+        "Authorization":"Bearer "+token
+      }
+    }
+  );
 
-}catch(e){}
+  if(r.status===404)return false;
 
-/*
- Agar document ID UID nahi hai,
- to uid field se search karenge.
-*/
+  if(r.status===401 || r.status===403){
 
-try{
+    if(await refreshTokenNow()){
 
-const query={
-structuredQuery:{
-from:[
-{collectionId:"users"}
-],
-where:{
-fieldFilter:{
-field:{
-fieldPath:"uid"
-},
-op:"EQUAL",
-value:{
-stringValue:requestedId
-}
-}
-},
-limit:1
-}
-};
+      return checkFollow(uid);
 
-const data=await firebase(
-":runQuery",
-{
-method:"POST",
-body:JSON.stringify(query)
-}
-);
+    }
+  }
 
-const found=(data||[])
-.find(x=>x.document);
-
-if(found){
-profileUser=makeUser(found.document);
-return profileUser;
+  return r.ok;
 }
 
-}catch(e){}
 
-return null;
+/* FOLLOW */
+
+async function followUser(uid){
+
+  const id=myUid+"_"+uid;
+
+  const body={
+    fields:{
+      followerId:{
+        stringValue:myUid
+      },
+      followingId:{
+        stringValue:uid
+      },
+      createdAt:{
+        timestampValue:
+        new Date().toISOString()
+      }
+    }
+  };
+
+  const r=await fetch(
+    `${base}/follows/${encodeURIComponent(id)}`,
+    {
+      method:"PATCH",
+      headers:{
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(body)
+    }
+  );
+
+  if(r.status===401 || r.status===403){
+
+    if(await refreshTokenNow()){
+
+      return followUser(uid);
+
+    }
+  }
+
+  return r.ok;
 }
 
-async function getPosts(userId){
 
-const query={
-structuredQuery:{
-from:[
-{collectionId:"posts"}
-],
-where:{
-fieldFilter:{
-field:{
-fieldPath:"userId"
-},
-op:"EQUAL",
-value:{
-stringValue:userId
-}
-}
-},
-orderBy:[
-{
-field:{
-fieldPath:"createdAt"
-},
-direction:"DESCENDING"
-}
-],
-limit:100
-}
-};
+/* UNFOLLOW */
 
-try{
+async function unfollowUser(uid){
 
-const data=await firebase(
-":runQuery",
-{
-method:"POST",
-body:JSON.stringify(query)
-}
-);
+  const id=myUid+"_"+uid;
 
-return(data||[])
-.filter(x=>x.document)
-.map(x=>x.document);
+  const r=await fetch(
+    `${base}/follows/${encodeURIComponent(id)}`,
+    {
+      method:"DELETE",
+      headers:{
+        "Authorization":"Bearer "+token
+      }
+    }
+  );
 
-}catch(e){
+  if(r.status===401 || r.status===403){
 
-console.log("Posts error:",e);
-return[];
+    if(await refreshTokenNow()){
 
-}
+      return unfollowUser(uid);
+
+    }
+  }
+
+  return r.ok;
 }
 
-function postData(doc){
 
-const f=doc.fields||{};
+/* SHOW PROFILE */
 
-return{
-id:doc.name.split("/").pop(),
-image:value(f.image),
-caption:value(f.caption),
-createdAt:value(f.createdAt)
-};
+function showProfile(user){
 
+  currentUser=user;
+
+  const photo=
+    user.photoURL ||
+    "https://via.placeholder.com/150?text=C";
+
+  const own=user.uid===myUid;
+
+  document.getElementById("profileBox").innerHTML=`
+
+    <div class="profile">
+
+      <img
+        class="photo"
+        src="${esc(photo)}"
+        alt=""
+      >
+
+      <div class="details">
+
+        <div class="name">
+          ${esc(user.name)}
+        </div>
+
+        <div class="username">
+          @${esc(user.username)}
+        </div>
+
+        ${
+          user.bio
+          ? `<div class="bio">${esc(user.bio)}</div>`
+          : ""
+        }
+
+        <div class="stats">
+
+          <div class="stat">
+            <b id="postCount">0</b>
+            <span>Posts</span>
+          </div>
+
+          <div class="stat">
+            <b>0</b>
+            <span>Followers</span>
+          </div>
+
+          <div class="stat">
+            <b>0</b>
+            <span>Following</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  if(own){
+
+    document.getElementById("actions").innerHTML=`
+      <button
+        class="action edit"
+        id="editBtn">
+        Edit Profile
+      </button>
+    `;
+
+    document.getElementById("editBtn")
+      .onclick=()=>{
+        location.href="edit-profile.html";
+      };
+
+  }else{
+
+    document.getElementById("actions").innerHTML=`
+      <button
+        class="action"
+        id="followBtn">
+        Loading...
+      </button>
+    `;
+
+    const followBtn=
+      document.getElementById("followBtn");
+
+    checkFollow(user.uid).then(isFollowing=>{
+
+      followBtn.textContent=
+        isFollowing ? "Following" : "Follow";
+
+      followBtn.className=
+        isFollowing
+        ? "action edit"
+        : "action";
+
+      followBtn.onclick=async()=>{
+
+        followBtn.disabled=true;
+
+        if(isFollowing){
+
+          await unfollowUser(user.uid);
+
+        }else{
+
+          await followUser(user.uid);
+
+        }
+
+        location.reload();
+
+      };
+
+    });
+
+  }
 }
 
-function renderProfile(user,posts){
 
-const isMe=
-(user.uid===myUid || user.id===myUid);
+/* SHOW POSTS */
 
-const photo=
-user.photoURL ||
-"https://via.placeholder.com/200";
+function showPosts(posts){
 
-const name=
-user.name ||
-user.username ||
-"User";
+  const box=document.getElementById("postsBox");
 
-const username=
-user.username || "";
+  document.getElementById("postCount").textContent=
+    posts.length;
 
-page.innerHTML=`
+  if(!posts.length){
 
-<div class="profile">
+    box.innerHTML=
+      `<div class="empty">No posts yet</div>`;
 
-<div class="top">
+    return;
+  }
 
-<img
-class="photo"
-src="${esc(photo)}"
-onerror="this.src='https://via.placeholder.com/200'"
->
+  const grid=document.createElement("div");
 
-<div class="details">
+  grid.className="grid";
 
-<div class="name">
-${esc(name)}
-</div>
+  posts.forEach(doc=>{
 
-<div class="username">
-${username?"@"+esc(username):""}
-</div>
+    const f=doc.fields || {};
 
-<div class="bio">
-${esc(user.bio||"")}
-</div>
+    const image=value(f.image);
 
-</div>
+    if(!image)return;
 
-</div>
+    const img=document.createElement("img");
 
-<div class="stats">
+    img.className="post";
 
-<div>
-<div class="statNumber">
-${posts.length}
-</div>
-<div class="statText">
-Posts
-</div>
-</div>
+    img.src=image;
 
-<div>
-<div class="statNumber">
-0
-</div>
-<div class="statText">
-Followers
-</div>
-</div>
+    img.alt="Post";
 
-<div>
-<div class="statNumber">
-0
-</div>
-<div class="statText">
-Following
-</div>
-</div>
+    img.onclick=()=>{
 
-</div>
+      localStorage.setItem(
+        "crockcellViewedPost",
+        doc.name.split("/").pop()
+      );
 
-<div class="actions">
+      alert(
+        "Post open system next step me add hoga."
+      );
 
-${
-isMe
-?
-`<button
-class="editBtn"
-id="editBtn"
->
-Edit profile
-</button>`
-:
-`<button
-class="followBtn"
-id="profileFollowBtn"
->
-Follow
-</button>`
+    };
+
+    grid.appendChild(img);
+
+  });
+
+  box.innerHTML="";
+
+  box.appendChild(grid);
 }
 
-</div>
 
-</div>
-
-<div class="tabs">
-<div class="tab">▦</div>
-</div>
-
-${
-posts.length
-?
-`<div class="grid">
-${posts.map(p=>{
-
-const post=postData(p);
-
-return`
-
-<div
-class="post"
-data-post="${esc(post.id)}"
->
-
-<img
-src="${esc(post.image)}"
-onerror="this.style.display='none'"
->
-
-</div>
-
-`;
-
-}).join("")}
-</div>`
-:
-`<div class="noPosts">
-No posts yet
-</div>`
-}
-
-`;
-
-if(isMe){
-
-document.getElementById("editBtn")
-.addEventListener("click",()=>{
-location.href="edit-profile.html";
-});
-
-}else{
-
-document.getElementById("profileFollowBtn")
-.addEventListener(
-"click",
-()=>toggleFollow(
-user.uid||user.id
-)
-);
-
-}
-
-document.querySelectorAll(".post")
-.forEach(post=>{
-
-post.addEventListener("click",()=>{
-
-/*
- Abhi post open karne ke liye
- post ID save kar rahe hain.
- Next step me isi se Like,
- Comment aur Share add karenge.
-*/
-
-localStorage.setItem(
-"crockcellViewedPost",
-post.dataset.post
-);
-
-alert(
-"Post open system next step me add hoga."
-);
-
-});
-
-});
-
-}
-
-async function toggleFollow(target){
-
-const followId=
-myUid+"_"+target;
-
-const button=
-document.getElementById(
-"profileFollowBtn"
-);
-
-try{
-
-let exists=true;
-
-try{
-
-await firebase(
-"/follows/"+followId,
-{method:"GET"}
-);
-
-}catch(e){
-
-exists=false;
-
-}
-
-if(exists){
-
-await firebase(
-"/follows/"+followId,
-{method:"DELETE"}
-);
-
-button.textContent="Follow";
-button.classList.remove("following");
-
-}else{
-
-await firebase(
-"/follows/"+followId,
-{
-method:"PATCH",
-body:JSON.stringify({
-fields:{
-followerId:{
-stringValue:myUid
-},
-followingId:{
-stringValue:target
-},
-createdAt:{
-timestampValue:
-new Date().toISOString()
-}
-}
-})
-}
-);
-
-button.textContent="Following";
-button.classList.add("following");
-
-}
-
-}catch(e){
-
-alert(
-"Follow update nahi ho paya."
-);
-
-}
-
-}
-
-document.getElementById(
-"settingsBtn"
-).addEventListener(
-"click",
-()=>{
-
-if(profileUser &&
-(profileUser.uid===myUid ||
- profileUser.id===myUid)){
-
-location.href="edit-profile.html";
-
-}else{
-
-alert(
-"Settings sirf apni profile par available hain."
-);
-
-}
-
-});
+/* START */
 
 async function start(){
 
-try{
+  if(!token || !myUid){
 
-const user=await getUser();
+    location.href="index.html";
 
-if(!user){
+    return;
+  }
 
-page.innerHTML=`
-<div class="error">
-Profile nahi mili.
-</div>
-`;
+  try{
 
-return;
+    if(refreshToken){
+
+      await refreshTokenNow();
+
+    }
+
+    const user=await getUser(requestedUid);
+
+    if(!user){
+
+      document.getElementById("profileBox").innerHTML=`
+        <div class="empty">
+          User profile nahi mili.
+        </div>
+      `;
+
+      document.getElementById("actions").innerHTML="";
+
+      return;
+    }
+
+    showProfile(user);
+
+    const posts=await getPosts(user.uid);
+
+    showPosts(posts);
+
+  }catch(e){
+
+    console.error(e);
+
+    document.getElementById("profileBox").innerHTML=`
+      <div class="empty">
+        Profile load nahi ho payi.<br><br>
+        ${esc(e.message)}
+      </div>
+    `;
+
+  }
 }
 
-const realUid=
-user.uid ||
-user.id;
 
-const posts=
-await getPosts(realUid);
+/* BACK */
 
-renderProfile(user,posts);
+document.getElementById("back").onclick=()=>{
 
-}catch(e){
+  if(history.length>1){
 
-console.log(e);
+    history.back();
 
-page.innerHTML=`
-<div class="error">
-Profile load nahi ho paayi.
-</div>
-`;
+  }else{
 
-}
+    location.href="home.html";
 
-}
+  }
+
+};
+
+
+/* SETTINGS */
+
+document.getElementById("settings").onclick=()=>{
+
+  if(currentUser && currentUser.uid===myUid){
+
+    location.href="edit-profile.html";
+
+  }else{
+
+    alert("Ye dusre user ki profile hai.");
+
+  }
+
+};
 
 start();
 
 </script>
 
 </body>
-  </html>
+</html>
