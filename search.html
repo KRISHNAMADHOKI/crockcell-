@@ -1,310 +1,672 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Search - CROCKCELL</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Search - CROCKCELL</title>
 
-* {
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+padding-bottom:75px
 }
 
-body {
-    margin: 0;
-    background: #f4f4f7;
-    padding-bottom: 80px;
+header{
+height:65px;
+border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+padding:0 20px;
+font-size:24px;
+font-weight:bold
 }
 
-header {
-    background: white;
-    padding: 18px;
-    text-align: center;
-    color: #4f46e5;
-    font-size: 25px;
-    font-weight: bold;
+main{
+max-width:650px;
+margin:auto;
+padding:20px
 }
 
-.container {
-    padding: 20px 15px;
+.searchBox{
+display:flex;
+gap:10px
 }
 
-.search-box {
-    display: flex;
-    gap: 10px;
+input{
+flex:1;
+background:#111;
+border:1px solid #333;
+color:#fff;
+border-radius:10px;
+padding:14px;
+font-size:16px;
+outline:none
 }
 
-#searchInput {
-    flex: 1;
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    font-size: 16px;
-    outline: none;
+.searchBtn{
+border:0;
+border-radius:10px;
+padding:0 18px;
+background:#fff;
+color:#000;
+font-weight:bold
 }
 
-.search-button {
-    padding: 14px 18px;
-    border: none;
-    border-radius: 12px;
-    background: #4f46e5;
-    color: white;
-    font-weight: bold;
+.results{
+margin-top:25px
 }
 
-.result {
-    margin-top: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 15px;
+.user{
+display:flex;
+align-items:center;
+gap:14px;
+padding:15px 5px;
+border-bottom:1px solid #222
 }
 
-.user {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.avatar{
+width:55px;
+height:55px;
+border-radius:50%;
+object-fit:cover;
+background:#222
 }
 
-.user-info {
-    flex: 1;
+.userInfo{
+flex:1;
+min-width:0
 }
 
-.user img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #ddd;
+.name{
+font-size:17px;
+font-weight:bold
 }
 
-.username {
-    font-weight: bold;
-    font-size: 17px;
+.username{
+color:#999;
+margin-top:4px
 }
 
-.bio {
-    color: #777;
-    margin-top: 5px;
+.follow{
+border:0;
+border-radius:8px;
+padding:9px 15px;
+background:#fff;
+color:#000;
+font-weight:bold
 }
 
-.follow-button {
-    margin-top: 12px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 10px;
-    background: #4f46e5;
-    color: white;
-    font-weight: bold;
+.following{
+background:#222;
+color:#fff;
+border:1px solid #444
 }
 
-.empty {
-    text-align: center;
-    color: #777;
-    margin-top: 40px;
+.msg{
+text-align:center;
+color:#777;
+padding:35px 10px
 }
 
-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    display: flex;
-    justify-content: space-around;
-    padding: 13px 5px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:65px;
+background:#000;
+border-top:1px solid #222;
+display:flex;
+justify-content:space-around;
+align-items:center
 }
 
-nav a {
-    text-decoration: none;
-    color: #555;
-    font-size: 13px;
-    text-align: center;
+nav a{
+color:#fff;
+text-decoration:none;
+font-size:25px
 }
+</style>
+</head>
 
-</style></head><body><header>
-CROCKCELL
-</header><div class="container"><h2>Search 🔍</h2><div class="search-box"><input
+<body>
+
+<header>Search</header>
+
+<main>
+
+<div class="searchBox">
+<input id="searchInput"
 type="text"
-id="searchInput"
-placeholder="Search username..."
+placeholder="Search username...">
 
-«»
-
-<button
-class="search-button"
-onclick="searchUser()">
+<button class="searchBtn"
+onclick="searchUsers()">
 Search
 </button>
+</div>
 
-</div><div id="result"></div></div><nav><a href="home.html">
-🏠<br>Home
-</a><a href="search.html">
-🔍<br>Search
-</a><a href="create.html">
-➕<br>Create
-<a href="activity.html">
-🔔<br>Activity
-</a><a href="profile.html">
-👤<br>Profile
-</a></nav><script>
+<div id="results" class="results"></div>
 
-function searchUser() {
+<div id="msg" class="msg">
+Search for a username
+</div>
 
-    let searchInput =
-        document.getElementById("searchInput");
+</main>
 
-    let result =
-        document.getElementById("result");
+<nav>
+<a href="home.html">⌂</a>
+<a href="search.html">⌕</a>
+<a href="create.html">＋</a>
+<a href="activity.html">♡</a>
+<a href="profile.html">◉</a>
+</nav>
 
-    let search =
-        searchInput.value
-        .trim()
-        .toLowerCase();
+<script>
 
+const API_KEY=
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-    if (search === "") {
+const PROJECT_ID=
+"crockcell-cd2e6";
 
-        result.innerHTML = `
-            <div class="empty">
-                Username likho 🔍
-            </div>
-        `;
+const BASE=
+"https://firestore.googleapis.com/v1/projects/"
++PROJECT_ID+
+"/databases/(default)/documents";
 
-        return;
-    }
+let token=
+localStorage.getItem("crockcellIdToken");
 
+let uid=
+localStorage.getItem("crockcellUid");
 
-    let savedProfile =
-        localStorage.getItem("crockcellProfile");
+let refreshToken=
+localStorage.getItem("crockcellRefreshToken");
 
 
-    if (!savedProfile) {
-
-        result.innerHTML = `
-            <div class="empty">
-                User nahi mila 😕
-            </div>
-        `;
-
-        return;
-    }
+function $(id){
+return document.getElementById(id);
+}
 
 
-    let profile;
+function defaultPhoto(){
 
-    try {
-
-        profile =
-            JSON.parse(savedProfile);
-
-    } catch (error) {
-
-        result.innerHTML = `
-            <div class="empty">
-                Profile data me problem hai 😕
-            </div>
-        `;
-
-        return;
-    }
-
-
-    let username =
-        (profile.username || "")
-        .trim()
-        .toLowerCase();
-
-
-    if (
-        username !== "" &&
-        username.includes(search)
-    ) {
-
-        let photo =
-            profile.photo || "";
-
-
-        let following =
-            localStorage.getItem(
-                "crockcellFollowing"
-            );
-
-
-        let buttonText =
-            following === "1"
-            ? "Following ✓"
-            : "Follow";
-
-
-        result.innerHTML = `
-
-            <div class="result">
-
-                <div class="user">
-
-                    <img
-                        src="${photo}"
-                        alt="Profile"
-                    >
-
-                    <div class="user-info">
-
-                        <div class="username">
-                            @${profile.username}
-                        </div>
-
-                        <div class="bio">
-                            ${profile.bio || ""}
-                        </div>
-
-                        <button
-                            id="followButton"
-                            class="follow-button"
-                            onclick="followUser()">
-                            ${buttonText}
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-    } else {
-
-        result.innerHTML = `
-
-            <div class="empty">
-                User nahi mila 😕
-            </div>
-
-        `;
-
-    }
+return "data:image/svg+xml;charset=UTF-8,"+
+encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg"
+width="100" height="100">
+<rect width="100%" height="100%" fill="#222"/>
+<text x="50%" y="60%"
+text-anchor="middle"
+fill="#777"
+font-size="40">👤</text>
+</svg>
+`);
 
 }
 
 
-function followUser() {
+async function refresh(){
 
-    localStorage.setItem(
-        "crockcellFollowing",
-        "1"
-    );
+if(!refreshToken)return false;
 
+try{
 
-    let button =
-        document.getElementById(
-            "followButton"
-        );
+const r=await fetch(
+"https://securetoken.googleapis.com/v1/token?key="
++API_KEY,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+body:
+"grant_type=refresh_token&refresh_token="
++encodeURIComponent(refreshToken)
+}
+);
 
+const d=await r.json();
 
-    if (button) {
+if(!r.ok||!d.id_token)return false;
 
-        button.innerText =
-            "Following ✓";
+token=d.id_token;
 
-    }
+refreshToken=
+d.refresh_token||refreshToken;
+
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
+
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
+
+return true;
+
+}catch(e){
+
+return false;
 
 }
 
-</script></body></html>
+}
+
+
+async function firestore(path,opt={},retry=true){
+
+opt.headers={
+...(opt.headers||{}),
+Authorization:"Bearer "+token,
+"Content-Type":"application/json"
+};
+
+let r=await fetch(BASE+path,opt);
+
+if((r.status===401||r.status===403)
+&&retry&&refreshToken){
+
+if(await refresh()){
+
+return firestore(
+path,
+opt,
+false
+);
+
+}
+
+}
+
+return r;
+
+}
+
+
+/* SEARCH USERS */
+
+async function searchUsers(){
+
+const text=
+$("searchInput").value
+.trim()
+.toLowerCase()
+.replace(/^@/,"");
+
+if(!text){
+
+$("results").innerHTML="";
+$("msg").textContent=
+"Username likho";
+
+return;
+
+}
+
+$("msg").textContent=
+"Searching...";
+
+$("results").innerHTML="";
+
+
+try{
+
+const query={
+
+structuredQuery:{
+
+from:[
+{
+collectionId:"users"
+}
+],
+
+where:{
+
+fieldFilter:{
+
+field:{
+fieldPath:"username"
+},
+
+op:"EQUAL",
+
+value:{
+stringValue:text
+}
+
+}
+
+},
+
+limit:20
+
+}
+
+};
+
+
+const r=await firestore(
+":runQuery",
+{
+method:"POST",
+body:JSON.stringify(query)
+}
+);
+
+
+if(!r.ok){
+
+console.log(await r.text());
+
+$("msg").textContent=
+"Search nahi ho pa rahi.";
+
+return;
+
+}
+
+
+const rows=await r.json();
+
+const users=
+rows
+.map(x=>x.document)
+.filter(Boolean);
+
+
+if(!users.length){
+
+$("msg").textContent=
+"No user found.";
+
+return;
+
+}
+
+
+$("msg").textContent="";
+
+for(const doc of users){
+
+await renderUser(doc);
+
+}
+
+}catch(e){
+
+console.log(e);
+
+$("msg").textContent=
+"Something went wrong.";
+
+}
+
+}
+
+
+/* SHOW USER */
+
+async function renderUser(doc){
+
+const f=doc.fields||{};
+
+const userId=
+f.uid?.stringValue ||
+doc.name.split("/").pop();
+
+const name=
+f.name?.stringValue ||
+"User";
+
+const username=
+f.username?.stringValue ||
+"";
+
+const photo=
+f.photoURL?.stringValue ||
+"";
+
+
+if(userId===uid)return;
+
+
+const div=
+document.createElement("div");
+
+div.className="user";
+
+div.innerHTML=`
+
+<img class="avatar"
+src="${photo||defaultPhoto()}"
+alt="Profile">
+
+<div class="userInfo">
+
+<div class="name">
+${escapeHTML(name)}
+</div>
+
+<div class="username">
+@${escapeHTML(username)}
+</div>
+
+</div>
+
+<button class="follow"
+id="follow-${userId}">
+Follow
+</button>
+
+`;
+
+
+$("results").appendChild(div);
+
+
+const button=
+document.getElementById(
+"follow-"+userId
+);
+
+
+const following=
+await isFollowing(userId);
+
+
+if(following){
+
+button.textContent=
+"Following";
+
+button.classList.add(
+"following"
+);
+
+}
+
+
+button.onclick=
+()=>toggleFollow(
+userId,
+button
+);
+
+}
+
+
+/* CHECK FOLLOW */
+
+async function isFollowing(targetUid){
+
+const id=
+uid+"_"+targetUid;
+
+const r=
+await firestore(
+"/follows/"+id
+);
+
+return r.ok;
+
+}
+
+
+/* FOLLOW / UNFOLLOW */
+
+async function toggleFollow(
+targetUid,
+button
+){
+
+button.disabled=true;
+
+
+try{
+
+const id=
+uid+"_"+targetUid;
+
+
+/* ALREADY FOLLOWING */
+
+if(button.classList.contains(
+"following"
+)){
+
+const r=
+await firestore(
+"/follows/"+id,
+{
+method:"DELETE"
+}
+);
+
+if(!r.ok){
+
+console.log(await r.text());
+
+button.disabled=false;
+
+return;
+
+}
+
+button.textContent="Follow";
+
+button.classList.remove(
+"following"
+);
+
+}else{
+
+const body={
+
+fields:{
+
+followerId:{
+stringValue:uid
+},
+
+followingId:{
+stringValue:targetUid
+},
+
+createdAt:{
+timestampValue:
+new Date().toISOString()
+}
+
+}
+
+};
+
+
+const r=
+await firestore(
+"/follows/"+id,
+{
+method:"PATCH",
+body:JSON.stringify(body)
+}
+);
+
+
+if(!r.ok){
+
+console.log(await r.text());
+
+button.disabled=false;
+
+return;
+
+}
+
+button.textContent=
+"Following";
+
+button.classList.add(
+"following"
+);
+
+}
+
+}catch(e){
+
+console.log(e);
+
+}
+
+button.disabled=false;
+
+}
+
+
+/* HTML SAFE */
+
+function escapeHTML(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ENTER TO SEARCH */
+
+$("searchInput").addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter"){
+searchUsers();
+}
+
+});
+
+
+if(!token||!uid){
+
+location.href="index.html";
+
+}
+
+</script>
+
+</body>
+</html>
