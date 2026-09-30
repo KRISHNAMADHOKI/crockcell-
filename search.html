@@ -7,91 +7,19 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:#fafafa;
-  font-family:Arial,sans-serif;
-  color:#111;
-}
-
-.top{
-  height:60px;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-  display:flex;
-  align-items:center;
-  padding:0 15px;
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-
-.logo{
-  font-size:23px;
-  font-weight:800;
-}
-
-.searchbox{
-  padding:12px;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-}
-
-input{
-  width:100%;
-  padding:12px 15px;
-  border:1px solid #ccc;
-  border-radius:12px;
-  font-size:16px;
-  outline:none;
-}
-
-.results{
-  padding:10px;
-}
-
-.user{
-  display:flex;
-  align-items:center;
-  padding:12px 8px;
-  border-bottom:1px solid #eee;
-  cursor:pointer;
-}
-
-.user:active{
-  background:#eee;
-}
-
-.photo{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#ddd;
-  margin-right:13px;
-}
-
-.info{
-  flex:1;
-}
-
-.name{
-  font-weight:700;
-  font-size:16px;
-}
-
-.username{
-  color:#777;
-  font-size:14px;
-  margin-top:3px;
-}
-
-.empty{
-  text-align:center;
-  color:#777;
-  padding:40px 10px;
-}
+body{margin:0;background:#fafafa;font-family:Arial,sans-serif;color:#111}
+.top{height:60px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 15px}
+.logo{font-size:23px;font-weight:800}
+.searchbox{padding:12px;background:#fff;border-bottom:1px solid #ddd}
+input{width:100%;padding:12px 15px;border:1px solid #ccc;border-radius:12px;font-size:16px;outline:none}
+.results{padding:10px}
+.user{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid #eee;cursor:pointer}
+.photo{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#ddd;margin-right:13px}
+.info{flex:1}
+.name{font-weight:700;font-size:16px}
+.username{color:#777;font-size:14px;margin-top:3px}
+.empty{text-align:center;color:#777;padding:40px 10px;line-height:1.5}
+.error{color:#c00;word-break:break-word}
 </style>
 </head>
 
@@ -119,7 +47,7 @@ const BASE=
 PROJECT_ID+
 "/databases/(default)/documents";
 
-const token=localStorage.getItem("crockcellIdToken");
+let token=localStorage.getItem("crockcellIdToken");
 const myUid=localStorage.getItem("crockcellUid");
 
 if(!token||!myUid){
@@ -127,49 +55,31 @@ if(!token||!myUid){
 }
 
 function val(x){
-
   if(!x)return "";
-
-  if(x.stringValue!==undefined)
-    return x.stringValue;
-
-  if(x.integerValue!==undefined)
-    return x.integerValue;
-
-  if(x.doubleValue!==undefined)
-    return x.doubleValue;
-
-  if(x.booleanValue!==undefined)
-    return x.booleanValue;
-
+  if(x.stringValue!==undefined)return x.stringValue;
+  if(x.integerValue!==undefined)return x.integerValue;
+  if(x.doubleValue!==undefined)return x.doubleValue;
+  if(x.booleanValue!==undefined)return x.booleanValue;
   return "";
 }
 
 function esc(s){
-
   return String(s||"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 }
 
 function makeUser(doc){
 
   const f=doc.fields||{};
-
   const docId=doc.name.split("/").pop();
-
-  /*
-    IMPORTANT:
-    document ID aur Firebase UID alag ho sakte hain.
-    Yahan actual uid field hi use hogi.
-  */
 
   return {
     docId:docId,
-    uid:val(f.uid)||"",
+    uid:val(f.uid),
     name:val(f.name)||"User",
     username:val(f.username)||"",
     photoURL:val(f.photoURL)||"",
@@ -184,6 +94,10 @@ async function getAllUsers(){
     "/users?pageSize=1000&key="+
     encodeURIComponent(API_KEY);
 
+  console.log("REQUEST:",url);
+  console.log("TOKEN EXISTS:",!!token);
+  console.log("MY UID:",myUid);
+
   const r=await fetch(url,{
     method:"GET",
     headers:{
@@ -191,15 +105,27 @@ async function getAllUsers(){
     }
   });
 
-  const data=await r.json();
+  const text=await r.text();
+
+  console.log("HTTP STATUS:",r.status);
+  console.log("RESPONSE:",text);
+
+  let data={};
+
+  try{
+    data=JSON.parse(text);
+  }catch(e){
+    data={raw:text};
+  }
 
   if(!r.ok){
 
-    console.log("Firebase error:",data);
-
     throw new Error(
-      data.error?.message ||
-      "Users load failed"
+      "HTTP "+r.status+
+      " | "+
+      (data.error?.status||"UNKNOWN")+
+      " | "+
+      (data.error?.message||text||"Unknown Firebase error")
     );
   }
 
@@ -213,15 +139,11 @@ async function searchUsers(q){
   q=q.trim().toLowerCase();
 
   if(!q){
-
-    box.innerHTML=
-      '<div class="empty">Search for a user</div>';
-
+    box.innerHTML='<div class="empty">Search for a user</div>';
     return;
   }
 
-  box.innerHTML=
-    '<div class="empty">Searching...</div>';
+  box.innerHTML='<div class="empty">Searching...</div>';
 
   try{
 
@@ -233,16 +155,12 @@ async function searchUsers(q){
 
       const u=makeUser(doc);
 
-      // UID nahi hai to is user ko skip.
       if(!u.uid)return;
-
-      // Apna account search results me nahi dikhana.
       if(u.uid===myUid)return;
 
-      const name=(u.name||"").toLowerCase();
-      const username=(u.username||"").toLowerCase();
+      const name=u.name.toLowerCase();
+      const username=u.username.toLowerCase();
 
-      // Name ya username me search text hona chahiye.
       if(
         name.includes(q) ||
         username.includes(q)
@@ -253,10 +171,7 @@ async function searchUsers(q){
     });
 
     if(!users.length){
-
-      box.innerHTML=
-        '<div class="empty">No users found</div>';
-
+      box.innerHTML='<div class="empty">No users found</div>';
       return;
     }
 
@@ -265,36 +180,20 @@ async function searchUsers(q){
     users.forEach(u=>{
 
       const row=document.createElement("div");
-
       row.className="user";
 
       row.innerHTML=`
-
-        <img
-          class="photo"
-          src="${esc(u.photoURL)}"
-          onerror="this.style.visibility='hidden'"
-        >
+        <img class="photo"
+        src="${esc(u.photoURL)}"
+        onerror="this.style.visibility='hidden'">
 
         <div class="info">
-
-          <div class="name">
-            ${esc(u.name)}
-          </div>
-
-          <div class="username">
-            @${esc(u.username)}
-          </div>
-
+          <div class="name">${esc(u.name)}</div>
+          <div class="username">@${esc(u.username)}</div>
         </div>
       `;
 
       row.onclick=()=>{
-
-        /*
-          YAHAN ACTUAL FIREBASE UID PASS HOGI.
-          Document ID nahi.
-        */
 
         localStorage.setItem(
           "crockcellViewedUser",
@@ -306,7 +205,6 @@ async function searchUsers(q){
           encodeURIComponent(u.uid)+
           "&doc="+
           encodeURIComponent(u.docId);
-
       };
 
       box.appendChild(row);
@@ -315,19 +213,19 @@ async function searchUsers(q){
 
   }catch(e){
 
-    console.error(e);
+    console.error("SEARCH ERROR:",e);
 
     box.innerHTML=
-      '<div class="empty">'+
+      '<div class="empty error">'+
+      '<b>Firebase Search Error</b><br><br>'+
       esc(e.message)+
       '</div>';
   }
 }
 
-let timer=null;
+let timer;
 
-document
-.getElementById("search")
+document.getElementById("search")
 .addEventListener("input",function(){
 
   clearTimeout(timer);
