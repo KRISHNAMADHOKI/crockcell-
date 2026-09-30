@@ -8,211 +8,144 @@
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#000;
-  color:#fff;
-  font-family:Arial,sans-serif;
+ margin:0;background:#000;color:#fff;
+ font-family:Arial,sans-serif;
 }
 .header{
-  height:64px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:0 16px;
-  border-bottom:1px solid #222;
+ height:64px;display:flex;align-items:center;
+ gap:12px;padding:0 16px;border-bottom:1px solid #222;
 }
-.back{
-  font-size:27px;
-  cursor:pointer;
-}
-.title{
-  font-size:21px;
-  font-weight:bold;
-}
+.back{font-size:28px;cursor:pointer}
+.title{font-size:21px;font-weight:bold}
+
 .searchArea{
-  padding:16px;
-  position:sticky;
-  top:0;
-  background:#000;
-  z-index:5;
+ padding:14px 16px;
+ position:sticky;top:0;background:#000;z-index:5;
 }
 .searchBox{
-  display:flex;
-  align-items:center;
-  background:#1b1b1b;
-  border:1px solid #333;
-  border-radius:16px;
-  padding:5px;
+ display:flex;align-items:center;
+ background:#1b1b1b;border:1px solid #333;
+ border-radius:16px;padding:4px;
 }
 .searchIcon{
-  width:42px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  color:#aaa;
+ width:40px;text-align:center;
+ font-size:21px;color:#aaa;
 }
 input{
-  flex:1;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:#fff;
-  font-size:16px;
-  padding:11px 5px;
+ flex:1;border:0;outline:0;background:transparent;
+ color:#fff;font-size:16px;padding:12px 4px;
 }
-input::placeholder{
-  color:#888;
+input::placeholder{color:#888}
+
+.clearBtn{
+ display:none;background:none;border:0;
+ color:#aaa;font-size:22px;padding:8px;
 }
 .searchBtn{
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:13px;
-  background:#fff;
-  color:#000;
-  font-size:19px;
-  cursor:pointer;
+ width:44px;height:44px;border:0;
+ border-radius:13px;background:#fff;color:#000;
+ font-size:20px;cursor:pointer;
 }
-.clearBtn{
-  display:none;
-  border:0;
-  background:transparent;
-  color:#aaa;
-  font-size:20px;
-  cursor:pointer;
-  padding:8px;
-}
-.section{
-  padding:0 16px 20px;
-}
+
+.section{padding:0 16px 80px}
 .heading{
-  color:#aaa;
-  font-size:14px;
-  margin:5px 0 12px;
+ color:#999;font-size:14px;
+ margin:6px 0 10px;
 }
+
 .user{
-  display:flex;
-  align-items:center;
-  padding:11px 0;
-  border-bottom:1px solid #1e1e1e;
-  cursor:pointer;
+ display:flex;align-items:center;
+ padding:11px 0;border-bottom:1px solid #202020;
+ cursor:pointer;
 }
 .avatar{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#292929;
-  margin-right:12px;
+ width:52px;height:52px;border-radius:50%;
+ object-fit:cover;background:#292929;
+ margin-right:12px;
 }
-.info{
-  flex:1;
-  min-width:0;
-}
+.info{flex:1;min-width:0}
 .name{
-  font-weight:bold;
-  font-size:16px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+ font-size:16px;font-weight:bold;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .username{
-  color:#999;
-  margin-top:4px;
-  font-size:14px;
+ color:#999;font-size:14px;margin-top:4px;
 }
+
 .followBtn{
-  border:0;
-  border-radius:10px;
-  padding:8px 13px;
-  background:#fff;
-  color:#000;
-  font-weight:bold;
-  cursor:pointer;
+ border:0;border-radius:10px;
+ padding:8px 13px;
+ background:#fff;color:#000;
+ font-weight:bold;cursor:pointer;
 }
 .following{
-  background:#292929;
-  color:#fff;
+ background:#292929;color:#fff;
 }
+
 .empty{
-  text-align:center;
-  color:#888;
-  padding:35px 10px;
+ text-align:center;color:#888;
+ padding:40px 10px;
 }
+
 .bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:60px;
-  background:#000;
-  border-top:1px solid #222;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:10;
+ position:fixed;left:0;right:0;bottom:0;
+ height:60px;background:#000;
+ border-top:1px solid #222;
+ display:flex;justify-content:space-around;
+ align-items:center;z-index:10;
 }
 .bottom a{
-  color:#aaa;
-  text-decoration:none;
-  font-size:23px;
+ color:#aaa;text-decoration:none;font-size:23px;
 }
-.bottom a.active{
-  color:#fff;
-}
-.spacer{
-  height:70px;
-}
+.bottom a.active{color:#fff}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  <div class="back" onclick="history.back()">‹</div>
-  <div class="title">Search</div>
+ <div class="back" onclick="history.back()">‹</div>
+ <div class="title">Search</div>
 </div>
 
 <div class="searchArea">
-  <div class="searchBox">
+ <div class="searchBox">
 
-    <div class="searchIcon">⌕</div>
+  <div class="searchIcon">⌕</div>
 
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Search people..."
-      autocomplete="off"
-    >
+  <input
+   id="searchInput"
+   type="text"
+   placeholder="Search people..."
+   autocomplete="off"
+  >
 
-    <button id="clearBtn" class="clearBtn">×</button>
+  <button id="clearBtn" class="clearBtn">×</button>
 
-    <button id="searchBtn" class="searchBtn">⌕</button>
+  <button id="searchBtn" class="searchBtn">⌕</button>
 
-  </div>
+ </div>
 </div>
 
 <div class="section">
-  <div id="heading" class="heading">Suggested people</div>
-  <div id="results"></div>
+ <div id="heading" class="heading">Suggested people</div>
+ <div id="results"></div>
 </div>
 
-<div class="spacer"></div>
-
 <div class="bottom">
-  <a href="home.html">⌂</a>
-  <a href="search.html" class="active">⌕</a>
-  <a href="create.html">＋</a>
-  <a href="activity.html">♡</a>
-  <a href="profile.html">◉</a>
+ <a href="home.html">⌂</a>
+ <a href="search.html" class="active">⌕</a>
+ <a href="create.html">＋</a>
+ <a href="activity.html">♡</a>
+ <a href="profile.html">◉</a>
 </div>
 
 <script>
+
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 const PROJECT_ID="crockcell-cd2e6";
-const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+const BASE=
+ `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 let token=localStorage.getItem("crockcellIdToken");
 let uid=localStorage.getItem("crockcellUid");
@@ -226,357 +159,384 @@ const results=document.getElementById("results");
 const heading=document.getElementById("heading");
 const clearBtn=document.getElementById("clearBtn");
 
+if(!token || !uid){
+ location.href="index.html";
+}
+
 function esc(v){
-  return String(v??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+ return String(v??"")
+ .replace(/&/g,"&amp;")
+ .replace(/</g,"&lt;")
+ .replace(/>/g,"&gt;")
+ .replace(/"/g,"&quot;")
+ .replace(/'/g,"&#039;");
 }
 
 async function refresh(){
-  if(!refreshToken)return false;
 
-  try{
-    const r=await fetch(
-      `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-      {
-        method:"POST",
-        headers:{"Content-Type":"application/x-www-form-urlencoded"},
-        body:
-          "grant_type=refresh_token&refresh_token="+
-          encodeURIComponent(refreshToken)
-      }
-    );
+ if(!refreshToken)return false;
 
-    const d=await r.json();
+ try{
 
-    if(!r.ok || !d.id_token)return false;
+  const r=await fetch(
+   `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/x-www-form-urlencoded"
+    },
+    body:
+     "grant_type=refresh_token&refresh_token="+
+     encodeURIComponent(refreshToken)
+   }
+  );
 
-    token=d.id_token;
-    refreshToken=d.refresh_token||refreshToken;
+  const d=await r.json();
 
-    localStorage.setItem("crockcellIdToken",token);
-    localStorage.setItem("crockcellRefreshToken",refreshToken);
+  if(!r.ok || !d.id_token)return false;
 
-    return true;
-  }catch(e){
-    return false;
-  }
+  token=d.id_token;
+  refreshToken=d.refresh_token || refreshToken;
+
+  localStorage.setItem("crockcellIdToken",token);
+  localStorage.setItem(
+   "crockcellRefreshToken",refreshToken
+  );
+
+  return true;
+
+ }catch(e){
+  return false;
+ }
 }
 
 async function firestore(path,opt={}){
-  opt.headers=Object.assign(
-    {"Content-Type":"application/json"},
-    opt.headers||{}
+
+ opt.headers=Object.assign(
+  {"Content-Type":"application/json"},
+  opt.headers||{}
+ );
+
+ opt.headers.Authorization="Bearer "+token;
+
+ let r=await fetch(BASE+path,opt);
+
+ if((r.status===401 || r.status===403) && refreshToken){
+
+  if(await refresh()){
+
+   opt.headers.Authorization="Bearer "+token;
+   r=await fetch(BASE+path,opt);
+
+  }
+ }
+
+ const text=await r.text();
+
+ let data=null;
+
+ try{
+  data=text ? JSON.parse(text) : null;
+ }catch(e){}
+
+ if(!r.ok){
+  throw new Error(
+   data?.error?.message || "Firebase error "+r.status
   );
+ }
 
-  opt.headers.Authorization="Bearer "+token;
-
-  let r=await fetch(BASE+path,opt);
-
-  if((r.status===401||r.status===403) && refreshToken){
-    const ok=await refresh();
-
-    if(ok){
-      opt.headers.Authorization="Bearer "+token;
-      r=await fetch(BASE+path,opt);
-    }
-  }
-
-  const text=await r.text();
-
-  let data=null;
-  try{
-    data=text?JSON.parse(text):null;
-  }catch(e){}
-
-  if(!r.ok){
-    throw new Error(
-      data?.error?.message || ("Firebase error "+r.status)
-    );
-  }
-
-  return data;
+ return data;
 }
 
-function val(field){
-  if(!field)return "";
-  if(field.stringValue!==undefined)return field.stringValue;
-  if(field.integerValue!==undefined)return field.integerValue;
-  if(field.doubleValue!==undefined)return field.doubleValue;
-  return "";
+function value(field){
+
+ if(!field)return "";
+
+ if(field.stringValue!==undefined)
+  return field.stringValue;
+
+ if(field.integerValue!==undefined)
+  return field.integerValue;
+
+ return "";
 }
 
-function docToUser(doc){
-  const f=doc.fields||{};
+function makeUser(doc){
 
-  return{
-    id:doc.name.split("/").pop(),
-    name:val(f.name),
-    username:val(f.username),
-    bio:val(f.bio),
-    photoURL:val(f.photoURL),
-    email:val(f.email)
-  };
+ const f=doc.fields || {};
+
+ return {
+  id:doc.name.split("/").pop(),
+  name:value(f.name),
+  username:value(f.username),
+  bio:value(f.bio),
+  photoURL:value(f.photoURL),
+  email:value(f.email)
+ };
 }
 
 async function loadUsers(){
 
-  if(!token){
-    location.href="index.html";
-    return;
-  }
+ try{
 
-  try{
+  const query={
+   structuredQuery:{
+    from:[
+     {collectionId:"users"}
+    ]
+   }
+  };
 
-    const q={
-      structuredQuery:{
-        from:[
-          {collectionId:"users"}
-        ]
-      }
-    };
+  const data=await firestore(
+   ":runQuery",
+   {
+    method:"POST",
+    body:JSON.stringify(query)
+   }
+  );
 
-    const data=await firestore(
-      ":runQuery",
-      {
-        method:"POST",
-        body:JSON.stringify(q)
-      }
-    );
+  allUsers=(data || [])
+   .filter(x=>x.document)
+   .map(x=>makeUser(x.document));
 
-    allUsers=(data||[])
-      .filter(x=>x.document)
-      .map(x=>docToUser(x.document));
+  showUsers("");
 
-    showSuggestions("");
+ }catch(e){
 
-  }catch(e){
+  console.error(e);
 
-    results.innerHTML=
-      `<div class="empty">Users load nahi ho paaye.</div>`;
-
-  }
+  results.innerHTML=
+   `<div class="empty">
+      Users load nahi ho paaye.
+    </div>`;
+ }
 }
 
-function showSuggestions(query){
+function showUsers(text){
 
-  query=query.trim().toLowerCase();
+ const q=text.trim().toLowerCase();
 
-  clearBtn.style.display=query?"block":"none";
+ clearBtn.style.display=q ? "block" : "none";
 
-  let users=[...allUsers];
+ let users=[];
 
-  if(query){
+ if(!q){
 
-    users=users
-      .map(u=>{
+  users=allUsers.slice(0,10);
+  heading.textContent="Suggested people";
 
-        const username=(u.username||"").toLowerCase();
-        const name=(u.name||"").toLowerCase();
+ }else{
 
-        let score=10;
+  users=allUsers
+   .map(u=>{
 
-        if(username===query)score=0;
-        else if(username.startsWith(query))score=1;
-        else if(name.startsWith(query))score=2;
-        else if(username.includes(query))score=3;
-        else if(name.includes(query))score=4;
-        else score=99;
+    const username=(u.username||"").toLowerCase();
+    const name=(u.name||"").toLowerCase();
 
-        return {...u,score};
+    let score=99;
 
-      })
-      .filter(u=>u.score<99)
-      .sort((a,b)=>a.score-b.score);
+    if(username===q)score=0;
+    else if(name===q)score=1;
+    else if(username.startsWith(q))score=2;
+    else if(name.startsWith(q))score=3;
+    else if(username.includes(q))score=4;
+    else if(name.includes(q))score=5;
 
-    heading.textContent="People";
+    return {...u,score};
 
-  }else{
+   })
+   .filter(u=>u.score<99)
+   .sort((a,b)=>a.score-b.score);
 
-    users=users.slice(0,8);
-    heading.textContent="Suggested people";
+  heading.textContent="Search results";
+ }
 
-  }
-
-  renderUsers(users);
+ renderUsers(users);
 }
 
 function renderUsers(users){
 
-  if(!users.length){
+ if(!users.length){
 
-    results.innerHTML=
-      `<div class="empty">No users found</div>`;
+  results.innerHTML=
+   `<div class="empty">No users found</div>`;
 
-    return;
-  }
+  return;
+ }
 
-  results.innerHTML=users.map(u=>{
+ results.innerHTML=users.map(u=>{
 
-    const photo=u.photoURL ||
-      "https://via.placeholder.com/100";
+  const photo=
+   u.photoURL ||
+   "https://via.placeholder.com/100";
 
-    const displayName=u.name || u.username || "User";
-    const username=u.username || "";
+  const name=u.name || u.username || "User";
+  const username=u.username || "";
 
-    return `
-      <div class="user" data-id="${esc(u.id)}">
+  return `
+   <div class="user" data-id="${esc(u.id)}">
 
-        <img
-          class="avatar"
-          src="${esc(photo)}"
-          onerror="this.src='https://via.placeholder.com/100'"
-        >
+    <img
+     class="avatar"
+     src="${esc(photo)}"
+     onerror="this.src='https://via.placeholder.com/100'"
+    >
 
-        <div class="info">
-          <div class="name">${esc(displayName)}</div>
-          <div class="username">
-            ${username ? "@"+esc(username) : ""}
-          </div>
-        </div>
+    <div class="info">
+     <div class="name">${esc(name)}</div>
 
-        ${
-          u.id!==uid
-          ? `<button
-               class="followBtn"
-               data-follow="${esc(u.id)}"
-             >Follow</button>`
-          : ""
-        }
+     <div class="username">
+      ${username ? "@"+esc(username) : ""}
+     </div>
+    </div>
 
-      </div>
-    `;
+    ${
+     u.id!==uid
+     ?
+     `<button
+       class="followBtn"
+       data-id="${esc(u.id)}"
+      >Follow</button>`
+     :
+     ""
+    }
 
-  }).join("");
+   </div>
+  `;
 
-  document.querySelectorAll(".user").forEach(row=>{
+ }).join("");
 
-    row.addEventListener("click",e=>{
+ document.querySelectorAll(".user").forEach(row=>{
 
-      if(e.target.closest(".followBtn"))return;
+  row.addEventListener("click",e=>{
 
-      const id=row.dataset.id;
+   if(e.target.closest(".followBtn"))return;
 
-      localStorage.setItem(
-        "crockcellViewedUser",
-        id
-      );
+   const userId=row.dataset.id;
 
-      location.href="profile.html?uid="+encodeURIComponent(id);
+   localStorage.setItem(
+    "crockcellViewedUser",
+    userId
+   );
 
-    });
+   location.href=
+    "profile.html?uid="+
+    encodeURIComponent(userId);
+
+  });
+
+ });
+
+ document.querySelectorAll(".followBtn").forEach(btn=>{
+
+  btn.addEventListener("click",async e=>{
+
+   e.stopPropagation();
+
+   await toggleFollow(
+    btn.dataset.id,
+    btn
+   );
 
   });
 
-  document.querySelectorAll(".followBtn").forEach(btn=>{
-
-    btn.addEventListener("click",async e=>{
-
-      e.stopPropagation();
-
-      const target=btn.dataset.follow;
-
-      await toggleFollow(target,btn);
-
-    });
-
-  });
+ });
 
 }
 
 async function toggleFollow(target,btn){
 
-  const followId=uid+"_"+target;
+ const followId=uid+"_"+target;
+
+ try{
 
   try{
 
-    const path="/follows/"+followId;
+   await firestore(
+    "/follows/"+followId,
+    {method:"GET"}
+   );
 
-    try{
+   await firestore(
+    "/follows/"+followId,
+    {method:"DELETE"}
+   );
 
-      await firestore(
-        path,
-        {method:"GET"}
-      );
-
-      await firestore(
-        path,
-        {method:"DELETE"}
-      );
-
-      btn.textContent="Follow";
-      btn.classList.remove("following");
-
-    }catch(e){
-
-      await firestore(
-        path,
-        {
-          method:"PATCH",
-          body:JSON.stringify({
-            fields:{
-              followerId:{stringValue:uid},
-              followingId:{stringValue:target},
-              createdAt:{
-                timestampValue:new Date().toISOString()
-              }
-            }
-          })
-        }
-      );
-
-      btn.textContent="Following";
-      btn.classList.add("following");
-
-    }
+   btn.textContent="Follow";
+   btn.classList.remove("following");
 
   }catch(e){
 
-    alert("Follow update nahi ho paya.");
+   await firestore(
+    "/follows/"+followId,
+    {
+     method:"PATCH",
+     body:JSON.stringify({
+      fields:{
+       followerId:{
+        stringValue:uid
+       },
+       followingId:{
+        stringValue:target
+       },
+       createdAt:{
+        timestampValue:new Date().toISOString()
+       }
+      }
+     })
+    }
+   );
+
+   btn.textContent="Following";
+   btn.classList.add("following");
 
   }
+
+ }catch(e){
+
+  alert("Follow update nahi ho paya.");
+
+ }
 }
 
 input.addEventListener("input",()=>{
 
-  clearTimeout(timer);
+ clearTimeout(timer);
 
-  timer=setTimeout(()=>{
+ timer=setTimeout(()=>{
 
-    showSuggestions(input.value);
+  showUsers(input.value);
 
-  },180);
+ },150);
 
 });
 
-document.getElementById("searchBtn").addEventListener("click",()=>{
+document.getElementById("searchBtn")
+.addEventListener("click",()=>{
 
-  showSuggestions(input.value);
-
-  input.focus();
+ showUsers(input.value);
+ input.focus();
 
 });
 
 clearBtn.addEventListener("click",()=>{
 
-  input.value="";
-  showSuggestions("");
-  input.focus();
+ input.value="";
+ showUsers("");
+ input.focus();
 
 });
 
 input.addEventListener("keydown",e=>{
 
-  if(e.key==="Enter"){
-    showSuggestions(input.value);
-  }
+ if(e.key==="Enter"){
+  showUsers(input.value);
+ }
 
 });
 
 loadUsers();
+
 </script>
 
 </body>
