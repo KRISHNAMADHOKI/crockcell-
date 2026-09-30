@@ -4,31 +4,104 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Edit Profile - CROCKCELL</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
-header{height:60px;border-bottom:1px solid #222;display:flex;align-items:center;padding:0 16px;font-size:21px;font-weight:bold}
-.back{font-size:28px;margin-right:15px;cursor:pointer}
-main{max-width:500px;margin:auto;padding:25px 18px}
-.photo{width:100px;height:100px;border-radius:50%;background:#222;object-fit:cover;display:block;margin:10px auto 25px}
-input,textarea{width:100%;background:#111;border:1px solid #333;color:#fff;border-radius:8px;padding:13px;margin:7px 0 16px;font-size:16px}
-textarea{height:100px;resize:none}
-label{font-size:14px;color:#aaa}
-button{width:100%;border:0;border-radius:8px;padding:13px;background:#fff;color:#000;font-size:16px;font-weight:bold;margin-top:5px}
-#msg{text-align:center;margin-top:15px;color:#aaa}
+
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif
+}
+
+header{
+height:60px;
+border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+padding:0 18px;
+font-size:22px;
+font-weight:bold
+}
+
+.back{
+font-size:30px;
+margin-right:15px;
+cursor:pointer
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:25px 32px
+}
+
+.profilePhoto{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+display:block;
+margin:10px auto 30px;
+background:#222
+}
+
+label{
+display:block;
+margin:18px 0 8px;
+color:#aaa;
+font-weight:bold
+}
+
+input,textarea{
+width:100%;
+background:#111;
+border:1px solid #333;
+color:#fff;
+border-radius:10px;
+padding:14px;
+font-size:16px
+}
+
+textarea{
+height:110px;
+resize:none
+}
+
+button{
+width:100%;
+margin-top:25px;
+padding:15px;
+border:0;
+border-radius:10px;
+background:#fff;
+color:#000;
+font-size:17px;
+font-weight:bold
+}
+
+#msg{
+text-align:center;
+margin-top:18px;
+color:#aaa
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <span class="back" onclick="location.href='profile.html'">‹</span>
-  Edit Profile
+<span class="back" onclick="location.href='profile.html'">‹</span>
+Edit Profile
 </header>
 
 <main>
 
-<img id="photo" class="photo" src="" alt="Profile">
+<img id="profilePhoto"
+class="profilePhoto"
+src=""
+alt="Profile">
 
 <label>Profile Photo</label>
 <input id="photoInput" type="file" accept="image/*">
@@ -40,228 +113,566 @@ button{width:100%;border:0;border-radius:8px;padding:13px;background:#fff;color:
 <input id="username" type="text" placeholder="Username">
 
 <label>Bio</label>
-<textarea id="bio" placeholder="Write something about yourself"></textarea>
+<textarea id="bio" placeholder="Write your bio"></textarea>
 
-<button onclick="saveProfile()">Save Changes</button>
+<button id="saveBtn" onclick="saveProfile()">
+Save Changes
+</button>
 
 <div id="msg"></div>
 
 </main>
 
 <script>
-const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-const PROJECT_ID="crockcell-cd2e6";
-const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-let token=localStorage.getItem("crockcellIdToken");
-let uid=localStorage.getItem("crockcellUid");
-let refreshToken=localStorage.getItem("crockcellRefreshToken");
+const API_KEY=
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
+const PROJECT_ID=
+"crockcell-cd2e6";
+
+const BASE=
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+let token=
+localStorage.getItem("crockcellIdToken");
+
+let uid=
+localStorage.getItem("crockcellUid");
+
+let refreshToken=
+localStorage.getItem("crockcellRefreshToken");
+
 let newPhoto="";
 
-const $=id=>document.getElementById(id);
 
-function setMsg(t){$("msg").textContent=t}
+function $(id){
+return document.getElementById(id);
+}
+
+
+function msg(text){
+$("msg").textContent=text;
+}
+
+
+function defaultPhoto(){
+
+return "data:image/svg+xml;charset=UTF-8,"+
+encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg"
+width="200" height="200">
+<rect width="100%" height="100%" fill="#222"/>
+<text x="50%" y="58%"
+text-anchor="middle"
+fill="#777"
+font-size="70">👤</text>
+</svg>
+`);
+
+}
+
 
 async function refresh(){
-  if(!refreshToken)return false;
 
-  try{
-    const r=await fetch(
-      `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-      {
-        method:"POST",
-        headers:{"Content-Type":"application/x-www-form-urlencoded"},
-        body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
-      }
-    );
+if(!refreshToken)return false;
 
-    const d=await r.json();
+try{
 
-    if(!r.ok||!d.id_token)return false;
+const r=await fetch(
+`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+body:
+`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+}
+);
 
-    token=d.id_token;
-    refreshToken=d.refresh_token||refreshToken;
+const d=await r.json();
 
-    localStorage.setItem("crockcellIdToken",token);
-    localStorage.setItem("crockcellRefreshToken",refreshToken);
+if(!r.ok||!d.id_token)return false;
 
-    return true;
-  }catch(e){
-    return false;
-  }
+token=d.id_token;
+
+refreshToken=
+d.refresh_token||refreshToken;
+
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
+
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
+
+return true;
+
+}catch(e){
+
+return false;
+
 }
 
-async function api(path,opt={},retry=true){
-  opt.headers={
-    ...(opt.headers||{}),
-    Authorization:"Bearer "+token,
-    "Content-Type":"application/json"
-  };
-
-  let r=await fetch(BASE+path,opt);
-
-  if((r.status===401||r.status===403)&&retry&&refreshToken){
-    if(await refresh())return api(path,opt,false);
-  }
-
-  return r;
 }
 
-function val(v){
-  return v==null?"":String(v);
+
+async function getProfile(){
+
+let r=await fetch(
+`${BASE}/users/${uid}`,
+{
+headers:{
+Authorization:"Bearer "+token
+},
+cache:"no-store"
+}
+);
+
+if((r.status===401||r.status===403)
+&&refreshToken){
+
+if(await refresh()){
+
+r=await fetch(
+`${BASE}/users/${uid}`,
+{
+headers:{
+Authorization:"Bearer "+token
+},
+cache:"no-store"
+}
+);
+
 }
 
-function toFields(obj){
-  return {
-    stringValue:obj===undefined||obj===null?"":String(obj)
-  };
 }
+
+return r;
+
+}
+
+
+/* LOAD CURRENT PROFILE */
 
 async function loadProfile(){
 
-  if(!token||!uid){
-    location.href="index.html";
-    return;
-  }
+if(!token||!uid){
 
-  setMsg("Loading...");
+location.href="index.html";
+return;
 
-  try{
-    let r=await api(`/users/${uid}`);
-
-    if(!r.ok && refreshToken){
-      if(await refresh())r=await api(`/users/${uid}`);
-    }
-
-    if(!r.ok){
-      setMsg("Profile load nahi ho rahi.");
-      return;
-    }
-
-    const d=await r.json();
-    const f=d.fields||{};
-
-    $("name").value=val(f.name?.stringValue);
-    $("username").value=val(f.username?.stringValue);
-    $("bio").value=val(f.bio?.stringValue);
-
-    const p=val(f.photoURL?.stringValue);
-
-    if(p){
-      $("photo").src=p;
-    }else{
-      $("photo").src="data:image/svg+xml;charset=UTF-8,"+
-      encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-        <rect width="100%" height="100%" fill="#222"/>
-        <text x="50%" y="55%" text-anchor="middle" fill="#777" font-size="70">👤</text>
-        </svg>`
-      );
-    }
-
-    setMsg("");
-
-  }catch(e){
-    setMsg("Something went wrong.");
-  }
 }
 
-$("photoInput").addEventListener("change",function(){
+msg("Loading...");
 
-  const file=this.files[0];
-  if(!file)return;
+try{
 
-  if(file.size>5*1024*1024){
-    setMsg("Photo 5MB se chhoti rakho.");
-    this.value="";
-    return;
-  }
+const r=await getProfile();
 
-  const reader=new FileReader();
+if(!r.ok){
 
-  reader.onload=e=>{
-    newPhoto=e.target.result;
-    $("photo").src=newPhoto;
-  };
+msg("Profile load nahi hui.");
+return;
 
-  reader.readAsDataURL(file);
+}
+
+const d=await r.json();
+
+const f=d.fields||{};
+
+$("name").value=
+f.name?.stringValue||"";
+
+$("username").value=
+f.username?.stringValue||"";
+
+$("bio").value=
+f.bio?.stringValue||"";
+
+const photo=
+f.photoURL?.stringValue||"";
+
+$("profilePhoto").src=
+photo||defaultPhoto();
+
+msg("");
+
+}catch(e){
+
+console.log(e);
+
+msg("Something went wrong.");
+
+}
+
+}
+
+
+/* COMPRESS PHOTO */
+
+function compressPhoto(file){
+
+return new Promise((resolve,reject)=>{
+
+const reader=new FileReader();
+
+reader.onload=function(){
+
+const img=new Image();
+
+img.onload=function(){
+
+const max=500;
+
+let w=img.width;
+let h=img.height;
+
+if(w>h){
+
+if(w>max){
+h=h*(max/w);
+w=max;
+}
+
+}else{
+
+if(h>max){
+w=w*(max/h);
+h=max;
+}
+
+}
+
+const canvas=
+document.createElement("canvas");
+
+canvas.width=Math.round(w);
+canvas.height=Math.round(h);
+
+const ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+/*
+JPEG quality .55
+Keeps Firebase document small
+*/
+
+const result=
+canvas.toDataURL(
+"image/jpeg",
+0.55
+);
+
+resolve(result);
+
+};
+
+img.onerror=reject;
+
+img.src=reader.result;
+
+};
+
+reader.onerror=reject;
+
+reader.readAsDataURL(file);
+
 });
+
+}
+
+
+/* PHOTO SELECT */
+
+$("photoInput").addEventListener(
+"change",
+async function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+msg("Photo compress ho rahi hai...");
+
+try{
+
+newPhoto=
+await compressPhoto(file);
+
+$("profilePhoto").src=newPhoto;
+
+msg("Photo ready hai ✓");
+
+}catch(e){
+
+console.log(e);
+
+msg("Photo load nahi hui.");
+
+}
+
+});
+
+
+/* SAVE PROFILE */
 
 async function saveProfile(){
 
-  const name=$("name").value.trim();
-  const username=$("username").value.trim().replace(/^@/,"");
-  const bio=$("bio").value.trim();
+const name=
+$("name").value.trim();
 
-  if(!name){
-    setMsg("Name likho.");
-    return;
-  }
+const username=
+$("username").value
+.trim()
+.replace(/^@/,"");
 
-  if(!username){
-    setMsg("Username likho.");
-    return;
-  }
+const bio=
+$("bio").value.trim();
 
-  if(username.length<3){
-    setMsg("Username kam se kam 3 characters ka ho.");
-    return;
-  }
 
-  setMsg("Saving...");
+if(!name){
 
-  try{
+msg("Name likho.");
 
-    const body={
-      fields:{
-        name:{stringValue:name},
-        username:{stringValue:username},
-        bio:{stringValue:bio},
-        uid:{stringValue:uid},
-        updatedAt:{timestampValue:new Date().toISOString()}
-      }
-    };
+return;
 
-    if(newPhoto){
-      body.fields.photoURL={stringValue:newPhoto};
-    }
-
-    let r=await api(`/users/${uid}?updateMask.fieldPaths=name&updateMask.fieldPaths=username&updateMask.fieldPaths=bio&updateMask.fieldPaths=uid&updateMask.fieldPaths=updatedAt${newPhoto?"&updateMask.fieldPaths=photoURL":""}`,{
-      method:"PATCH",
-      body:JSON.stringify(body)
-    });
-
-    if(!r.ok){
-      const err=await r.text();
-      console.log(err);
-      setMsg("Profile save nahi hui.");
-      return;
-    }
-
-    const oldProfile=JSON.parse(localStorage.getItem("crockcellProfile")||"{}");
-
-    localStorage.setItem("crockcellProfile",JSON.stringify({
-      ...oldProfile,
-      name,
-      username,
-      bio,
-      uid,
-      ...(newPhoto?{photoURL:newPhoto}:{} )
-    }));
-
-    setMsg("Profile updated successfully ✓");
-
-    setTimeout(()=>{
-      location.href="profile.html";
-    },800);
-
-  }catch(e){
-    console.log(e);
-    setMsg("Something went wrong.");
-  }
 }
 
+if(!username){
+
+msg("Username likho.");
+
+return;
+
+}
+
+if(username.length<3){
+
+msg("Username kam se kam 3 characters ka ho.");
+
+return;
+
+}
+
+
+$("saveBtn").disabled=true;
+
+$("saveBtn").textContent="Saving...";
+
+msg("Profile save ho rahi hai...");
+
+
+try{
+
+const fields={
+
+name:{
+stringValue:name
+},
+
+username:{
+stringValue:username
+},
+
+bio:{
+stringValue:bio
+},
+
+uid:{
+stringValue:uid
+},
+
+updatedAt:{
+timestampValue:
+new Date().toISOString()
+}
+
+};
+
+
+/*
+Only add photo if a new photo
+was selected.
+*/
+
+if(newPhoto){
+
+fields.photoURL={
+stringValue:newPhoto
+};
+
+}
+
+
+let url=
+`${BASE}/users/${uid}`;
+
+const params=[];
+
+Object.keys(fields).forEach(
+key=>{
+params.push(
+"updateMask.fieldPaths="+
+encodeURIComponent(key)
+);
+});
+
+url+="?"+params.join("&");
+
+
+let r=await fetch(
+url,
+{
+method:"PATCH",
+
+headers:{
+Authorization:"Bearer "+token,
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+fields:fields
+}),
+
+cache:"no-store"
+});
+
+
+/* TOKEN EXPIRED */
+
+if((r.status===401||r.status===403)
+&&refreshToken){
+
+if(await refresh()){
+
+r=await fetch(
+url,
+{
+method:"PATCH",
+
+headers:{
+Authorization:"Bearer "+token,
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+fields:fields
+}),
+
+cache:"no-store"
+}
+);
+
+}
+
+}
+
+
+if(!r.ok){
+
+const errorText=
+await r.text();
+
+console.log(
+"FIREBASE ERROR:",
+errorText
+);
+
+msg("Profile save nahi hui.");
+
+$("saveBtn").disabled=false;
+
+$("saveBtn").textContent=
+"Save Changes";
+
+return;
+
+}
+
+
+/* UPDATE LOCAL DATA */
+
+let old={};
+
+try{
+
+old=JSON.parse(
+localStorage.getItem(
+"crockcellProfile"
+)||"{}"
+);
+
+}catch(e){}
+
+
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify({
+
+...old,
+
+uid:uid,
+
+name:name,
+
+username:username,
+
+bio:bio,
+
+photoURL:
+newPhoto||
+old.photoURL||
+""
+
+})
+);
+
+
+msg("Profile saved successfully ✓");
+
+setTimeout(
+()=>{
+
+location.href=
+"profile.html?v="+Date.now();
+
+},
+800
+);
+
+
+}catch(e){
+
+console.log(e);
+
+msg("Something went wrong.");
+
+$("saveBtn").disabled=false;
+
+$("saveBtn").textContent=
+"Save Changes";
+
+}
+
+}
+
+
 loadProfile();
+
 </script>
 
 </body>
