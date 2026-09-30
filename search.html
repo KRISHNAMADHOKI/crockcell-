@@ -53,7 +53,7 @@ border-radius:16px;
 padding:4px 5px
 }
 
-.searchSymbol{
+.searchIcon{
 width:40px;
 text-align:center;
 font-size:21px;
@@ -75,17 +75,17 @@ padding:0 5px
 color:#888
 }
 
-.clear{
+#clearBtn{
 width:38px;
 height:38px;
 border:0;
 background:transparent;
-color:#999;
+color:#aaa;
 font-size:22px;
 display:none
 }
 
-.searchButton{
+#searchBtn{
 width:44px;
 height:44px;
 border:0;
@@ -93,7 +93,6 @@ border-radius:13px;
 background:#fff;
 color:#000;
 font-size:20px;
-font-weight:bold;
 cursor:pointer
 }
 
@@ -104,7 +103,7 @@ padding:0 16px
 .heading{
 font-size:14px;
 color:#999;
-margin:4px 0 10px
+margin:5px 0 10px
 }
 
 .user{
@@ -149,8 +148,7 @@ border-radius:10px;
 padding:8px 13px;
 background:#fff;
 color:#000;
-font-weight:bold;
-cursor:pointer
+font-weight:bold
 }
 
 .following{
@@ -161,7 +159,7 @@ color:#fff
 .empty{
 text-align:center;
 color:#888;
-padding:35px 10px
+padding:40px 10px
 }
 
 .bottom{
@@ -198,9 +196,10 @@ color:#fff
 </div>
 
 <div class="searchArea">
+
 <div class="searchBox">
 
-<div class="searchSymbol">⌕</div>
+<div class="searchIcon">⌕</div>
 
 <input
 id="searchInput"
@@ -209,17 +208,18 @@ placeholder="Search people..."
 autocomplete="off"
 >
 
-<button id="clearButton" class="clear">×</button>
+<button id="clearBtn">×</button>
 
-<button id="searchButton" class="searchButton">⌕</button>
+<button id="searchBtn">⌕</button>
 
 </div>
+
 </div>
 
 <div class="section">
 
 <div id="heading" class="heading">
-Suggested people
+Search people
 </div>
 
 <div id="results"></div>
@@ -246,13 +246,12 @@ let token=localStorage.getItem("crockcellIdToken");
 let uid=localStorage.getItem("crockcellUid");
 let refreshToken=localStorage.getItem("crockcellRefreshToken");
 
-let users=[];
 let timer=null;
 
 const input=document.getElementById("searchInput");
 const results=document.getElementById("results");
 const heading=document.getElementById("heading");
-const clearButton=document.getElementById("clearButton");
+const clearBtn=document.getElementById("clearBtn");
 
 if(!token || !uid){
 location.href="index.html";
@@ -267,16 +266,9 @@ return String(v||"")
 .replace(/'/g,"&#039;");
 }
 
-function getValue(field){
-
-if(!field)return"";
-
-if(field.stringValue!==undefined)
-return field.stringValue;
-
-if(field.integerValue!==undefined)
-return field.integerValue;
-
+function value(f){
+if(!f)return"";
+if(f.stringValue!==undefined)return f.stringValue;
 return"";
 }
 
@@ -291,8 +283,7 @@ const r=await fetch(
 {
 method:"POST",
 headers:{
-"Content-Type":
-"application/x-www-form-urlencoded"
+"Content-Type":"application/x-www-form-urlencoded"
 },
 body:
 "grant_type=refresh_token&refresh_token="+
@@ -302,8 +293,7 @@ encodeURIComponent(refreshToken)
 
 const d=await r.json();
 
-if(!r.ok || !d.id_token)
-return false;
+if(!r.ok || !d.id_token)return false;
 
 token=d.id_token;
 
@@ -327,7 +317,7 @@ return false;
 }
 }
 
-async function firebase(path,options={}){
+async function firestore(path,options={}){
 
 options.headers=Object.assign(
 {
@@ -339,8 +329,7 @@ options.headers||{}
 
 let r=await fetch(BASE+path,options);
 
-if((r.status===401 || r.status===403)
-&& refreshToken){
+if((r.status===401||r.status===403)&&refreshToken){
 
 const ok=await refresh();
 
@@ -380,147 +369,130 @@ const f=doc.fields||{};
 
 return{
 id:doc.name.split("/").pop(),
-name:getValue(f.name),
-username:getValue(f.username),
-bio:getValue(f.bio),
-photoURL:getValue(f.photoURL),
-email:getValue(f.email)
+name:value(f.name),
+username:value(f.username),
+photoURL:value(f.photoURL),
+bio:value(f.bio),
+email:value(f.email)
 };
 
 }
 
-async function loadUsers(){
+async function queryField(field,prefix){
+
+if(!prefix)return[];
+
+const end=prefix+"\uf8ff";
+
+const query={
+structuredQuery:{
+
+from:[
+{collectionId:"users"}
+],
+
+where:{
+fieldFilter:{
+field:{
+fieldPath:field
+},
+op:"GREATER_THAN_OR_EQUAL",
+value:{
+stringValue:prefix
+}
+}
+},
+
+orderBy:[
+{
+field:{
+fieldPath:field
+},
+direction:"ASCENDING"
+}
+],
+
+limit:20
+
+}
+};
 
 try{
 
-/*
- Firebase ka simple users collection
- GET use kar rahe hain.
-*/
-
-const data=await firebase(
-"/users?pageSize=100"
+const data=await firestore(
+":runQuery",
+{
+method:"POST",
+body:JSON.stringify(query)
+}
 );
 
-users=(data.documents||[])
-.map(makeUser);
+return(data||[])
+.filter(x=>x.document)
+.map(x=>makeUser(x.document))
+.filter(u=>{
 
-/*
- Agar current user kisi wajah se collection
- response me nahi mila to local profile se
- usko manually add kar denge.
-*/
+const v=(field==="username"
+?u.username
+:u.name).toLowerCase();
 
-const mine=localStorage.getItem(
-"crockcellProfile"
-);
+return v.startsWith(prefix.toLowerCase());
 
-if(mine){
-
-try{
-
-const p=JSON.parse(mine);
-
-if(p){
-
-const already=users.some(
-u=>u.id===uid
-);
-
-if(!already){
-
-users.unshift({
-id:uid,
-name:p.name||"",
-username:p.username||"",
-bio:p.bio||"",
-photoURL:p.photoURL||"",
-email:p.email||""
 });
-
-}
-
-}
-
-}catch(e){}
-
-}
-
-showUsers("");
 
 }catch(e){
 
-console.log(e);
-
-results.innerHTML=
-`<div class="empty">
-Search users load nahi ho paaye.
-</div>`;
+console.log(field,e);
+return[];
 
 }
 
 }
 
-function showUsers(text){
+async function searchUsers(){
 
-const q=text.trim().toLowerCase();
+const q=input.value.trim();
 
-clearButton.style.display=
+clearBtn.style.display=
 q?"block":"none";
-
-let list=[];
 
 if(!q){
 
-list=users.slice(0,10);
+heading.textContent="Search people";
 
-heading.textContent=
-"Suggested people";
+results.innerHTML=
+`<div class="empty">
+Type a name or username
+</div>`;
 
-}else{
-
-list=users
-.map(u=>{
-
-const username=
-(u.username||"").toLowerCase();
-
-const name=
-(u.name||"").toLowerCase();
-
-let score=99;
-
-if(username===q)
-score=0;
-
-else if(name===q)
-score=1;
-
-else if(username.startsWith(q))
-score=2;
-
-else if(name.startsWith(q))
-score=3;
-
-else if(username.includes(q))
-score=4;
-
-else if(name.includes(q))
-score=5;
-
-return{
-...u,
-score
-};
-
-})
-.filter(u=>u.score<99)
-.sort((a,b)=>a.score-b.score);
-
-heading.textContent=
-"Search results";
-
+return;
 }
+
+heading.textContent="Searching...";
+
+results.innerHTML=
+`<div class="empty">Searching...</div>`;
+
+const usernameResults=
+await queryField(
+"username",
+q.toLowerCase()
+);
+
+const nameResults=
+await queryField(
+"name",
+q.toUpperCase()
+);
+
+const map=new Map();
+
+[...usernameResults,...nameResults]
+.forEach(u=>map.set(u.id,u));
+
+const list=[...map.values()];
+
+heading.textContent="People";
 
 renderUsers(list);
 
@@ -544,17 +516,12 @@ const photo=
 u.photoURL ||
 "https://via.placeholder.com/100";
 
-const name=
-u.name ||
-u.username ||
-"User";
-
-const username=
-u.username||"";
-
 return`
 
-<div class="user" data-id="${esc(u.id)}">
+<div
+class="user"
+data-id="${esc(u.id)}"
+>
 
 <img
 class="avatar"
@@ -565,11 +532,11 @@ onerror="this.src='https://via.placeholder.com/100'"
 <div class="info">
 
 <div class="name">
-${esc(name)}
+${esc(u.name||u.username||"User")}
 </div>
 
 <div class="username">
-${username?"@"+esc(username):""}
+${u.username?"@"+esc(u.username):""}
 </div>
 
 </div>
@@ -579,12 +546,11 @@ u.id!==uid
 ?
 `<button
 class="follow"
-data-follow="${esc(u.id)}"
+data-id="${esc(u.id)}"
 >
 Follow
 </button>`
-:
-""
+:""
 }
 
 </div>
@@ -596,43 +562,36 @@ Follow
 document.querySelectorAll(".user")
 .forEach(row=>{
 
-row.addEventListener("click",function(e){
+row.addEventListener("click",e=>{
 
 if(e.target.closest(".follow"))
 return;
 
-const id=this.dataset.id;
-
-/*
- Abhi selected user ID save kar rahe hain.
- Next step me profile page isi ID ko read karega.
-*/
+const userId=row.dataset.id;
 
 localStorage.setItem(
 "crockcellViewedUser",
-id
+userId
 );
 
 location.href=
 "profile.html?uid="+
-encodeURIComponent(id);
+encodeURIComponent(userId);
 
 });
 
 });
 
 document.querySelectorAll(".follow")
-.forEach(button=>{
+.forEach(btn=>{
 
-button.addEventListener(
-"click",
-async function(e){
+btn.addEventListener("click",async e=>{
 
 e.stopPropagation();
 
 await toggleFollow(
-this.dataset.follow,
-this
+btn.dataset.id,
+btn
 );
 
 });
@@ -643,18 +602,17 @@ this
 
 async function toggleFollow(target,button){
 
-const id=uid+"_"+target;
+const followId=
+uid+"_"+target;
 
 try{
-
-/* Pehle check */
 
 let exists=true;
 
 try{
 
-await firebase(
-"/follows/"+id,
+await firestore(
+"/follows/"+followId,
 {method:"GET"}
 );
 
@@ -666,11 +624,9 @@ exists=false;
 
 if(exists){
 
-await firebase(
-"/follows/"+id,
-{
-method:"DELETE"
-}
+await firestore(
+"/follows/"+followId,
+{method:"DELETE"}
 );
 
 button.textContent="Follow";
@@ -678,8 +634,8 @@ button.classList.remove("following");
 
 }else{
 
-await firebase(
-"/follows/"+id,
+await firestore(
+"/follows/"+followId,
 {
 method:"PATCH",
 body:JSON.stringify({
@@ -706,47 +662,40 @@ button.classList.add("following");
 
 }catch(e){
 
-alert(
-"Follow update nahi ho paya."
-);
+alert("Follow update nahi ho paya.");
 
 }
 
 }
 
-input.addEventListener(
-"input",
-function(){
+input.addEventListener("input",()=>{
 
 clearTimeout(timer);
 
 timer=setTimeout(
-()=>{
-showUsers(input.value);
-},
-150
+searchUsers,
+200
 );
 
 });
 
-document.getElementById(
-"searchButton"
-).addEventListener(
+document.getElementById("searchBtn")
+.addEventListener(
 "click",
-function(){
+searchUsers
+);
 
-showUsers(input.value);
-input.focus();
-
-});
-
-clearButton.addEventListener(
+clearBtn.addEventListener(
 "click",
-function(){
+()=>{
 
 input.value="";
+clearBtn.style.display="none";
 
-showUsers("");
+results.innerHTML=
+`<div class="empty">
+Type a name or username
+</div>`;
 
 input.focus();
 
@@ -754,15 +703,13 @@ input.focus();
 
 input.addEventListener(
 "keydown",
-function(e){
+e=>{
 
 if(e.key==="Enter"){
-showUsers(input.value);
+searchUsers();
 }
 
 });
-
-loadUsers();
 
 </script>
 
