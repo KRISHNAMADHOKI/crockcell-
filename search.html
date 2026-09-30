@@ -7,531 +7,758 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
- margin:0;background:#000;color:#fff;
- font-family:Arial,sans-serif;
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+padding-bottom:70px
 }
+
 .header{
- height:64px;display:flex;align-items:center;
- gap:12px;padding:0 16px;border-bottom:1px solid #222;
+height:64px;
+display:flex;
+align-items:center;
+padding:0 16px;
+border-bottom:1px solid #222
 }
-.back{font-size:28px;cursor:pointer}
-.title{font-size:21px;font-weight:bold}
+
+.back{
+font-size:28px;
+margin-right:14px;
+cursor:pointer
+}
+
+.title{
+font-size:21px;
+font-weight:bold
+}
 
 .searchArea{
- padding:14px 16px;
- position:sticky;top:0;background:#000;z-index:5;
+padding:14px 16px;
+background:#000;
+position:sticky;
+top:0;
+z-index:5
 }
+
 .searchBox{
- display:flex;align-items:center;
- background:#1b1b1b;border:1px solid #333;
- border-radius:16px;padding:4px;
-}
-.searchIcon{
- width:40px;text-align:center;
- font-size:21px;color:#aaa;
-}
-input{
- flex:1;border:0;outline:0;background:transparent;
- color:#fff;font-size:16px;padding:12px 4px;
-}
-input::placeholder{color:#888}
-
-.clearBtn{
- display:none;background:none;border:0;
- color:#aaa;font-size:22px;padding:8px;
-}
-.searchBtn{
- width:44px;height:44px;border:0;
- border-radius:13px;background:#fff;color:#000;
- font-size:20px;cursor:pointer;
+height:52px;
+display:flex;
+align-items:center;
+background:#1b1b1b;
+border:1px solid #333;
+border-radius:16px;
+padding:4px 5px
 }
 
-.section{padding:0 16px 80px}
+.searchSymbol{
+width:40px;
+text-align:center;
+font-size:21px;
+color:#aaa
+}
+
+#searchInput{
+flex:1;
+height:42px;
+border:0;
+outline:0;
+background:transparent;
+color:#fff;
+font-size:16px;
+padding:0 5px
+}
+
+#searchInput::placeholder{
+color:#888
+}
+
+.clear{
+width:38px;
+height:38px;
+border:0;
+background:transparent;
+color:#999;
+font-size:22px;
+display:none
+}
+
+.searchButton{
+width:44px;
+height:44px;
+border:0;
+border-radius:13px;
+background:#fff;
+color:#000;
+font-size:20px;
+font-weight:bold;
+cursor:pointer
+}
+
+.section{
+padding:0 16px
+}
+
 .heading{
- color:#999;font-size:14px;
- margin:6px 0 10px;
+font-size:14px;
+color:#999;
+margin:4px 0 10px
 }
 
 .user{
- display:flex;align-items:center;
- padding:11px 0;border-bottom:1px solid #202020;
- cursor:pointer;
-}
-.avatar{
- width:52px;height:52px;border-radius:50%;
- object-fit:cover;background:#292929;
- margin-right:12px;
-}
-.info{flex:1;min-width:0}
-.name{
- font-size:16px;font-weight:bold;
- white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.username{
- color:#999;font-size:14px;margin-top:4px;
+display:flex;
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid #202020;
+cursor:pointer
 }
 
-.followBtn{
- border:0;border-radius:10px;
- padding:8px 13px;
- background:#fff;color:#000;
- font-weight:bold;cursor:pointer;
+.avatar{
+width:52px;
+height:52px;
+border-radius:50%;
+object-fit:cover;
+background:#292929;
+margin-right:12px
 }
+
+.info{
+flex:1;
+min-width:0
+}
+
+.name{
+font-size:16px;
+font-weight:bold;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
+}
+
+.username{
+font-size:14px;
+color:#999;
+margin-top:4px
+}
+
+.follow{
+border:0;
+border-radius:10px;
+padding:8px 13px;
+background:#fff;
+color:#000;
+font-weight:bold;
+cursor:pointer
+}
+
 .following{
- background:#292929;color:#fff;
+background:#292929;
+color:#fff
 }
 
 .empty{
- text-align:center;color:#888;
- padding:40px 10px;
+text-align:center;
+color:#888;
+padding:35px 10px
 }
 
 .bottom{
- position:fixed;left:0;right:0;bottom:0;
- height:60px;background:#000;
- border-top:1px solid #222;
- display:flex;justify-content:space-around;
- align-items:center;z-index:10;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:60px;
+background:#000;
+border-top:1px solid #222;
+display:flex;
+justify-content:space-around;
+align-items:center;
+z-index:10
 }
+
 .bottom a{
- color:#aaa;text-decoration:none;font-size:23px;
+color:#aaa;
+text-decoration:none;
+font-size:23px
 }
-.bottom a.active{color:#fff}
+
+.bottom a.active{
+color:#fff
+}
 </style>
 </head>
 
 <body>
 
 <div class="header">
- <div class="back" onclick="history.back()">‹</div>
- <div class="title">Search</div>
+<div class="back" onclick="history.back()">‹</div>
+<div class="title">Search</div>
 </div>
 
 <div class="searchArea">
- <div class="searchBox">
+<div class="searchBox">
 
-  <div class="searchIcon">⌕</div>
+<div class="searchSymbol">⌕</div>
 
-  <input
-   id="searchInput"
-   type="text"
-   placeholder="Search people..."
-   autocomplete="off"
-  >
+<input
+id="searchInput"
+type="text"
+placeholder="Search people..."
+autocomplete="off"
+>
 
-  <button id="clearBtn" class="clearBtn">×</button>
+<button id="clearButton" class="clear">×</button>
 
-  <button id="searchBtn" class="searchBtn">⌕</button>
+<button id="searchButton" class="searchButton">⌕</button>
 
- </div>
+</div>
 </div>
 
 <div class="section">
- <div id="heading" class="heading">Suggested people</div>
- <div id="results"></div>
+
+<div id="heading" class="heading">
+Suggested people
+</div>
+
+<div id="results"></div>
+
 </div>
 
 <div class="bottom">
- <a href="home.html">⌂</a>
- <a href="search.html" class="active">⌕</a>
- <a href="create.html">＋</a>
- <a href="activity.html">♡</a>
- <a href="profile.html">◉</a>
+<a href="home.html">⌂</a>
+<a href="search.html" class="active">⌕</a>
+<a href="create.html">＋</a>
+<a href="activity.html">♡</a>
+<a href="profile.html">◉</a>
 </div>
 
 <script>
 
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 const PROJECT_ID="crockcell-cd2e6";
+
 const BASE=
- `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 let token=localStorage.getItem("crockcellIdToken");
 let uid=localStorage.getItem("crockcellUid");
 let refreshToken=localStorage.getItem("crockcellRefreshToken");
 
-let allUsers=[];
+let users=[];
 let timer=null;
 
 const input=document.getElementById("searchInput");
 const results=document.getElementById("results");
 const heading=document.getElementById("heading");
-const clearBtn=document.getElementById("clearBtn");
+const clearButton=document.getElementById("clearButton");
 
 if(!token || !uid){
- location.href="index.html";
+location.href="index.html";
 }
 
 function esc(v){
- return String(v??"")
- .replace(/&/g,"&amp;")
- .replace(/</g,"&lt;")
- .replace(/>/g,"&gt;")
- .replace(/"/g,"&quot;")
- .replace(/'/g,"&#039;");
+return String(v||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+function getValue(field){
+
+if(!field)return"";
+
+if(field.stringValue!==undefined)
+return field.stringValue;
+
+if(field.integerValue!==undefined)
+return field.integerValue;
+
+return"";
 }
 
 async function refresh(){
 
- if(!refreshToken)return false;
+if(!refreshToken)return false;
 
- try{
+try{
 
-  const r=await fetch(
-   `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-   {
-    method:"POST",
-    headers:{
-     "Content-Type":"application/x-www-form-urlencoded"
-    },
-    body:
-     "grant_type=refresh_token&refresh_token="+
-     encodeURIComponent(refreshToken)
-   }
-  );
+const r=await fetch(
+`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+body:
+"grant_type=refresh_token&refresh_token="+
+encodeURIComponent(refreshToken)
+}
+);
 
-  const d=await r.json();
+const d=await r.json();
 
-  if(!r.ok || !d.id_token)return false;
+if(!r.ok || !d.id_token)
+return false;
 
-  token=d.id_token;
-  refreshToken=d.refresh_token || refreshToken;
+token=d.id_token;
 
-  localStorage.setItem("crockcellIdToken",token);
-  localStorage.setItem(
-   "crockcellRefreshToken",refreshToken
-  );
+if(d.refresh_token)
+refreshToken=d.refresh_token;
 
-  return true;
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
 
- }catch(e){
-  return false;
- }
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
+
+return true;
+
+}catch(e){
+return false;
+}
 }
 
-async function firestore(path,opt={}){
+async function firebase(path,options={}){
 
- opt.headers=Object.assign(
-  {"Content-Type":"application/json"},
-  opt.headers||{}
- );
+options.headers=Object.assign(
+{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
+},
+options.headers||{}
+);
 
- opt.headers.Authorization="Bearer "+token;
+let r=await fetch(BASE+path,options);
 
- let r=await fetch(BASE+path,opt);
+if((r.status===401 || r.status===403)
+&& refreshToken){
 
- if((r.status===401 || r.status===403) && refreshToken){
+const ok=await refresh();
 
-  if(await refresh()){
+if(ok){
 
-   opt.headers.Authorization="Bearer "+token;
-   r=await fetch(BASE+path,opt);
+options.headers.Authorization=
+"Bearer "+token;
 
-  }
- }
+r=await fetch(BASE+path,options);
 
- const text=await r.text();
-
- let data=null;
-
- try{
-  data=text ? JSON.parse(text) : null;
- }catch(e){}
-
- if(!r.ok){
-  throw new Error(
-   data?.error?.message || "Firebase error "+r.status
-  );
- }
-
- return data;
+}
 }
 
-function value(field){
+const text=await r.text();
 
- if(!field)return "";
+let data=null;
 
- if(field.stringValue!==undefined)
-  return field.stringValue;
+try{
+data=text?JSON.parse(text):null
+}catch(e){}
 
- if(field.integerValue!==undefined)
-  return field.integerValue;
+if(!r.ok){
 
- return "";
+throw new Error(
+data?.error?.message ||
+("Firebase error "+r.status)
+);
+
+}
+
+return data;
 }
 
 function makeUser(doc){
 
- const f=doc.fields || {};
+const f=doc.fields||{};
 
- return {
-  id:doc.name.split("/").pop(),
-  name:value(f.name),
-  username:value(f.username),
-  bio:value(f.bio),
-  photoURL:value(f.photoURL),
-  email:value(f.email)
- };
+return{
+id:doc.name.split("/").pop(),
+name:getValue(f.name),
+username:getValue(f.username),
+bio:getValue(f.bio),
+photoURL:getValue(f.photoURL),
+email:getValue(f.email)
+};
+
 }
 
 async function loadUsers(){
 
- try{
+try{
 
-  const query={
-   structuredQuery:{
-    from:[
-     {collectionId:"users"}
-    ]
-   }
-  };
+/*
+ Firebase ka simple users collection
+ GET use kar rahe hain.
+*/
 
-  const data=await firestore(
-   ":runQuery",
-   {
-    method:"POST",
-    body:JSON.stringify(query)
-   }
-  );
+const data=await firebase(
+"/users?pageSize=100"
+);
 
-  allUsers=(data || [])
-   .filter(x=>x.document)
-   .map(x=>makeUser(x.document));
+users=(data.documents||[])
+.map(makeUser);
 
-  showUsers("");
+/*
+ Agar current user kisi wajah se collection
+ response me nahi mila to local profile se
+ usko manually add kar denge.
+*/
 
- }catch(e){
+const mine=localStorage.getItem(
+"crockcellProfile"
+);
 
-  console.error(e);
+if(mine){
 
-  results.innerHTML=
-   `<div class="empty">
-      Users load nahi ho paaye.
-    </div>`;
- }
+try{
+
+const p=JSON.parse(mine);
+
+if(p){
+
+const already=users.some(
+u=>u.id===uid
+);
+
+if(!already){
+
+users.unshift({
+id:uid,
+name:p.name||"",
+username:p.username||"",
+bio:p.bio||"",
+photoURL:p.photoURL||"",
+email:p.email||""
+});
+
+}
+
+}
+
+}catch(e){}
+
+}
+
+showUsers("");
+
+}catch(e){
+
+console.log(e);
+
+results.innerHTML=
+`<div class="empty">
+Search users load nahi ho paaye.
+</div>`;
+
+}
+
 }
 
 function showUsers(text){
 
- const q=text.trim().toLowerCase();
+const q=text.trim().toLowerCase();
 
- clearBtn.style.display=q ? "block" : "none";
+clearButton.style.display=
+q?"block":"none";
 
- let users=[];
+let list=[];
 
- if(!q){
+if(!q){
 
-  users=allUsers.slice(0,10);
-  heading.textContent="Suggested people";
+list=users.slice(0,10);
 
- }else{
+heading.textContent=
+"Suggested people";
 
-  users=allUsers
-   .map(u=>{
+}else{
 
-    const username=(u.username||"").toLowerCase();
-    const name=(u.name||"").toLowerCase();
+list=users
+.map(u=>{
 
-    let score=99;
+const username=
+(u.username||"").toLowerCase();
 
-    if(username===q)score=0;
-    else if(name===q)score=1;
-    else if(username.startsWith(q))score=2;
-    else if(name.startsWith(q))score=3;
-    else if(username.includes(q))score=4;
-    else if(name.includes(q))score=5;
+const name=
+(u.name||"").toLowerCase();
 
-    return {...u,score};
+let score=99;
 
-   })
-   .filter(u=>u.score<99)
-   .sort((a,b)=>a.score-b.score);
+if(username===q)
+score=0;
 
-  heading.textContent="Search results";
- }
+else if(name===q)
+score=1;
 
- renderUsers(users);
-}
+else if(username.startsWith(q))
+score=2;
 
-function renderUsers(users){
+else if(name.startsWith(q))
+score=3;
 
- if(!users.length){
+else if(username.includes(q))
+score=4;
 
-  results.innerHTML=
-   `<div class="empty">No users found</div>`;
+else if(name.includes(q))
+score=5;
 
-  return;
- }
+return{
+...u,
+score
+};
 
- results.innerHTML=users.map(u=>{
+})
+.filter(u=>u.score<99)
+.sort((a,b)=>a.score-b.score);
 
-  const photo=
-   u.photoURL ||
-   "https://via.placeholder.com/100";
-
-  const name=u.name || u.username || "User";
-  const username=u.username || "";
-
-  return `
-   <div class="user" data-id="${esc(u.id)}">
-
-    <img
-     class="avatar"
-     src="${esc(photo)}"
-     onerror="this.src='https://via.placeholder.com/100'"
-    >
-
-    <div class="info">
-     <div class="name">${esc(name)}</div>
-
-     <div class="username">
-      ${username ? "@"+esc(username) : ""}
-     </div>
-    </div>
-
-    ${
-     u.id!==uid
-     ?
-     `<button
-       class="followBtn"
-       data-id="${esc(u.id)}"
-      >Follow</button>`
-     :
-     ""
-    }
-
-   </div>
-  `;
-
- }).join("");
-
- document.querySelectorAll(".user").forEach(row=>{
-
-  row.addEventListener("click",e=>{
-
-   if(e.target.closest(".followBtn"))return;
-
-   const userId=row.dataset.id;
-
-   localStorage.setItem(
-    "crockcellViewedUser",
-    userId
-   );
-
-   location.href=
-    "profile.html?uid="+
-    encodeURIComponent(userId);
-
-  });
-
- });
-
- document.querySelectorAll(".followBtn").forEach(btn=>{
-
-  btn.addEventListener("click",async e=>{
-
-   e.stopPropagation();
-
-   await toggleFollow(
-    btn.dataset.id,
-    btn
-   );
-
-  });
-
- });
+heading.textContent=
+"Search results";
 
 }
 
-async function toggleFollow(target,btn){
+renderUsers(list);
 
- const followId=uid+"_"+target;
-
- try{
-
-  try{
-
-   await firestore(
-    "/follows/"+followId,
-    {method:"GET"}
-   );
-
-   await firestore(
-    "/follows/"+followId,
-    {method:"DELETE"}
-   );
-
-   btn.textContent="Follow";
-   btn.classList.remove("following");
-
-  }catch(e){
-
-   await firestore(
-    "/follows/"+followId,
-    {
-     method:"PATCH",
-     body:JSON.stringify({
-      fields:{
-       followerId:{
-        stringValue:uid
-       },
-       followingId:{
-        stringValue:target
-       },
-       createdAt:{
-        timestampValue:new Date().toISOString()
-       }
-      }
-     })
-    }
-   );
-
-   btn.textContent="Following";
-   btn.classList.add("following");
-
-  }
-
- }catch(e){
-
-  alert("Follow update nahi ho paya.");
-
- }
 }
 
-input.addEventListener("input",()=>{
+function renderUsers(list){
 
- clearTimeout(timer);
+if(!list.length){
 
- timer=setTimeout(()=>{
+results.innerHTML=
+`<div class="empty">
+No users found
+</div>`;
 
-  showUsers(input.value);
+return;
+}
 
- },150);
+results.innerHTML=list.map(u=>{
+
+const photo=
+u.photoURL ||
+"https://via.placeholder.com/100";
+
+const name=
+u.name ||
+u.username ||
+"User";
+
+const username=
+u.username||"";
+
+return`
+
+<div class="user" data-id="${esc(u.id)}">
+
+<img
+class="avatar"
+src="${esc(photo)}"
+onerror="this.src='https://via.placeholder.com/100'"
+>
+
+<div class="info">
+
+<div class="name">
+${esc(name)}
+</div>
+
+<div class="username">
+${username?"@"+esc(username):""}
+</div>
+
+</div>
+
+${
+u.id!==uid
+?
+`<button
+class="follow"
+data-follow="${esc(u.id)}"
+>
+Follow
+</button>`
+:
+""
+}
+
+</div>
+
+`;
+
+}).join("");
+
+document.querySelectorAll(".user")
+.forEach(row=>{
+
+row.addEventListener("click",function(e){
+
+if(e.target.closest(".follow"))
+return;
+
+const id=this.dataset.id;
+
+/*
+ Abhi selected user ID save kar rahe hain.
+ Next step me profile page isi ID ko read karega.
+*/
+
+localStorage.setItem(
+"crockcellViewedUser",
+id
+);
+
+location.href=
+"profile.html?uid="+
+encodeURIComponent(id);
 
 });
 
-document.getElementById("searchBtn")
-.addEventListener("click",()=>{
+});
 
- showUsers(input.value);
- input.focus();
+document.querySelectorAll(".follow")
+.forEach(button=>{
+
+button.addEventListener(
+"click",
+async function(e){
+
+e.stopPropagation();
+
+await toggleFollow(
+this.dataset.follow,
+this
+);
 
 });
 
-clearBtn.addEventListener("click",()=>{
+});
 
- input.value="";
- showUsers("");
- input.focus();
+}
+
+async function toggleFollow(target,button){
+
+const id=uid+"_"+target;
+
+try{
+
+/* Pehle check */
+
+let exists=true;
+
+try{
+
+await firebase(
+"/follows/"+id,
+{method:"GET"}
+);
+
+}catch(e){
+
+exists=false;
+
+}
+
+if(exists){
+
+await firebase(
+"/follows/"+id,
+{
+method:"DELETE"
+}
+);
+
+button.textContent="Follow";
+button.classList.remove("following");
+
+}else{
+
+await firebase(
+"/follows/"+id,
+{
+method:"PATCH",
+body:JSON.stringify({
+fields:{
+followerId:{
+stringValue:uid
+},
+followingId:{
+stringValue:target
+},
+createdAt:{
+timestampValue:
+new Date().toISOString()
+}
+}
+})
+}
+);
+
+button.textContent="Following";
+button.classList.add("following");
+
+}
+
+}catch(e){
+
+alert(
+"Follow update nahi ho paya."
+);
+
+}
+
+}
+
+input.addEventListener(
+"input",
+function(){
+
+clearTimeout(timer);
+
+timer=setTimeout(
+()=>{
+showUsers(input.value);
+},
+150
+);
 
 });
 
-input.addEventListener("keydown",e=>{
+document.getElementById(
+"searchButton"
+).addEventListener(
+"click",
+function(){
 
- if(e.key==="Enter"){
-  showUsers(input.value);
- }
+showUsers(input.value);
+input.focus();
+
+});
+
+clearButton.addEventListener(
+"click",
+function(){
+
+input.value="";
+
+showUsers("");
+
+input.focus();
+
+});
+
+input.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter"){
+showUsers(input.value);
+}
 
 });
 
