@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Edit Profile - CROCKCELL</title>
+<title>Edit Profile</title>
 
 <style>
 *{box-sizing:border-box}
@@ -16,17 +16,17 @@ font-family:Arial,sans-serif
 }
 
 header{
-height:60px;
+height:65px;
 border-bottom:1px solid #222;
 display:flex;
 align-items:center;
-padding:0 18px;
+padding:0 25px;
 font-size:22px;
 font-weight:bold
 }
 
 .back{
-font-size:30px;
+font-size:32px;
 margin-right:15px;
 cursor:pointer
 }
@@ -37,13 +37,13 @@ margin:auto;
 padding:25px 32px
 }
 
-.profilePhoto{
+.photo{
 width:120px;
 height:120px;
 border-radius:50%;
 object-fit:cover;
 display:block;
-margin:10px auto 30px;
+margin:15px auto 30px;
 background:#222
 }
 
@@ -81,10 +81,24 @@ font-size:17px;
 font-weight:bold
 }
 
+button:disabled{
+opacity:.5
+}
+
 #msg{
-text-align:center;
 margin-top:18px;
-color:#aaa
+text-align:center;
+color:#aaa;
+line-height:1.5;
+word-break:break-word
+}
+
+.error{
+color:#ff7777!important
+}
+
+.success{
+color:#72ff72!important
 }
 </style>
 </head>
@@ -98,10 +112,7 @@ Edit Profile
 
 <main>
 
-<img id="profilePhoto"
-class="profilePhoto"
-src=""
-alt="Profile">
+<img id="photo" class="photo" src="" alt="Profile">
 
 <label>Profile Photo</label>
 <input id="photoInput" type="file" accept="image/*">
@@ -132,7 +143,9 @@ const PROJECT_ID=
 "crockcell-cd2e6";
 
 const BASE=
-`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+"https://firestore.googleapis.com/v1/projects/"
++PROJECT_ID+
+"/databases/(default)/documents";
 
 let token=
 localStorage.getItem("crockcellIdToken");
@@ -151,8 +164,9 @@ return document.getElementById(id);
 }
 
 
-function msg(text){
+function show(text,type=""){
 $("msg").textContent=text;
+$("msg").className=type;
 }
 
 
@@ -173,14 +187,15 @@ font-size="70">👤</text>
 }
 
 
-async function refresh(){
+async function refreshTokenNow(){
 
 if(!refreshToken)return false;
 
 try{
 
 const r=await fetch(
-`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+"https://securetoken.googleapis.com/v1/token?key="
++API_KEY,
 {
 method:"POST",
 headers:{
@@ -188,18 +203,22 @@ headers:{
 "application/x-www-form-urlencoded"
 },
 body:
-`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+"grant_type=refresh_token&refresh_token="
++encodeURIComponent(refreshToken)
 }
 );
 
 const d=await r.json();
 
-if(!r.ok||!d.id_token)return false;
+if(!r.ok || !d.id_token){
+console.log("TOKEN ERROR",d);
+return false;
+}
 
 token=d.id_token;
 
 refreshToken=
-d.refresh_token||refreshToken;
+d.refresh_token || refreshToken;
 
 localStorage.setItem(
 "crockcellIdToken",
@@ -215,6 +234,7 @@ return true;
 
 }catch(e){
 
+console.log(e);
 return false;
 
 }
@@ -222,10 +242,21 @@ return false;
 }
 
 
-async function getProfile(){
+/* LOAD PROFILE */
+
+async function loadProfile(){
+
+if(!token || !uid){
+
+location.href="index.html";
+return;
+
+}
+
+try{
 
 let r=await fetch(
-`${BASE}/users/${uid}`,
+BASE+"/users/"+uid,
 {
 headers:{
 Authorization:"Bearer "+token
@@ -237,10 +268,10 @@ cache:"no-store"
 if((r.status===401||r.status===403)
 &&refreshToken){
 
-if(await refresh()){
+if(await refreshTokenNow()){
 
 r=await fetch(
-`${BASE}/users/${uid}`,
+BASE+"/users/"+uid,
 {
 headers:{
 Authorization:"Bearer "+token
@@ -253,31 +284,9 @@ cache:"no-store"
 
 }
 
-return r;
-
-}
-
-
-/* LOAD CURRENT PROFILE */
-
-async function loadProfile(){
-
-if(!token||!uid){
-
-location.href="index.html";
-return;
-
-}
-
-msg("Loading...");
-
-try{
-
-const r=await getProfile();
-
 if(!r.ok){
 
-msg("Profile load nahi hui.");
+show("Profile load nahi hui.","error");
 return;
 
 }
@@ -295,19 +304,14 @@ f.username?.stringValue||"";
 $("bio").value=
 f.bio?.stringValue||"";
 
-const photo=
-f.photoURL?.stringValue||"";
-
-$("profilePhoto").src=
-photo||defaultPhoto();
-
-msg("");
+$("photo").src=
+f.photoURL?.stringValue||defaultPhoto();
 
 }catch(e){
 
 console.log(e);
 
-msg("Something went wrong.");
+show("Profile load error.","error");
 
 }
 
@@ -328,22 +332,22 @@ const img=new Image();
 
 img.onload=function(){
 
-const max=500;
-
 let w=img.width;
 let h=img.height;
+
+const max=450;
 
 if(w>h){
 
 if(w>max){
-h=h*(max/w);
+h=h*max/w;
 w=max;
 }
 
 }else{
 
 if(h>max){
-w=w*(max/h);
+w=w*max/h;
 h=max;
 }
 
@@ -366,18 +370,12 @@ canvas.width,
 canvas.height
 );
 
-/*
-JPEG quality .55
-Keeps Firebase document small
-*/
-
-const result=
+resolve(
 canvas.toDataURL(
 "image/jpeg",
-0.55
+0.45
+)
 );
-
-resolve(result);
 
 };
 
@@ -396,7 +394,7 @@ reader.readAsDataURL(file);
 }
 
 
-/* PHOTO SELECT */
+/* PHOTO */
 
 $("photoInput").addEventListener(
 "change",
@@ -406,29 +404,27 @@ const file=this.files[0];
 
 if(!file)return;
 
-msg("Photo compress ho rahi hai...");
-
 try{
+
+show("Photo compress ho rahi hai...");
 
 newPhoto=
 await compressPhoto(file);
 
-$("profilePhoto").src=newPhoto;
+$("photo").src=newPhoto;
 
-msg("Photo ready hai ✓");
+show("Photo ready hai ✓","success");
 
 }catch(e){
 
-console.log(e);
-
-msg("Photo load nahi hui.");
+show("Photo load nahi hui.","error");
 
 }
 
 });
 
 
-/* SAVE PROFILE */
+/* SAVE */
 
 async function saveProfile(){
 
@@ -436,9 +432,7 @@ const name=
 $("name").value.trim();
 
 const username=
-$("username").value
-.trim()
-.replace(/^@/,"");
+$("username").value.trim().replace(/^@/,"");
 
 const bio=
 $("bio").value.trim();
@@ -446,68 +440,97 @@ $("bio").value.trim();
 
 if(!name){
 
-msg("Name likho.");
-
+show("Name likho.","error");
 return;
 
 }
 
 if(!username){
 
-msg("Username likho.");
-
+show("Username likho.","error");
 return;
 
 }
-
-if(username.length<3){
-
-msg("Username kam se kam 3 characters ka ho.");
-
-return;
-
-}
-
 
 $("saveBtn").disabled=true;
 
 $("saveBtn").textContent="Saving...";
 
-msg("Profile save ho rahi hai...");
+show("Profile save ho rahi hai...");
 
 
 try{
 
-const fields={
+/*
+First make sure token is fresh
+*/
 
-name:{
-stringValue:name
-},
+if(refreshToken){
 
-username:{
-stringValue:username
-},
+await refreshTokenNow();
 
-bio:{
-stringValue:bio
-},
-
-uid:{
-stringValue:uid
-},
-
-updatedAt:{
-timestampValue:
-new Date().toISOString()
 }
-
-};
 
 
 /*
-Only add photo if a new photo
-was selected.
+Get existing document first.
+This keeps all existing fields.
 */
+
+let get=await fetch(
+BASE+"/users/"+uid,
+{
+headers:{
+Authorization:"Bearer "+token
+},
+cache:"no-store"
+}
+);
+
+
+if(!get.ok){
+
+const error=await get.text();
+
+console.log("GET ERROR:",error);
+
+show(
+"Profile read error: "+
+get.status,
+"error"
+);
+
+$("saveBtn").disabled=false;
+
+$("saveBtn").textContent=
+"Save Changes";
+
+return;
+
+}
+
+
+const oldDoc=await get.json();
+
+const fields=
+oldDoc.fields || {};
+
+
+/*
+Update only changed profile fields.
+*/
+
+fields.name={
+stringValue:name
+};
+
+fields.username={
+stringValue:username
+};
+
+fields.bio={
+stringValue:bio
+};
 
 if(newPhoto){
 
@@ -518,20 +541,12 @@ stringValue:newPhoto
 }
 
 
-let url=
-`${BASE}/users/${uid}`;
+/*
+Use Firestore PATCH.
+*/
 
-const params=[];
-
-Object.keys(fields).forEach(
-key=>{
-params.push(
-"updateMask.fieldPaths="+
-encodeURIComponent(key)
-);
-});
-
-url+="?"+params.join("&");
+const url=
+BASE+"/users/"+uid;
 
 
 let r=await fetch(
@@ -552,12 +567,14 @@ cache:"no-store"
 });
 
 
-/* TOKEN EXPIRED */
+/*
+If token expired, refresh and retry.
+*/
 
 if((r.status===401||r.status===403)
 &&refreshToken){
 
-if(await refresh()){
+if(await refreshTokenNow()){
 
 r=await fetch(
 url,
@@ -588,11 +605,22 @@ const errorText=
 await r.text();
 
 console.log(
-"FIREBASE ERROR:",
+"FIREBASE SAVE ERROR:",
 errorText
 );
 
-msg("Profile save nahi hui.");
+
+/*
+Show exact status so we can identify
+the problem instead of guessing.
+*/
+
+show(
+"Firebase error: "+
+r.status+
+" | Save nahi hui",
+"error"
+);
 
 $("saveBtn").disabled=false;
 
@@ -604,13 +632,16 @@ return;
 }
 
 
-/* UPDATE LOCAL DATA */
+/*
+SAVE LOCAL CACHE
+*/
 
-let old={};
+let oldLocal={};
 
 try{
 
-old=JSON.parse(
+oldLocal=
+JSON.parse(
 localStorage.getItem(
 "crockcellProfile"
 )||"{}"
@@ -623,7 +654,7 @@ localStorage.setItem(
 "crockcellProfile",
 JSON.stringify({
 
-...old,
+...oldLocal,
 
 uid:uid,
 
@@ -635,31 +666,39 @@ bio:bio,
 
 photoURL:
 newPhoto||
-old.photoURL||
+fields.photoURL?.stringValue||
 ""
 
 })
 );
 
 
-msg("Profile saved successfully ✓");
+show(
+"Profile saved successfully ✓",
+"success"
+);
+
 
 setTimeout(
-()=>{
+function(){
 
 location.href=
 "profile.html?v="+Date.now();
 
 },
-800
+1000
 );
 
 
 }catch(e){
 
-console.log(e);
+console.log("SAVE EXCEPTION:",e);
 
-msg("Something went wrong.");
+show(
+"Save error: "+
+e.message,
+"error"
+);
 
 $("saveBtn").disabled=false;
 
