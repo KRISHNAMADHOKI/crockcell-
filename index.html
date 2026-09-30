@@ -1,193 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CROCKCELL - Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CROCKCELL - Login</title>
 
-<style>
-*{box-sizing:border-box}
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:#fafafa;
-  font-family:Arial,sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    body{
+      min-height:100vh;
+      background:#000;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
 
-.box{
-  width:92%;
-  max-width:380px;
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:18px;
-  padding:30px 22px;
-  text-align:center;
-}
+    .box{
+      width:100%;
+      max-width:400px;
+      text-align:center;
+    }
 
-.logo{
-  font-size:34px;
-  font-weight:900;
-  margin-bottom:25px;
-}
+    .logo{
+      font-size:42px;
+      font-weight:800;
+      letter-spacing:2px;
+      margin-bottom:10px;
+    }
 
-input{
-  width:100%;
-  padding:13px;
-  margin:7px 0;
-  border:1px solid #ccc;
-  border-radius:10px;
-  font-size:16px;
-  outline:none;
-}
+    .tagline{
+      color:#aaa;
+      margin-bottom:35px;
+      font-size:14px;
+    }
 
-button{
-  width:100%;
-  padding:13px;
-  margin-top:12px;
-  border:0;
-  border-radius:10px;
-  background:#111;
-  color:#fff;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-}
+    .input-box{
+      position:relative;
+      margin-bottom:15px;
+    }
 
-button:disabled{
-  opacity:.6;
-}
+    input{
+      width:100%;
+      padding:16px;
+      padding-right:55px;
+      border:1px solid #333;
+      border-radius:12px;
+      background:#111;
+      color:#fff;
+      font-size:16px;
+      outline:none;
+    }
 
-.forgot{
-  display:block;
-  margin-top:18px;
-  color:#111;
-  text-decoration:none;
-  font-size:14px;
-  font-weight:600;
-}
+    input:focus{
+      border-color:#777;
+    }
 
-.signup{
-  display:block;
-  margin-top:22px;
-  padding-top:20px;
-  border-top:1px solid #eee;
-  color:#111;
-  text-decoration:none;
-  font-size:14px;
-}
+    .password-toggle{
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      color:#aaa;
+      font-size:14px;
+      cursor:pointer;
+      padding:8px;
+    }
 
-#msg{
-  margin-top:15px;
-  font-size:14px;
-  line-height:1.4;
-}
-</style>
+    .login-btn{
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      background:#fff;
+      color:#000;
+      font-size:17px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:5px;
+    }
+
+    .login-btn:disabled{
+      opacity:.5;
+    }
+
+    .forgot{
+      display:block;
+      margin:20px 0;
+      color:#fff;
+      text-decoration:none;
+      font-size:14px;
+    }
+
+    .forgot:hover{
+      text-decoration:underline;
+    }
+
+    .message{
+      min-height:22px;
+      margin-top:15px;
+      font-size:14px;
+      color:#ff7777;
+    }
+
+    .signup{
+      margin-top:25px;
+      color:#aaa;
+      font-size:14px;
+    }
+
+    .signup a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    .signup a:hover{
+      text-decoration:underline;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="box">
+  <div class="box">
 
-  <div class="logo">CROCKCELL</div>
+    <div class="logo">CROCKCELL</div>
 
-  <input
-    id="email"
-    type="email"
-    placeholder="Email address"
-    autocomplete="email"
-  >
+    <div class="tagline">
+      Connect. Share. Create.
+    </div>
 
-  <input
-    id="password"
-    type="password"
-    placeholder="Password"
-    autocomplete="current-password"
-  >
+    <form id="loginForm">
 
-  <button id="loginBtn">
-    Login
-  </button>
+      <div class="input-box">
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          autocomplete="email"
+          required
+        >
+      </div>
 
-  <a class="forgot" href="forgot-password.html">
-    Forgot Password?
-  </a>
+      <div class="input-box">
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        >
 
-  <a class="signup" href="signup.html">
-    Don't have an account? Sign Up
-  </a>
+        <button
+          type="button"
+          class="password-toggle"
+          id="togglePassword"
+        >
+          Show
+        </button>
+      </div>
 
-  <div id="msg"></div>
+      <button
+        type="submit"
+        class="login-btn"
+        id="loginBtn"
+      >
+        Login
+      </button>
 
-</div>
+    </form>
+
+    <a class="forgot" href="forgot-password.html">
+      Forgot Password?
+    </a>
+
+    <div class="message" id="message"></div>
+
+    <div class="signup">
+      Don't have an account?
+      <a href="signup.html">Sign Up</a>
+    </div>
+
+  </div>
 
 <script>
 
-const API_KEY=
-"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+const API_KEY = "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-const email=document.getElementById("email");
-const password=document.getElementById("password");
-const loginBtn=document.getElementById("loginBtn");
-const msg=document.getElementById("msg");
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+const loginBtn = document.getElementById("loginBtn");
+const message = document.getElementById("message");
 
-loginBtn.onclick=async function(){
 
-  const e=email.value.trim();
-  const p=password.value;
+/* SHOW / HIDE PASSWORD */
 
-  msg.innerText="";
-  msg.style.color="#111";
+togglePassword.addEventListener("click", function(){
 
-  if(!e||!p){
-    msg.innerText="Email and password enter karo.";
-    return;
+  if(passwordInput.type === "password"){
+
+    passwordInput.type = "text";
+    togglePassword.textContent = "Hide";
+
+  }else{
+
+    passwordInput.type = "password";
+    togglePassword.textContent = "Show";
+
   }
 
-  loginBtn.disabled=true;
-  loginBtn.innerText="Logging in...";
+});
+
+
+/* LOGIN */
+
+loginForm.addEventListener("submit", async function(e){
+
+  e.preventDefault();
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  message.textContent = "";
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging in...";
 
   try{
 
-    const r=await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+
-      API_KEY,
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + API_KEY,
       {
         method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
         body:JSON.stringify({
-          email:e,
-          password:p,
+          email:email,
+          password:password,
           returnSecureToken:true
         })
       }
     );
 
-    const data=await r.json();
+    const data = await response.json();
 
-    if(!r.ok){
+    if(!response.ok){
 
-      let error=data.error?.message||"Login failed.";
-
-      if(error==="INVALID_LOGIN_CREDENTIALS"){
-        error="Email ya password galat hai.";
+      if(data.error && data.error.message === "INVALID_LOGIN_CREDENTIALS"){
+        throw new Error("Email ya password galat hai.");
       }
 
-      if(error==="EMAIL_NOT_FOUND"){
-        error="Is email se account nahi mila.";
+      if(data.error && data.error.message === "EMAIL_NOT_FOUND"){
+        throw new Error("Ye email registered nahi hai.");
       }
 
-      if(error==="INVALID_PASSWORD"){
-        error="Password galat hai.";
+      if(data.error && data.error.message === "INVALID_PASSWORD"){
+        throw new Error("Password galat hai.");
       }
 
-      throw new Error(error);
+      throw new Error(
+        data.error?.message || "Login failed."
+      );
     }
+
+
+    /* SAVE LOGIN INFORMATION */
 
     localStorage.setItem(
       "crockcellIdToken",
@@ -212,28 +301,23 @@ loginBtn.onclick=async function(){
       })
     );
 
-    msg.style.color="green";
-    msg.innerText="Login successful!";
 
-    setTimeout(()=>{
-      location.href="home.html";
+    message.style.color = "#77ff99";
+    message.textContent = "Login successful!";
+
+    setTimeout(function(){
+      location.href = "home.html";
     },500);
 
-  }catch(e){
 
-    msg.style.color="#c00";
-    msg.innerText=e.message;
+  }catch(error){
 
-    loginBtn.disabled=false;
-    loginBtn.innerText="Login";
-  }
+    message.style.color = "#ff7777";
+    message.textContent = error.message;
 
-};
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
 
-password.addEventListener("keydown",function(e){
-
-  if(e.key==="Enter"){
-    loginBtn.click();
   }
 
 });
