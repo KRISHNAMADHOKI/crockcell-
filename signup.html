@@ -2,88 +2,66 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CROCKCELL - Sign Up</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CROCKCELL Signup</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif;
-}
-
+*{box-sizing:border-box}
 body{
-    background:#f5f5f5;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px
 }
-
 .box{
-    width:100%;
-    max-width:400px;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 4px 20px rgba(0,0,0,.08);
+width:100%;
+max-width:380px;
+background:#111;
+border:1px solid #222;
+border-radius:16px;
+padding:25px
 }
-
-.logo{
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-    margin-bottom:8px;
+h1{
+text-align:center;
+letter-spacing:2px;
+margin-top:0
 }
-
-.subtitle{
-    text-align:center;
-    color:#777;
-    margin-bottom:25px;
-}
-
 input{
-    width:100%;
-    padding:13px;
-    margin-bottom:12px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    outline:none;
+width:100%;
+padding:13px;
+margin:7px 0;
+border-radius:9px;
+border:1px solid #333;
+background:#050505;
+color:#fff;
+outline:none
 }
-
 button{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:8px;
-    background:#111;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
+width:100%;
+padding:13px;
+margin-top:10px;
+border:0;
+border-radius:9px;
+background:#fff;
+color:#000;
+font-weight:bold;
+cursor:pointer
 }
-
-button:disabled{
-    opacity:.6;
+p{
+text-align:center;
+color:#aaa;
+font-size:14px
 }
-
-.message{
-    text-align:center;
-    margin-top:15px;
-    font-size:14px;
-}
-
-.login{
-    text-align:center;
-    margin-top:18px;
-    font-size:14px;
-}
-
-.login a{
-    color:#111;
-    font-weight:bold;
+a{color:#fff}
+#msg{
+text-align:center;
+margin-top:12px;
+font-size:14px
 }
 </style>
 </head>
@@ -92,362 +70,158 @@ button:disabled{
 
 <div class="box">
 
-    <div class="logo">CROCKCELL</div>
+<h1>CROCKCELL</h1>
 
-    <div class="subtitle">
-        Create your account
-    </div>
+<input id="name" placeholder="Full name">
+<input id="username" placeholder="Username">
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
-    <input
-        type="text"
-        id="name"
-        placeholder="Full name"
-    >
+<button onclick="signup()">Create account</button>
 
-    <input
-        type="text"
-        id="username"
-        placeholder="Username"
-    >
+<div id="msg"></div>
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Email"
-    >
-
-    <input
-        type="password"
-        id="password"
-        placeholder="Password"
-    >
-
-    <input
-        type="password"
-        id="confirmPassword"
-        placeholder="Confirm password"
-    >
-
-    <button
-        id="signupBtn"
-        onclick="signup()">
-        Create Account
-    </button>
-
-    <div
-        class="message"
-        id="message">
-    </div>
-
-    <div class="login">
-        Already have an account?
-        <a href="index.html">Login</a>
-    </div>
+<p>
+Already have an account?
+<a href="index.html">Login</a>
+</p>
 
 </div>
 
-
 <script>
 
-/* FIREBASE API KEY */
+const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8wAgcjHzt2ORJk";
+const PROJECT_ID="crockcell-cd2e6";
 
-const API_KEY =
-"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-
+const BASE=
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 async function signup(){
 
-    const name =
-        document.getElementById("name")
-        .value.trim();
-
-    const username =
-        document.getElementById("username")
-        .value.trim();
-
-    const email =
-        document.getElementById("email")
-        .value.trim();
-
-    const password =
-        document.getElementById("password")
-        .value;
-
-    const confirmPassword =
-        document.getElementById("confirmPassword")
-        .value;
-
-    const message =
-        document.getElementById("message");
-
-    const button =
-        document.getElementById("signupBtn");
-
-
-    message.innerText = "";
-
-
-    if(!name || !username || !email ||
-       !password || !confirmPassword){
-
-        message.innerText =
-            "Please fill all fields.";
-
-        return;
-    }
-
-
-    if(password !== confirmPassword){
-
-        message.innerText =
-            "Passwords do not match.";
-
-        return;
-    }
-
-
-    if(password.length < 6){
-
-        message.innerText =
-            "Password must be at least 6 characters.";
-
-        return;
-    }
-
-
-    button.disabled = true;
-
-    message.innerText =
-        "Creating account...";
-
-
-    try{
-
-        /* CREATE FIREBASE AUTH ACCOUNT */
-
-        const authResponse =
-            await fetch(
-                "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
-                + API_KEY,
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                        "application/json"
-                    },
-
-                    body:JSON.stringify({
-
-                        email:email,
-
-                        password:password,
-
-                        returnSecureToken:true
-
-                    })
-                }
-            );
-
-
-        const authData =
-            await authResponse.json();
-
-
-        if(!authResponse.ok){
-
-            throw new Error(
-                authData.error?.message ||
-                "Signup failed"
-            );
-
-        }
-
-
-        const uid =
-            authData.localId;
-
-        const idToken =
-            authData.idToken;
-
-
-        /* SAVE USER PROFILE IN FIRESTORE */
-
-        const userData = {
-
-            name:name,
-
-            username:username,
-
-            email:email,
-
-            uid:uid,
-
-            bio:"",
-
-            photoURL:"",
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        const firestoreResponse =
-            await fetch(
-
-                "https://firestore.googleapis.com/v1/projects/"
-                + "crockcell-cd2e6"
-                + "/databases/(default)/documents/users/"
-                + uid
-                + "?updateMask.fieldPaths=name"
-                + "&updateMask.fieldPaths=username"
-                + "&updateMask.fieldPaths=email"
-                + "&updateMask.fieldPaths=uid"
-                + "&updateMask.fieldPaths=bio"
-                + "&updateMask.fieldPaths=photoURL"
-                + "&updateMask.fieldPaths=createdAt",
-
-                {
-
-                    method:"PATCH",
-
-                    headers:{
-
-                        "Content-Type":
-                        "application/json",
-
-                        "Authorization":
-                        "Bearer " + idToken
-
-                    },
-
-                    body:JSON.stringify({
-
-                        fields:{
-
-                            name:{
-                                stringValue:name
-                            },
-
-                            username:{
-                                stringValue:username
-                            },
-
-                            email:{
-                                stringValue:email
-                            },
-
-                            uid:{
-                                stringValue:uid
-                            },
-
-                            bio:{
-                                stringValue:""
-                            },
-
-                            photoURL:{
-                                stringValue:""
-                            },
-
-                            createdAt:{
-                                stringValue:
-                                userData.createdAt
-                            }
-
-                        }
-
-                    })
-
-                }
-
-            );
-
-
-        const firestoreData =
-            await firestoreResponse.json();
-
-
-        if(!firestoreResponse.ok){
-
-            console.log(
-                "Firestore error:",
-                firestoreData
-            );
-
-            throw new Error(
-                "Account created, but profile could not be saved."
-            );
-
-        }
-
-
-        /* SAVE LOGIN INFORMATION */
-
-        localStorage.setItem(
-            "crockcellIdToken",
-            idToken
-        );
-
-        localStorage.setItem(
-            "crockcellUid",
-            uid
-        );
-
-        localStorage.setItem(
-            "crockcellProfile",
-            JSON.stringify(userData)
-        );
-
-
-        message.innerText =
-            "Account created successfully!";
-
-
-        /* GO TO HOME */
-
-        setTimeout(function(){
-
-            window.location.replace(
-                "home.html"
-            );
-
-        },700);
-
-
-    }catch(error){
-
-        console.log(error);
-
-        let errorMessage =
-            error.message;
-
-
-        if(errorMessage ===
-           "EMAIL_EXISTS"){
-
-            errorMessage =
-                "This email is already registered.";
-
-        }
-
-
-        if(errorMessage ===
-           "INVALID_EMAIL"){
-
-            errorMessage =
-                "Please enter a valid email.";
-
-        }
-
-
-        message.innerText =
-            errorMessage;
-
-
-        button.disabled = false;
-
-    }
+const name=document.getElementById("name").value.trim();
+const username=document.getElementById("username").value.trim();
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+
+const msg=document.getElementById("msg");
+
+if(!name||!username||!email||!password){
+msg.style.color="#ff7777";
+msg.textContent="Please fill all fields.";
+return;
+}
+
+if(password.length<6){
+msg.style.color="#ff7777";
+msg.textContent="Password must be at least 6 characters.";
+return;
+}
+
+msg.style.color="#aaa";
+msg.textContent="Creating account...";
+
+try{
+
+const auth=await fetch(
+`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+email:email,
+password:password,
+returnSecureToken:true
+})
+}
+);
+
+const data=await auth.json();
+
+if(!auth.ok){
+
+let error=data.error?.message||"Signup failed";
+
+if(error==="EMAIL_EXISTS")
+error="This email is already registered.";
+
+if(error==="INVALID_EMAIL")
+error="Invalid email address.";
+
+msg.style.color="#ff7777";
+msg.textContent=error;
+return;
+}
+
+/* Save authentication */
+
+localStorage.setItem(
+"crockcellIdToken",
+data.idToken
+);
+
+localStorage.setItem(
+"crockcellRefreshToken",
+data.refreshToken
+);
+
+localStorage.setItem(
+"crockcellUid",
+data.localId
+);
+
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify({
+name:name,
+username:username,
+email:email,
+uid:data.localId
+})
+);
+
+/* Create Firestore profile */
+
+const profile={
+fields:{
+name:{stringValue:name},
+username:{stringValue:username},
+email:{stringValue:email},
+uid:{stringValue:data.localId},
+bio:{stringValue:""},
+photoURL:{stringValue:""},
+createdAt:{
+timestampValue:new Date().toISOString()
+}
+}
+};
+
+await fetch(
+`${BASE}/users/${data.localId}`,
+{
+method:"PATCH",
+headers:{
+"Content-Type":"application/json",
+Authorization:`Bearer ${data.idToken}`
+},
+body:JSON.stringify(profile)
+}
+);
+
+msg.style.color="#55ff88";
+msg.textContent="Signup successful! Opening CROCKCELL...";
+
+setTimeout(()=>{
+location.href="home.html";
+},500);
+
+}catch(e){
+
+msg.style.color="#ff7777";
+msg.textContent="Network error. Please try again.";
+
+}
 
 }
 
