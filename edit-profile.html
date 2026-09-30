@@ -1,402 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Edit Profile - CROCKCELL</title>
-
 <style>
-
-* {
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    margin: 0;
-    background: #f4f4f7;
-}
-
-header {
-    background: white;
-    padding: 18px;
-    text-align: center;
-    color: #4f46e5;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.container {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px 15px;
-}
-
-.box {
-    background: white;
-    padding: 25px;
-    border-radius: 18px;
-}
-
-h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-input,
-textarea {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 18px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 15px;
-}
-
-textarea {
-    height: 100px;
-    resize: none;
-}
-
-.photo-button {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 15px;
-    background: #4f46e5;
-    color: white;
-    text-align: center;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
-#photo {
-    display: none;
-}
-
-#preview {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto 20px;
-    background: #ddd;
-}
-
-.save-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    background: #111827;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.back {
-    display: block;
-    text-align: center;
-    margin-top: 18px;
-    color: #4f46e5;
-    text-decoration: none;
-}
-
+*{box-sizing:border-box}
+body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
+header{height:60px;border-bottom:1px solid #222;display:flex;align-items:center;padding:0 16px;font-size:21px;font-weight:bold}
+.back{font-size:28px;margin-right:15px;cursor:pointer}
+main{max-width:500px;margin:auto;padding:25px 18px}
+.photo{width:100px;height:100px;border-radius:50%;background:#222;object-fit:cover;display:block;margin:10px auto 25px}
+input,textarea{width:100%;background:#111;border:1px solid #333;color:#fff;border-radius:8px;padding:13px;margin:7px 0 16px;font-size:16px}
+textarea{height:100px;resize:none}
+label{font-size:14px;color:#aaa}
+button{width:100%;border:0;border-radius:8px;padding:13px;background:#fff;color:#000;font-size:16px;font-weight:bold;margin-top:5px}
+#msg{text-align:center;margin-top:15px;color:#aaa}
 </style>
-
 </head>
 
 <body>
 
 <header>
-CROCKCELL
+  <span class="back" onclick="location.href='profile.html'">‹</span>
+  Edit Profile
 </header>
 
-<div class="container">
+<main>
 
-<div class="box">
-
-<h2>Edit Profile ✏️</h2>
-
-<img id="preview" alt="Profile Photo">
+<img id="photo" class="photo" src="" alt="Profile">
 
 <label>Profile Photo</label>
+<input id="photoInput" type="file" accept="image/*">
 
-<label for="photo" class="photo-button">
-📸 Choose Photo
-</label>
-
-<input
-    type="file"
-    id="photo"
-    accept="image/*"
->
+<label>Name</label>
+<input id="name" type="text" placeholder="Your name">
 
 <label>Username</label>
-
-<input
-    type="text"
-    id="username"
-    placeholder="Enter username"
->
+<input id="username" type="text" placeholder="Username">
 
 <label>Bio</label>
+<textarea id="bio" placeholder="Write something about yourself"></textarea>
 
-<textarea
-    id="bio"
-    placeholder="Write your bio..."
-></textarea>
+<button onclick="saveProfile()">Save Changes</button>
 
-<button
-    type="button"
-    class="save-button"
-    onclick="saveProfile()">
-    Save Profile
-</button>
+<div id="msg"></div>
 
-<a href="profile.html" class="back">
-← Back to Profile
-</a>
-
-</div>
-
-</div>
-
+</main>
 
 <script>
+const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+const PROJECT_ID="crockcell-cd2e6";
+const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-/* Load old profile */
+let token=localStorage.getItem("crockcellIdToken");
+let uid=localStorage.getItem("crockcellUid");
+let refreshToken=localStorage.getItem("crockcellRefreshToken");
+let newPhoto="";
 
-let savedProfile =
-    localStorage.getItem("crockcellProfile");
+const $=id=>document.getElementById(id);
 
-let oldProfile = {};
+function setMsg(t){$("msg").textContent=t}
 
-if (savedProfile) {
+async function refresh(){
+  if(!refreshToken)return false;
 
-    try {
-        oldProfile = JSON.parse(savedProfile);
-    } catch (error) {
-        oldProfile = {};
-    }
+  try{
+    const r=await fetch(
+      `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+      {
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+      }
+    );
 
+    const d=await r.json();
+
+    if(!r.ok||!d.id_token)return false;
+
+    token=d.id_token;
+    refreshToken=d.refresh_token||refreshToken;
+
+    localStorage.setItem("crockcellIdToken",token);
+    localStorage.setItem("crockcellRefreshToken",refreshToken);
+
+    return true;
+  }catch(e){
+    return false;
+  }
 }
 
-document.getElementById("username").value =
-    oldProfile.username || "";
+async function api(path,opt={},retry=true){
+  opt.headers={
+    ...(opt.headers||{}),
+    Authorization:"Bearer "+token,
+    "Content-Type":"application/json"
+  };
 
-document.getElementById("bio").value =
-    oldProfile.bio || "";
+  let r=await fetch(BASE+path,opt);
 
+  if((r.status===401||r.status===403)&&retry&&refreshToken){
+    if(await refresh())return api(path,opt,false);
+  }
 
-/* Show old photo */
-
-if (oldProfile.photo) {
-
-    document.getElementById("preview").src =
-        oldProfile.photo;
-
+  return r;
 }
 
-
-/* Select new photo */
-
-document.getElementById("photo").addEventListener(
-    "change",
-    function() {
-
-        let file = this.files[0];
-
-        if (!file) {
-            return;
-        }
-
-        let reader = new FileReader();
-
-        reader.onload = function(event) {
-
-            document.getElementById("preview").src =
-                event.target.result;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    }
-);
-
-
-/* Save Profile */
-
-function saveProfile() {
-
-    let username =
-        document.getElementById("username").value.trim();
-
-    let bio =
-        document.getElementById("bio").value.trim();
-
-    let file =
-        document.getElementById("photo").files[0];
-
-
-    if (username === "") {
-
-        alert("Username likho.");
-
-        return;
-
-    }
-
-
-    /* New photo */
-
-    if (file) {
-
-        let reader = new FileReader();
-
-        reader.onload = function(event) {
-
-            let img = new Image();
-
-            img.onload = function() {
-
-                let canvas =
-                    document.createElement("canvas");
-
-                let maxSize = 500;
-
-                let width = img.width;
-                let height = img.height;
-
-
-                if (width > height) {
-
-                    if (width > maxSize) {
-
-                        height =
-                            height * maxSize / width;
-
-                        width = maxSize;
-
-                    }
-
-                } else {
-
-                    if (height > maxSize) {
-
-                        width =
-                            width * maxSize / height;
-
-                        height = maxSize;
-
-                    }
-
-                }
-
-
-                canvas.width = width;
-                canvas.height = height;
-
-
-                let ctx =
-                    canvas.getContext("2d");
-
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-
-                let compressedPhoto =
-                    canvas.toDataURL(
-                        "image/jpeg",
-                        0.7
-                    );
-
-
-                let profile = {
-
-                    username: username,
-
-                    bio: bio,
-
-                    photo: compressedPhoto
-
-                };
-
-
-                localStorage.setItem(
-                    "crockcellProfile",
-                    JSON.stringify(profile)
-                );
-
-
-                alert("Profile save ho gayi! 🎉");
-
-
-                window.location.href =
-                    "profile.html";
-
-            };
-
-
-            img.src = event.target.result;
-
-        };
-
-
-        reader.readAsDataURL(file);
-
-    }
-
-
-    /* Photo not changed */
-
-    else {
-
-        let profile = {
-
-            username: username,
-
-            bio: bio,
-
-            photo: oldProfile.photo || ""
-
-        };
-
-
-        localStorage.setItem(
-            "crockcellProfile",
-            JSON.stringify(profile)
-        );
-
-
-        alert("Profile save ho gayi! 🎉");
-
-
-        window.location.href =
-            "profile.html";
-
-    }
-
+function val(v){
+  return v==null?"":String(v);
 }
 
+function toFields(obj){
+  return {
+    stringValue:obj===undefined||obj===null?"":String(obj)
+  };
+}
+
+async function loadProfile(){
+
+  if(!token||!uid){
+    location.href="index.html";
+    return;
+  }
+
+  setMsg("Loading...");
+
+  try{
+    let r=await api(`/users/${uid}`);
+
+    if(!r.ok && refreshToken){
+      if(await refresh())r=await api(`/users/${uid}`);
+    }
+
+    if(!r.ok){
+      setMsg("Profile load nahi ho rahi.");
+      return;
+    }
+
+    const d=await r.json();
+    const f=d.fields||{};
+
+    $("name").value=val(f.name?.stringValue);
+    $("username").value=val(f.username?.stringValue);
+    $("bio").value=val(f.bio?.stringValue);
+
+    const p=val(f.photoURL?.stringValue);
+
+    if(p){
+      $("photo").src=p;
+    }else{
+      $("photo").src="data:image/svg+xml;charset=UTF-8,"+
+      encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+        <rect width="100%" height="100%" fill="#222"/>
+        <text x="50%" y="55%" text-anchor="middle" fill="#777" font-size="70">👤</text>
+        </svg>`
+      );
+    }
+
+    setMsg("");
+
+  }catch(e){
+    setMsg("Something went wrong.");
+  }
+}
+
+$("photoInput").addEventListener("change",function(){
+
+  const file=this.files[0];
+  if(!file)return;
+
+  if(file.size>5*1024*1024){
+    setMsg("Photo 5MB se chhoti rakho.");
+    this.value="";
+    return;
+  }
+
+  const reader=new FileReader();
+
+  reader.onload=e=>{
+    newPhoto=e.target.result;
+    $("photo").src=newPhoto;
+  };
+
+  reader.readAsDataURL(file);
+});
+
+async function saveProfile(){
+
+  const name=$("name").value.trim();
+  const username=$("username").value.trim().replace(/^@/,"");
+  const bio=$("bio").value.trim();
+
+  if(!name){
+    setMsg("Name likho.");
+    return;
+  }
+
+  if(!username){
+    setMsg("Username likho.");
+    return;
+  }
+
+  if(username.length<3){
+    setMsg("Username kam se kam 3 characters ka ho.");
+    return;
+  }
+
+  setMsg("Saving...");
+
+  try{
+
+    const body={
+      fields:{
+        name:{stringValue:name},
+        username:{stringValue:username},
+        bio:{stringValue:bio},
+        uid:{stringValue:uid},
+        updatedAt:{timestampValue:new Date().toISOString()}
+      }
+    };
+
+    if(newPhoto){
+      body.fields.photoURL={stringValue:newPhoto};
+    }
+
+    let r=await api(`/users/${uid}?updateMask.fieldPaths=name&updateMask.fieldPaths=username&updateMask.fieldPaths=bio&updateMask.fieldPaths=uid&updateMask.fieldPaths=updatedAt${newPhoto?"&updateMask.fieldPaths=photoURL":""}`,{
+      method:"PATCH",
+      body:JSON.stringify(body)
+    });
+
+    if(!r.ok){
+      const err=await r.text();
+      console.log(err);
+      setMsg("Profile save nahi hui.");
+      return;
+    }
+
+    const oldProfile=JSON.parse(localStorage.getItem("crockcellProfile")||"{}");
+
+    localStorage.setItem("crockcellProfile",JSON.stringify({
+      ...oldProfile,
+      name,
+      username,
+      bio,
+      uid,
+      ...(newPhoto?{photoURL:newPhoto}:{} )
+    }));
+
+    setMsg("Profile updated successfully ✓");
+
+    setTimeout(()=>{
+      location.href="profile.html";
+    },800);
+
+  }catch(e){
+    console.log(e);
+    setMsg("Something went wrong.");
+  }
+}
+
+loadProfile();
 </script>
 
 </body>
-
 </html>
