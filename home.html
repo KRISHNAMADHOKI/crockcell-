@@ -1,38 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CROCKCELL</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
 header{height:58px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;background:#000;z-index:5}
-.logo{font-size:23px;font-weight:800;letter-spacing:1px}button{background:none;border:0;color:#fff;cursor:pointer}
-#profile{padding:14px 16px;border-bottom:1px solid #222;color:#bbb}
+.logo{font-size:22px;font-weight:bold;letter-spacing:1px}
+button{border:0;background:none;color:#fff;cursor:pointer}
+#profile{padding:14px 16px;border-bottom:1px solid #222;color:#aaa}
 #profile b{color:#fff;font-size:18px}
 #feed{max-width:600px;margin:auto;padding-bottom:70px}
-.post{border-bottom:1px solid #222;padding-bottom:16px;margin-bottom:10px}
-.top{display:flex;align-items:center;padding:12px 14px;gap:10px}
-.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#222}
+.post{border-bottom:1px solid #222;padding-bottom:15px;margin-bottom:8px}
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#222}
 .name{font-weight:bold}
-.photo{width:100%;max-height:650px;object-fit:cover;display:block;background:#111}
+.photo{width:100%;max-height:650px;object-fit:cover;display:block}
 .actions{display:flex;gap:18px;padding:10px 14px 5px;font-size:23px}
 .info{padding:0 14px}
 .caption{margin-top:7px}
 .comments{padding:8px 14px}
 .comment{font-size:14px;margin:7px 0;color:#ddd}
 .comment b{color:#fff}
-.comment button{color:#777;margin-left:5px}
-.form{display:flex;gap:7px;margin-top:9px}
+.comment button{color:#888;margin-left:6px}
+.form{display:flex;gap:7px;padding:0 14px}
 .form input{flex:1;background:#111;border:1px solid #333;border-radius:20px;padding:10px;color:#fff;outline:none}
 .form button{background:#fff;color:#000;border-radius:20px;padding:0 14px}
 .del{color:#f66;font-size:12px}
+.loading{text-align:center;padding:35px;color:#aaa}
+.error{text-align:center;padding:25px;color:#f66}
 nav{position:fixed;bottom:0;left:0;right:0;height:58px;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;z-index:9}
 nav a{color:#fff;text-decoration:none;font-size:22px}
-.loading{text-align:center;padding:35px;color:#aaa}
-.error{text-align:center;padding:25px;color:#ff7777}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -41,7 +44,10 @@ nav a{color:#fff;text-decoration:none;font-size:22px}
 </header>
 
 <section id="profile">Loading profile...</section>
-<main id="feed"><div class="loading">Loading posts...</div></main>
+
+<main id="feed">
+<div class="loading">Loading posts...</div>
+</main>
 
 <nav>
 <a href="home.html">⌂</a>
@@ -67,285 +73,544 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({
 }[m]));
 
 async function refresh(){
- if(!refreshToken)return false;
- try{
-  const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{
-   method:"POST",
-   headers:{"Content-Type":"application/x-www-form-urlencoded"},
-   body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
-  });
-  const d=await r.json();
-  if(!r.ok||!d.id_token)return false;
-  token=d.id_token;
-  uid=d.user_id||uid;
-  refreshToken=d.refresh_token||refreshToken;
-  localStorage.setItem("crockcellIdToken",token);
-  localStorage.setItem("crockcellUid",uid);
-  localStorage.setItem("crockcellRefreshToken",refreshToken);
-  return true;
- }catch(e){return false}
+
+if(!refreshToken)return false;
+
+try{
+
+let r=await fetch(
+`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:
+`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+});
+
+let d=await r.json();
+
+if(!r.ok||!d.id_token)return false;
+
+token=d.id_token;
+uid=d.user_id||uid;
+refreshToken=d.refresh_token||refreshToken;
+
+localStorage.setItem("crockcellIdToken",token);
+localStorage.setItem("crockcellRefreshToken",refreshToken);
+localStorage.setItem("crockcellUid",uid);
+
+return true;
+
+}catch(e){
+return false;
+}
 }
 
 async function api(path,opt={},retry=true){
- opt={...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${token}`}};
- let r=await fetch(BASE+path,opt);
- if((r.status==401||r.status==403)&&retry&&await refresh())
-  return api(path,opt,false);
- return r;
+
+if(!token)return null;
+
+opt={
+...opt,
+headers:{
+...(opt.headers||{}),
+Authorization:`Bearer ${token}`
+}
+};
+
+let r=await fetch(BASE+path,opt);
+
+if(
+(r.status===401||r.status===403)&&
+retry&&
+await refresh()
+){
+return api(path,opt,false);
+}
+
+return r;
 }
 
 async function profile(){
- const r=await api(`/users/${uid}`);
- if(!r.ok)return;
- const d=await r.json(),f=d.fields||{};
- document.getElementById("profile").innerHTML=
- `<b>${esc(val(f.name)||val(f.username)||"User")}</b><br>@${esc(val(f.username)||"user")}`;
+
+let r=await api(`/users/${encodeURIComponent(uid)}`);
+
+if(!r||!r.ok){
+document.getElementById("profile").innerHTML=
+"<b>CROCKCELL</b><br>Profile unavailable";
+return;
+}
+
+let d=await r.json();
+let f=d.fields||{};
+
+document.getElementById("profile").innerHTML=
+`<b>${esc(val(f.name)||val(f.username)||"User")}</b>
+<br>@${esc(val(f.username)||"user")}`;
 }
 
 async function posts(){
- const box=document.getElementById("feed");
- const r=await api("/posts?pageSize=50");
- if(!r.ok){
-  box.innerHTML=`<div class="error">Post load nahi hui.<br>Authentication error.</div>`;
-  return;
- }
 
- const d=await r.json();
- const arr=(d.documents||[]).sort((a,b)=>
-  String(val(b.fields?.createdAt)).localeCompare(String(val(a.fields?.createdAt)))
- );
+let box=document.getElementById("feed");
 
- box.innerHTML="";
- if(!arr.length){
-  box.innerHTML='<div class="loading">Abhi koi post nahi hai.</div>';
-  return;
- }
+let r=await api("/posts?pageSize=50");
 
- for(const doc of arr)renderPost(doc);
+if(!r||!r.ok){
+
+box.innerHTML=
+`<div class="error">
+Posts load nahi hui.<br>
+Please refresh the page.
+</div>`;
+
+return;
+}
+
+let d=await r.json();
+
+let arr=(d.documents||[]).sort((a,b)=>
+String(val(b.fields?.createdAt))
+.localeCompare(
+String(val(a.fields?.createdAt))
+)
+);
+
+box.innerHTML="";
+
+if(!arr.length){
+
+box.innerHTML=
+`<div class="loading">
+Abhi koi post nahi hai.
+</div>`;
+
+return;
+}
+
+arr.forEach(renderPost);
 }
 
 function renderPost(doc){
- const f=doc.fields||{};
- const id=val(f.postId)||doc.name.split("/").pop();
- const image=val(f.image);
- const username=val(f.username)||"user";
- const caption=val(f.caption);
- const likes=Number(val(f.likes)||0);
 
- const el=document.createElement("article");
- el.className="post";
- el.id="post_"+id;
+let f=doc.fields||{};
 
- el.innerHTML=`
- <div class="top">
-  <div class="avatar"></div>
-  <div class="name">${esc(username)}</div>
- </div>
+let id=val(f.postId)||doc.name.split("/").pop();
+let image=val(f.image);
+let username=val(f.username)||"user";
+let caption=val(f.caption);
+let likes=Number(val(f.likes)||0);
 
- ${image?`<img class="photo" src="${image}" alt="post">`:""}
+let el=document.createElement("article");
 
- <div class="actions">
-  <button id="like_${id}" onclick="likePost('${esc(id)}')">♡</button>
-  <button onclick="focusComment('${esc(id)}')">💬</button>
-  <button onclick="sharePost('${esc(id)}')">↗</button>
- </div>
+el.className="post";
+el.id="post_"+id;
 
- <div class="info">
-  <b id="count_${id}">${likes} likes</b>
-  ${caption?`<div class="caption"><b>${esc(username)}</b> ${esc(caption)}</div>`:""}
-  ${String(val(f.userId))===String(uid)?`<button class="del" onclick="deletePost('${esc(id)}')">Delete post</button>`:""}
- </div>
+el.innerHTML=`
 
- <div class="comments" id="comments_${id}">
-  <div style="color:#777">Loading comments...</div>
- </div>
+<div class="top">
+<div class="avatar"></div>
+<div class="name">${esc(username)}</div>
+</div>
 
- <div class="form">
-  <input id="input_${id}" placeholder="Add a comment...">
-  <button onclick="sendComment('${esc(id)}')">Post</button>
- </div>`;
+${image?
+`<img class="photo" src="${image}" alt="post">`
+:""}
 
- document.getElementById("feed").appendChild(el);
- checkLike(id);
- loadComments(id);
+<div class="actions">
+
+<button id="like_${id}"
+onclick="likePost('${esc(id)}')">♡</button>
+
+<button onclick="focusComment('${esc(id)}')">💬</button>
+
+<button onclick="sharePost('${esc(id)}')">↗</button>
+
+</div>
+
+<div class="info">
+
+<b id="count_${id}">
+${likes} likes
+</b>
+
+${caption?
+`<div class="caption">
+<b>${esc(username)}</b> ${esc(caption)}
+</div>`
+:""}
+
+${String(val(f.userId))===String(uid)?
+`<button class="del"
+onclick="deletePost('${esc(id)}')">
+Delete post
+</button>`
+:""}
+
+</div>
+
+<div class="comments" id="comments_${id}">
+<div style="color:#777">
+Loading comments...
+</div>
+</div>
+
+<div class="form">
+
+<input
+id="input_${id}"
+placeholder="Add a comment..."
+>
+
+<button onclick="sendComment('${esc(id)}')">
+Post
+</button>
+
+</div>
+`;
+
+document.getElementById("feed").appendChild(el);
+
+checkLike(id);
+loadComments(id);
 }
 
 async function checkLike(id){
- const r=await api(`/likes/${encodeURIComponent(id+"_"+uid)}`);
- const b=document.getElementById("like_"+id);
- if(r.ok&&b)b.textContent="♥";
+
+let r=await api(
+`/likes/${encodeURIComponent(id+"_"+uid)}`
+);
+
+let b=document.getElementById("like_"+id);
+
+if(r&&r.ok&&b)b.textContent="♥";
 }
 
 async function likePost(id){
- const likeId=id+"_"+uid;
- const r=await api(`/likes/${encodeURIComponent(likeId)}`);
 
- if(r.ok){
-  await api(`/likes/${encodeURIComponent(likeId)}`,{method:"DELETE"});
-  await changeLikeCount(id,-1);
-  const b=document.getElementById("like_"+id);
-  if(b)b.textContent="♡";
- }else{
-  const now=new Date().toISOString();
-  await api(`/likes/${encodeURIComponent(likeId)}`,{
-   method:"PATCH",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({fields:{
-    postId:{stringValue:id},
-    userId:{stringValue:uid},
-    createdAt:{timestampValue:now}
-   }})
-  });
-  await changeLikeCount(id,1);
-  const b=document.getElementById("like_"+id);
-  if(b)b.textContent="♥";
- }
+let likeId=id+"_"+uid;
+
+let r=await api(
+`/likes/${encodeURIComponent(likeId)}`
+);
+
+if(!r)return;
+
+if(r.ok){
+
+await api(
+`/likes/${encodeURIComponent(likeId)}`,
+{method:"DELETE"}
+);
+
+await changeLikeCount(id,-1);
+
+let b=document.getElementById("like_"+id);
+
+if(b)b.textContent="♡";
+
+}else{
+
+let now=new Date().toISOString();
+
+await api(
+`/likes/${encodeURIComponent(likeId)}`,
+{
+method:"PATCH",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+fields:{
+postId:{stringValue:id},
+userId:{stringValue:uid},
+createdAt:{timestampValue:now}
+}
+})
+}
+);
+
+await changeLikeCount(id,1);
+
+let b=document.getElementById("like_"+id);
+
+if(b)b.textContent="♥";
+}
 }
 
 async function changeLikeCount(id,n){
- const r=await api(`/posts/${encodeURIComponent(id)}`);
- if(!r.ok)return;
- const d=await r.json(),f=d.fields||{};
- let count=Number(val(f.likes)||0)+n;
- if(count<0)count=0;
 
- await api(`/posts/${encodeURIComponent(id)}?updateMask.fieldPaths=likes`,{
-  method:"PATCH",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({fields:{likes:{integerValue:String(count)}}})
- });
+let r=await api(
+`/posts/${encodeURIComponent(id)}`
+);
 
- const c=document.getElementById("count_"+id);
- if(c)c.textContent=count+" likes";
+if(!r||!r.ok)return;
+
+let d=await r.json();
+let f=d.fields||{};
+
+let count=Number(val(f.likes)||0)+n;
+
+if(count<0)count=0;
+
+await api(
+`/posts/${encodeURIComponent(id)}?updateMask.fieldPaths=likes`,
+{
+method:"PATCH",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+fields:{
+likes:{
+integerValue:String(count)
+}
+}
+})
+}
+);
+
+let c=document.getElementById("count_"+id);
+
+if(c)c.textContent=count+" likes";
 }
 
 async function loadComments(id){
- const box=document.getElementById("comments_"+id);
- const r=await api("/comments?pageSize=300");
- if(!r.ok){box.innerHTML="";return}
 
- const d=await r.json();
- const list=(d.documents||[])
- .filter(x=>val(x.fields?.postId)===id)
- .sort((a,b)=>String(val(a.fields?.createdAt)).localeCompare(String(val(b.fields?.createdAt))));
+let box=document.getElementById("comments_"+id);
 
- if(!list.length){
-  box.innerHTML='<div style="color:#777">No comments yet.</div>';
-  return;
- }
+let r=await api("/comments?pageSize=300");
 
- box.innerHTML=list.map(x=>{
-  const f=x.fields||{},cid=x.name.split("/").pop();
-  const owner=val(f.userId)===uid;
-  return `<div class="comment">
-   <b>${esc(val(f.username)||"user")}</b> ${esc(val(f.text))}
-   ${owner?`<button onclick="deleteComment('${cid}','${esc(id)}')">Delete</button>`:""}
-  </div>`;
- }).join("");
+if(!r||!r.ok){
+box.innerHTML="";
+return;
+}
+
+let d=await r.json();
+
+let list=(d.documents||[])
+.filter(x=>val(x.fields?.postId)===id)
+.sort((a,b)=>
+String(val(a.fields?.createdAt))
+.localeCompare(
+String(val(b.fields?.createdAt))
+)
+);
+
+if(!list.length){
+
+box.innerHTML=
+`<div style="color:#777">
+No comments yet.
+</div>`;
+
+return;
+}
+
+box.innerHTML=list.map(x=>{
+
+let f=x.fields||{};
+let cid=x.name.split("/").pop();
+
+return `
+<div class="comment">
+<b>${esc(val(f.username)||"user")}</b>
+${esc(val(f.text))}
+${
+val(f.userId)===uid?
+`<button onclick="deleteComment('${cid}','${esc(id)}')">
+Delete
+</button>`:""
+}
+</div>`;
+
+}).join("");
 }
 
 async function sendComment(id){
- const input=document.getElementById("input_"+id);
- const text=input.value.trim();
- if(!text)return;
 
- await api("/comments",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({fields:{
-   postId:{stringValue:id},
-   userId:{stringValue:uid},
-   username:{stringValue:localStorage.getItem("crockcellProfile")?
-    JSON.parse(localStorage.getItem("crockcellProfile")).username||"user":"user"},
-   text:{stringValue:text},
-   createdAt:{timestampValue:new Date().toISOString()}
-  }})
- });
+let input=document.getElementById("input_"+id);
+let text=input.value.trim();
 
- input.value="";
- loadComments(id);
+if(!text)return;
+
+let p={};
+
+try{
+p=JSON.parse(
+localStorage.getItem("crockcellProfile")||"{}"
+);
+}catch(e){}
+
+await api(
+"/comments",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+fields:{
+postId:{stringValue:id},
+userId:{stringValue:uid},
+username:{
+stringValue:p.username||p.name||"user"
+},
+text:{stringValue:text},
+createdAt:{
+timestampValue:new Date().toISOString()
+}
+}
+})
+}
+);
+
+input.value="";
+loadComments(id);
 }
 
 async function deleteComment(cid,id){
- const r=await api(`/comments/${encodeURIComponent(cid)}`);
- if(!r.ok)return;
- const d=await r.json();
- if(val(d.fields?.userId)!==uid)return;
- await api(`/comments/${encodeURIComponent(cid)}`,{method:"DELETE"});
- loadComments(id);
+
+let r=await api(
+`/comments/${encodeURIComponent(cid)}`
+);
+
+if(!r||!r.ok)return;
+
+let d=await r.json();
+
+if(val(d.fields?.userId)!==uid)return;
+
+await api(
+`/comments/${encodeURIComponent(cid)}`,
+{method:"DELETE"}
+);
+
+loadComments(id);
 }
 
 async function deletePost(id){
- if(!confirm("Delete this post?"))return;
 
- const r=await api(`/posts/${encodeURIComponent(id)}`);
- if(!r.ok)return;
+if(!confirm("Delete this post?"))return;
 
- const d=await r.json();
- if(val(d.fields?.userId)!==uid){
-  alert("You can delete only your own post.");
-  return;
- }
+let r=await api(
+`/posts/${encodeURIComponent(id)}`
+);
 
- for(const collection of ["likes","comments"]){
-  const q=await api(`/${collection}?pageSize=300`);
-  if(!q.ok)continue;
-  const data=await q.json();
+if(!r||!r.ok)return;
 
-  for(const x of data.documents||[]){
-   const f=x.fields||{};
-   if(val(f.postId)===id||val(f.reelId)===id){
-    const cid=x.name.split("/").pop();
-    await api(`/${collection}/${encodeURIComponent(cid)}`,{method:"DELETE"});
-   }
-  }
- }
+let d=await r.json();
 
- await api(`/posts/${encodeURIComponent(id)}`,{method:"DELETE"});
- document.getElementById("post_"+id)?.remove();
+if(val(d.fields?.userId)!==uid){
+
+alert("You can delete only your own post.");
+return;
+}
+
+for(let collection of ["likes","comments"]){
+
+let q=await api(
+`/${collection}?pageSize=300`
+);
+
+if(!q||!q.ok)continue;
+
+let data=await q.json();
+
+for(let x of data.documents||[]){
+
+let f=x.fields||{};
+
+if(
+val(f.postId)===id||
+val(f.reelId)===id
+){
+
+let cid=x.name.split("/").pop();
+
+await api(
+`/${collection}/${encodeURIComponent(cid)}`,
+{method:"DELETE"}
+);
+}
+}
+}
+
+await api(
+`/posts/${encodeURIComponent(id)}`,
+{method:"DELETE"}
+);
+
+document.getElementById("post_"+id)?.remove();
 }
 
 function focusComment(id){
- document.getElementById("input_"+id)?.focus();
+document.getElementById("input_"+id)?.focus();
 }
 
 async function sharePost(id){
- const url=location.origin+location.pathname+"?post="+encodeURIComponent(id);
- try{
-  if(navigator.share)await navigator.share({title:"CROCKCELL",url});
-  else{
-   await navigator.clipboard.writeText(url);
-   alert("Post link copied");
-  }
- }catch(e){}
+
+let url=
+location.origin+
+location.pathname+
+"?post="+encodeURIComponent(id);
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+title:"CROCKCELL",
+url:url
+});
+
+}else{
+
+await navigator.clipboard.writeText(url);
+alert("Post link copied");
+
+}
+
+}catch(e){}
 }
 
 function logout(){
- localStorage.removeItem("crockcellIdToken");
- localStorage.removeItem("crockcellRefreshToken");
- localStorage.removeItem("crockcellUid");
- localStorage.removeItem("crockcellProfile");
- location.href="index.html";
+
+localStorage.removeItem("crockcellIdToken");
+localStorage.removeItem("crockcellRefreshToken");
+localStorage.removeItem("crockcellUid");
+localStorage.removeItem("crockcellProfile");
+
+location.href="index.html";
 }
 
 async function start(){
- if(!refreshToken){
-  location.href="index.html";
-  return;
- }
 
- if(!await refresh()){
-  localStorage.removeItem("crockcellIdToken");
-  localStorage.removeItem("crockcellRefreshToken");
-  location.href="index.html";
-  return;
- }
+/*
+पहले saved ID token इस्तेमाल होगा।
+Refresh token हो तो उसे भी refresh करेंगे।
+*/
 
- await profile();
- await posts();
+if(!token||!uid){
+
+location.href="index.html";
+return;
+}
+
+if(refreshToken){
+
+await refresh();
+
+}
+
+await profile();
+await posts();
+
 }
 
 start();
 </script>
+
 </body>
 </html>
