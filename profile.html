@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CROCKCELL Profile</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Profile - CROCKCELL</title>
 
 <style>
 *{box-sizing:border-box}
@@ -13,22 +13,22 @@ margin:0;
 background:#000;
 color:#fff;
 font-family:Arial,sans-serif;
-padding-bottom:75px
+padding-bottom:70px
 }
 
-header{
-height:72px;
-border-bottom:1px solid #222;
+.header{
+height:64px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:0 25px
+padding:0 16px;
+border-bottom:1px solid #222
 }
 
-.logo{
-font-size:32px;
-font-weight:900;
-letter-spacing:1px
+.leftHead{
+display:flex;
+align-items:center;
+gap:14px
 }
 
 .back{
@@ -36,290 +36,237 @@ font-size:28px;
 cursor:pointer
 }
 
+.logo{
+font-size:20px;
+font-weight:bold
+}
+
 .settings{
-font-size:25px;
+font-size:22px;
 cursor:pointer
 }
 
-main{
-max-width:700px;
-margin:auto;
-padding:30px 28px
+.profile{
+padding:20px 16px 12px
 }
 
-.profileTop{
+.top{
 display:flex;
-align-items:center;
-gap:25px
+align-items:center
 }
 
 .photo{
-width:110px;
-height:110px;
+width:88px;
+height:88px;
 border-radius:50%;
 object-fit:cover;
 background:#222;
-border:2px solid #333
+margin-right:20px
 }
 
 .details{
-flex:1
+flex:1;
+min-width:0
 }
 
 .name{
-font-size:28px;
+font-size:20px;
 font-weight:bold;
-margin-bottom:8px
+margin-bottom:5px
 }
 
 .username{
-font-size:18px;
-color:#aaa;
-margin-bottom:12px
+font-size:14px;
+color:#999;
+margin-bottom:8px
 }
 
 .bio{
-font-size:16px;
-line-height:1.5;
+font-size:14px;
+line-height:1.4;
 white-space:pre-wrap
-}
-
-.edit{
-display:inline-block;
-margin-top:25px;
-padding:12px 22px;
-border:1px solid #555;
-border-radius:9px;
-color:#fff;
-text-decoration:none;
-font-weight:bold
 }
 
 .stats{
 display:flex;
-gap:55px;
-margin:35px 0 25px;
-border-bottom:1px solid #222;
-padding-bottom:25px
-}
-
-.stat{
+justify-content:space-around;
+margin-top:22px;
 text-align:center
 }
 
-.stat b{
-display:block;
-font-size:22px
+.statNumber{
+font-size:18px;
+font-weight:bold
 }
 
-.stat span{
+.statText{
+font-size:12px;
 color:#999;
-font-size:14px
+margin-top:4px
+}
+
+.actions{
+margin-top:18px
+}
+
+.editBtn,
+.followBtn{
+width:100%;
+height:42px;
+border:0;
+border-radius:10px;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+background:#fff;
+color:#000
+}
+
+.following{
+background:#292929;
+color:#fff
+}
+
+.tabs{
+height:52px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-top:1px solid #222;
+border-bottom:1px solid #222;
+margin-top:10px
+}
+
+.tab{
+font-size:22px
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:3px
+gap:2px;
+padding-top:2px
 }
 
 .post{
 width:100%;
 aspect-ratio:1/1;
+background:#151515;
+overflow:hidden;
+cursor:pointer
+}
+
+.post img{
+width:100%;
+height:100%;
 object-fit:cover;
-background:#111
+display:block
 }
 
-.empty{
+.noPosts,
+.loading,
+.error{
 text-align:center;
-color:#777;
-padding:50px 10px
+color:#888;
+padding:45px 15px
 }
 
-.message{
-text-align:center;
-color:#777;
-margin-top:20px
-}
-
-nav{
+.bottom{
 position:fixed;
-bottom:0;
 left:0;
 right:0;
-height:65px;
+bottom:0;
+height:60px;
 background:#000;
 border-top:1px solid #222;
 display:flex;
 justify-content:space-around;
-align-items:center
+align-items:center;
+z-index:10
 }
 
-nav a{
-color:#fff;
+.bottom a{
+color:#aaa;
 text-decoration:none;
-font-size:25px
-}
-
-@media(max-width:500px){
-
-main{
-padding:25px 28px
-}
-
-.logo{
-font-size:27px
-}
-
-.profileTop{
-gap:18px
-}
-
-.photo{
-width:95px;
-height:95px
-}
-
-.name{
 font-size:23px
 }
 
-.username{
-font-size:16px
-}
-
-.stats{
-gap:38px
-}
-
+.bottom a.active{
+color:#fff
 }
 </style>
 </head>
 
 <body>
 
-<header>
+<div class="header">
 
-<div class="back" onclick="location.href='home.html'">←</div>
-
+<div class="leftHead">
+<div class="back" onclick="history.back()">‹</div>
 <div class="logo">CROCKCELL</div>
+</div>
 
-<div class="settings">⚙</div>
+<div class="settings" id="settingsBtn">⚙</div>
 
-</header>
+</div>
 
+<div id="page">
 
-<main>
-
-<div class="profileTop">
-
-<img id="profilePhoto"
-class="photo"
-src=""
-alt="Profile Photo">
-
-<div class="details">
-
-<div id="name" class="name">Loading...</div>
-
-<div id="username" class="username"></div>
-
-<div id="bio" class="bio"></div>
-
+<div class="loading">
+Loading profile...
 </div>
 
 </div>
 
-
-<a class="edit" href="edit-profile.html">
-Edit profile
-</a>
-
-
-<div class="stats">
-
-<div class="stat">
-<b id="postCount">0</b>
-<span>Posts</span>
-</div>
-
-<div class="stat">
-<b>0</b>
-<span>Followers</span>
-</div>
-
-<div class="stat">
-<b>0</b>
-<span>Following</span>
-</div>
-
-</div>
-
-
-<div id="grid" class="grid"></div>
-
-<div id="empty" class="empty" style="display:none">
-No posts yet
-</div>
-
-<div id="message" class="message"></div>
-
-</main>
-
-
-<nav>
+<div class="bottom">
 
 <a href="home.html">⌂</a>
-
 <a href="search.html">⌕</a>
-
 <a href="create.html">＋</a>
-
 <a href="activity.html">♡</a>
+<a href="profile.html" class="active">◉</a>
 
-<a href="profile.html">◉</a>
-
-</nav>
-
+</div>
 
 <script>
 
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-
 const PROJECT_ID="crockcell-cd2e6";
 
 const BASE=
 `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 let token=localStorage.getItem("crockcellIdToken");
+let myUid=localStorage.getItem("crockcellUid");
+let refreshToken=localStorage.getItem("crockcellRefreshToken");
 
-let uid=localStorage.getItem("crockcellUid");
+const page=document.getElementById("page");
 
-let refreshToken=
-localStorage.getItem("crockcellRefreshToken");
-
-
-function $(id){
-return document.getElementById(id);
+if(!token || !myUid){
+location.href="index.html";
 }
 
-
-function defaultPhoto(){
-
-return "data:image/svg+xml;charset=UTF-8,"+
-encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg"
-width="200" height="200">
-<rect width="100%" height="100%" fill="#222"/>
-<text x="50%" y="58%"
-text-anchor="middle"
-fill="#777"
-font-size="70">👤</text>
-</svg>
-`);
-
+function esc(v){
+return String(v||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
+function value(field){
+
+if(!field)return"";
+
+if(field.stringValue!==undefined)
+return field.stringValue;
+
+if(field.integerValue!==undefined)
+return field.integerValue;
+
+return"";
+}
 
 async function refresh(){
 
@@ -332,23 +279,23 @@ const r=await fetch(
 {
 method:"POST",
 headers:{
-"Content-Type":
-"application/x-www-form-urlencoded"
+"Content-Type":"application/x-www-form-urlencoded"
 },
 body:
-`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+"grant_type=refresh_token&refresh_token="+
+encodeURIComponent(refreshToken)
 }
 );
 
 const d=await r.json();
 
-if(!r.ok || !d.id_token){
+if(!r.ok || !d.id_token)
 return false;
-}
 
 token=d.id_token;
 
-refreshToken=d.refresh_token || refreshToken;
+if(d.refresh_token)
+refreshToken=d.refresh_token;
 
 localStorage.setItem(
 "crockcellIdToken",
@@ -363,311 +310,556 @@ refreshToken
 return true;
 
 }catch(e){
-
 return false;
-
+}
 }
 
-}
+async function firebase(path,options={}){
 
-
-async function getUser(){
-
-let r=await fetch(
-`${BASE}/users/${uid}`,
+options.headers=Object.assign(
 {
-headers:{
-Authorization:"Bearer "+token
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
 },
-cache:"no-store"
-}
+options.headers||{}
 );
 
-if((r.status===401||r.status===403)
-&&refreshToken){
+let r=await fetch(BASE+path,options);
 
-if(await refresh()){
+if((r.status===401 || r.status===403)
+&& refreshToken){
 
-r=await fetch(
-`${BASE}/users/${uid}`,
-{
-headers:{
-Authorization:"Bearer "+token
-},
-cache:"no-store"
-}
-);
+const ok=await refresh();
 
-}
+if(ok){
+
+options.headers.Authorization=
+"Bearer "+token;
+
+r=await fetch(BASE+path,options);
 
 }
-
-return r;
-
 }
 
+const text=await r.text();
 
-async function loadProfile(){
-
-if(!token || !uid){
-
-location.href="index.html";
-
-return;
-
-}
-
-$("message").textContent="Loading profile...";
+let data=null;
 
 try{
-
-const r=await getUser();
+data=text?JSON.parse(text):null
+}catch(e){}
 
 if(!r.ok){
 
-console.log(await r.text());
-
-$("message").textContent=
-"Profile load nahi ho rahi.";
-
-return;
+throw new Error(
+data?.error?.message ||
+("Firebase error "+r.status)
+);
 
 }
 
-const data=await r.json();
+return data;
+}
 
-const f=data.fields || {};
+function makeUser(doc){
 
+const f=doc.fields||{};
 
-const name=
-f.name?.stringValue || "User";
+return{
+id:doc.name.split("/").pop(),
+uid:value(f.uid) || doc.name.split("/").pop(),
+name:value(f.name),
+username:value(f.username),
+bio:value(f.bio),
+photoURL:value(f.photoURL),
+email:value(f.email)
+};
 
-const username=
-f.username?.stringValue || "";
+}
 
-const bio=
-f.bio?.stringValue || "";
+/*
+ URL se jis user ko open karna hai
+ uska ID mil raha hai.
+*/
 
-const photo=
-f.photoURL?.stringValue || "";
+const params=new URLSearchParams(
+location.search
+);
 
+let requestedId=params.get("uid");
 
-/* FIREBASE DATA DIRECTLY SHOW */
+/*
+ Agar direct profile.html khola gaya hai
+ to apni profile open hogi.
+*/
 
-$("name").textContent=name;
+if(!requestedId){
+requestedId=myUid;
+}
 
-$("username").textContent=
-username ? "@"+username : "";
+let profileUser=null;
 
-$("bio").textContent=bio;
+async function getUser(){
 
-$("profilePhoto").src=
-photo || defaultPhoto();
-
-
-/* UPDATE LOCAL CACHE */
-
-let old={};
+/*
+ Pehle document ID se try
+*/
 
 try{
 
-old=JSON.parse(
-localStorage.getItem(
-"crockcellProfile"
-)||"{}"
+const doc=await firebase(
+"/users/"+encodeURIComponent(requestedId),
+{
+method:"GET"
+}
 );
+
+if(doc){
+profileUser=makeUser(doc);
+return profileUser;
+}
 
 }catch(e){}
 
-localStorage.setItem(
-"crockcellProfile",
-JSON.stringify({
-...old,
-uid:uid,
-name:name,
-username:username,
-bio:bio,
-photoURL:photo
-})
-);
-
-$("message").textContent="";
-
-await loadPosts();
-
-}catch(e){
-
-console.log(e);
-
-$("message").textContent=
-"Something went wrong.";
-
-}
-
-}
-
-
-async function loadPosts(){
+/*
+ Agar document ID UID nahi hai,
+ to uid field se search karenge.
+*/
 
 try{
 
 const query={
-
 structuredQuery:{
-
 from:[
-{
-collectionId:"posts"
-}
+{collectionId:"users"}
 ],
-
 where:{
-
 fieldFilter:{
+field:{
+fieldPath:"uid"
+},
+op:"EQUAL",
+value:{
+stringValue:requestedId
+}
+}
+},
+limit:1
+}
+};
 
+const data=await firebase(
+":runQuery",
+{
+method:"POST",
+body:JSON.stringify(query)
+}
+);
+
+const found=(data||[])
+.find(x=>x.document);
+
+if(found){
+profileUser=makeUser(found.document);
+return profileUser;
+}
+
+}catch(e){}
+
+return null;
+}
+
+async function getPosts(userId){
+
+const query={
+structuredQuery:{
+from:[
+{collectionId:"posts"}
+],
+where:{
+fieldFilter:{
 field:{
 fieldPath:"userId"
 },
-
 op:"EQUAL",
-
 value:{
-stringValue:uid
+stringValue:userId
 }
-
 }
-
+},
+orderBy:[
+{
+field:{
+fieldPath:"createdAt"
+},
+direction:"DESCENDING"
 }
-
+],
+limit:100
 }
-
 };
 
+try{
 
-let r=await fetch(
-`${BASE}:runQuery`,
+const data=await firebase(
+":runQuery",
 {
 method:"POST",
-
-headers:{
-Authorization:"Bearer "+token,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify(query),
-
-cache:"no-store"
+body:JSON.stringify(query)
 }
 );
 
+return(data||[])
+.filter(x=>x.document)
+.map(x=>x.document);
 
-if((r.status===401||r.status===403)
-&&refreshToken){
+}catch(e){
 
-if(await refresh()){
+console.log("Posts error:",e);
+return[];
 
-r=await fetch(
-`${BASE}:runQuery`,
-{
-method:"POST",
-
-headers:{
-Authorization:"Bearer "+token,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify(query),
-
-cache:"no-store"
 }
+}
+
+function postData(doc){
+
+const f=doc.fields||{};
+
+return{
+id:doc.name.split("/").pop(),
+image:value(f.image),
+caption:value(f.caption),
+createdAt:value(f.createdAt)
+};
+
+}
+
+function renderProfile(user,posts){
+
+const isMe=
+(user.uid===myUid || user.id===myUid);
+
+const photo=
+user.photoURL ||
+"https://via.placeholder.com/200";
+
+const name=
+user.name ||
+user.username ||
+"User";
+
+const username=
+user.username || "";
+
+page.innerHTML=`
+
+<div class="profile">
+
+<div class="top">
+
+<img
+class="photo"
+src="${esc(photo)}"
+onerror="this.src='https://via.placeholder.com/200'"
+>
+
+<div class="details">
+
+<div class="name">
+${esc(name)}
+</div>
+
+<div class="username">
+${username?"@"+esc(username):""}
+</div>
+
+<div class="bio">
+${esc(user.bio||"")}
+</div>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div>
+<div class="statNumber">
+${posts.length}
+</div>
+<div class="statText">
+Posts
+</div>
+</div>
+
+<div>
+<div class="statNumber">
+0
+</div>
+<div class="statText">
+Followers
+</div>
+</div>
+
+<div>
+<div class="statNumber">
+0
+</div>
+<div class="statText">
+Following
+</div>
+</div>
+
+</div>
+
+<div class="actions">
+
+${
+isMe
+?
+`<button
+class="editBtn"
+id="editBtn"
+>
+Edit profile
+</button>`
+:
+`<button
+class="followBtn"
+id="profileFollowBtn"
+>
+Follow
+</button>`
+}
+
+</div>
+
+</div>
+
+<div class="tabs">
+<div class="tab">▦</div>
+</div>
+
+${
+posts.length
+?
+`<div class="grid">
+${posts.map(p=>{
+
+const post=postData(p);
+
+return`
+
+<div
+class="post"
+data-post="${esc(post.id)}"
+>
+
+<img
+src="${esc(post.image)}"
+onerror="this.style.display='none'"
+>
+
+</div>
+
+`;
+
+}).join("")}
+</div>`
+:
+`<div class="noPosts">
+No posts yet
+</div>`
+}
+
+`;
+
+if(isMe){
+
+document.getElementById("editBtn")
+.addEventListener("click",()=>{
+location.href="edit-profile.html";
+});
+
+}else{
+
+document.getElementById("profileFollowBtn")
+.addEventListener(
+"click",
+()=>toggleFollow(
+user.uid||user.id
+)
+);
+
+}
+
+document.querySelectorAll(".post")
+.forEach(post=>{
+
+post.addEventListener("click",()=>{
+
+/*
+ Abhi post open karne ke liye
+ post ID save kar rahe hain.
+ Next step me isi se Like,
+ Comment aur Share add karenge.
+*/
+
+localStorage.setItem(
+"crockcellViewedPost",
+post.dataset.post
+);
+
+alert(
+"Post open system next step me add hoga."
+);
+
+});
+
+});
+
+}
+
+async function toggleFollow(target){
+
+const followId=
+myUid+"_"+target;
+
+const button=
+document.getElementById(
+"profileFollowBtn"
+);
+
+try{
+
+let exists=true;
+
+try{
+
+await firebase(
+"/follows/"+followId,
+{method:"GET"}
+);
+
+}catch(e){
+
+exists=false;
+
+}
+
+if(exists){
+
+await firebase(
+"/follows/"+followId,
+{method:"DELETE"}
+);
+
+button.textContent="Follow";
+button.classList.remove("following");
+
+}else{
+
+await firebase(
+"/follows/"+followId,
+{
+method:"PATCH",
+body:JSON.stringify({
+fields:{
+followerId:{
+stringValue:myUid
+},
+followingId:{
+stringValue:target
+},
+createdAt:{
+timestampValue:
+new Date().toISOString()
+}
+}
+})
+}
+);
+
+button.textContent="Following";
+button.classList.add("following");
+
+}
+
+}catch(e){
+
+alert(
+"Follow update nahi ho paya."
 );
 
 }
 
 }
 
+document.getElementById(
+"settingsBtn"
+).addEventListener(
+"click",
+()=>{
 
-if(!r.ok){
+if(profileUser &&
+(profileUser.uid===myUid ||
+ profileUser.id===myUid)){
 
-$("empty").style.display="block";
+location.href="edit-profile.html";
 
-return;
+}else{
 
-}
-
-
-const rows=await r.json();
-
-const docs=
-rows
-.map(x=>x.document)
-.filter(Boolean);
-
-
-$("postCount").textContent=docs.length;
-
-
-if(!docs.length){
-
-$("empty").style.display="block";
-
-return;
+alert(
+"Settings sirf apni profile par available hain."
+);
 
 }
 
-
-docs.sort((a,b)=>{
-
-const aa=
-a.fields?.createdAt?.stringValue || "";
-
-const bb=
-b.fields?.createdAt?.stringValue || "";
-
-return bb.localeCompare(aa);
-
 });
 
+async function start(){
 
-const grid=$("grid");
+try{
 
-grid.innerHTML="";
+const user=await getUser();
 
+if(!user){
 
-docs.forEach(doc=>{
+page.innerHTML=`
+<div class="error">
+Profile nahi mili.
+</div>
+`;
 
-const image=
-doc.fields?.image?.stringValue || "";
+return;
+}
 
-if(!image)return;
+const realUid=
+user.uid ||
+user.id;
 
+const posts=
+await getPosts(realUid);
 
-const img=
-document.createElement("img");
-
-img.className="post";
-
-img.src=image;
-
-img.alt="Post";
-
-grid.appendChild(img);
-
-});
-
+renderProfile(user,posts);
 
 }catch(e){
 
 console.log(e);
 
-}
+page.innerHTML=`
+<div class="error">
+Profile load nahi ho paayi.
+</div>
+`;
 
 }
 
+}
 
-loadProfile();
+start();
 
 </script>
 
 </body>
-</html>
+  </html>
