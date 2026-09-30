@@ -1,1624 +1,351 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CROCKCELL Home</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CROCKCELL</title>
 <style>
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-font-family:Arial;
-}
-
-body{
-background:#f5f5f5;
-padding-bottom:80px;
-}
-
-.header{
-height:60px;
-background:white;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 15px;
-border-bottom:1px solid #ddd;
-}
-
-.logo{
-font-size:22px;
-font-weight:bold;
-}
-
-.logout{
-background:#111;
-color:white;
-border:0;
-padding:9px 14px;
-border-radius:8px;
-}
-
-.profile{
-background:white;
-margin:12px;
-padding:14px;
-border-radius:12px;
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.circle{
-width:48px;
-height:48px;
-border-radius:50%;
-background:#111;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-}
-
-.info{
-flex:1;
-}
-
-.info b{
-display:block;
-margin-bottom:5px;
-}
-
-.info span{
-font-size:13px;
-color:#777;
-}
-
-.message{
-background:white;
-margin:12px;
-padding:25px;
-border-radius:12px;
-text-align:center;
-color:#777;
-}
-
-.post{
-background:white;
-margin:12px;
-border-radius:12px;
-overflow:hidden;
-}
-
-.postTop{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px;
-font-weight:bold;
-}
-
-.postTop .circle{
-width:40px;
-height:40px;
-}
-
-.postUser{
-flex:1;
-}
-
-.deletePost{
-border:0;
-background:none;
-color:#b00020;
-font-weight:bold;
-font-size:13px;
-padding:8px;
-}
-
-.postImage{
-width:100%;
-display:block;
-max-height:550px;
-object-fit:cover;
-}
-
-.postBody{
-padding:12px;
-}
-
-.actions{
-display:flex;
-gap:20px;
-margin-bottom:10px;
-}
-
-.actions button{
-border:0;
-background:none;
-font-size:23px;
-}
-
-.likes{
-font-weight:bold;
-font-size:14px;
-margin-bottom:8px;
-}
-
-.commentCount{
-font-size:13px;
-font-weight:bold;
-color:#555;
-margin-bottom:8px;
-}
-
-.caption{
-font-size:14px;
-margin-bottom:10px;
-}
-
-.commentSection{
-border-top:1px solid #eee;
-padding-top:10px;
-}
-
-.comment{
-font-size:13px;
-margin-bottom:10px;
-display:flex;
-align-items:center;
-gap:7px;
-}
-
-.commentText{
-flex:1;
-}
-
-.deleteComment{
-border:0;
-background:none;
-color:#b00020;
-font-size:12px;
-padding:4px;
-}
-
-.commentForm{
-display:flex;
-gap:7px;
-margin-top:10px;
-}
-
-.commentInput{
-flex:1;
-min-width:0;
-border:1px solid #ddd;
-border-radius:8px;
-padding:9px;
-outline:none;
-}
-
-.commentButton{
-background:#111;
-color:white;
-border:0;
-border-radius:8px;
-padding:9px 12px;
-}
-
-.loadingComments{
-font-size:12px;
-color:#888;
-}
-
-.error{
-background:white;
-margin:12px;
-padding:20px;
-border-radius:12px;
-color:#b00020;
-text-align:center;
-}
-
-.nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-height:65px;
-background:white;
-border-top:1px solid #ddd;
-display:flex;
-justify-content:space-around;
-align-items:center;
-}
-
-.nav a{
-text-decoration:none;
-color:#111;
-text-align:center;
-font-size:12px;
-}
-
-.nav div{
-font-size:21px;
-}
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
+header{height:58px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;background:#000;z-index:5}
+.logo{font-size:23px;font-weight:800;letter-spacing:1px}button{background:none;border:0;color:#fff;cursor:pointer}
+#profile{padding:14px 16px;border-bottom:1px solid #222;color:#bbb}
+#profile b{color:#fff;font-size:18px}
+#feed{max-width:600px;margin:auto;padding-bottom:70px}
+.post{border-bottom:1px solid #222;padding-bottom:16px;margin-bottom:10px}
+.top{display:flex;align-items:center;padding:12px 14px;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#222}
+.name{font-weight:bold}
+.photo{width:100%;max-height:650px;object-fit:cover;display:block;background:#111}
+.actions{display:flex;gap:18px;padding:10px 14px 5px;font-size:23px}
+.info{padding:0 14px}
+.caption{margin-top:7px}
+.comments{padding:8px 14px}
+.comment{font-size:14px;margin:7px 0;color:#ddd}
+.comment b{color:#fff}
+.comment button{color:#777;margin-left:5px}
+.form{display:flex;gap:7px;margin-top:9px}
+.form input{flex:1;background:#111;border:1px solid #333;border-radius:20px;padding:10px;color:#fff;outline:none}
+.form button{background:#fff;color:#000;border-radius:20px;padding:0 14px}
+.del{color:#f66;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;height:58px;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;z-index:9}
+nav a{color:#fff;text-decoration:none;font-size:22px}
+.loading{text-align:center;padding:35px;color:#aaa}
+.error{text-align:center;padding:25px;color:#ff7777}
 </style>
 </head>
-
 <body>
 
-<div class="header">
+<header>
+<div class="logo">CROCKCELL</div>
+<button onclick="logout()">Logout</button>
+</header>
 
-<div class="logo">
-CROCKCELL
-</div>
+<section id="profile">Loading profile...</section>
+<main id="feed"><div class="loading">Loading posts...</div></main>
 
-<button class="logout" onclick="logout()">
-Log out
-</button>
-
-</div>
-
-
-<div class="profile">
-
-<div class="circle" id="profileCircle">
-U
-</div>
-
-<div class="info">
-
-<b id="profileName">
-User
-</b>
-
-<span id="profileEmail">
-Account
-</span>
-
-</div>
-
-</div>
-
-
-<div id="posts">
-
-<div class="message">
-Loading posts...
-</div>
-
-</div>
-
-
-<div class="nav">
-
-<a href="home.html">
-<div>⌂</div>
-Home
-</a>
-
-<a href="search.html">
-<div>⌕</div>
-Search
-</a>
-
-<a href="create.html">
-<div>＋</div>
-Create
-</a>
-
-<a href="activity.html">
-<div>♡</div>
-Activity
-</a>
-
-<a href="profile.html">
-<div>●</div>
-Profile
-</a>
-
-</div>
-
+<nav>
+<a href="home.html">⌂</a>
+<a href="search.html">⌕</a>
+<a href="create.html">＋</a>
+<a href="activity.html">♡</a>
+<a href="profile.html">◉</a>
+</nav>
 
 <script>
-
-const PROJECT_ID = "crockcell-cd2e6";
-
-const token =
-localStorage.getItem("crockcellIdToken");
-
-const uid =
-localStorage.getItem("crockcellUid");
-
-
-if(!token || !uid){
-
-window.location.replace("index.html");
-
-}
-
-
-/* FIRESTORE VALUE */
-
-function readValue(field){
-
-if(!field){
-return "";
-}
-
-if(field.stringValue !== undefined){
-return field.stringValue;
-}
-
-if(field.integerValue !== undefined){
-return Number(field.integerValue);
-}
-
-if(field.doubleValue !== undefined){
-return Number(field.doubleValue);
-}
-
-if(field.booleanValue !== undefined){
-return field.booleanValue;
-}
-
-if(field.timestampValue !== undefined){
-return field.timestampValue;
-}
-
-return "";
-
-}
-
-
-/* SAFE TEXT */
-
-function safeText(value){
-
-const div =
-document.createElement("div");
-
-div.textContent =
-value == null ? "" : String(value);
-
-return div.innerHTML;
-
-}
-
-
-/* PROFILE */
-
-async function loadProfile(){
-
-try{
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/users/"
-+ encodeURIComponent(uid);
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-if(!response.ok){
-return;
-}
-
-const data =
-await response.json();
-
-const fields =
-data.fields || {};
-
-const name =
-readValue(fields.name) || "User";
-
-const username =
-readValue(fields.username) || "";
-
-const email =
-readValue(fields.email) || "";
-
-document.getElementById("profileName").innerText =
-username ? "@"+username : name;
-
-document.getElementById("profileEmail").innerText =
-email;
-
-document.getElementById("profileCircle").innerText =
-(username || name || "U").charAt(0).toUpperCase();
-
-}catch(error){
-
-console.log("PROFILE ERROR:",error);
-
-}
-
-}
-
-
-/* LOAD POSTS */
-
-async function loadPosts(){
-
-const box =
-document.getElementById("posts");
-
-box.innerHTML = `
-<div class="message">
-Loading posts...
-</div>
-`;
-
-try{
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/posts?pageSize=50";
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const data =
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error?.message || "Posts error"
-);
-
-}
-
-const documents =
-data.documents || [];
-
-box.innerHTML = "";
-
-if(documents.length === 0){
-
-box.innerHTML = `
-<div class="message">
-No posts yet.
-</div>
-`;
-
-return;
-
-}
-
-
-/* NEWEST FIRST */
-
-documents.sort(function(a,b){
-
-const aDate =
-readValue(a.fields?.createdAt) || "";
-
-const bDate =
-readValue(b.fields?.createdAt) || "";
-
-return String(bDate).localeCompare(String(aDate));
-
-});
-
-
-for(const item of documents){
-
-renderPost(item);
-
-}
-
-}catch(error){
-
-console.log("POST ERROR:",error);
-
-box.innerHTML = `
-<div class="error">
-<b>Posts load nahi hui.</b>
-<br><br>
-${safeText(error.message)}
-</div>
-`;
-
-}
-
-}
-
-
-/* RENDER POST */
-
-function renderPost(item){
-
-const fields =
-item.fields || {};
-
-const fullName =
-item.name || "";
-
-const postId =
-fullName.split("/").pop();
-
-const username =
-readValue(fields.username) || "user";
-
-const caption =
-readValue(fields.caption) || "";
-
-const image =
-readValue(fields.image) || "";
-
-const likes =
-Number(readValue(fields.likes) || 0);
-
-const postUserId =
-readValue(fields.userId) || "";
-
-const isOwner =
-postUserId === uid;
-
-
-const post =
-document.createElement("div");
-
-post.className = "post";
-
-post.innerHTML = `
-
-<div class="postTop">
-
-<div class="circle">
-${safeText(
-String(username).charAt(0).toUpperCase()
-)}
-</div>
-
-<div class="postUser">
-@${safeText(username)}
-</div>
-
-${
-isOwner
-?
-`
-<button
-class="deletePost"
-onclick="deletePost('${safeText(postId)}')">
-Delete
-</button>
-`
-:
-""
-}
-
-</div>
-
-
-${
-image
-?
-`
-<img
-class="postImage"
-src="${image}">
-`
-:
-""
-}
-
-
-<div class="postBody">
-
-<div class="actions">
-
-<button
-class="likeButton"
-data-post-id="${safeText(postId)}"
-onclick="likePost(this)">
-♡
-</button>
-
-<button
-onclick="focusComment('${safeText(postId)}')">
-💬
-</button>
-
-<button onclick="sharePost()">
-↗
-</button>
-
-</div>
-
-
-<div
-class="likes"
-id="likes-${safeText(postId)}">
-${likes} likes
-</div>
-
-
-<div
-class="commentCount"
-id="commentCount-${safeText(postId)}">
-Comments: 0
-</div>
-
-
-<div class="caption">
-
-<b>
-@${safeText(username)}
-</b>
-
-${safeText(caption)}
-
-</div>
-
-
-<div class="commentSection">
-
-<div id="comments-${safeText(postId)}">
-
-<div class="loadingComments">
-Loading comments...
-</div>
-
-</div>
-
-
-<div class="commentForm">
-
-<input
-id="input-${safeText(postId)}"
-class="commentInput"
-placeholder="Write a comment..."
-maxlength="300">
-
-<button
-class="commentButton"
-onclick="sendComment('${safeText(postId)}')">
-Send
-</button>
-
-</div>
-
-</div>
-
-</div>
-`;
-
-document.getElementById("posts").appendChild(post);
-
-checkLike(postId);
-
-loadComments(postId);
-
-}
-
-
-/* CHECK LIKE */
-
-async function checkLike(postId){
-
-try{
-
-const likeId =
-postId + "_" + uid;
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/likes/"
-+ encodeURIComponent(likeId);
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const button =
-document.querySelector(
-'[data-post-id="'+CSS.escape(postId)+'"]'
-);
-
-if(button && response.ok){
-
-button.innerText = "♥";
-
-button.setAttribute(
-"data-liked",
-"true"
-);
-
-}else if(button){
-
-button.setAttribute(
-"data-liked",
-"false"
-);
-
-}
-
-}catch(error){
-
-console.log("LIKE CHECK ERROR:",error);
-
-}
-
-}
-
-
-/* LIKE */
-
-async function likePost(button){
-
-const postId =
-button.getAttribute("data-post-id");
-
-const liked =
-button.getAttribute("data-liked") === "true";
-
-if(button.disabled){
-return;
-}
-
-button.disabled = true;
-
-try{
-
-const likeId =
-postId + "_" + uid;
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/likes/"
-+ encodeURIComponent(likeId);
-
-
-if(liked){
-
-const response =
-await fetch(url,{
-method:"DELETE",
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-if(!response.ok){
-throw new Error("Unlike failed");
-}
-
-button.innerText = "♡";
-
-button.setAttribute(
-"data-liked",
-"false"
-);
-
-await changeLikeCount(postId,-1);
-
-}else{
-
-const response =
-await fetch(url,{
-method:"PATCH",
-
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-fields:{
-
-postId:{
-stringValue:postId
-},
-
-userId:{
-stringValue:uid
-},
-
-createdAt:{
-timestampValue:new Date().toISOString()
-}
-
-}
-
-})
-
-});
-
-if(!response.ok){
-
-const data =
-await response.json();
-
-throw new Error(
-data.error?.message || "Like failed"
-);
-
-}
-
-button.innerText = "♥";
-
-button.setAttribute(
-"data-liked",
-"true"
-);
-
-await changeLikeCount(postId,1);
-
-}
-
-}catch(error){
-
-alert(
-"Like save nahi hua: "+error.message
-);
-
-}finally{
-
-button.disabled = false;
-
-}
-
-}
-
-
-/* LIKE COUNT */
-
-async function changeLikeCount(postId,change){
-
-try{
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/posts/"
-+ encodeURIComponent(postId);
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const data =
-await response.json();
-
-if(!response.ok){
-throw new Error("Post update failed");
-}
-
-let likes =
-Number(readValue(data.fields?.likes) || 0);
-
-likes += change;
-
-if(likes < 0){
-likes = 0;
-}
-
-const updateUrl =
-url + "?updateMask.fieldPaths=likes";
-
-await fetch(updateUrl,{
-method:"PATCH",
-
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-fields:{
-likes:{
-integerValue:likes
-}
-}
-
-})
-
-});
-
-const box =
-document.getElementById("likes-"+postId);
-
-if(box){
-
-box.innerText =
-likes+" likes";
-
-}
-
-}catch(error){
-
-console.log(
-"LIKE COUNT ERROR:",
-error
-);
-
-}
-
-}
-
-
-/* LOAD COMMENTS */
-
-async function loadComments(postId){
-
-const box =
-document.getElementById(
-"comments-"+postId
-);
-
-if(!box){
-return;
-}
-
-try{
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/comments?pageSize=50";
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const data =
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error?.message || "Comments error"
-);
-
-}
-
-let comments =
-data.documents || [];
-
-comments =
-comments.filter(function(item){
-
-return readValue(
-item.fields?.postId
-) === postId;
-
-});
-
-
-comments.sort(function(a,b){
-
-const aDate =
-readValue(a.fields?.createdAt) || "";
-
-const bDate =
-readValue(b.fields?.createdAt) || "";
-
-return String(aDate).localeCompare(String(bDate));
-
-});
-
-
-const countBox =
-document.getElementById(
-"commentCount-"+postId
-);
-
-if(countBox){
-
-countBox.innerText =
-"Comments: "+comments.length;
-
-}
-
-box.innerHTML = "";
-
-
-if(comments.length === 0){
-
-box.innerHTML = `
-<div class="loadingComments">
-No comments yet.
-</div>
-`;
-
-return;
-
-}
-
-
-comments.forEach(function(item){
-
-const fields =
-item.fields || {};
-
-const username =
-readValue(fields.username) || "user";
-
-const text =
-readValue(fields.text) || "";
-
-const commentUserId =
-readValue(fields.userId) || "";
-
-const fullCommentName =
-item.name || "";
-
-const commentId =
-fullCommentName.split("/").pop();
-
-const div =
-document.createElement("div");
-
-div.className = "comment";
-
-let deleteButton = "";
-
-if(commentUserId === uid){
-
-deleteButton = `
-<button
-class="deleteComment"
-onclick="deleteComment('${safeText(commentId)}','${safeText(postId)}')">
-Delete
-</button>
-`;
-
-}
-
-div.innerHTML = `
-
-<div class="commentText">
-
-<b>
-@${safeText(username)}
-</b>
-
-${safeText(text)}
-
-</div>
-
-${deleteButton}
-
-`;
-
-box.appendChild(div);
-
-});
-
-
-}catch(error){
-
-console.log(
-"COMMENT ERROR:",
-error
-);
-
-box.innerHTML = `
-<div class="loadingComments">
-No comments yet.
-</div>
-`;
-
-}
-
-}
-
-
-/* SEND COMMENT */
-
-async function sendComment(postId){
-
-const input =
-document.getElementById(
-"input-"+postId
-);
-
-if(!input){
-return;
-}
-
-const text =
-input.value.trim();
-
-if(!text){
-
-alert("Comment likho.");
-
-return;
-
-}
-
-const button =
-input.parentElement.querySelector("button");
-
-button.disabled = true;
-
-try{
-
-const profileUrl =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/users/"
-+ encodeURIComponent(uid);
-
-const profileResponse =
-await fetch(profileUrl,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const profileData =
-await profileResponse.json();
-
-let username = "User";
-
-if(profileResponse.ok){
-
-username =
-readValue(
-profileData.fields?.username
-) || "User";
-
-}
-
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/comments";
-
-const response =
-await fetch(url,{
-method:"POST",
-
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-fields:{
-
-postId:{
-stringValue:postId
-},
-
-userId:{
-stringValue:uid
-},
-
-username:{
-stringValue:username
-},
-
-text:{
-stringValue:text
-},
-
-createdAt:{
-timestampValue:new Date().toISOString()
-}
-
-}
-
-})
-
-});
-
-const data =
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error?.message ||
-"Comment save failed"
-);
-
-}
-
-input.value = "";
-
-await loadComments(postId);
-
-}catch(error){
-
-alert(
-"Comment save nahi hua: "+error.message
-);
-
-}finally{
-
-button.disabled = false;
-
-}
-
-}
-
-
-/* DELETE COMMENT */
-
-async function deleteComment(commentId,postId){
-
-if(!confirm(
-"Kya aap ye comment delete karna chahte ho?"
-)){
-
-return;
-
+const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+const PROJECT_ID="crockcell-cd2e6";
+const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+let token=localStorage.getItem("crockcellIdToken");
+let uid=localStorage.getItem("crockcellUid");
+let refreshToken=localStorage.getItem("crockcellRefreshToken");
+
+const val=f=>f?.stringValue??f?.integerValue??f?.timestampValue??"";
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[m]));
+
+async function refresh(){
+ if(!refreshToken)return false;
+ try{
+  const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{
+   method:"POST",
+   headers:{"Content-Type":"application/x-www-form-urlencoded"},
+   body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+  });
+  const d=await r.json();
+  if(!r.ok||!d.id_token)return false;
+  token=d.id_token;
+  uid=d.user_id||uid;
+  refreshToken=d.refresh_token||refreshToken;
+  localStorage.setItem("crockcellIdToken",token);
+  localStorage.setItem("crockcellUid",uid);
+  localStorage.setItem("crockcellRefreshToken",refreshToken);
+  return true;
+ }catch(e){return false}
+}
+
+async function api(path,opt={},retry=true){
+ opt={...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${token}`}};
+ let r=await fetch(BASE+path,opt);
+ if((r.status==401||r.status==403)&&retry&&await refresh())
+  return api(path,opt,false);
+ return r;
+}
+
+async function profile(){
+ const r=await api(`/users/${uid}`);
+ if(!r.ok)return;
+ const d=await r.json(),f=d.fields||{};
+ document.getElementById("profile").innerHTML=
+ `<b>${esc(val(f.name)||val(f.username)||"User")}</b><br>@${esc(val(f.username)||"user")}`;
+}
+
+async function posts(){
+ const box=document.getElementById("feed");
+ const r=await api("/posts?pageSize=50");
+ if(!r.ok){
+  box.innerHTML=`<div class="error">Post load nahi hui.<br>Authentication error.</div>`;
+  return;
+ }
+
+ const d=await r.json();
+ const arr=(d.documents||[]).sort((a,b)=>
+  String(val(b.fields?.createdAt)).localeCompare(String(val(a.fields?.createdAt)))
+ );
+
+ box.innerHTML="";
+ if(!arr.length){
+  box.innerHTML='<div class="loading">Abhi koi post nahi hai.</div>';
+  return;
+ }
+
+ for(const doc of arr)renderPost(doc);
+}
+
+function renderPost(doc){
+ const f=doc.fields||{};
+ const id=val(f.postId)||doc.name.split("/").pop();
+ const image=val(f.image);
+ const username=val(f.username)||"user";
+ const caption=val(f.caption);
+ const likes=Number(val(f.likes)||0);
+
+ const el=document.createElement("article");
+ el.className="post";
+ el.id="post_"+id;
+
+ el.innerHTML=`
+ <div class="top">
+  <div class="avatar"></div>
+  <div class="name">${esc(username)}</div>
+ </div>
+
+ ${image?`<img class="photo" src="${image}" alt="post">`:""}
+
+ <div class="actions">
+  <button id="like_${id}" onclick="likePost('${esc(id)}')">♡</button>
+  <button onclick="focusComment('${esc(id)}')">💬</button>
+  <button onclick="sharePost('${esc(id)}')">↗</button>
+ </div>
+
+ <div class="info">
+  <b id="count_${id}">${likes} likes</b>
+  ${caption?`<div class="caption"><b>${esc(username)}</b> ${esc(caption)}</div>`:""}
+  ${String(val(f.userId))===String(uid)?`<button class="del" onclick="deletePost('${esc(id)}')">Delete post</button>`:""}
+ </div>
+
+ <div class="comments" id="comments_${id}">
+  <div style="color:#777">Loading comments...</div>
+ </div>
+
+ <div class="form">
+  <input id="input_${id}" placeholder="Add a comment...">
+  <button onclick="sendComment('${esc(id)}')">Post</button>
+ </div>`;
+
+ document.getElementById("feed").appendChild(el);
+ checkLike(id);
+ loadComments(id);
+}
+
+async function checkLike(id){
+ const r=await api(`/likes/${encodeURIComponent(id+"_"+uid)}`);
+ const b=document.getElementById("like_"+id);
+ if(r.ok&&b)b.textContent="♥";
+}
+
+async function likePost(id){
+ const likeId=id+"_"+uid;
+ const r=await api(`/likes/${encodeURIComponent(likeId)}`);
+
+ if(r.ok){
+  await api(`/likes/${encodeURIComponent(likeId)}`,{method:"DELETE"});
+  await changeLikeCount(id,-1);
+  const b=document.getElementById("like_"+id);
+  if(b)b.textContent="♡";
+ }else{
+  const now=new Date().toISOString();
+  await api(`/likes/${encodeURIComponent(likeId)}`,{
+   method:"PATCH",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({fields:{
+    postId:{stringValue:id},
+    userId:{stringValue:uid},
+    createdAt:{timestampValue:now}
+   }})
+  });
+  await changeLikeCount(id,1);
+  const b=document.getElementById("like_"+id);
+  if(b)b.textContent="♥";
+ }
+}
+
+async function changeLikeCount(id,n){
+ const r=await api(`/posts/${encodeURIComponent(id)}`);
+ if(!r.ok)return;
+ const d=await r.json(),f=d.fields||{};
+ let count=Number(val(f.likes)||0)+n;
+ if(count<0)count=0;
+
+ await api(`/posts/${encodeURIComponent(id)}?updateMask.fieldPaths=likes`,{
+  method:"PATCH",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({fields:{likes:{integerValue:String(count)}}})
+ });
+
+ const c=document.getElementById("count_"+id);
+ if(c)c.textContent=count+" likes";
+}
+
+async function loadComments(id){
+ const box=document.getElementById("comments_"+id);
+ const r=await api("/comments?pageSize=300");
+ if(!r.ok){box.innerHTML="";return}
+
+ const d=await r.json();
+ const list=(d.documents||[])
+ .filter(x=>val(x.fields?.postId)===id)
+ .sort((a,b)=>String(val(a.fields?.createdAt)).localeCompare(String(val(b.fields?.createdAt))));
+
+ if(!list.length){
+  box.innerHTML='<div style="color:#777">No comments yet.</div>';
+  return;
+ }
+
+ box.innerHTML=list.map(x=>{
+  const f=x.fields||{},cid=x.name.split("/").pop();
+  const owner=val(f.userId)===uid;
+  return `<div class="comment">
+   <b>${esc(val(f.username)||"user")}</b> ${esc(val(f.text))}
+   ${owner?`<button onclick="deleteComment('${cid}','${esc(id)}')">Delete</button>`:""}
+  </div>`;
+ }).join("");
+}
+
+async function sendComment(id){
+ const input=document.getElementById("input_"+id);
+ const text=input.value.trim();
+ if(!text)return;
+
+ await api("/comments",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({fields:{
+   postId:{stringValue:id},
+   userId:{stringValue:uid},
+   username:{stringValue:localStorage.getItem("crockcellProfile")?
+    JSON.parse(localStorage.getItem("crockcellProfile")).username||"user":"user"},
+   text:{stringValue:text},
+   createdAt:{timestampValue:new Date().toISOString()}
+  }})
+ });
+
+ input.value="";
+ loadComments(id);
+}
+
+async function deleteComment(cid,id){
+ const r=await api(`/comments/${encodeURIComponent(cid)}`);
+ if(!r.ok)return;
+ const d=await r.json();
+ if(val(d.fields?.userId)!==uid)return;
+ await api(`/comments/${encodeURIComponent(cid)}`,{method:"DELETE"});
+ loadComments(id);
+}
+
+async function deletePost(id){
+ if(!confirm("Delete this post?"))return;
+
+ const r=await api(`/posts/${encodeURIComponent(id)}`);
+ if(!r.ok)return;
+
+ const d=await r.json();
+ if(val(d.fields?.userId)!==uid){
+  alert("You can delete only your own post.");
+  return;
+ }
+
+ for(const collection of ["likes","comments"]){
+  const q=await api(`/${collection}?pageSize=300`);
+  if(!q.ok)continue;
+  const data=await q.json();
+
+  for(const x of data.documents||[]){
+   const f=x.fields||{};
+   if(val(f.postId)===id||val(f.reelId)===id){
+    const cid=x.name.split("/").pop();
+    await api(`/${collection}/${encodeURIComponent(cid)}`,{method:"DELETE"});
+   }
+  }
+ }
+
+ await api(`/posts/${encodeURIComponent(id)}`,{method:"DELETE"});
+ document.getElementById("post_"+id)?.remove();
+}
+
+function focusComment(id){
+ document.getElementById("input_"+id)?.focus();
+}
+
+async function sharePost(id){
+ const url=location.origin+location.pathname+"?post="+encodeURIComponent(id);
+ try{
+  if(navigator.share)await navigator.share({title:"CROCKCELL",url});
+  else{
+   await navigator.clipboard.writeText(url);
+   alert("Post link copied");
+  }
+ }catch(e){}
 }
-
-try{
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/comments/"
-+ encodeURIComponent(commentId);
-
-const response =
-await fetch(url,{
-method:"DELETE",
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-if(!response.ok){
-
-const data =
-await response.json();
-
-throw new Error(
-data.error?.message || "Delete failed"
-);
-
-}
-
-await loadComments(postId);
-
-}catch(error){
-
-alert(
-"Comment delete nahi hua: "+error.message
-);
-
-}
-
-}
-
-
-/* DELETE ALL MATCHING DOCUMENTS */
-
-async function deleteRelatedDocuments(
-collection,
-postId
-){
-
-const url =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/"
-+ collection
-+ "?pageSize=300";
-
-const response =
-await fetch(url,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const data =
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error?.message ||
-(collection+" load failed")
-);
-
-}
-
-const documents =
-data.documents || [];
-
-
-for(const item of documents){
-
-const itemPostId =
-readValue(item.fields?.postId) || "";
-
-if(itemPostId !== postId){
-continue;
-}
-
-if(!item.name){
-continue;
-}
-
-
-/* DELETE RELATED DOCUMENT */
-
-const deleteResponse =
-await fetch(
-"https://firestore.googleapis.com/v1/"
-+ item.name,
-{
-method:"DELETE",
-headers:{
-"Authorization":"Bearer "+token
-}
-}
-);
-
-if(!deleteResponse.ok){
-
-const deleteData =
-await deleteResponse.json();
-
-throw new Error(
-deleteData.error?.message ||
-("Unable to delete "+collection)
-);
-
-}
-
-}
-
-}
-
-
-/* DELETE POST */
-
-async function deletePost(postId){
-
-if(!confirm(
-"Post ke saare likes aur comments bhi delete ho jayenge. Kya delete karna hai?"
-)){
-
-return;
-
-}
-
-try{
-
-/* FIRST CHECK POST */
-
-const postUrl =
-"https://firestore.googleapis.com/v1/projects/"
-+ PROJECT_ID
-+ "/databases/(default)/documents/posts/"
-+ encodeURIComponent(postId);
-
-const postResponse =
-await fetch(postUrl,{
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-const postData =
-await postResponse.json();
-
-if(!postResponse.ok){
-
-throw new Error(
-postData.error?.message ||
-"Post nahi mili."
-);
-
-}
-
-
-/* OWNER CHECK */
-
-const ownerId =
-readValue(postData.fields?.userId) || "";
-
-if(ownerId !== uid){
-
-throw new Error(
-"Sirf post owner hi post delete kar sakta hai."
-);
-
-}
-
-
-/* DELETE LIKES */
-
-await deleteRelatedDocuments(
-"likes",
-postId
-);
-
-
-/* DELETE COMMENTS */
-
-await deleteRelatedDocuments(
-"comments",
-postId
-);
-
-
-/* DELETE POST */
-
-const deletePostResponse =
-await fetch(postUrl,{
-method:"DELETE",
-
-headers:{
-"Authorization":"Bearer "+token
-}
-});
-
-if(!deletePostResponse.ok){
-
-const deleteData =
-await deletePostResponse.json();
-
-throw new Error(
-deleteData.error?.message ||
-"Post delete failed"
-);
-
-}
-
-
-/* REMOVE LOCAL COPY */
-
-try{
-
-const localPosts =
-JSON.parse(
-localStorage.getItem(
-"crockcellPosts"
-) || "[]"
-);
-
-const remaining =
-localPosts.filter(function(post){
-
-const localId =
-post.id ||
-post.postId ||
-"";
-
-return String(localId) !== String(postId);
-
-});
-
-localStorage.setItem(
-"crockcellPosts",
-JSON.stringify(remaining)
-);
-
-}catch(error){
-
-console.log(
-"LOCAL DELETE ERROR:",
-error
-);
-
-}
-
-
-/* RELOAD POSTS */
-
-await loadPosts();
-
-}catch(error){
-
-console.log(
-"DELETE POST ERROR:",
-error
-);
-
-alert(
-"Post delete nahi hui: "+error.message
-);
-
-}
-
-}
-
-
-/* FOCUS COMMENT */
-
-function focusComment(postId){
-
-const input =
-document.getElementById(
-"input-"+postId
-);
-
-if(input){
-
-input.focus();
-
-input.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
-
-}
-
-}
-
-
-/* SHARE */
-
-function sharePost(){
-
-alert(
-"Share system baad me add karenge."
-);
-
-}
-
-
-/* LOGOUT */
 
 function logout(){
-
-localStorage.removeItem(
-"crockcellIdToken"
-);
-
-localStorage.removeItem(
-"crockcellUid"
-);
-
-localStorage.removeItem(
-"crockcellProfile"
-);
-
-window.location.replace(
-"index.html"
-);
-
+ localStorage.removeItem("crockcellIdToken");
+ localStorage.removeItem("crockcellRefreshToken");
+ localStorage.removeItem("crockcellUid");
+ localStorage.removeItem("crockcellProfile");
+ location.href="index.html";
 }
 
+async function start(){
+ if(!refreshToken){
+  location.href="index.html";
+  return;
+ }
 
-/* START */
+ if(!await refresh()){
+  localStorage.removeItem("crockcellIdToken");
+  localStorage.removeItem("crockcellRefreshToken");
+  location.href="index.html";
+  return;
+ }
 
-loadProfile();
-loadPosts();
+ await profile();
+ await posts();
+}
 
+start();
 </script>
-
 </body>
-</hfg
+</html>
