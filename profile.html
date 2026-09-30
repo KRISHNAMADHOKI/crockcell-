@@ -7,192 +7,58 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#fafafa;
-  color:#111;
-}
-
-header{
-  height:60px;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-
-.logo{
-  font-size:22px;
-  font-weight:bold;
-}
-
-.headbtn{
-  border:0;
-  background:none;
-  font-size:24px;
-  cursor:pointer;
-}
-
-.wrap{
-  max-width:700px;
-  margin:auto;
-  padding:20px 15px 80px;
-}
-
-.profile{
-  display:flex;
-  gap:20px;
-  align-items:center;
-  padding:10px 0 25px;
-}
-
-.photo{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#ddd;
-  border:1px solid #ddd;
-}
-
-.details{
-  flex:1;
-}
-
-.name{
-  font-size:21px;
-  font-weight:bold;
-}
-
-.username{
-  color:#777;
-  margin-top:4px;
-}
-
-.bio{
-  margin-top:8px;
-  font-size:14px;
-}
-
-.stats{
-  display:flex;
-  gap:28px;
-  margin-top:14px;
-}
-
-.stat{
-  text-align:center;
-}
-
-.stat b{
-  display:block;
-  font-size:18px;
-}
-
-.stat span{
-  color:#777;
-  font-size:12px;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.action{
-  flex:1;
-  padding:10px;
-  border:0;
-  border-radius:8px;
-  background:#111;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.edit{
-  background:#eee;
-  color:#111;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:3px;
-}
-
-.post{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:cover;
-  background:#ddd;
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-  color:#777;
-  padding:40px 10px;
-}
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:60px;
-  background:white;
-  border-top:1px solid #ddd;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:20;
-}
-
-.bottom a{
-  text-decoration:none;
-  color:#111;
-  font-size:13px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#fafafa;color:#111}
+header{height:60px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:10}
+.logo{font-size:22px;font-weight:bold}
+.headbtn{border:0;background:none;font-size:25px;cursor:pointer}
+.wrap{max-width:700px;margin:auto;padding:20px 15px 80px}
+.profile{display:flex;gap:20px;align-items:center;padding:10px 0 25px}
+.photo{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#ddd;border:1px solid #ddd}
+.details{flex:1;min-width:0}
+.name{font-size:21px;font-weight:bold}
+.username{color:#777;margin-top:4px}
+.bio{margin-top:8px;font-size:14px}
+.stats{display:flex;gap:28px;margin-top:14px}
+.stat{text-align:center}
+.stat b{display:block;font-size:18px}
+.stat span{color:#777;font-size:12px}
+.actions{display:flex;gap:10px;margin-bottom:20px}
+.action{flex:1;padding:10px;border:0;border-radius:8px;background:#111;color:white;font-weight:bold;cursor:pointer}
+.edit{background:#eee;color:#111}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.post{width:100%;aspect-ratio:1/1;object-fit:cover;background:#ddd;cursor:pointer}
+.empty{text-align:center;color:#777;padding:40px 10px}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;align-items:center;z-index:20}
+.bottom a{text-decoration:none;color:#111;font-size:13px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <button class="headbtn" id="back">‹</button>
-  <div class="logo">CROCKCELL</div>
-  <button class="headbtn" id="settings">⚙</button>
+<button class="headbtn" id="back">‹</button>
+<div class="logo">CROCKCELL</div>
+<button class="headbtn" id="settings">⚙</button>
 </header>
 
 <div class="wrap">
 
-  <div id="profileBox">
-    Loading...
-  </div>
+<div id="profileBox">Loading...</div>
 
-  <div class="actions" id="actions"></div>
+<div class="actions" id="actions"></div>
 
-  <div id="postsBox">
-    <div class="empty">Loading posts...</div>
-  </div>
+<div id="postsBox">
+<div class="empty">Loading posts...</div>
+</div>
 
 </div>
 
 <div class="bottom">
-  <a href="home.html">Home</a>
-  <a href="search.html">Search</a>
-  <a href="create.html">Create</a>
-  <a href="reels.html">Reels</a>
-  <a href="profile.html">Profile</a>
+<a href="home.html">Home</a>
+<a href="search.html">Search</a>
+<a href="create.html">Create</a>
+<a href="reels.html">Reels</a>
+<a href="profile.html">Profile</a>
 </div>
 
 <script>
@@ -209,224 +75,210 @@ const base=
 
 const params=new URLSearchParams(location.search);
 
-let requestedUid=params.get("uid");
+/*
+ IMPORTANT:
+ Agar URL me uid nahi hai to search.html ne jo user save kiya hai
+ usko use karenge.
+ Sirf apni profile ke liye myUid use hoga.
+*/
 
-if(!requestedUid){
-  requestedUid=myUid;
-}
+let requestedUid=
+  params.get("uid") ||
+  localStorage.getItem("crockcellViewedUser") ||
+  myUid;
 
 let currentUser=null;
 
 function esc(x){
-  return String(x||"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(x||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
 function value(v){
-  if(!v)return "";
-
-  return v.stringValue ||
-         v.integerValue ||
-         v.doubleValue ||
-         v.booleanValue ||
-         "";
+if(!v)return "";
+return v.stringValue ||
+v.integerValue ||
+v.doubleValue ||
+v.booleanValue ||
+"";
 }
 
 async function refreshTokenNow(){
 
-  if(!refreshToken)return false;
+if(!refreshToken)return false;
 
-  try{
+try{
 
-    const r=await fetch(
-      "https://securetoken.googleapis.com/v1/token?key="+API_KEY,
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":
-          "application/x-www-form-urlencoded"
-        },
-        body:
-        "grant_type=refresh_token&refresh_token="+
-        encodeURIComponent(refreshToken)
-      }
-    );
+const r=await fetch(
+"https://securetoken.googleapis.com/v1/token?key="+API_KEY,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+body:
+"grant_type=refresh_token&refresh_token="+
+encodeURIComponent(refreshToken)
+}
+);
 
-    const d=await r.json();
+const d=await r.json();
 
-    if(!r.ok || !d.id_token){
-      return false;
-    }
+if(!r.ok || !d.id_token)return false;
 
-    token=d.id_token;
+token=d.id_token;
+refreshToken=d.refresh_token||refreshToken;
 
-    refreshToken=
-      d.refresh_token || refreshToken;
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
 
-    localStorage.setItem(
-      "crockcellIdToken",
-      token
-    );
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
 
-    localStorage.setItem(
-      "crockcellRefreshToken",
-      refreshToken
-    );
+return true;
 
-    return true;
-
-  }catch(e){
-
-    return false;
-  }
+}catch(e){
+return false;
+}
 }
 
 
-/* USER BY UID */
+/* USER KO UID SE DHUNDO */
 
-async function getUserByUid(uid){
+async function findUserByUid(uid){
 
-  const query={
-    structuredQuery:{
-      from:[
-        {collectionId:"users"}
-      ],
-      where:{
-        fieldFilter:{
-          field:{
-            fieldPath:"uid"
-          },
-          op:"EQUAL",
-          value:{
-            stringValue:uid
-          }
-        }
-      },
-      limit:1
-    }
-  };
+const query={
+structuredQuery:{
+from:[
+{collectionId:"users"}
+],
+where:{
+fieldFilter:{
+field:{
+fieldPath:"uid"
+},
+op:"EQUAL",
+value:{
+stringValue:uid
+}
+}
+},
+limit:1
+}
+};
 
-  let r=await fetch(
-    base+":runQuery",
-    {
-      method:"POST",
-      headers:{
-        "Authorization":"Bearer "+token,
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(query)
-    }
-  );
+let r=await fetch(
+base+":runQuery",
+{
+method:"POST",
+headers:{
+"Authorization":"Bearer "+token,
+"Content-Type":"application/json"
+},
+body:JSON.stringify(query)
+}
+);
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return findUserByUid(uid);
+}
 
-      return getUserByUid(uid);
+}
 
-    }
-  }
+const data=await r.json();
 
-  const data=await r.json();
+if(!r.ok){
+throw new Error(
+data.error?.message||"User search failed"
+);
+}
 
-  if(!r.ok){
-    throw new Error(
-      data.error?.message ||
-      "User search failed"
-    );
-  }
+const item=data.find(x=>x.document);
 
-  const doc=data.find(x=>x.document)?.document;
+if(!item)return null;
 
-  if(!doc)return null;
+const doc=item.document;
+const f=doc.fields||{};
 
-  const f=doc.fields || {};
+return{
+docId:doc.name.split("/").pop(),
+uid:value(f.uid),
+name:value(f.name)||"User",
+username:value(f.username)||"",
+bio:value(f.bio)||"",
+photoURL:value(f.photoURL)||"",
+email:value(f.email)||""
+};
 
-  return {
-
-    docId:doc.name.split("/").pop(),
-
-    uid:value(f.uid) || uid,
-
-    name:value(f.name) || "User",
-
-    username:value(f.username) || "",
-
-    bio:value(f.bio) || "",
-
-    photoURL:value(f.photoURL) || "",
-
-    email:value(f.email) || ""
-
-  };
 }
 
 
-/* FALLBACK: DOCUMENT ID */
+/* DOCUMENT ID SE USER DHUNDO */
 
-async function getUserByDocId(uid){
+async function findUserByDocId(id){
 
-  const r=await fetch(
-    `${base}/users/${encodeURIComponent(uid)}`,
-    {
-      headers:{
-        "Authorization":"Bearer "+token
-      }
-    }
-  );
+const r=await fetch(
+`${base}/users/${encodeURIComponent(id)}`,
+{
+headers:{
+"Authorization":"Bearer "+token
+}
+}
+);
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return findUserByDocId(id);
+}
 
-      return getUserByDocId(uid);
+}
 
-    }
-  }
+if(!r.ok)return null;
 
-  if(!r.ok){
-    return null;
-  }
+const doc=await r.json();
+const f=doc.fields||{};
 
-  const doc=await r.json();
+return{
+docId:doc.name.split("/").pop(),
+uid:value(f.uid)||id,
+name:value(f.name)||"User",
+username:value(f.username)||"",
+bio:value(f.bio)||"",
+photoURL:value(f.photoURL)||"",
+email:value(f.email)||""
+};
 
-  const f=doc.fields || {};
-
-  return {
-
-    docId:doc.name.split("/").pop(),
-
-    uid:value(f.uid) || uid,
-
-    name:value(f.name) || "User",
-
-    username:value(f.username) || "",
-
-    bio:value(f.bio) || "",
-
-    photoURL:value(f.photoURL) || "",
-
-    email:value(f.email) || ""
-
-  };
 }
 
 
-/* GET USER */
+/* USER LOAD */
 
-async function getUser(uid){
+async function getUser(id){
 
-  let user=await getUserByUid(uid);
+/*
+ Pehle UID field me search.
+ Agar search se document ID mila hai,
+ to fallback document ID se.
+*/
 
-  if(user)return user;
+let user=await findUserByUid(id);
 
-  user=await getUserByDocId(uid);
+if(user)return user;
 
-  return user;
+return await findUserByDocId(id);
+
 }
 
 
@@ -434,59 +286,58 @@ async function getUser(uid){
 
 async function getPosts(uid){
 
-  const query={
-    structuredQuery:{
-      from:[
-        {collectionId:"posts"}
-      ],
-      where:{
-        fieldFilter:{
-          field:{
-            fieldPath:"userId"
-          },
-          op:"EQUAL",
-          value:{
-            stringValue:uid
-          }
-        }
-      },
-      limit:100
-    }
-  };
+const query={
+structuredQuery:{
+from:[
+{collectionId:"posts"}
+],
+where:{
+fieldFilter:{
+field:{
+fieldPath:"userId"
+},
+op:"EQUAL",
+value:{
+stringValue:uid
+}
+}
+},
+limit:100
+}
+};
 
-  let r=await fetch(
-    base+":runQuery",
-    {
-      method:"POST",
-      headers:{
-        "Authorization":"Bearer "+token,
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(query)
-    }
-  );
+let r=await fetch(
+base+":runQuery",
+{
+method:"POST",
+headers:{
+"Authorization":"Bearer "+token,
+"Content-Type":"application/json"
+},
+body:JSON.stringify(query)
+}
+);
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return getPosts(uid);
+}
 
-      return getPosts(uid);
+}
 
-    }
-  }
+const data=await r.json();
 
-  const data=await r.json();
+if(!r.ok){
+throw new Error(
+data.error?.message||"Posts failed"
+);
+}
 
-  if(!r.ok){
-    throw new Error(
-      data.error?.message ||
-      "Posts failed"
-    );
-  }
+return data
+.filter(x=>x.document)
+.map(x=>x.document);
 
-  return data
-    .filter(x=>x.document)
-    .map(x=>x.document);
 }
 
 
@@ -494,31 +345,30 @@ async function getPosts(uid){
 
 async function checkFollow(uid){
 
-  if(uid===myUid)return false;
+if(uid===myUid)return false;
 
-  const id=myUid+"_"+uid;
+const id=myUid+"_"+uid;
 
-  const r=await fetch(
-    `${base}/follows/${encodeURIComponent(id)}`,
-    {
-      headers:{
-        "Authorization":"Bearer "+token
-      }
-    }
-  );
+const r=await fetch(
+`${base}/follows/${encodeURIComponent(id)}`,
+{
+headers:{
+"Authorization":"Bearer "+token
+}
+}
+);
 
-  if(r.status===404)return false;
+if(r.status===404)return false;
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return checkFollow(uid);
+}
 
-      return checkFollow(uid);
+}
 
-    }
-  }
-
-  return r.ok;
+return r.ok;
 }
 
 
@@ -526,45 +376,43 @@ async function checkFollow(uid){
 
 async function followUser(uid){
 
-  const id=myUid+"_"+uid;
+const id=myUid+"_"+uid;
 
-  const body={
-    fields:{
-      followerId:{
-        stringValue:myUid
-      },
-      followingId:{
-        stringValue:uid
-      },
-      createdAt:{
-        timestampValue:
-        new Date().toISOString()
-      }
-    }
-  };
+const body={
+fields:{
+followerId:{
+stringValue:myUid
+},
+followingId:{
+stringValue:uid
+},
+createdAt:{
+timestampValue:new Date().toISOString()
+}
+}
+};
 
-  const r=await fetch(
-    `${base}/follows/${encodeURIComponent(id)}`,
-    {
-      method:"PATCH",
-      headers:{
-        "Authorization":"Bearer "+token,
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(body)
-    }
-  );
+const r=await fetch(
+`${base}/follows/${encodeURIComponent(id)}`,
+{
+method:"PATCH",
+headers:{
+"Authorization":"Bearer "+token,
+"Content-Type":"application/json"
+},
+body:JSON.stringify(body)
+}
+);
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return followUser(uid);
+}
 
-      return followUser(uid);
+}
 
-    }
-  }
-
-  return r.ok;
+return r.ok;
 }
 
 
@@ -572,212 +420,210 @@ async function followUser(uid){
 
 async function unfollowUser(uid){
 
-  const id=myUid+"_"+uid;
+const id=myUid+"_"+uid;
 
-  const r=await fetch(
-    `${base}/follows/${encodeURIComponent(id)}`,
-    {
-      method:"DELETE",
-      headers:{
-        "Authorization":"Bearer "+token
-      }
-    }
-  );
+const r=await fetch(
+`${base}/follows/${encodeURIComponent(id)}`,
+{
+method:"DELETE",
+headers:{
+"Authorization":"Bearer "+token
+}
+}
+);
 
-  if(r.status===401 || r.status===403){
+if(r.status===401 || r.status===403){
 
-    if(await refreshTokenNow()){
+if(await refreshTokenNow()){
+return unfollowUser(uid);
+}
 
-      return unfollowUser(uid);
+}
 
-    }
-  }
-
-  return r.ok;
+return r.ok;
 }
 
 
-/* SHOW PROFILE */
+/* PROFILE DISPLAY */
 
 function showProfile(user){
 
-  currentUser=user;
+currentUser=user;
 
-  const photo=
-    user.photoURL ||
-    "https://via.placeholder.com/150?text=C";
+const own=user.uid===myUid;
 
-  const own=user.uid===myUid;
+const photo=
+user.photoURL||
+"https://via.placeholder.com/150?text=C";
 
-  document.getElementById("profileBox").innerHTML=`
+document.getElementById("profileBox").innerHTML=`
 
-    <div class="profile">
+<div class="profile">
 
-      <img
-        class="photo"
-        src="${esc(photo)}"
-        alt=""
-      >
+<img
+class="photo"
+src="${esc(photo)}"
+alt=""
+>
 
-      <div class="details">
+<div class="details">
 
-        <div class="name">
-          ${esc(user.name)}
-        </div>
+<div class="name">
+${esc(user.name)}
+</div>
 
-        <div class="username">
-          @${esc(user.username)}
-        </div>
+<div class="username">
+@${esc(user.username)}
+</div>
 
-        ${
-          user.bio
-          ? `<div class="bio">${esc(user.bio)}</div>`
-          : ""
-        }
+${
+user.bio
+? `<div class="bio">${esc(user.bio)}</div>`
+:""
+}
 
-        <div class="stats">
+<div class="stats">
 
-          <div class="stat">
-            <b id="postCount">0</b>
-            <span>Posts</span>
-          </div>
+<div class="stat">
+<b id="postCount">0</b>
+<span>Posts</span>
+</div>
 
-          <div class="stat">
-            <b>0</b>
-            <span>Followers</span>
-          </div>
+<div class="stat">
+<b>0</b>
+<span>Followers</span>
+</div>
 
-          <div class="stat">
-            <b>0</b>
-            <span>Following</span>
-          </div>
+<div class="stat">
+<b>0</b>
+<span>Following</span>
+</div>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </div>
-  `;
+</div>
+`;
 
-  if(own){
 
-    document.getElementById("actions").innerHTML=`
-      <button
-        class="action edit"
-        id="editBtn">
-        Edit Profile
-      </button>
-    `;
+if(own){
 
-    document.getElementById("editBtn")
-      .onclick=()=>{
-        location.href="edit-profile.html";
-      };
+document.getElementById("actions").innerHTML=`
 
-  }else{
+<button
+class="action edit"
+id="editBtn">
+Edit Profile
+</button>
 
-    document.getElementById("actions").innerHTML=`
-      <button
-        class="action"
-        id="followBtn">
-        Loading...
-      </button>
-    `;
+`;
 
-    const followBtn=
-      document.getElementById("followBtn");
+document.getElementById("editBtn").onclick=()=>{
+location.href="edit-profile.html";
+};
 
-    checkFollow(user.uid).then(isFollowing=>{
+}else{
 
-      followBtn.textContent=
-        isFollowing ? "Following" : "Follow";
+document.getElementById("actions").innerHTML=`
 
-      followBtn.className=
-        isFollowing
-        ? "action edit"
-        : "action";
+<button
+class="action"
+id="followBtn">
+Loading...
+</button>
 
-      followBtn.onclick=async()=>{
+`;
 
-        followBtn.disabled=true;
+const btn=
+document.getElementById("followBtn");
 
-        if(isFollowing){
+checkFollow(user.uid).then(isFollowing=>{
 
-          await unfollowUser(user.uid);
+btn.textContent=
+isFollowing?"Following":"Follow";
 
-        }else{
+btn.className=
+isFollowing
+?"action edit"
+:"action";
 
-          await followUser(user.uid);
+btn.onclick=async()=>{
 
-        }
+btn.disabled=true;
 
-        location.reload();
+if(isFollowing){
+await unfollowUser(user.uid);
+}else{
+await followUser(user.uid);
+}
 
-      };
+location.reload();
 
-    });
+};
 
-  }
+});
+
+}
+
 }
 
 
-/* SHOW POSTS */
+/* POSTS DISPLAY */
 
 function showPosts(posts){
 
-  const box=document.getElementById("postsBox");
+document.getElementById("postCount").textContent=
+posts.length;
 
-  document.getElementById("postCount").textContent=
-    posts.length;
+const box=
+document.getElementById("postsBox");
 
-  if(!posts.length){
+if(!posts.length){
 
-    box.innerHTML=
-      `<div class="empty">No posts yet</div>`;
+box.innerHTML=
+`<div class="empty">No posts yet</div>`;
 
-    return;
-  }
+return;
+}
 
-  const grid=document.createElement("div");
+const grid=document.createElement("div");
 
-  grid.className="grid";
+grid.className="grid";
 
-  posts.forEach(doc=>{
+posts.forEach(doc=>{
 
-    const f=doc.fields || {};
+const f=doc.fields||{};
+const image=value(f.image);
 
-    const image=value(f.image);
+if(!image)return;
 
-    if(!image)return;
+const img=document.createElement("img");
 
-    const img=document.createElement("img");
+img.className="post";
+img.src=image;
+img.alt="Post";
 
-    img.className="post";
+img.onclick=()=>{
 
-    img.src=image;
+localStorage.setItem(
+"crockcellViewedPost",
+doc.name.split("/").pop()
+);
 
-    img.alt="Post";
+alert(
+"Post open system next step me add hoga."
+);
 
-    img.onclick=()=>{
+};
 
-      localStorage.setItem(
-        "crockcellViewedPost",
-        doc.name.split("/").pop()
-      );
+grid.appendChild(img);
 
-      alert(
-        "Post open system next step me add hoga."
-      );
+});
 
-    };
+box.innerHTML="";
+box.appendChild(grid);
 
-    grid.appendChild(img);
-
-  });
-
-  box.innerHTML="";
-
-  box.appendChild(grid);
 }
 
 
@@ -785,54 +631,78 @@ function showPosts(posts){
 
 async function start(){
 
-  if(!token || !myUid){
+if(!token||!myUid){
 
-    location.href="index.html";
+location.href="index.html";
+return;
 
-    return;
-  }
+}
 
-  try{
+try{
 
-    if(refreshToken){
+if(refreshToken){
+await refreshTokenNow();
+}
 
-      await refreshTokenNow();
 
-    }
+/*
+ VERY IMPORTANT:
+ Yaha requestedUid ko dubara myUid se replace nahi karna.
+*/
 
-    const user=await getUser(requestedUid);
+const user=await getUser(requestedUid);
 
-    if(!user){
+if(!user){
 
-      document.getElementById("profileBox").innerHTML=`
-        <div class="empty">
-          User profile nahi mili.
-        </div>
-      `;
+document.getElementById("profileBox").innerHTML=`
 
-      document.getElementById("actions").innerHTML="";
+<div class="empty">
+User profile nahi mili.
+</div>
 
-      return;
-    }
+`;
 
-    showProfile(user);
+return;
 
-    const posts=await getPosts(user.uid);
+}
 
-    showPosts(posts);
 
-  }catch(e){
+/*
+ Jo profile open hui hai uski UID ko save kar do.
+*/
 
-    console.error(e);
+localStorage.setItem(
+"crockcellViewedUser",
+user.uid
+);
 
-    document.getElementById("profileBox").innerHTML=`
-      <div class="empty">
-        Profile load nahi ho payi.<br><br>
-        ${esc(e.message)}
-      </div>
-    `;
+showProfile(user);
 
-  }
+const posts=
+await getPosts(user.uid);
+
+showPosts(posts);
+
+}catch(e){
+
+console.error(e);
+
+document.getElementById("profileBox").innerHTML=`
+
+<div class="empty">
+
+Profile load nahi ho payi.
+
+<br><br>
+
+${esc(e.message)}
+
+</div>
+
+`;
+
+}
+
 }
 
 
@@ -840,15 +710,11 @@ async function start(){
 
 document.getElementById("back").onclick=()=>{
 
-  if(history.length>1){
-
-    history.back();
-
-  }else{
-
-    location.href="home.html";
-
-  }
+if(history.length>1){
+history.back();
+}else{
+location.href="home.html";
+}
 
 };
 
@@ -857,17 +723,18 @@ document.getElementById("back").onclick=()=>{
 
 document.getElementById("settings").onclick=()=>{
 
-  if(currentUser && currentUser.uid===myUid){
+if(currentUser&&currentUser.uid===myUid){
 
-    location.href="edit-profile.html";
+location.href="edit-profile.html";
 
-  }else{
+}else{
 
-    alert("Ye dusre user ki profile hai.");
+alert("Ye dusre user ki profile hai.");
 
-  }
+}
 
 };
+
 
 start();
 
