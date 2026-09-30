@@ -3,741 +3,493 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Profile - CROCKCELL</title>
-
+<title>CROCKCELL - Profile</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#fafafa;color:#111}
-header{height:60px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:10}
-.logo{font-size:22px;font-weight:bold}
-.headbtn{border:0;background:none;font-size:25px;cursor:pointer}
-.wrap{max-width:700px;margin:auto;padding:20px 15px 80px}
-.profile{display:flex;gap:20px;align-items:center;padding:10px 0 25px}
-.photo{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#ddd;border:1px solid #ddd}
-.details{flex:1;min-width:0}
-.name{font-size:21px;font-weight:bold}
+body{margin:0;background:#fafafa;font-family:Arial,sans-serif;color:#111;padding-bottom:70px}
+
+.top{
+  height:60px;background:#fff;border-bottom:1px solid #ddd;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 15px;position:sticky;top:0;z-index:5
+}
+
+.logo{font-size:22px;font-weight:800}
+button{border:0;border-radius:9px;padding:9px 14px;font-weight:700;cursor:pointer}
+.edit{background:#111;color:#fff}
+
+.profile{
+  background:#fff;padding:20px 15px;border-bottom:1px solid #ddd
+}
+
+.head{
+  display:flex;align-items:center;gap:18px
+}
+
+.avatar{
+  width:88px;height:88px;border-radius:50%;
+  object-fit:cover;background:#ddd
+}
+
+.details{flex:1}
+
+.name{font-size:20px;font-weight:800}
 .username{color:#777;margin-top:4px}
-.bio{margin-top:8px;font-size:14px}
-.stats{display:flex;gap:28px;margin-top:14px}
+.bio{margin-top:10px;line-height:1.4}
+
+.stats{
+  display:flex;gap:30px;margin-top:20px
+}
+
 .stat{text-align:center}
 .stat b{display:block;font-size:18px}
-.stat span{color:#777;font-size:12px}
-.actions{display:flex;gap:10px;margin-bottom:20px}
-.action{flex:1;padding:10px;border:0;border-radius:8px;background:#111;color:white;font-weight:bold;cursor:pointer}
-.edit{background:#eee;color:#111}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
-.post{width:100%;aspect-ratio:1/1;object-fit:cover;background:#ddd;cursor:pointer}
-.empty{text-align:center;color:#777;padding:40px 10px}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;align-items:center;z-index:20}
-.bottom a{text-decoration:none;color:#111;font-size:13px}
+.stat span{font-size:13px;color:#777}
+
+.follow{
+  margin-top:15px;
+  width:100%;
+  background:#111;color:#fff
+}
+
+.postsTitle{
+  padding:15px;font-weight:800;background:#fff;
+  border-bottom:1px solid #ddd
+}
+
+.posts{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+
+.post{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  background:#ddd
+}
+
+.empty{
+  padding:40px 10px;text-align:center;color:#777;
+  grid-column:1/-1
+}
+
+.bottom{
+  position:fixed;bottom:0;left:0;right:0;height:60px;
+  background:#fff;border-top:1px solid #ddd;
+  display:flex;justify-content:space-around;align-items:center;
+  z-index:10
+}
+
+.bottom button{
+  background:none;font-size:14px
+}
 </style>
 </head>
 
 <body>
 
-<header>
-<button class="headbtn" id="back">‹</button>
-<div class="logo">CROCKCELL</div>
-<button class="headbtn" id="settings">⚙</button>
-</header>
-
-<div class="wrap">
-
-<div id="profileBox">Loading...</div>
-
-<div class="actions" id="actions"></div>
-
-<div id="postsBox">
-<div class="empty">Loading posts...</div>
+<div class="top">
+  <div class="logo">CROCKCELL</div>
+  <button id="edit" class="edit" style="display:none">Edit</button>
 </div>
 
+<div id="profile" class="profile">
+  Loading profile...
 </div>
+
+<div class="postsTitle">Posts</div>
+<div id="posts" class="posts"></div>
 
 <div class="bottom">
-<a href="home.html">Home</a>
-<a href="search.html">Search</a>
-<a href="create.html">Create</a>
-<a href="reels.html">Reels</a>
-<a href="profile.html">Profile</a>
+  <button onclick="location.href='home.html'">Home</button>
+  <button onclick="location.href='search.html'">Search</button>
+  <button onclick="location.href='create.html'">Create</button>
+  <button onclick="goMyProfile()">Profile</button>
 </div>
 
 <script>
-
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 const PROJECT_ID="crockcell-cd2e6";
+const BASE="https://firestore.googleapis.com/v1/projects/"+PROJECT_ID+"/databases/(default)/documents";
 
 let token=localStorage.getItem("crockcellIdToken");
-let refreshToken=localStorage.getItem("crockcellRefreshToken");
 const myUid=localStorage.getItem("crockcellUid");
+const refreshToken=localStorage.getItem("crockcellRefreshToken");
 
-const base=
-`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+if(!token||!myUid){
+  location.href="index.html";
+}
 
 const params=new URLSearchParams(location.search);
 
-/*
- IMPORTANT:
- Agar URL me uid nahi hai to search.html ne jo user save kiya hai
- usko use karenge.
- Sirf apni profile ke liye myUid use hoga.
-*/
+const requestedUid=params.get("uid")||"";
+const requestedDoc=params.get("doc")||"";
 
-let requestedUid=
-  params.get("uid") ||
-  localStorage.getItem("crockcellViewedUser") ||
-  myUid;
-
-let currentUser=null;
-
-function esc(x){
-return String(x||"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+function val(x){
+  if(!x)return "";
+  if(x.stringValue!==undefined)return x.stringValue;
+  if(x.integerValue!==undefined)return x.integerValue;
+  if(x.doubleValue!==undefined)return x.doubleValue;
+  if(x.booleanValue!==undefined)return x.booleanValue;
+  return "";
 }
 
-function value(v){
-if(!v)return "";
-return v.stringValue ||
-v.integerValue ||
-v.doubleValue ||
-v.booleanValue ||
-"";
+function esc(s){
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 async function refreshTokenNow(){
 
-if(!refreshToken)return false;
+  if(!refreshToken)return false;
 
-try{
+  try{
 
-const r=await fetch(
-"https://securetoken.googleapis.com/v1/token?key="+API_KEY,
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/x-www-form-urlencoded"
-},
-body:
-"grant_type=refresh_token&refresh_token="+
-encodeURIComponent(refreshToken)
-}
-);
+    const r=await fetch(
+      "https://securetoken.googleapis.com/v1/token?key="+API_KEY,
+      {
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:"grant_type=refresh_token&refresh_token="+
+              encodeURIComponent(refreshToken)
+      }
+    );
 
-const d=await r.json();
+    const d=await r.json();
 
-if(!r.ok || !d.id_token)return false;
+    if(!r.ok)return false;
 
-token=d.id_token;
-refreshToken=d.refresh_token||refreshToken;
+    token=d.id_token;
 
-localStorage.setItem(
-"crockcellIdToken",
-token
-);
+    localStorage.setItem("crockcellIdToken",token);
 
-localStorage.setItem(
-"crockcellRefreshToken",
-refreshToken
-);
+    if(d.refresh_token){
+      localStorage.setItem("crockcellRefreshToken",d.refresh_token);
+    }
 
-return true;
+    return true;
 
-}catch(e){
-return false;
-}
+  }catch(e){
+    return false;
+  }
 }
 
+async function api(url,options={}){
 
-/* USER KO UID SE DHUNDO */
+  options.headers={
+    ...(options.headers||{}),
+    "Authorization":"Bearer "+token,
+    "Content-Type":"application/json"
+  };
+
+  let r=await fetch(url,options);
+
+  if((r.status===401||r.status===403)&&refreshToken){
+
+    const ok=await refreshTokenNow();
+
+    if(ok){
+      options.headers.Authorization="Bearer "+token;
+      r=await fetch(url,options);
+    }
+  }
+
+  return r;
+}
+
+function userFromDoc(doc){
+
+  const f=doc.fields||{};
+  const docId=doc.name.split("/").pop();
+
+  return {
+    docId:docId,
+    uid:val(f.uid)||"",
+    name:val(f.name)||"User",
+    username:val(f.username)||"",
+    bio:val(f.bio)||"",
+    photoURL:val(f.photoURL)||""
+  };
+}
 
 async function findUserByUid(uid){
 
-const query={
-structuredQuery:{
-from:[
-{collectionId:"users"}
-],
-where:{
-fieldFilter:{
-field:{
-fieldPath:"uid"
-},
-op:"EQUAL",
-value:{
-stringValue:uid
-}
-}
-},
-limit:1
-}
-};
+  if(!uid)return null;
 
-let r=await fetch(
-base+":runQuery",
-{
-method:"POST",
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-body:JSON.stringify(query)
-}
-);
+  const body={
+    structuredQuery:{
+      from:[{collectionId:"users"}],
+      where:{
+        fieldFilter:{
+          field:{fieldPath:"uid"},
+          op:"EQUAL",
+          value:{stringValue:uid}
+        }
+      },
+      limit:1
+    }
+  };
 
-if(r.status===401 || r.status===403){
+  const r=await api(
+    BASE+":runQuery?key="+API_KEY,
+    {
+      method:"POST",
+      body:JSON.stringify(body)
+    }
+  );
 
-if(await refreshTokenNow()){
-return findUserByUid(uid);
-}
+  if(!r.ok)return null;
 
-}
+  const data=await r.json();
 
-const data=await r.json();
+  for(const item of data){
+    if(item.document){
+      const u=userFromDoc(item.document);
 
-if(!r.ok){
-throw new Error(
-data.error?.message||"User search failed"
-);
+      if(u.uid){
+        return u;
+      }
+    }
+  }
+
+  return null;
 }
 
-const item=data.find(x=>x.document);
+async function findUserByDocId(docId){
 
-if(!item)return null;
+  if(!docId)return null;
 
-const doc=item.document;
-const f=doc.fields||{};
+  const r=await api(
+    BASE+"/users/"+encodeURIComponent(docId)+"?key="+API_KEY
+  );
 
-return{
-docId:doc.name.split("/").pop(),
-uid:value(f.uid),
-name:value(f.name)||"User",
-username:value(f.username)||"",
-bio:value(f.bio)||"",
-photoURL:value(f.photoURL)||"",
-email:value(f.email)||""
-};
+  if(!r.ok)return null;
 
+  const doc=await r.json();
+
+  if(!doc.fields)return null;
+
+  return userFromDoc(doc);
 }
 
+async function getUser(){
 
-/* DOCUMENT ID SE USER DHUNDO */
+  // 1. URL me actual UID diya hua hai to pehle UID se search.
+  if(requestedUid){
 
-async function findUserByDocId(id){
+    const u=await findUserByUid(requestedUid);
 
-const r=await fetch(
-`${base}/users/${encodeURIComponent(id)}`,
-{
-headers:{
-"Authorization":"Bearer "+token
+    if(u)return u;
+  }
+
+  // 2. UID query se na mile to document ID se check.
+  if(requestedDoc){
+
+    const u=await findUserByDocId(requestedDoc);
+
+    if(u)return u;
+  }
+
+  // 3. Agar old URL me document ID ko uid ki tarah bheja gaya hai,
+  // tab bhi profile recover ho jayegi.
+  if(requestedUid){
+
+    const u=await findUserByDocId(requestedUid);
+
+    if(u)return u;
+  }
+
+  // 4. Kuch bhi nahi mila to apni profile.
+  return await findUserByUid(myUid);
 }
-}
-);
-
-if(r.status===401 || r.status===403){
-
-if(await refreshTokenNow()){
-return findUserByDocId(id);
-}
-
-}
-
-if(!r.ok)return null;
-
-const doc=await r.json();
-const f=doc.fields||{};
-
-return{
-docId:doc.name.split("/").pop(),
-uid:value(f.uid)||id,
-name:value(f.name)||"User",
-username:value(f.username)||"",
-bio:value(f.bio)||"",
-photoURL:value(f.photoURL)||"",
-email:value(f.email)||""
-};
-
-}
-
-
-/* USER LOAD */
-
-async function getUser(id){
-
-/*
- Pehle UID field me search.
- Agar search se document ID mila hai,
- to fallback document ID se.
-*/
-
-let user=await findUserByUid(id);
-
-if(user)return user;
-
-return await findUserByDocId(id);
-
-}
-
-
-/* POSTS */
 
 async function getPosts(uid){
 
-const query={
-structuredQuery:{
-from:[
-{collectionId:"posts"}
-],
-where:{
-fieldFilter:{
-field:{
-fieldPath:"userId"
-},
-op:"EQUAL",
-value:{
-stringValue:uid
+  const body={
+    structuredQuery:{
+      from:[{collectionId:"posts"}],
+      where:{
+        fieldFilter:{
+          field:{fieldPath:"userId"},
+          op:"EQUAL",
+          value:{stringValue:uid}
+        }
+      },
+      limit:100
+    }
+  };
+
+  const r=await api(
+    BASE+":runQuery?key="+API_KEY,
+    {
+      method:"POST",
+      body:JSON.stringify(body)
+    }
+  );
+
+  if(!r.ok)return [];
+
+  const data=await r.json();
+
+  const posts=[];
+
+  for(const item of data){
+    if(item.document){
+      posts.push(item.document);
+    }
+  }
+
+  posts.sort((a,b)=>{
+
+    const da=val(a.fields?.createdAt);
+    const db=val(b.fields?.createdAt);
+
+    return String(db).localeCompare(String(da));
+  });
+
+  return posts;
 }
-}
-},
-limit:100
-}
-};
-
-let r=await fetch(
-base+":runQuery",
-{
-method:"POST",
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-body:JSON.stringify(query)
-}
-);
-
-if(r.status===401 || r.status===403){
-
-if(await refreshTokenNow()){
-return getPosts(uid);
-}
-
-}
-
-const data=await r.json();
-
-if(!r.ok){
-throw new Error(
-data.error?.message||"Posts failed"
-);
-}
-
-return data
-.filter(x=>x.document)
-.map(x=>x.document);
-
-}
-
-
-/* FOLLOW CHECK */
-
-async function checkFollow(uid){
-
-if(uid===myUid)return false;
-
-const id=myUid+"_"+uid;
-
-const r=await fetch(
-`${base}/follows/${encodeURIComponent(id)}`,
-{
-headers:{
-"Authorization":"Bearer "+token
-}
-}
-);
-
-if(r.status===404)return false;
-
-if(r.status===401 || r.status===403){
-
-if(await refreshTokenNow()){
-return checkFollow(uid);
-}
-
-}
-
-return r.ok;
-}
-
-
-/* FOLLOW */
-
-async function followUser(uid){
-
-const id=myUid+"_"+uid;
-
-const body={
-fields:{
-followerId:{
-stringValue:myUid
-},
-followingId:{
-stringValue:uid
-},
-createdAt:{
-timestampValue:new Date().toISOString()
-}
-}
-};
-
-const r=await fetch(
-`${base}/follows/${encodeURIComponent(id)}`,
-{
-method:"PATCH",
-headers:{
-"Authorization":"Bearer "+token,
-"Content-Type":"application/json"
-},
-body:JSON.stringify(body)
-}
-);
-
-if(r.status===401 || r.status===403){
-
-if(await refreshTokenNow()){
-return followUser(uid);
-}
-
-}
-
-return r.ok;
-}
-
-
-/* UNFOLLOW */
-
-async function unfollowUser(uid){
-
-const id=myUid+"_"+uid;
-
-const r=await fetch(
-`${base}/follows/${encodeURIComponent(id)}`,
-{
-method:"DELETE",
-headers:{
-"Authorization":"Bearer "+token
-}
-}
-);
-
-if(r.status===401 || r.status===403){
-
-if(await refreshTokenNow()){
-return unfollowUser(uid);
-}
-
-}
-
-return r.ok;
-}
-
-
-/* PROFILE DISPLAY */
 
 function showProfile(user){
 
-currentUser=user;
+  const own=user.uid===myUid;
 
-const own=user.uid===myUid;
+  document.getElementById("edit").style.display=
+    own?"block":"none";
 
-const photo=
-user.photoURL||
-"https://via.placeholder.com/150?text=C";
+  document.getElementById("edit").onclick=()=>{
+    location.href="edit-profile.html";
+  };
 
-document.getElementById("profileBox").innerHTML=`
+  const profile=document.getElementById("profile");
 
-<div class="profile">
+  profile.innerHTML=`
+    <div class="head">
 
-<img
-class="photo"
-src="${esc(photo)}"
-alt=""
->
+      <img class="avatar"
+        src="${user.photoURL||""}"
+        onerror="this.style.visibility='hidden'">
 
-<div class="details">
+      <div class="details">
 
-<div class="name">
-${esc(user.name)}
-</div>
+        <div class="name">${esc(user.name)}</div>
 
-<div class="username">
-@${esc(user.username)}
-</div>
+        <div class="username">
+          @${esc(user.username)}
+        </div>
 
-${
-user.bio
-? `<div class="bio">${esc(user.bio)}</div>`
-:""
+      </div>
+    </div>
+
+    <div class="bio">${esc(user.bio)}</div>
+
+    ${
+      own
+      ? ""
+      : `<button id="followBtn" class="follow">Follow</button>`
+    }
+
+    <div class="stats">
+      <div class="stat">
+        <b id="postCount">0</b>
+        <span>Posts</span>
+      </div>
+
+      <div class="stat">
+        <b>0</b>
+        <span>Followers</span>
+      </div>
+
+      <div class="stat">
+        <b>0</b>
+        <span>Following</span>
+      </div>
+    </div>
+  `;
+
+  if(!own){
+
+    document.getElementById("followBtn").onclick=function(){
+
+      if(this.innerText==="Follow"){
+        this.innerText="Following";
+      }else{
+        this.innerText="Follow";
+      }
+
+    };
+
+  }
 }
 
-<div class="stats">
+async function load(){
 
-<div class="stat">
-<b id="postCount">0</b>
-<span>Posts</span>
-</div>
+  if(refreshToken){
+    await refreshTokenNow();
+  }
 
-<div class="stat">
-<b>0</b>
-<span>Followers</span>
-</div>
+  const user=await getUser();
 
-<div class="stat">
-<b>0</b>
-<span>Following</span>
-</div>
+  if(!user){
 
-</div>
+    document.getElementById("profile").innerHTML=
+      '<div class="empty">User profile not found.</div>';
 
-</div>
+    return;
+  }
 
-</div>
-`;
+  // Actual UID save hoga, document ID nahi.
+  if(user.uid){
+    localStorage.setItem("crockcellViewedUser",user.uid);
+  }
 
+  showProfile(user);
 
-if(own){
+  const posts=await getPosts(user.uid);
 
-document.getElementById("actions").innerHTML=`
+  const box=document.getElementById("posts");
 
-<button
-class="action edit"
-id="editBtn">
-Edit Profile
-</button>
+  document.getElementById("postCount").innerText=posts.length;
 
-`;
+  if(!posts.length){
 
-document.getElementById("editBtn").onclick=()=>{
-location.href="edit-profile.html";
-};
+    box.innerHTML='<div class="empty">No Posts Yet</div>';
 
-}else{
+    return;
+  }
 
-document.getElementById("actions").innerHTML=`
+  box.innerHTML="";
 
-<button
-class="action"
-id="followBtn">
-Loading...
-</button>
+  posts.forEach(doc=>{
 
-`;
+    const f=doc.fields||{};
+    const image=val(f.image);
 
-const btn=
-document.getElementById("followBtn");
+    if(!image)return;
 
-checkFollow(user.uid).then(isFollowing=>{
+    const img=document.createElement("img");
 
-btn.textContent=
-isFollowing?"Following":"Follow";
+    img.className="post";
+    img.src=image;
+    img.alt="Post";
 
-btn.className=
-isFollowing
-?"action edit"
-:"action";
-
-btn.onclick=async()=>{
-
-btn.disabled=true;
-
-if(isFollowing){
-await unfollowUser(user.uid);
-}else{
-await followUser(user.uid);
+    box.appendChild(img);
+  });
 }
 
-location.reload();
+function goMyProfile(){
 
-};
-
-});
-
+  // Apni profile par hamesha actual Firebase UID jayegi.
+  location.href=
+    "profile.html?uid="+encodeURIComponent(myUid);
 }
 
-}
-
-
-/* POSTS DISPLAY */
-
-function showPosts(posts){
-
-document.getElementById("postCount").textContent=
-posts.length;
-
-const box=
-document.getElementById("postsBox");
-
-if(!posts.length){
-
-box.innerHTML=
-`<div class="empty">No posts yet</div>`;
-
-return;
-}
-
-const grid=document.createElement("div");
-
-grid.className="grid";
-
-posts.forEach(doc=>{
-
-const f=doc.fields||{};
-const image=value(f.image);
-
-if(!image)return;
-
-const img=document.createElement("img");
-
-img.className="post";
-img.src=image;
-img.alt="Post";
-
-img.onclick=()=>{
-
-localStorage.setItem(
-"crockcellViewedPost",
-doc.name.split("/").pop()
-);
-
-alert(
-"Post open system next step me add hoga."
-);
-
-};
-
-grid.appendChild(img);
-
-});
-
-box.innerHTML="";
-box.appendChild(grid);
-
-}
-
-
-/* START */
-
-async function start(){
-
-if(!token||!myUid){
-
-location.href="index.html";
-return;
-
-}
-
-try{
-
-if(refreshToken){
-await refreshTokenNow();
-}
-
-
-/*
- VERY IMPORTANT:
- Yaha requestedUid ko dubara myUid se replace nahi karna.
-*/
-
-const user=await getUser(requestedUid);
-
-if(!user){
-
-document.getElementById("profileBox").innerHTML=`
-
-<div class="empty">
-User profile nahi mili.
-</div>
-
-`;
-
-return;
-
-}
-
-
-/*
- Jo profile open hui hai uski UID ko save kar do.
-*/
-
-localStorage.setItem(
-"crockcellViewedUser",
-user.uid
-);
-
-showProfile(user);
-
-const posts=
-await getPosts(user.uid);
-
-showPosts(posts);
-
-}catch(e){
-
-console.error(e);
-
-document.getElementById("profileBox").innerHTML=`
-
-<div class="empty">
-
-Profile load nahi ho payi.
-
-<br><br>
-
-${esc(e.message)}
-
-</div>
-
-`;
-
-}
-
-}
-
-
-/* BACK */
-
-document.getElementById("back").onclick=()=>{
-
-if(history.length>1){
-history.back();
-}else{
-location.href="home.html";
-}
-
-};
-
-
-/* SETTINGS */
-
-document.getElementById("settings").onclick=()=>{
-
-if(currentUser&&currentUser.uid===myUid){
-
-location.href="edit-profile.html";
-
-}else{
-
-alert("Ye dusre user ki profile hai.");
-
-}
-
-};
-
-
-start();
-
+load();
 </script>
 
 </body>
