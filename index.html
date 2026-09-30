@@ -3,67 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CROCKCELL Login</title>
+<title>CROCKCELL - Login</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
-margin:0;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#000;
-color:#fff;
-font-family:Arial,sans-serif;
-padding:20px
+  margin:0;
+  min-height:100vh;
+  background:#fafafa;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
 .box{
-width:100%;
-max-width:380px;
-background:#111;
-border:1px solid #222;
-border-radius:16px;
-padding:28px
+  width:92%;
+  max-width:380px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:18px;
+  padding:30px 22px;
+  text-align:center;
 }
+
 .logo{
-text-align:center;
-font-size:28px;
-font-weight:bold;
-letter-spacing:2px;
-margin-bottom:25px
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:25px;
 }
+
 input{
-width:100%;
-padding:13px;
-margin:7px 0;
-background:#050505;
-border:1px solid #333;
-border-radius:9px;
-color:#fff;
-outline:none
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
 }
+
 button{
-width:100%;
-padding:13px;
-margin-top:10px;
-border:0;
-border-radius:9px;
-background:#fff;
-color:#000;
-font-weight:bold;
-cursor:pointer
+  width:100%;
+  padding:13px;
+  margin-top:12px;
+  border:0;
+  border-radius:10px;
+  background:#111;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
 }
-p{
-text-align:center;
-color:#999;
-font-size:14px
+
+button:disabled{
+  opacity:.6;
 }
-a{color:#fff}
+
+.forgot{
+  display:block;
+  margin-top:18px;
+  color:#111;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:600;
+}
+
+.signup{
+  display:block;
+  margin-top:22px;
+  padding-top:20px;
+  border-top:1px solid #eee;
+  color:#111;
+  text-decoration:none;
+  font-size:14px;
+}
+
 #msg{
-text-align:center;
-margin-top:12px;
-font-size:14px
+  margin-top:15px;
+  font-size:14px;
+  line-height:1.4;
 }
 </style>
 </head>
@@ -72,30 +92,35 @@ font-size:14px
 
 <div class="box">
 
-<div class="logo">CROCKCELL</div>
+  <div class="logo">CROCKCELL</div>
 
-<input
-id="email"
-type="email"
-placeholder="Email"
-autocomplete="email"
->
+  <input
+    id="email"
+    type="email"
+    placeholder="Email address"
+    autocomplete="email"
+  >
 
-<input
-id="password"
-type="password"
-placeholder="Password"
-autocomplete="current-password"
->
+  <input
+    id="password"
+    type="password"
+    placeholder="Password"
+    autocomplete="current-password"
+  >
 
-<button onclick="login()">Login</button>
+  <button id="loginBtn">
+    Login
+  </button>
 
-<div id="msg"></div>
+  <a class="forgot" href="forgot-password.html">
+    Forgot Password?
+  </a>
 
-<p>
-Don't have an account?
-<a href="signup.html">Sign up</a>
-</p>
+  <a class="signup" href="signup.html">
+    Don't have an account? Sign Up
+  </a>
+
+  <div id="msg"></div>
 
 </div>
 
@@ -104,114 +129,112 @@ Don't have an account?
 const API_KEY=
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-async function login(){
+const email=document.getElementById("email");
+const password=document.getElementById("password");
+const loginBtn=document.getElementById("loginBtn");
+const msg=document.getElementById("msg");
 
-const email=
-document.getElementById("email").value.trim();
+loginBtn.onclick=async function(){
 
-const password=
-document.getElementById("password").value;
+  const e=email.value.trim();
+  const p=password.value;
 
-const msg=
-document.getElementById("msg");
+  msg.innerText="";
+  msg.style.color="#111";
 
-if(!email||!password){
+  if(!e||!p){
+    msg.innerText="Email and password enter karo.";
+    return;
+  }
 
-msg.style.color="#ff7777";
-msg.textContent="Enter email and password.";
-return;
+  loginBtn.disabled=true;
+  loginBtn.innerText="Logging in...";
 
-}
+  try{
 
-msg.style.color="#aaa";
-msg.textContent="Logging in...";
+    const r=await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+
+      API_KEY,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          email:e,
+          password:p,
+          returnSecureToken:true
+        })
+      }
+    );
 
-try{
+    const data=await r.json();
 
-const r=await fetch(
-`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email:email,
-password:password,
-returnSecureToken:true
-})
-}
-);
+    if(!r.ok){
 
-const data=await r.json();
+      let error=data.error?.message||"Login failed.";
 
-if(!r.ok){
+      if(error==="INVALID_LOGIN_CREDENTIALS"){
+        error="Email ya password galat hai.";
+      }
 
-let error=data.error?.message||"Login failed.";
+      if(error==="EMAIL_NOT_FOUND"){
+        error="Is email se account nahi mila.";
+      }
 
-if(
-error==="INVALID_LOGIN_CREDENTIALS"||
-error==="EMAIL_NOT_FOUND"||
-error==="INVALID_PASSWORD"
-){
-error="Email or password is incorrect.";
-}
+      if(error==="INVALID_PASSWORD"){
+        error="Password galat hai.";
+      }
 
-if(error==="USER_DISABLED"){
-error="This account has been disabled.";
-}
+      throw new Error(error);
+    }
 
-msg.style.color="#ff7777";
-msg.textContent=error;
-return;
+    localStorage.setItem(
+      "crockcellIdToken",
+      data.idToken
+    );
 
-}
+    localStorage.setItem(
+      "crockcellRefreshToken",
+      data.refreshToken
+    );
 
-/* Save login session */
+    localStorage.setItem(
+      "crockcellUid",
+      data.localId
+    );
 
-localStorage.setItem(
-"crockcellIdToken",
-data.idToken
-);
+    localStorage.setItem(
+      "crockcellProfile",
+      JSON.stringify({
+        email:data.email,
+        uid:data.localId
+      })
+    );
 
-localStorage.setItem(
-"crockcellRefreshToken",
-data.refreshToken
-);
+    msg.style.color="green";
+    msg.innerText="Login successful!";
 
-localStorage.setItem(
-"crockcellUid",
-data.localId
-);
+    setTimeout(()=>{
+      location.href="home.html";
+    },500);
 
-localStorage.setItem(
-"crockcellProfile",
-JSON.stringify({
-email:data.email,
-uid:data.localId
-})
-);
+  }catch(e){
 
-msg.style.color="#55ff88";
-msg.textContent="Login successful!";
+    msg.style.color="#c00";
+    msg.innerText=e.message;
 
-setTimeout(()=>{
-location.href="home.html";
-},300);
+    loginBtn.disabled=false;
+    loginBtn.innerText="Login";
+  }
 
-}catch(e){
+};
 
-msg.style.color="#ff7777";
-msg.textContent=
-"Network error. Please try again.";
+password.addEventListener("keydown",function(e){
 
-}
-
-}
-
-document.addEventListener("keydown",e=>{
-
-if(e.key==="Enter")login();
+  if(e.key==="Enter"){
+    loginBtn.click();
+  }
 
 });
 
