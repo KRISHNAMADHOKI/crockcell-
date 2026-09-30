@@ -4,21 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CROCKCELL - Search</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#fafafa;font-family:Arial,sans-serif;color:#111}
-.top{height:60px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 15px;position:sticky;top:0;z-index:5}
-.logo{font-size:23px;font-weight:800}
-.searchbox{padding:12px;background:#fff;border-bottom:1px solid #ddd}
-input{width:100%;padding:12px 15px;border:1px solid #ccc;border-radius:12px;font-size:16px;outline:none}
-.results{padding:10px}
-.user{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid #eee;cursor:pointer}
-.user:active{background:#eee}
-.photo{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#ddd;margin-right:13px}
-.info{flex:1}
-.name{font-weight:700;font-size:16px}
-.username{color:#777;font-size:14px;margin-top:3px}
-.empty{text-align:center;color:#777;padding:40px 10px}
+
+body{
+  margin:0;
+  background:#fafafa;
+  font-family:Arial,sans-serif;
+  color:#111;
+}
+
+.top{
+  height:60px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.searchbox{
+  padding:12px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+}
+
+input{
+  width:100%;
+  padding:12px 15px;
+  border:1px solid #ccc;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+
+.results{
+  padding:10px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  padding:12px 8px;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+}
+
+.user:active{
+  background:#eee;
+}
+
+.photo{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+  margin-right:13px;
+}
+
+.info{
+  flex:1;
+}
+
+.name{
+  font-weight:700;
+  font-size:16px;
+}
+
+.username{
+  color:#777;
+  font-size:14px;
+  margin-top:3px;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:40px 10px;
+}
 </style>
 </head>
 
@@ -37,9 +110,14 @@ input{width:100%;padding:12px 15px;border:1px solid #ccc;border-radius:12px;font
 </div>
 
 <script>
+
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 const PROJECT_ID="crockcell-cd2e6";
-const BASE="https://firestore.googleapis.com/v1/projects/"+PROJECT_ID+"/databases/(default)/documents";
+
+const BASE=
+"https://firestore.googleapis.com/v1/projects/"+
+PROJECT_ID+
+"/databases/(default)/documents";
 
 const token=localStorage.getItem("crockcellIdToken");
 const myUid=localStorage.getItem("crockcellUid");
@@ -49,15 +127,26 @@ if(!token||!myUid){
 }
 
 function val(x){
+
   if(!x)return "";
-  if(x.stringValue!==undefined)return x.stringValue;
-  if(x.integerValue!==undefined)return x.integerValue;
-  if(x.doubleValue!==undefined)return x.doubleValue;
-  if(x.booleanValue!==undefined)return x.booleanValue;
+
+  if(x.stringValue!==undefined)
+    return x.stringValue;
+
+  if(x.integerValue!==undefined)
+    return x.integerValue;
+
+  if(x.doubleValue!==undefined)
+    return x.doubleValue;
+
+  if(x.booleanValue!==undefined)
+    return x.booleanValue;
+
   return "";
 }
 
 function esc(s){
+
   return String(s||"")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
@@ -66,18 +155,21 @@ function esc(s){
     .replace(/'/g,"&#039;");
 }
 
-function userFromDoc(doc){
+function makeUser(doc){
+
   const f=doc.fields||{};
+
   const docId=doc.name.split("/").pop();
 
-  // IMPORTANT:
-  // Firebase UID field ko priority milegi.
-  // Document ID ko UID nahi maana jayega.
-  const uid=val(f.uid)||"";
+  /*
+    IMPORTANT:
+    document ID aur Firebase UID alag ho sakte hain.
+    Yahan actual uid field hi use hogi.
+  */
 
   return {
     docId:docId,
-    uid:uid,
+    uid:val(f.uid)||"",
     name:val(f.name)||"User",
     username:val(f.username)||"",
     photoURL:val(f.photoURL)||"",
@@ -85,86 +177,86 @@ function userFromDoc(doc){
   };
 }
 
+async function getAllUsers(){
+
+  const url=
+    BASE+
+    "/users?pageSize=1000&key="+
+    encodeURIComponent(API_KEY);
+
+  const r=await fetch(url,{
+    method:"GET",
+    headers:{
+      "Authorization":"Bearer "+token
+    }
+  });
+
+  const data=await r.json();
+
+  if(!r.ok){
+
+    console.log("Firebase error:",data);
+
+    throw new Error(
+      data.error?.message ||
+      "Users load failed"
+    );
+  }
+
+  return data.documents||[];
+}
+
 async function searchUsers(q){
 
   const box=document.getElementById("results");
 
-  if(!q.trim()){
-    box.innerHTML='<div class="empty">Search for a user</div>';
+  q=q.trim().toLowerCase();
+
+  if(!q){
+
+    box.innerHTML=
+      '<div class="empty">Search for a user</div>';
+
     return;
   }
 
-  box.innerHTML='<div class="empty">Searching...</div>';
+  box.innerHTML=
+    '<div class="empty">Searching...</div>';
 
   try{
 
-    const body={
-      structuredQuery:{
-        from:[{collectionId:"users"}],
-        where:{
-          compositeFilter:{
-            op:"OR",
-            filters:[
-              {
-                fieldFilter:{
-                  field:{fieldPath:"username"},
-                  op:"GREATER_THAN_OR_EQUAL",
-                  value:{stringValue:q}
-                }
-              },
-              {
-                fieldFilter:{
-                  field:{fieldPath:"name"},
-                  op:"GREATER_THAN_OR_EQUAL",
-                  value:{stringValue:q}
-                }
-              }
-            ]
-          }
-        },
-        limit:30
-      }
-    };
-
-    const r=await fetch(
-      BASE+":runQuery?key="+API_KEY,
-      {
-        method:"POST",
-        headers:{
-          "Authorization":"Bearer "+token,
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify(body)
-      }
-    );
-
-    const data=await r.json();
-
-    if(!r.ok){
-      throw new Error(data.error?.message||"Search failed");
-    }
+    const documents=await getAllUsers();
 
     const users=[];
 
-    for(const item of data){
+    documents.forEach(doc=>{
 
-      if(!item.document)continue;
+      const u=makeUser(doc);
 
-      const u=userFromDoc(item.document);
+      // UID nahi hai to is user ko skip.
+      if(!u.uid)return;
 
-      // Actual Firebase UID zaroor hona chahiye.
-      if(!u.uid)continue;
+      // Apna account search results me nahi dikhana.
+      if(u.uid===myUid)return;
 
-      if(u.uid===myUid)continue;
+      const name=(u.name||"").toLowerCase();
+      const username=(u.username||"").toLowerCase();
 
-      const text=(u.name+" "+u.username).toLowerCase();
-      if(!text.includes(q.toLowerCase()))continue;
+      // Name ya username me search text hona chahiye.
+      if(
+        name.includes(q) ||
+        username.includes(q)
+      ){
+        users.push(u);
+      }
 
-      users.push(u);
-    }
+    });
 
     if(!users.length){
-      box.innerHTML='<div class="empty">No users found</div>';
+
+      box.innerHTML=
+        '<div class="empty">No users found</div>';
+
       return;
     }
 
@@ -173,33 +265,52 @@ async function searchUsers(q){
     users.forEach(u=>{
 
       const row=document.createElement("div");
+
       row.className="user";
 
       row.innerHTML=`
-        <img class="photo"
-          src="${u.photoURL||""}"
-          onerror="this.style.visibility='hidden'">
+
+        <img
+          class="photo"
+          src="${esc(u.photoURL)}"
+          onerror="this.style.visibility='hidden'"
+        >
 
         <div class="info">
-          <div class="name">${esc(u.name)}</div>
-          <div class="username">@${esc(u.username)}</div>
+
+          <div class="name">
+            ${esc(u.name)}
+          </div>
+
+          <div class="username">
+            @${esc(u.username)}
+          </div>
+
         </div>
       `;
 
       row.onclick=()=>{
 
-        // Actual Firebase UID pass hoga.
-        // Document ID alag se bhi pass kar rahe hain.
-        localStorage.setItem("crockcellViewedUser",u.uid);
+        /*
+          YAHAN ACTUAL FIREBASE UID PASS HOGI.
+          Document ID nahi.
+        */
+
+        localStorage.setItem(
+          "crockcellViewedUser",
+          u.uid
+        );
 
         location.href=
           "profile.html?uid="+
           encodeURIComponent(u.uid)+
           "&doc="+
           encodeURIComponent(u.docId);
+
       };
 
       box.appendChild(row);
+
     });
 
   }catch(e){
@@ -207,23 +318,28 @@ async function searchUsers(q){
     console.error(e);
 
     box.innerHTML=
-      '<div class="empty">Search error: '+esc(e.message)+'</div>';
+      '<div class="empty">'+
+      esc(e.message)+
+      '</div>';
   }
 }
 
-let timer;
+let timer=null;
 
-document.getElementById("search").addEventListener("input",function(){
+document
+.getElementById("search")
+.addEventListener("input",function(){
 
   clearTimeout(timer);
 
-  const q=this.value.trim();
+  const q=this.value;
 
   timer=setTimeout(()=>{
     searchUsers(q);
-  },350);
+  },300);
 
 });
+
 </script>
 
 </body>
