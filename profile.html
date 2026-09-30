@@ -3,260 +3,670 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Profile - CROCKCELL</title>
+<title>CROCKCELL Profile</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
-header{height:60px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
-header b{font-size:20px}
-.edit{border:1px solid #444;border-radius:7px;padding:8px 14px;color:#fff;text-decoration:none;font-size:14px}
-main{max-width:650px;margin:auto;padding:20px 16px}
-.top{display:flex;gap:22px;align-items:center}
-.photo{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#222}
-.info{flex:1}
-.name{font-size:20px;font-weight:bold}
-.username{color:#aaa;margin-top:4px}
-.bio{margin-top:10px;white-space:pre-wrap}
-.stats{display:flex;gap:28px;margin:22px 0;font-size:14px}
-.stats b{font-size:17px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:20px}
-.post{width:100%;aspect-ratio:1/1;object-fit:cover;background:#111}
-.empty{text-align:center;color:#777;padding:50px 10px}
-nav{position:fixed;bottom:0;left:0;right:0;height:58px;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center}
-nav a{color:#fff;text-decoration:none;font-size:14px}
+
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+padding-bottom:75px
+}
+
+header{
+height:72px;
+border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 25px
+}
+
+.logo{
+font-size:32px;
+font-weight:900;
+letter-spacing:1px
+}
+
+.back{
+font-size:28px;
+cursor:pointer
+}
+
+.settings{
+font-size:25px;
+cursor:pointer
+}
+
+main{
+max-width:700px;
+margin:auto;
+padding:30px 28px
+}
+
+.profileTop{
+display:flex;
+align-items:center;
+gap:25px
+}
+
+.photo{
+width:110px;
+height:110px;
+border-radius:50%;
+object-fit:cover;
+background:#222;
+border:2px solid #333
+}
+
+.details{
+flex:1
+}
+
+.name{
+font-size:28px;
+font-weight:bold;
+margin-bottom:8px
+}
+
+.username{
+font-size:18px;
+color:#aaa;
+margin-bottom:12px
+}
+
+.bio{
+font-size:16px;
+line-height:1.5;
+white-space:pre-wrap
+}
+
+.edit{
+display:inline-block;
+margin-top:25px;
+padding:12px 22px;
+border:1px solid #555;
+border-radius:9px;
+color:#fff;
+text-decoration:none;
+font-weight:bold
+}
+
+.stats{
+display:flex;
+gap:55px;
+margin:35px 0 25px;
+border-bottom:1px solid #222;
+padding-bottom:25px
+}
+
+.stat{
+text-align:center
+}
+
+.stat b{
+display:block;
+font-size:22px
+}
+
+.stat span{
+color:#999;
+font-size:14px
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:3px
+}
+
+.post{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+background:#111
+}
+
+.empty{
+text-align:center;
+color:#777;
+padding:50px 10px
+}
+
+.message{
+text-align:center;
+color:#777;
+margin-top:20px
+}
+
+nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:65px;
+background:#000;
+border-top:1px solid #222;
+display:flex;
+justify-content:space-around;
+align-items:center
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-size:25px
+}
+
+@media(max-width:500px){
+
+main{
+padding:25px 28px
+}
+
+.logo{
+font-size:27px
+}
+
+.profileTop{
+gap:18px
+}
+
+.photo{
+width:95px;
+height:95px
+}
+
+.name{
+font-size:23px
+}
+
+.username{
+font-size:16px
+}
+
+.stats{
+gap:38px
+}
+
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <b id="headName">Profile</b>
-  <a class="edit" href="edit-profile.html">Edit Profile</a>
+
+<div class="back" onclick="location.href='home.html'">←</div>
+
+<div class="logo">CROCKCELL</div>
+
+<div class="settings">⚙</div>
+
 </header>
+
 
 <main>
 
-  <section class="top">
-    <img id="photo" class="photo" src="" alt="Profile">
-    <div class="info">
-      <div id="name" class="name">Loading...</div>
-      <div id="username" class="username"></div>
-      <div id="bio" class="bio"></div>
-    </div>
-  </section>
+<div class="profileTop">
 
-  <div class="stats">
-    <div><b id="postCount">0</b><br>Posts</div>
-  </div>
+<img id="profilePhoto"
+class="photo"
+src=""
+alt="Profile Photo">
 
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" style="display:none">No posts yet</div>
+<div class="details">
+
+<div id="name" class="name">Loading...</div>
+
+<div id="username" class="username"></div>
+
+<div id="bio" class="bio"></div>
+
+</div>
+
+</div>
+
+
+<a class="edit" href="edit-profile.html">
+Edit profile
+</a>
+
+
+<div class="stats">
+
+<div class="stat">
+<b id="postCount">0</b>
+<span>Posts</span>
+</div>
+
+<div class="stat">
+<b>0</b>
+<span>Followers</span>
+</div>
+
+<div class="stat">
+<b>0</b>
+<span>Following</span>
+</div>
+
+</div>
+
+
+<div id="grid" class="grid"></div>
+
+<div id="empty" class="empty" style="display:none">
+No posts yet
+</div>
+
+<div id="message" class="message"></div>
 
 </main>
 
+
 <nav>
-  <a href="home.html">Home</a>
-  <a href="search.html">Search</a>
-  <a href="create.html">Create</a>
-  <a href="reels.html">Reels</a>
-  <a href="profile.html">Profile</a>
+
+<a href="home.html">⌂</a>
+
+<a href="search.html">⌕</a>
+
+<a href="create.html">＋</a>
+
+<a href="activity.html">♡</a>
+
+<a href="profile.html">◉</a>
+
 </nav>
 
+
 <script>
+
 const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
 const PROJECT_ID="crockcell-cd2e6";
-const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+const BASE=
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 let token=localStorage.getItem("crockcellIdToken");
+
 let uid=localStorage.getItem("crockcellUid");
-let refreshToken=localStorage.getItem("crockcellRefreshToken");
 
-const $=id=>document.getElementById(id);
+let refreshToken=
+localStorage.getItem("crockcellRefreshToken");
 
-async function refresh(){
-  if(!refreshToken)return false;
 
-  try{
-    const r=await fetch(
-      `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-      {
-        method:"POST",
-        headers:{"Content-Type":"application/x-www-form-urlencoded"},
-        body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
-      }
-    );
-
-    const d=await r.json();
-
-    if(!r.ok||!d.id_token)return false;
-
-    token=d.id_token;
-    refreshToken=d.refresh_token||refreshToken;
-
-    localStorage.setItem("crockcellIdToken",token);
-    localStorage.setItem("crockcellRefreshToken",refreshToken);
-
-    return true;
-  }catch(e){
-    return false;
-  }
+function $(id){
+return document.getElementById(id);
 }
 
-async function api(path,opt={},retry=true){
-
-  opt.headers={
-    ...(opt.headers||{}),
-    Authorization:"Bearer "+token,
-    "Content-Type":"application/json"
-  };
-
-  let r=await fetch(BASE+path,opt);
-
-  if((r.status===401||r.status===403)&&retry&&refreshToken){
-    if(await refresh())return api(path,opt,false);
-  }
-
-  return r;
-}
-
-function text(v){
-  return v==null?"":String(v);
-}
 
 function defaultPhoto(){
-  return "data:image/svg+xml;charset=UTF-8,"+
-  encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-    <rect width="100%" height="100%" fill="#222"/>
-    <text x="50%" y="58%" text-anchor="middle" fill="#777" font-size="70">👤</text>
-    </svg>`
-  );
+
+return "data:image/svg+xml;charset=UTF-8,"+
+encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg"
+width="200" height="200">
+<rect width="100%" height="100%" fill="#222"/>
+<text x="50%" y="58%"
+text-anchor="middle"
+fill="#777"
+font-size="70">👤</text>
+</svg>
+`);
+
 }
+
+
+async function refresh(){
+
+if(!refreshToken)return false;
+
+try{
+
+const r=await fetch(
+`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+body:
+`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+}
+);
+
+const d=await r.json();
+
+if(!r.ok || !d.id_token){
+return false;
+}
+
+token=d.id_token;
+
+refreshToken=d.refresh_token || refreshToken;
+
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
+
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
+
+return true;
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+
+async function getUser(){
+
+let r=await fetch(
+`${BASE}/users/${uid}`,
+{
+headers:{
+Authorization:"Bearer "+token
+},
+cache:"no-store"
+}
+);
+
+if((r.status===401||r.status===403)
+&&refreshToken){
+
+if(await refresh()){
+
+r=await fetch(
+`${BASE}/users/${uid}`,
+{
+headers:{
+Authorization:"Bearer "+token
+},
+cache:"no-store"
+}
+);
+
+}
+
+}
+
+return r;
+
+}
+
 
 async function loadProfile(){
 
-  if(!token||!uid){
-    location.href="index.html";
-    return;
-  }
+if(!token || !uid){
 
-  try{
+location.href="index.html";
 
-    /* ALWAYS GET LATEST PROFILE FROM FIREBASE */
-    let r=await api(`/users/${uid}`);
+return;
 
-    if(!r.ok){
-      $("name").textContent="Profile not found";
-      return;
-    }
-
-    const d=await r.json();
-    const f=d.fields||{};
-
-    const name=text(f.name?.stringValue);
-    const username=text(f.username?.stringValue);
-    const bio=text(f.bio?.stringValue);
-    const photo=text(f.photoURL?.stringValue);
-
-    /* Show Firebase data */
-    $("name").textContent=name||"User";
-    $("headName").textContent=username||"Profile";
-    $("username").textContent=username?("@"+username):"";
-    $("bio").textContent=bio;
-
-    $("photo").src=photo||defaultPhoto();
-
-    /* Update local cache too */
-    const old=JSON.parse(
-      localStorage.getItem("crockcellProfile")||"{}"
-    );
-
-    localStorage.setItem(
-      "crockcellProfile",
-      JSON.stringify({
-        ...old,
-        uid,
-        name,
-        username,
-        bio,
-        photoURL:photo
-      })
-    );
-
-    await loadPosts();
-
-  }catch(e){
-    console.log(e);
-    $("name").textContent="Something went wrong";
-  }
 }
+
+$("message").textContent="Loading profile...";
+
+try{
+
+const r=await getUser();
+
+if(!r.ok){
+
+console.log(await r.text());
+
+$("message").textContent=
+"Profile load nahi ho rahi.";
+
+return;
+
+}
+
+const data=await r.json();
+
+const f=data.fields || {};
+
+
+const name=
+f.name?.stringValue || "User";
+
+const username=
+f.username?.stringValue || "";
+
+const bio=
+f.bio?.stringValue || "";
+
+const photo=
+f.photoURL?.stringValue || "";
+
+
+/* FIREBASE DATA DIRECTLY SHOW */
+
+$("name").textContent=name;
+
+$("username").textContent=
+username ? "@"+username : "";
+
+$("bio").textContent=bio;
+
+$("profilePhoto").src=
+photo || defaultPhoto();
+
+
+/* UPDATE LOCAL CACHE */
+
+let old={};
+
+try{
+
+old=JSON.parse(
+localStorage.getItem(
+"crockcellProfile"
+)||"{}"
+);
+
+}catch(e){}
+
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify({
+...old,
+uid:uid,
+name:name,
+username:username,
+bio:bio,
+photoURL:photo
+})
+);
+
+$("message").textContent="";
+
+await loadPosts();
+
+}catch(e){
+
+console.log(e);
+
+$("message").textContent=
+"Something went wrong.";
+
+}
+
+}
+
 
 async function loadPosts(){
 
-  try{
+try{
 
-    const q={
-      structuredQuery:{
-        from:[{collectionId:"posts"}],
-        where:{
-          fieldFilter:{
-            field:{fieldPath:"userId"},
-            op:"EQUAL",
-            value:{stringValue:uid}
-          }
-        }
-      }
-    };
+const query={
 
-    const r=await api("",{
-      method:"POST",
-      body:JSON.stringify(q)
-    });
+structuredQuery:{
 
-    if(!r.ok){
-      $("empty").style.display="block";
-      return;
-    }
+from:[
+{
+collectionId:"posts"
+}
+],
 
-    const data=await r.json();
-    const docs=data.map(x=>x.document).filter(Boolean);
+where:{
 
-    $("postCount").textContent=docs.length;
+fieldFilter:{
 
-    if(!docs.length){
-      $("empty").style.display="block";
-      return;
-    }
+field:{
+fieldPath:"userId"
+},
 
-    docs.sort((a,b)=>{
-      const aa=a.fields?.createdAt?.stringValue||"";
-      const bb=b.fields?.createdAt?.stringValue||"";
-      return bb.localeCompare(aa);
-    });
+op:"EQUAL",
 
-    const grid=$("grid");
-    grid.innerHTML="";
-
-    docs.forEach(doc=>{
-
-      const image=doc.fields?.image?.stringValue||"";
-
-      if(!image)return;
-
-      const img=document.createElement("img");
-      img.className="post";
-      img.src=image;
-      img.alt="Post";
-
-      grid.appendChild(img);
-    });
-
-  }catch(e){
-    console.log(e);
-  }
+value:{
+stringValue:uid
 }
 
+}
+
+}
+
+}
+
+};
+
+
+let r=await fetch(
+`${BASE}:runQuery`,
+{
+method:"POST",
+
+headers:{
+Authorization:"Bearer "+token,
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(query),
+
+cache:"no-store"
+}
+);
+
+
+if((r.status===401||r.status===403)
+&&refreshToken){
+
+if(await refresh()){
+
+r=await fetch(
+`${BASE}:runQuery`,
+{
+method:"POST",
+
+headers:{
+Authorization:"Bearer "+token,
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(query),
+
+cache:"no-store"
+}
+);
+
+}
+
+}
+
+
+if(!r.ok){
+
+$("empty").style.display="block";
+
+return;
+
+}
+
+
+const rows=await r.json();
+
+const docs=
+rows
+.map(x=>x.document)
+.filter(Boolean);
+
+
+$("postCount").textContent=docs.length;
+
+
+if(!docs.length){
+
+$("empty").style.display="block";
+
+return;
+
+}
+
+
+docs.sort((a,b)=>{
+
+const aa=
+a.fields?.createdAt?.stringValue || "";
+
+const bb=
+b.fields?.createdAt?.stringValue || "";
+
+return bb.localeCompare(aa);
+
+});
+
+
+const grid=$("grid");
+
+grid.innerHTML="";
+
+
+docs.forEach(doc=>{
+
+const image=
+doc.fields?.image?.stringValue || "";
+
+if(!image)return;
+
+
+const img=
+document.createElement("img");
+
+img.className="post";
+
+img.src=image;
+
+img.alt="Post";
+
+grid.appendChild(img);
+
+});
+
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+
 loadProfile();
+
 </script>
 
 </body>
