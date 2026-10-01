@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>CROCKCELL Messages</title>
 
@@ -22,66 +17,74 @@ body{
   margin:0;
   background:#000;
   color:#fff;
-  font-family:Arial,sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   min-height:100vh;
-  padding-bottom:95px;
 }
 
-
-/* =========================
-   LIST PAGE
-========================= */
-
 .header{
-  padding:20px 15px 15px;
+  padding:20px 18px 15px;
   border-bottom:1px solid #222;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(0,0,0,.95);
+  backdrop-filter:blur(15px);
 }
 
 .title{
-  font-size:30px;
-  font-weight:800;
-  margin-bottom:16px;
+  font-size:28px;
+  font-weight:bold;
+  margin-bottom:15px;
 }
 
-.search{
+.search-row{
   display:flex;
   gap:8px;
 }
 
-#searchInput{
+.search-input{
   flex:1;
-  min-width:0;
-  height:52px;
+  height:50px;
   border:0;
-  outline:0;
-  border-radius:22px;
+  outline:none;
+  border-radius:20px;
   background:#191919;
-  color:white;
+  color:#fff;
   padding:0 17px;
   font-size:16px;
 }
 
-#searchBtn{
-  width:58px;
-  height:52px;
+.search-btn{
+  width:55px;
+  height:50px;
   border:0;
-  border-radius:22px;
-  background:white;
-  color:black;
-  font-size:23px;
+  border-radius:20px;
+  background:#fff;
+  color:#000;
+  font-size:22px;
 }
 
-#list{
-  padding:5px 15px 100px;
+.main{
+  padding:15px 15px 105px;
 }
 
-.user{
+.empty{
+  text-align:center;
+  color:#777;
+  padding:55px 20px;
+}
+
+.user-card{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:14px 4px;
-  border-bottom:1px solid #202020;
+  gap:13px;
+  padding:14px 5px;
+  border-bottom:1px solid #181818;
   cursor:pointer;
+}
+
+.user-card:active{
+  background:#111;
 }
 
 .avatar{
@@ -89,11 +92,11 @@ body{
   height:55px;
   border-radius:50%;
   object-fit:cover;
-  background:#333;
+  background:#222;
   flex-shrink:0;
 }
 
-.info{
+.user-info{
   flex:1;
   min-width:0;
 }
@@ -109,69 +112,43 @@ body{
   font-size:14px;
 }
 
-.last{
+.arrow{
   color:#777;
-  margin-top:5px;
-  font-size:12px;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.open{
-  border:0;
-  background:white;
-  color:#000;
-  border-radius:15px;
-  padding:10px 13px;
-  font-weight:bold;
-}
-
-.empty{
-  text-align:center;
-  color:#777;
-  padding:45px 15px;
-  line-height:1.5;
-}
-
-.error{
-  color:#ff7777;
-  padding:25px 15px;
-  word-break:break-word;
+  font-size:25px;
 }
 
 
-/* =========================
-   CHAT
-========================= */
+/* CHAT */
 
-#chat{
+.chat{
   display:none;
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:50;
 }
 
-.chatTop{
+.chat-header{
+  height:75px;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:12px 14px;
+  gap:12px;
+  padding:10px 15px;
   border-bottom:1px solid #222;
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#000;
+  background:#111;
 }
 
-.back{
-  width:42px;
-  height:42px;
+.chat-back{
+  width:40px;
+  height:40px;
   border:0;
-  border-radius:14px;
-  background:#1d1d1d;
+  border-radius:50%;
+  background:#222;
   color:#fff;
-  font-size:26px;
+  font-size:22px;
 }
 
-.chatAvatar{
+.chat-avatar{
   width:45px;
   height:45px;
   border-radius:50%;
@@ -179,144 +156,127 @@ body{
   background:#333;
 }
 
-.chatUser{
+.chat-user{
   flex:1;
   min-width:0;
 }
 
-.chatName{
-  font-size:17px;
+.chat-name{
   font-weight:bold;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
+  font-size:16px;
 }
 
-.chatUsername{
+.chat-username{
   color:#888;
-  font-size:12px;
+  font-size:13px;
   margin-top:3px;
 }
 
-#chatMessages{
-  padding:15px 12px 120px;
+.chat-body{
+  position:absolute;
+  top:75px;
+  bottom:75px;
+  left:0;
+  right:0;
+  overflow-y:auto;
+  padding:15px;
 }
 
-.row{
-  display:flex;
-  margin:9px 0;
-}
-
-.me{
-  justify-content:flex-end;
-}
-
-.other{
-  justify-content:flex-start;
+.chat-empty{
+  color:#666;
+  text-align:center;
+  margin-top:45%;
 }
 
 .bubble{
   max-width:78%;
   padding:10px 13px;
+  margin:7px 0;
   border-radius:18px;
+  line-height:1.4;
   word-break:break-word;
-  font-size:15px;
 }
 
-.me .bubble{
-  background:white;
-  color:black;
+.mine{
+  margin-left:auto;
+  background:#fff;
+  color:#000;
   border-bottom-right-radius:5px;
 }
 
-.other .bubble{
+.theirs{
+  margin-right:auto;
   background:#202020;
-  color:white;
+  color:#fff;
   border-bottom-left-radius:5px;
 }
 
-.time{
-  font-size:9px;
-  opacity:.5;
-  margin-top:4px;
+.chat-input{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:75px;
+  display:flex;
+  gap:8px;
+  padding:12px;
+  background:#111;
+  border-top:1px solid #222;
 }
 
-
-/* =========================
-   MESSAGE INPUT
-========================= */
-
-#inputBar{
-  display:none;
-  position:fixed;
-  left:10px;
-  right:10px;
-  bottom:70px;
-  z-index:20;
-  padding:7px;
-  gap:7px;
-  background:#191919;
-  border:1px solid #333;
-  border-radius:21px;
-}
-
-#messageInput{
+.message-input{
   flex:1;
-  min-width:0;
-  height:43px;
   border:0;
-  outline:0;
-  border-radius:16px;
-  background:#0d0d0d;
-  color:white;
-  padding:0 13px;
+  outline:none;
+  border-radius:20px;
+  background:#222;
+  color:#fff;
+  padding:0 16px;
   font-size:15px;
 }
 
-#send{
-  width:45px;
-  height:43px;
+.send-btn{
+  width:55px;
   border:0;
-  border-radius:16px;
-  background:white;
-  color:black;
-  font-size:18px;
+  border-radius:20px;
+  background:#fff;
+  color:#000;
+  font-size:20px;
 }
 
 
-/* =========================
-   NAV
-========================= */
+/* NAV */
 
-.nav{
+.bottom-nav{
   position:fixed;
   left:12px;
   right:12px;
   bottom:12px;
-  z-index:30;
+  z-index:20;
   display:flex;
   padding:8px;
-  background:#191919;
-  border:1px solid #333;
   border-radius:24px;
+  background:rgba(25,25,25,.92);
+  backdrop-filter:blur(18px);
+  border:1px solid #333;
 }
 
-.nav a{
+.nav-item{
   flex:1;
   text-align:center;
-  text-decoration:none;
-  color:#999;
-  padding:7px 2px;
+  padding:8px 4px;
   border-radius:17px;
+  color:#999;
+  text-decoration:none;
   font-size:11px;
 }
 
-.nav a.active{
-  background:white;
-  color:black;
+.nav-item.active{
+  background:#fff;
+  color:#000;
 }
 
-.icon{
+.nav-icon{
   display:block;
   font-size:20px;
   margin-bottom:3px;
@@ -326,15 +286,12 @@ body{
 
 </head>
 
-
 <body>
 
 
-<!-- ==================================================
-     MESSAGE LIST
-================================================== -->
+<!-- MAIN -->
 
-<div id="listPage">
+<div id="mainPage">
 
   <div class="header">
 
@@ -342,17 +299,19 @@ body{
       Messages
     </div>
 
-    <div class="search">
+    <div class="search-row">
 
       <input
         id="searchInput"
+        class="search-input"
+        type="text"
         placeholder="Search people..."
         autocomplete="off"
-        autocapitalize="none"
       >
 
       <button
-        id="searchBtn"
+        id="searchButton"
+        class="search-btn"
         type="button"
       >
         ⌕
@@ -363,7 +322,7 @@ body{
   </div>
 
 
-  <div id="list">
+  <div id="mainContent" class="main">
 
     <div class="empty">
       Search karke kisi user ko message karo.
@@ -374,43 +333,41 @@ body{
 </div>
 
 
-<!-- ==================================================
-     CHAT PAGE
-================================================== -->
+<!-- CHAT -->
 
-<div id="chat">
+<div id="chatPage" class="chat">
 
-  <div class="chatTop">
+  <div class="chat-header">
 
     <button
-      id="back"
-      class="back"
+      id="chatBack"
+      class="chat-back"
       type="button"
     >
       ‹
     </button>
 
-
     <img
       id="chatAvatar"
-      class="chatAvatar"
+      class="chat-avatar"
       src=""
-      alt="User"
+      alt=""
     >
 
-
-    <div class="chatUser">
+    <div class="chat-user">
 
       <div
         id="chatName"
-        class="chatName"
+        class="chat-name"
       >
+        User
       </div>
 
       <div
         id="chatUsername"
-        class="chatUsername"
+        class="chat-username"
       >
+        @user
       </div>
 
     </div>
@@ -418,94 +375,68 @@ body{
   </div>
 
 
-  <div id="chatMessages"></div>
+  <div
+    id="chatBody"
+    class="chat-body"
+  >
+
+    <div class="chat-empty">
+      No messages yet.
+    </div>
+
+  </div>
+
+
+  <div class="chat-input">
+
+    <input
+      id="messageInput"
+      class="message-input"
+      type="text"
+      placeholder="Message..."
+      autocomplete="off"
+    >
+
+    <button
+      id="sendButton"
+      class="send-btn"
+      type="button"
+    >
+      ➤
+    </button>
+
+  </div>
 
 </div>
 
 
-<!-- ==================================================
-     MESSAGE INPUT
-================================================== -->
+<!-- NAV -->
 
-<div id="inputBar">
+<div class="bottom-nav">
 
-  <input
-    id="messageInput"
-    placeholder="Message..."
-    autocomplete="off"
-  >
-
-  <button
-    id="send"
-    type="button"
-  >
-    ➤
-  </button>
-
-</div>
-
-
-<!-- ==================================================
-     NAVIGATION
-================================================== -->
-
-<div class="nav">
-
-  <a href="home.html">
-
-    <span class="icon">
-      ⌂
-    </span>
-
+  <a class="nav-item" href="home.html">
+    <span class="nav-icon">⌂</span>
     Home
-
   </a>
 
-
-  <a href="search.html">
-
-    <span class="icon">
-      ⌕
-    </span>
-
+  <a class="nav-item" href="search.html">
+    <span class="nav-icon">⌕</span>
     Search
-
   </a>
 
-
-  <a href="reels.html">
-
-    <span class="icon">
-      ▶
-    </span>
-
+  <a class="nav-item" href="reels.html">
+    <span class="nav-icon">▶</span>
     Reels
-
   </a>
 
-
-  <a
-    href="messages.html"
-    class="active"
-  >
-
-    <span class="icon">
-      ♡
-    </span>
-
+  <a class="nav-item active" href="messages.html">
+    <span class="nav-icon">♡</span>
     Messages
-
   </a>
 
-
-  <a href="profile.html">
-
-    <span class="icon">
-      ◯
-    </span>
-
+  <a class="nav-item" href="profile.html">
+    <span class="nav-icon">◯</span>
     Profile
-
   </a>
 
 </div>
@@ -513,34 +444,23 @@ body{
 
 <script>
 
-/* ==================================================
-   FIREBASE
-================================================== */
-
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
 const PROJECT_ID =
 "crockcell-cd2e6";
 
-const BASE =
-"https://firestore.googleapis.com/v1/projects/"
-+
-PROJECT_ID
-+
-"/databases/(default)/documents";
 
-
-/* ==================================================
+/* =========================
    SESSION
-================================================== */
+========================= */
 
 let token =
 localStorage.getItem(
   "crockcell_idToken"
 );
 
-let myUID =
+let currentUID =
 localStorage.getItem(
   "crockcell_uid"
 );
@@ -555,10 +475,9 @@ if(!token){
 
 }
 
+if(!currentUID){
 
-if(!myUID){
-
-  myUID =
+  currentUID =
   sessionStorage.getItem(
     "crockcell_uid"
   );
@@ -566,41 +485,22 @@ if(!myUID){
 }
 
 
-if(!token || !myUID){
+if(!token || !currentUID){
 
-  location.replace(
+  window.location.replace(
     "index.html"
   );
 
 }
 
 
-/* ==================================================
-   VARIABLES
-================================================== */
-
-let selectedUser = null;
-
-let chatTimer = null;
-
-
-/* ==================================================
+/* =========================
    ELEMENTS
-================================================== */
+========================= */
 
-const listPage =
+const mainContent =
 document.getElementById(
-  "listPage"
-);
-
-const chatPage =
-document.getElementById(
-  "chat"
-);
-
-const list =
-document.getElementById(
-  "list"
+  "mainContent"
 );
 
 const searchInput =
@@ -608,9 +508,39 @@ document.getElementById(
   "searchInput"
 );
 
-const chatMessages =
+const searchButton =
 document.getElementById(
-  "chatMessages"
+  "searchButton"
+);
+
+const chatPage =
+document.getElementById(
+  "chatPage"
+);
+
+const chatBack =
+document.getElementById(
+  "chatBack"
+);
+
+const chatName =
+document.getElementById(
+  "chatName"
+);
+
+const chatUsername =
+document.getElementById(
+  "chatUsername"
+);
+
+const chatAvatar =
+document.getElementById(
+  "chatAvatar"
+);
+
+const chatBody =
+document.getElementById(
+  "chatBody"
 );
 
 const messageInput =
@@ -618,195 +548,226 @@ document.getElementById(
   "messageInput"
 );
 
-const inputBar =
+const sendButton =
 document.getElementById(
-  "inputBar"
+  "sendButton"
 );
 
 
-/* ==================================================
-   URL PARAMETERS
-================================================== */
-
-/*
-   Profile page se URL:
-
-   messages.html?uid=UID
-   &username=USERNAME
-   &name=NAME
-
-   yahan receive honge.
-*/
-
-const params =
-new URLSearchParams(
-  window.location.search
-);
+let selectedUser = null;
 
 
-const urlUID =
-params.get("uid");
-
-const urlUsername =
-params.get("username");
-
-const urlName =
-params.get("name");
-
-
-/* ==================================================
+/* =========================
    START
-================================================== */
+========================= */
 
-/*
-   Agar profile se direct Message
-   button se aaye hain to pehle
-   target account open hoga.
-*/
+startMessages();
 
-if(urlUID){
 
-  openURLUser();
+async function startMessages(){
 
-}else{
+  /*
+    FIRST:
+    sessionStorage target check
+  */
 
-  loadRecentChats();
+  let target = null;
+
+
+  try{
+
+    const saved =
+    sessionStorage.getItem(
+      "crockcell_chat_target"
+    );
+
+
+    if(saved){
+
+      target =
+      JSON.parse(saved);
+
+    }
+
+  }
+  catch(error){
+
+    target = null;
+
+  }
+
+
+  /*
+    SECOND:
+    URL target check
+  */
+
+  const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+  const urlUID =
+  params.get("uid");
+
+
+  const urlUsername =
+  params.get("username");
+
+
+  const urlName =
+  params.get("name");
+
+
+  /*
+    URL se target mila to
+    usko priority.
+  */
+
+  if(urlUID){
+
+    target = {
+
+      uid:
+      urlUID,
+
+      username:
+      urlUsername || "",
+
+      name:
+      urlName ||
+      urlUsername ||
+      "User",
+
+      photoURL:
+      target?.photoURL || ""
+
+    };
+
+  }
+
+
+  /*
+    TARGET MIL GAYA
+  */
+
+  if(target && target.uid){
+
+    await openTargetUser(
+      target
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Normal messages page
+  */
+
+  showEmpty();
 
 }
 
 
-/* ==================================================
-   OPEN USER FROM PROFILE URL
-================================================== */
+/* =========================
+   OPEN TARGET USER
+========================= */
 
-async function openURLUser(){
+async function openTargetUser(target){
 
   /*
-     Pehle URL se temporary user
-     bana dete hain.
-
-     Isse Firebase profile load
-     hone ka wait nahi karna padega.
+    Temporary data immediately show
+    kar do.
   */
 
-  const temporaryUser = {
+  selectedUser = {
 
-    uid:urlUID,
-
-    name:
-    urlName ||
-    "User",
+    uid:
+    target.uid,
 
     username:
-    urlUsername ||
-    "user",
+    target.username || "user",
 
-    photoURL:""
+    name:
+    target.name ||
+    target.username ||
+    "User",
+
+    photoURL:
+    target.photoURL || ""
 
   };
 
 
-  /*
-     DIRECT CHAT OPEN
-  */
-
-  openChat(
-    temporaryUser
-  );
+  showChat();
 
 
   /*
-     Firebase se actual profile
-     information load karo.
+    Firebase se exact profile
+    dobara load karenge.
   */
 
   try{
 
-    const actualUser =
+    const user =
     await getUserByUID(
-      urlUID
+      target.uid
     );
 
 
-    if(actualUser){
+    if(user){
 
-      /*
-         Agar profile mil gayi to
-         actual name/photo update.
-      */
+      selectedUser = user;
 
-      selectedUser =
-      actualUser;
-
-
-      document.getElementById(
-        "chatName"
-      ).textContent =
-      actualUser.name;
-
-
-      document.getElementById(
-        "chatUsername"
-      ).textContent =
-      "@"+
-      actualUser.username;
-
-
-      document.getElementById(
-        "chatAvatar"
-      ).src =
-      actualUser.photoURL ||
-      placeholder();
-
+      updateChatHeader();
 
     }
 
+  }
+  catch(error){
 
-  }catch(error){
-
-    console.log(
-      "Profile update error:",
+    console.error(
+      "Target user load error:",
       error
     );
 
   }
 
+
+  loadMessages();
+
 }
 
 
-/* ==================================================
+/* =========================
    GET USER BY UID
-================================================== */
+========================= */
 
-async function getUserByUID(
-  uid
-){
+async function getUserByUID(targetUID){
 
-  if(!uid){
-
-    return null;
-
-  }
+  const url =
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents/users/" +
+  encodeURIComponent(
+    targetUID
+  ) +
+  "?key=" +
+  API_KEY;
 
 
   const response =
   await fetch(
-
-    BASE+
-    "/users/"+
-    encodeURIComponent(uid),
-
+    url,
     {
-
       headers:{
-
         Authorization:
-        "Bearer "+token
-
+        "Bearer " + token
       }
-
     }
-
   );
 
 
@@ -822,13 +783,13 @@ async function getUserByUID(
 
 
   const f =
-  data.fields ||
-  {};
+  data.fields || {};
 
 
   return {
 
-    uid:uid,
+    uid:
+    targetUID,
 
     name:
     f.name?.stringValue ||
@@ -841,10 +802,6 @@ async function getUserByUID(
 
     photoURL:
     f.photoURL?.stringValue ||
-    "",
-
-    bio:
-    f.bio?.stringValue ||
     ""
 
   };
@@ -852,22 +809,234 @@ async function getUserByUID(
 }
 
 
-/* ==================================================
-   FIRESTORE MESSAGE QUERY
-================================================== */
+/* =========================
+   SHOW CHAT
+========================= */
+
+function showChat(){
+
+  document.getElementById(
+    "mainPage"
+  ).style.display="none";
+
+
+  chatPage.style.display="block";
+
+
+  updateChatHeader();
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+function updateChatHeader(){
+
+  if(!selectedUser){
+
+    return;
+
+  }
+
+
+  chatName.textContent =
+  selectedUser.name ||
+  "User";
+
+
+  chatUsername.textContent =
+  "@" +
+  (
+    selectedUser.username ||
+    "user"
+  );
+
+
+  chatAvatar.src =
+  selectedUser.photoURL ||
+  placeholderPhoto();
+
+}
+
+
+/* =========================
+   LOAD MESSAGES
+========================= */
+
+async function loadMessages(){
+
+  if(!selectedUser){
+
+    return;
+
+  }
+
+
+  chatBody.innerHTML = `
+
+    <div class="chat-empty">
+      Loading messages...
+    </div>
+
+  `;
+
+
+  try{
+
+    const sent =
+    await queryMessages(
+      currentUID,
+      selectedUser.uid
+    );
+
+
+    const received =
+    await queryMessages(
+      selectedUser.uid,
+      currentUID
+    );
+
+
+    const all = [
+
+      ...sent,
+
+      ...received
+
+    ];
+
+
+    all.sort(
+      (a,b)=>
+      getTime(a.createdAt) -
+      getTime(b.createdAt)
+    );
+
+
+    renderMessages(
+      all
+    );
+
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    chatBody.innerHTML = `
+
+      <div class="chat-empty">
+        Messages load nahi ho paaye.
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   QUERY MESSAGES
+========================= */
 
 async function queryMessages(
-  field,
-  value
+  sender,
+  receiver
 ){
+
+  const url =
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents:runQuery" +
+  "?key=" +
+  API_KEY;
+
+
+  const body = {
+
+    structuredQuery: {
+
+      from: [
+
+        {
+          collectionId:
+          "messages"
+        }
+
+      ],
+
+      where: {
+
+        compositeFilter: {
+
+          op:"AND",
+
+          filters:[
+
+            {
+
+              fieldFilter:{
+
+                field:{
+                  fieldPath:
+                  "senderId"
+                },
+
+                op:
+                "EQUAL",
+
+                value:{
+                  stringValue:
+                  sender
+                }
+
+              }
+
+            },
+
+            {
+
+              fieldFilter:{
+
+                field:{
+                  fieldPath:
+                  "receiverId"
+                },
+
+                op:
+                "EQUAL",
+
+                value:{
+                  stringValue:
+                  receiver
+                }
+
+              }
+
+            }
+
+          ]
+
+        }
+
+      },
+
+      limit:100
+
+    }
+
+  };
+
 
   const response =
   await fetch(
-
-    BASE+
-    ":runQuery?key="+
-    API_KEY,
-
+    url,
     {
 
       method:"POST",
@@ -875,7 +1044,7 @@ async function queryMessages(
       headers:{
 
         Authorization:
-        "Bearer "+token,
+        "Bearer " + token,
 
         "Content-Type":
         "application/json"
@@ -883,527 +1052,333 @@ async function queryMessages(
       },
 
       body:
-      JSON.stringify({
-
-        structuredQuery:{
-
-          from:[
-
-            {
-              collectionId:
-              "messages"
-            }
-
-          ],
-
-          where:{
-
-            fieldFilter:{
-
-              field:{
-
-                fieldPath:
-                field
-
-              },
-
-              op:
-              "EQUAL",
-
-              value:{
-
-                stringValue:
-                value
-
-              }
-
-            }
-
-          },
-
-          limit:100
-
-        }
-
-      })
+      JSON.stringify(body)
 
     }
-
   );
-
-
-  const text =
-  await response.text();
 
 
   if(!response.ok){
 
     throw new Error(
-      text
+      "MESSAGE_QUERY_FAILED"
     );
 
   }
 
 
-  let data;
+  const rows =
+  await response.json();
 
 
-  try{
+  const messages=[];
 
-    data =
-    JSON.parse(
-      text
-    );
 
-  }catch{
+  rows.forEach(row=>{
 
-    data =
-    text
-    .split("\n")
-    .filter(Boolean)
-    .map(
-      x =>
-      JSON.parse(x)
-    );
-
-  }
-
-
-  if(!Array.isArray(data)){
-
-    data=[
-      data
-    ];
-
-  }
-
-
-  return data;
-
-}
-
-
-/* ==================================================
-   RECENT CHATS
-================================================== */
-
-async function loadRecentChats(){
-
-  list.innerHTML =
-  `<div class="empty">
-    Messages load ho rahe hain...
-  </div>`;
-
-
-  try{
-
-    const sent =
-    await queryMessages(
-      "senderId",
-      myUID
-    );
-
-
-    const received =
-    await queryMessages(
-      "receiverId",
-      myUID
-    );
-
-
-    const all =
-    [
-      ...sent,
-      ...received
-    ];
-
-
-    const users =
-    new Map();
-
-
-    all.forEach(
-      row => {
-
-        if(!row.document){
-
-          return;
-
-        }
-
-
-        const f =
-        row.document.fields ||
-        {};
-
-
-        const sender =
-        f.senderId?.stringValue ||
-        "";
-
-
-        const receiver =
-        f.receiverId?.stringValue ||
-        "";
-
-
-        const other =
-        sender === myUID
-        ? receiver
-        : sender;
-
-
-        if(!other){
-
-          return;
-
-        }
-
-
-        const created =
-        f.createdAt?.timestampValue ||
-        "";
-
-
-        const old =
-        users.get(
-          other
-        );
-
-
-        if(
-
-          !old ||
-
-          new Date(created) >
-          new Date(old.createdAt)
-
-        ){
-
-          users.set(
-
-            other,
-
-            {
-
-              uid:other,
-
-              text:
-              f.text?.stringValue ||
-              "",
-
-              createdAt:
-              created
-
-            }
-
-          );
-
-        }
-
-      }
-
-    );
-
-
-    if(!users.size){
-
-      list.innerHTML =
-      `<div class="empty">
-        Abhi koi chat nahi hai.<br><br>
-        Search karke kisi user ko message karo.
-      </div>`;
+    if(!row.document){
 
       return;
 
     }
 
 
-    list.innerHTML =
-    "";
+    const f =
+    row.document.fields || {};
 
 
-    for(
-      const chat of users.values()
-    ){
+    messages.push({
 
-      const row =
-      createLoadingUser(
-        chat
-      );
+      senderId:
+      f.senderId?.stringValue ||
+      "",
 
+      receiverId:
+      f.receiverId?.stringValue ||
+      "",
 
-      loadUserAndUpdateRow(
-        chat.uid,
-        row,
-        chat.text
-      );
+      text:
+      f.text?.stringValue ||
+      "",
 
-    }
+      createdAt:
+      f.createdAt?.timestampValue ||
+      ""
 
+    });
 
-  }catch(error){
-
-    console.error(
-      error
-    );
+  });
 
 
-    list.innerHTML =
-    `<div class="error">
-      Messages error:<br><br>
-      ${escapeHTML(
-        error.message
-      )}
-    </div>`;
+  return messages;
+
+}
+
+
+/* =========================
+   RENDER MESSAGES
+========================= */
+
+function renderMessages(messages){
+
+  chatBody.innerHTML="";
+
+
+  if(!messages.length){
+
+    chatBody.innerHTML = `
+
+      <div class="chat-empty">
+        No messages yet.
+      </div>
+
+    `;
+
+    return;
 
   }
 
+
+  messages.forEach(message=>{
+
+    const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+    bubble.className =
+    "bubble " +
+    (
+      message.senderId === currentUID
+      ?
+      "mine"
+      :
+      "theirs"
+    );
+
+
+    bubble.textContent =
+    message.text;
+
+
+    chatBody.appendChild(
+      bubble
+    );
+
+  });
+
+
+  chatBody.scrollTop =
+  chatBody.scrollHeight;
+
 }
 
 
-/* ==================================================
-   CREATE LOADING USER
-================================================== */
+/* =========================
+   SEND
+========================= */
 
-function createLoadingUser(
-  chat
-){
-
-  const row =
-  document.createElement(
-    "div"
-  );
+sendButton.addEventListener(
+  "click",
+  sendMessage
+);
 
 
-  row.className =
-  "user";
-
-
-  row.innerHTML = `
-
-    <img
-      class="avatar"
-      src="${placeholder()}"
-      alt=""
-    >
-
-    <div class="info">
-
-      <div class="name">
-        Loading account...
-      </div>
-
-      <div class="username">
-        Please wait
-      </div>
-
-      <div class="last">
-        ${escapeHTML(
-          chat.text
-        )}
-      </div>
-
-    </div>
-
-    <button
-      class="open"
-      type="button"
-    >
-      Open
-    </button>
-
-  `;
-
-
-  row.onclick =
-  function(){
-
-    openChat({
-
-      uid:chat.uid,
-
-      name:"User",
-
-      username:"user",
-
-      photoURL:""
-
-    });
-
-  };
-
-
-  row.querySelector(
-    ".open"
-  ).onclick =
+messageInput.addEventListener(
+  "keydown",
   function(e){
 
-    e.stopPropagation();
+    if(e.key==="Enter"){
+
+      e.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
 
 
-    openChat({
+async function sendMessage(){
 
-      uid:chat.uid,
+  if(!selectedUser){
 
-      name:"User",
+    return;
 
-      username:"user",
-
-      photoURL:""
-
-    });
-
-  };
+  }
 
 
-  list.appendChild(
-    row
-  );
+  const text =
+  messageInput.value.trim();
 
 
-  return row;
+  if(!text){
 
-}
+    return;
+
+  }
 
 
-/* ==================================================
-   LOAD USER FOR RECENT CHAT
-================================================== */
+  sendButton.disabled=true;
 
-async function loadUserAndUpdateRow(
-  uid,
-  row,
-  lastText
-){
 
   try{
 
-    const user =
-    await getUserByUID(
-      uid
+    const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/messages" +
+    "?key=" +
+    API_KEY;
+
+
+    const body={
+
+      fields:{
+
+        senderId:{
+          stringValue:
+          currentUID
+        },
+
+        receiverId:{
+          stringValue:
+          selectedUser.uid
+        },
+
+        text:{
+          stringValue:
+          text
+        },
+
+        createdAt:{
+          timestampValue:
+          new Date().toISOString()
+        }
+
+      }
+
+    };
+
+
+    const response =
+    await fetch(
+      url,
+      {
+
+        method:"POST",
+
+        headers:{
+
+          Authorization:
+          "Bearer " + token,
+
+          "Content-Type":
+          "application/json"
+
+        },
+
+        body:
+        JSON.stringify(body)
+
+      }
     );
 
 
-    if(!user){
+    if(!response.ok){
 
       throw new Error(
-        "User profile not found"
+        "SEND_FAILED"
       );
 
     }
 
 
-    row.querySelector(
-      ".name"
-    ).textContent =
-    user.name;
+    messageInput.value="";
 
 
-    row.querySelector(
-      ".username"
-    ).textContent =
-    "@"+
-    user.username;
+    await loadMessages();
 
-
-    row.querySelector(
-      ".last"
-    ).textContent =
-    lastText;
-
-
-    const avatar =
-    row.querySelector(
-      ".avatar"
-    );
-
-
-    avatar.src =
-    user.photoURL ||
-    placeholder();
-
-
-    row.onclick =
-    function(){
-
-      openChat(
-        user
-      );
-
-    };
-
-
-    row.querySelector(
-      ".open"
-    ).onclick =
-    function(e){
-
-      e.stopPropagation();
-
-      openChat(
-        user
-      );
-
-    };
-
-
-  }catch(error){
+  }
+  catch(error){
 
     console.error(
       error
     );
 
 
-    row.querySelector(
-      ".name"
-    ).textContent =
-    "Account";
-
-
-    row.querySelector(
-      ".username"
-    ).textContent =
-    "Open chat";
-
-
-    row.onclick =
-    function(){
-
-      openChat({
-
-        uid:uid,
-
-        name:"Account",
-
-        username:"user",
-
-        photoURL:""
-
-      });
-
-    };
+    alert(
+      "Message send nahi ho paaya."
+    );
 
   }
+
+
+  sendButton.disabled=false;
 
 }
 
 
-/* ==================================================
-   SEARCH
-================================================== */
+/* =========================
+   BACK
+========================= */
 
-document.getElementById(
-  "searchBtn"
-).onclick =
-searchUsers;
+chatBack.addEventListener(
+  "click",
+  function(){
+
+    chatPage.style.display="none";
+
+
+    document.getElementById(
+      "mainPage"
+    ).style.display="block";
+
+
+    selectedUser=null;
+
+
+    /*
+      Target clear
+    */
+
+    sessionStorage.removeItem(
+      "crockcell_chat_target"
+    );
+
+
+    history.replaceState(
+      {},
+      "",
+      "messages.html"
+    );
+
+
+    showEmpty();
+
+  }
+);
+
+
+/* =========================
+   SEARCH
+========================= */
+
+searchButton.addEventListener(
+  "click",
+  searchUsers
+);
 
 
 searchInput.addEventListener(
   "keydown",
   function(e){
 
-    if(e.key === "Enter"){
+    if(e.key==="Enter"){
+
+      e.preventDefault();
 
       searchUsers();
 
@@ -1413,42 +1388,141 @@ searchInput.addEventListener(
 );
 
 
-/* ==================================================
-   SEARCH USERS
-================================================== */
-
 async function searchUsers(){
 
-  const q =
+  const text =
   searchInput.value
-  .trim()
-  .toLowerCase();
+    .trim()
+    .toLowerCase();
 
 
-  if(!q){
-
-    loadRecentChats();
+  if(!text){
 
     return;
 
   }
 
 
-  list.innerHTML =
-  `<div class="empty">
-    Searching...
-  </div>`;
+  mainContent.innerHTML = `
+
+    <div class="empty">
+      Searching...
+    </div>
+
+  `;
 
 
   try{
 
+    const endText =
+    text + "\uf8ff";
+
+
+    const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents:runQuery" +
+    "?key=" +
+    API_KEY;
+
+
+    const body={
+
+      structuredQuery:{
+
+        from:[
+
+          {
+            collectionId:
+            "users"
+          }
+
+        ],
+
+        where:{
+
+          compositeFilter:{
+
+            op:"AND",
+
+            filters:[
+
+              {
+
+                fieldFilter:{
+
+                  field:{
+                    fieldPath:
+                    "username"
+                  },
+
+                  op:
+                  "GREATER_THAN_OR_EQUAL",
+
+                  value:{
+                    stringValue:
+                    text
+                  }
+
+                }
+
+              },
+
+              {
+
+                fieldFilter:{
+
+                  field:{
+                    fieldPath:
+                    "username"
+                  },
+
+                  op:
+                  "LESS_THAN",
+
+                  value:{
+                    stringValue:
+                    endText
+                  }
+
+                }
+
+              }
+
+            ]
+
+          }
+
+        },
+
+        orderBy:[
+
+          {
+
+            field:{
+
+              fieldPath:
+              "username"
+
+            },
+
+            direction:
+            "ASCENDING"
+
+          }
+
+        ],
+
+        limit:30
+
+      }
+
+    };
+
+
     const response =
     await fetch(
-
-      BASE+
-      ":runQuery?key="+
-      API_KEY,
-
+      url,
       {
 
         method:"POST",
@@ -1456,7 +1530,7 @@ async function searchUsers(){
         headers:{
 
           Authorization:
-          "Bearer "+token,
+          "Bearer " + token,
 
           "Content-Type":
           "application/json"
@@ -1464,229 +1538,167 @@ async function searchUsers(){
         },
 
         body:
-        JSON.stringify({
-
-          structuredQuery:{
-
-            from:[
-
-              {
-                collectionId:
-                "users"
-              }
-
-            ],
-
-            orderBy:[
-
-              {
-
-                field:{
-
-                  fieldPath:
-                  "username"
-
-                },
-
-                direction:
-                "ASCENDING"
-
-              }
-
-            ],
-
-            limit:100
-
-          }
-
-        })
+        JSON.stringify(body)
 
       }
-
     );
-
-
-    const text =
-    await response.text();
 
 
     if(!response.ok){
 
       throw new Error(
-        text
+        "SEARCH_FAILED"
       );
 
     }
 
 
-    let rows =
-    JSON.parse(
-      text
-    );
+    const rows =
+    await response.json();
 
 
-    if(!Array.isArray(rows)){
-
-      rows=[
-        rows
-      ];
-
-    }
+    const users=[];
 
 
-    list.innerHTML =
-    "";
+    rows.forEach(row=>{
 
+      if(!row.document){
 
-    let count=0;
-
-
-    rows.forEach(
-      row => {
-
-        if(!row.document){
-
-          return;
-
-        }
-
-
-        const f =
-        row.document.fields ||
-        {};
-
-
-        const username =
-        (
-          f.username?.stringValue ||
-          ""
-        ).toLowerCase();
-
-
-        const name =
-        (
-          f.name?.stringValue ||
-          ""
-        ).toLowerCase();
-
-
-        if(
-
-          !username.includes(q) &&
-
-          !name.includes(q)
-
-        ){
-
-          return;
-
-        }
-
-
-        const uid =
-        f.uid?.stringValue ||
-        "";
-
-
-        if(
-
-          !uid ||
-
-          uid === myUID
-
-        ){
-
-          return;
-
-        }
-
-
-        count++;
-
-
-        createSearchRow({
-
-          uid:uid,
-
-          name:
-          f.name?.stringValue ||
-          f.username?.stringValue ||
-          "User",
-
-          username:
-          f.username?.stringValue ||
-          "user",
-
-          photoURL:
-          f.photoURL?.stringValue ||
-          ""
-
-        });
+        return;
 
       }
 
+
+      const f =
+      row.document.fields || {};
+
+
+      const foundUID =
+      f.uid?.stringValue || "";
+
+
+      const foundUsername =
+      f.username?.stringValue || "";
+
+
+      if(!foundUID ||
+         !foundUsername){
+
+        return;
+
+      }
+
+
+      if(foundUID === currentUID){
+
+        return;
+
+      }
+
+
+      users.push({
+
+        uid:
+        foundUID,
+
+        username:
+        foundUsername,
+
+        name:
+        f.name?.stringValue ||
+        foundUsername,
+
+        photoURL:
+        f.photoURL?.stringValue ||
+        ""
+
+      });
+
+    });
+
+
+    renderSearchUsers(
+      users
     );
 
-
-    if(!count){
-
-      list.innerHTML =
-      `<div class="empty">
-        Koi user nahi mila.
-      </div>`;
-
-    }
-
-
-  }catch(error){
+  }
+  catch(error){
 
     console.error(
       error
     );
 
 
-    list.innerHTML =
-    `<div class="error">
-      Search error:<br><br>
-      ${escapeHTML(
-        error.message
-      )}
-    </div>`;
+    mainContent.innerHTML = `
+
+      <div class="empty">
+        Search nahi ho paayi.
+      </div>
+
+    `;
 
   }
 
 }
 
 
-/* ==================================================
-   SEARCH RESULT ROW
-================================================== */
+/* =========================
+   SEARCH RESULTS
+========================= */
 
-function createSearchRow(
-  user
-){
+function renderSearchUsers(users){
 
-  const row =
-  document.createElement(
-    "div"
-  );
+  mainContent.innerHTML="";
 
 
-  row.className =
-  "user";
+  if(!users.length){
+
+    mainContent.innerHTML = `
+
+      <div class="empty">
+        Koi user nahi mila.
+      </div>
+
+    `;
+
+    return;
+
+  }
 
 
-  row.innerHTML = `
+  users.forEach(user=>{
 
-    <img
-      class="avatar"
-      src="${
-        user.photoURL ||
-        placeholder()
-      }"
-      alt=""
-    >
+    const card =
+    document.createElement(
+      "div"
+    );
 
-    <div class="info">
 
-      
+    card.className=
+    "user-card";
+
+
+    card.innerHTML = `
+
+      <img
+        class="avatar"
+        src="${
+          escapeAttribute(
+            user.photoURL ||
+            placeholderPhoto()
+          )
+        }"
+        alt=""
+      >
+
+      <div class="user-info">
+
+        <div class="name">
+          ${escapeHTML(
+            user.name
+          )}
+        </div>
+
+        <div class="username">
+          @${escapeHTML(
+            user.us
