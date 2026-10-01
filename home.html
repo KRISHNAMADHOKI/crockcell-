@@ -3,18 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CROCKCELL</title>
+<title>Home - CROCKCELL</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
     background:#000;
     color:#fff;
     font-family:Arial,sans-serif;
-    padding-bottom:65px;
+    padding-bottom:90px;
 }
+
+/* HEADER */
 
 header{
     height:58px;
@@ -25,8 +29,9 @@ header{
     padding:0 14px;
     position:sticky;
     top:0;
-    background:#000;
-    z-index:5;
+    background:rgba(0,0,0,.92);
+    backdrop-filter:blur(15px);
+    z-index:10;
 }
 
 .logo{
@@ -49,13 +54,17 @@ header{
     justify-content:center;
     text-decoration:none;
     color:#fff;
-    font-size:22px;
+    font-size:21px;
     border-radius:50%;
+    transition:.2s;
 }
 
 .header-btn:active{
     background:#222;
+    transform:scale(.92);
 }
+
+/* PROFILE INFO */
 
 #profile{
     padding:14px 16px;
@@ -67,6 +76,8 @@ header{
     color:#fff;
     font-size:18px;
 }
+
+/* FEED */
 
 #feed{
     max-width:600px;
@@ -88,10 +99,12 @@ header{
 }
 
 .avatar{
-    width:38px;
-    height:38px;
+    width:40px;
+    height:40px;
     border-radius:50%;
     background:#222;
+    object-fit:cover;
+    border:1px solid #333;
 }
 
 .name{
@@ -117,6 +130,11 @@ header{
     background:none;
     color:#fff;
     cursor:pointer;
+    transition:.15s;
+}
+
+.actions button:active{
+    transform:scale(.82);
 }
 
 .info{
@@ -164,6 +182,10 @@ header{
     outline:none;
 }
 
+.form input:focus{
+    border-color:#666;
+}
+
 .form button{
     background:#fff;
     color:#000;
@@ -177,6 +199,7 @@ header{
     font-size:12px;
     background:none;
     border:0;
+    margin-top:8px;
 }
 
 .loading{
@@ -191,80 +214,149 @@ header{
     color:#f66;
 }
 
+/* MODERN BOTTOM NAV */
 
-/* BOTTOM NAV */
-
-nav{
+.bottom-nav{
     position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:64px;
-    background:#000;
-    border-top:1px solid #222;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    height:68px;
+
+    background:rgba(20,20,20,.88);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid #333;
+    border-radius:22px;
+
     display:flex;
-    justify-content:space-around;
     align-items:center;
+    justify-content:space-around;
+
     z-index:20;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-nav a{
-    color:#fff;
-    text-decoration:none;
-    font-size:22px;
+.nav-item{
     width:25%;
-    height:60px;
+    height:56px;
+
     display:flex;
     align-items:center;
     justify-content:center;
     flex-direction:column;
+
+    text-decoration:none;
+    color:#777;
+
+    border-radius:17px;
+    transition:.2s;
+
+    position:relative;
 }
 
-nav a span{
+.nav-icon{
+    width:40px;
+    height:32px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:21px;
+    border-radius:12px;
+
+    transition:.2s;
+}
+
+.nav-label{
     font-size:9px;
     margin-top:2px;
-    color:#aaa;
+    color:#777;
 }
 
-nav a:active{
-    background:#151515;
-    border-radius:12px;
+.nav-item.active{
+    color:#fff;
 }
 
+.nav-item.active .nav-icon{
+    background:#fff;
+    color:#000;
+    transform:translateY(-1px);
+}
+
+.nav-item.active .nav-label{
+    color:#fff;
+    font-weight:bold;
+}
+
+.nav-item:active{
+    transform:scale(.90);
+}
+
+/* PROFILE NAV PHOTO */
+
+.nav-profile-photo{
+    width:31px;
+    height:31px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #777;
+}
+
+.nav-item.active .nav-profile-photo{
+    border-color:#fff;
+}
 
 /* PROFILE MENU */
 
 .profile-menu{
     display:none;
+
     position:fixed;
-    right:12px;
-    bottom:72px;
-    width:190px;
-    background:#151515;
+    right:14px;
+    bottom:88px;
+
+    width:205px;
+
+    background:rgba(22,22,22,.96);
+    backdrop-filter:blur(18px);
+
     border:1px solid #333;
-    border-radius:15px;
+    border-radius:18px;
+
     overflow:hidden;
-    z-index:30;
-    box-shadow:0 5px 25px rgba(0,0,0,.5);
+
+    z-index:35;
+
+    box-shadow:0 8px 35px rgba(0,0,0,.7);
 }
 
 .profile-menu a,
 .profile-menu button{
     width:100%;
     display:block;
+
     padding:15px;
+
     color:#fff;
     text-decoration:none;
+
     background:none;
     border:0;
     border-bottom:1px solid #292929;
+
     text-align:left;
     font-size:14px;
 }
 
 .profile-menu a:active,
 .profile-menu button:active{
-    background:#222;
+    background:#292929;
 }
 
 .profile-menu .logout{
@@ -276,9 +368,24 @@ nav a:active{
     display:none;
     position:fixed;
     inset:0;
-    z-index:25;
+    z-index:30;
 }
 
+/* SMALL SCREEN */
+
+@media(max-width:380px){
+
+    .bottom-nav{
+        left:7px;
+        right:7px;
+        bottom:7px;
+    }
+
+    .nav-label{
+        font-size:8px;
+    }
+
+}
 </style>
 </head>
 
@@ -361,31 +468,73 @@ Loading posts...
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- MODERN BOTTOM NAV -->
 
-<nav>
+<nav class="bottom-nav">
 
-<a href="home.html">
-🏠
-<span>Home</span>
+<a
+    href="home.html"
+    class="nav-item active">
+
+<div class="nav-icon">
+⌂
+</div>
+
+<span class="nav-label">
+Home
+</span>
+
 </a>
 
-<a href="search.html">
-🔍
-<span>Search</span>
+
+<a
+    href="search.html"
+    class="nav-item">
+
+<div class="nav-icon">
+⌕
+</div>
+
+<span class="nav-label">
+Search
+</span>
+
 </a>
 
-<a href="reels.html">
-🎬
-<span>Reels</span>
+
+<a
+    href="reels.html"
+    class="nav-item">
+
+<div class="nav-icon">
+▶
+</div>
+
+<span class="nav-label">
+Reels
+</span>
+
 </a>
+
 
 <a
     href="javascript:void(0)"
+    class="nav-item"
     onclick="toggleProfileMenu()">
 
-👤
-<span>Profile</span>
+<div class="nav-icon">
+
+<img
+    id="navProfilePhoto"
+    class="nav-profile-photo"
+    src="https://via.placeholder.com/80"
+    alt="Profile">
+
+</div>
+
+<span class="nav-label">
+Profile
+</span>
 
 </a>
 
@@ -572,23 +721,75 @@ await r.json();
 let f =
 d.fields || {};
 
+let username =
+val(f.username) ||
+"user";
+
+let name =
+val(f.name) ||
+username;
+
+let photo =
+val(f.photoURL) ||
+val(f.photo) ||
+val(f.profilePhoto) ||
+"";
+
 
 document.getElementById(
 "profile"
 ).innerHTML =
 
-`<b>${esc(
-val(f.name) ||
-val(f.username) ||
-"User"
-)}</b>
+`<b>${esc(name)}</b>
 
 <br>
 
-@${esc(
-val(f.username) ||
-"user"
-)}`;
+@${esc(username)}`;
+
+
+/* SAVE PROFILE FOR OTHER PAGES */
+
+let oldProfile={};
+
+try{
+
+oldProfile =
+JSON.parse(
+localStorage.getItem(
+"crockcellProfile"
+)||"{}"
+);
+
+}catch(e){}
+
+
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify({
+
+...oldProfile,
+
+uid:uid,
+
+username:username,
+
+name:name,
+
+photoURL:photo
+
+})
+);
+
+
+/* PROFILE PHOTO */
+
+if(photo){
+
+document.getElementById(
+"navProfilePhoto"
+).src=photo;
+
+}
 
 }
 
@@ -674,6 +875,12 @@ val(f.caption);
 let likes =
 Number(val(f.likes)||0);
 
+let postPhoto =
+val(f.photoURL) ||
+val(f.photo) ||
+val(f.profilePhoto) ||
+"";
+
 
 let el =
 document.createElement("article");
@@ -688,7 +895,21 @@ el.innerHTML=`
 
 <div class="top">
 
-<div class="avatar"></div>
+${
+postPhoto
+
+?
+
+`<img
+class="avatar"
+src="${esc(postPhoto)}"
+alt="Profile">`
+
+:
+
+`<div class="avatar"></div>`
+
+}
 
 <div class="name">
 ${esc(username)}
