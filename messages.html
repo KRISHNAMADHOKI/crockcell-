@@ -2,228 +2,375 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Messages - CROCKCELL</title>
 
 <style>
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
 }
 
-body {
-    background: #f4f4f7;
-    padding-bottom: 75px;
+body{
+    background:#f4f4f7;
+    padding-bottom:75px;
 }
 
-header {
-    background: white;
-    padding: 18px;
-    text-align: center;
-    color: #4f46e5;
-    font-size: 24px;
-    font-weight: bold;
+header{
+    background:white;
+    padding:18px;
+    text-align:center;
+    color:#4f46e5;
+    font-size:24px;
+    font-weight:bold;
 }
 
-.container {
-    max-width: 500px;
-    margin: auto;
-    padding: 15px 12px;
+.container{
+    max-width:500px;
+    margin:auto;
+    padding:15px 12px;
 }
 
-.title {
-    margin-bottom: 15px;
+.title{
+    margin-bottom:15px;
 }
 
-.chat-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.chat-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
-.chat-user {
-    background: white;
-    padding: 14px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
+.chat-user{
+    background:white;
+    padding:14px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
 }
 
-.chat-user img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #ddd;
+.chat-user:active{
+    transform:scale(.98);
 }
 
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #4f46e5;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: bold;
+.chat-user img{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#ddd;
 }
 
-.user-info {
-    flex: 1;
+.avatar{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:#4f46e5;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:bold;
 }
 
-.username {
-    font-weight: bold;
-    font-size: 16px;
+.user-info{
+    flex:1;
 }
 
-.last-message {
-    color: #777;
-    font-size: 13px;
-    margin-top: 5px;
+.username{
+    font-weight:bold;
+    font-size:16px;
 }
 
-.empty {
-    background: white;
-    padding: 30px;
-    text-align: center;
-    border-radius: 15px;
-    color: #777;
+.last-message{
+    color:#777;
+    font-size:13px;
+    margin-top:5px;
 }
 
-.chat-screen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #f4f4f7;
-    z-index: 10;
+.call-icons{
+    display:flex;
+    gap:6px;
 }
 
-.chat-header {
-    background: white;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+.call-icon{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:#f0efff;
+    font-size:19px;
+    cursor:pointer;
 }
 
-.back-button {
-    border: none;
-    background: none;
-    font-size: 25px;
+.empty{
+    background:white;
+    padding:30px;
+    text-align:center;
+    border-radius:15px;
+    color:#777;
 }
 
-.chat-title {
-    font-weight: bold;
-    font-size: 17px;
+/* CHAT */
+
+.chat-screen{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#f4f4f7;
+    z-index:10;
 }
 
-.messages {
-    height: calc(100vh - 130px);
-    overflow-y: auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.chat-header{
+    background:white;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
-.message {
-    max-width: 75%;
-    padding: 10px 13px;
-    border-radius: 15px;
-    font-size: 15px;
-    word-wrap: break-word;
+.back-button{
+    border:none;
+    background:none;
+    font-size:27px;
+    width:40px;
+    height:40px;
 }
 
-.sent {
-    align-self: flex-end;
-    background: #4f46e5;
-    color: white;
-    border-bottom-right-radius: 4px;
+.chat-title{
+    font-weight:bold;
+    font-size:17px;
+    flex:1;
 }
 
-.received {
-    align-self: flex-start;
-    background: white;
-    color: #222;
-    border-bottom-left-radius: 4px;
+.header-call-buttons{
+    display:flex;
+    gap:5px;
 }
 
-.message-time {
-    font-size: 10px;
-    opacity: 0.7;
-    margin-top: 4px;
-    text-align: right;
+.header-call{
+    border:none;
+    background:#f0efff;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    font-size:18px;
 }
 
-.message-box {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 10px;
-    display: flex;
-    gap: 8px;
+.messages{
+    height:calc(100vh - 130px);
+    overflow-y:auto;
+    padding:15px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 }
 
-.message-input {
-    flex: 1;
-    border: 1px solid #ddd;
-    border-radius: 22px;
-    padding: 11px 15px;
-    outline: none;
+.message{
+    max-width:75%;
+    padding:10px 13px;
+    border-radius:15px;
+    font-size:15px;
+    word-wrap:break-word;
 }
 
-.send-button {
-    border: none;
-    background: #4f46e5;
-    color: white;
-    border-radius: 22px;
-    padding: 10px 17px;
-    font-weight: bold;
+.sent{
+    align-self:flex-end;
+    background:#4f46e5;
+    color:white;
+    border-bottom-right-radius:4px;
 }
 
-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    display: flex;
-    justify-content: space-around;
-    padding: 13px 5px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
-    z-index: 5;
+.received{
+    align-self:flex-start;
+    background:white;
+    color:#222;
+    border-bottom-left-radius:4px;
 }
 
-nav a {
-    text-decoration: none;
-    color: #555;
-    font-size: 13px;
-    text-align: center;
+.message-time{
+    font-size:10px;
+    opacity:.7;
+    margin-top:4px;
+    text-align:right;
+}
+
+.message-box{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    padding:10px;
+    display:flex;
+    gap:8px;
+}
+
+.message-input{
+    flex:1;
+    border:1px solid #ddd;
+    border-radius:22px;
+    padding:11px 15px;
+    outline:none;
+}
+
+.send-button{
+    border:none;
+    background:#4f46e5;
+    color:white;
+    border-radius:22px;
+    padding:10px 17px;
+    font-weight:bold;
+}
+
+/* CALL SCREEN */
+
+.call-screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:50;
+    background:#111;
+    color:white;
+}
+
+.call-top{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    padding:20px;
+    text-align:center;
+    z-index:5;
+}
+
+.call-name{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.call-status{
+    margin-top:7px;
+    font-size:14px;
+    color:#ccc;
+}
+
+.remote-video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#222;
+}
+
+.local-video{
+    position:absolute;
+    right:15px;
+    top:85px;
+    width:110px;
+    height:155px;
+    object-fit:cover;
+    background:#333;
+    border-radius:14px;
+    border:2px solid white;
+}
+
+.audio-placeholder{
+    width:120px;
+    height:120px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:#4f46e5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:50px;
+}
+
+.call-controls{
+    position:absolute;
+    bottom:30px;
+    left:0;
+    right:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    z-index:10;
+}
+
+.call-control{
+    width:54px;
+    height:54px;
+    border:none;
+    border-radius:50%;
+    background:#333;
+    color:white;
+    font-size:22px;
+}
+
+.call-control.active{
+    background:#4f46e5;
+}
+
+.end-call{
+    width:62px;
+    height:62px;
+    border:none;
+    border-radius:50%;
+    background:#e53935;
+    color:white;
+    font-size:25px;
+}
+
+.permission-box{
+    position:absolute;
+    left:15px;
+    right:15px;
+    bottom:110px;
+    background:rgba(0,0,0,.75);
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    font-size:13px;
+    z-index:20;
+}
+
+nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    padding:13px 5px;
+    box-shadow:0 -2px 10px rgba(0,0,0,.08);
+    z-index:5;
+}
+
+nav a{
+    text-decoration:none;
+    color:#555;
+    font-size:13px;
+    text-align:center;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -238,45 +385,47 @@ CROCKCELL
         💬 Messages
     </h3>
 
-    <div
-        id="chatList"
-        class="chat-list">
-    </div>
+    <div id="chatList" class="chat-list"></div>
 
 </div>
 
 
 <!-- CHAT SCREEN -->
 
-<div
-    id="chatScreen"
-    class="chat-screen">
+<div id="chatScreen" class="chat-screen">
 
     <div class="chat-header">
 
-        <button
-            class="back-button"
-            onclick="closeChat()">
-
+        <button class="back-button" onclick="closeChat()">
             ←
-
         </button>
 
-        <div
-            id="chatTitle"
-            class="chat-title">
-
+        <div id="chatTitle" class="chat-title">
             Chat
+        </div>
+
+        <div class="header-call-buttons">
+
+            <button
+                class="header-call"
+                onclick="startCall('audio')"
+                title="Voice Call">
+                📞
+            </button>
+
+            <button
+                class="header-call"
+                onclick="startCall('video')"
+                title="Video Call">
+                📹
+            </button>
 
         </div>
 
     </div>
 
 
-    <div
-        id="messages"
-        class="messages">
-    </div>
+    <div id="messages" class="messages"></div>
 
 
     <div class="message-box">
@@ -292,9 +441,86 @@ CROCKCELL
         <button
             class="send-button"
             onclick="sendMessage()">
-
             Send
+        </button>
 
+    </div>
+
+</div>
+
+
+<!-- CALL SCREEN -->
+
+<div id="callScreen" class="call-screen">
+
+    <div class="call-top">
+
+        <div id="callName" class="call-name">
+            @User
+        </div>
+
+        <div id="callStatus" class="call-status">
+            Calling...
+        </div>
+
+    </div>
+
+
+    <div
+        id="audioPlaceholder"
+        class="audio-placeholder">
+        👤
+    </div>
+
+
+    <video
+        id="remoteVideo"
+        class="remote-video"
+        autoplay
+        playsinline>
+    </video>
+
+
+    <video
+        id="localVideo"
+        class="local-video"
+        autoplay
+        muted
+        playsinline>
+    </video>
+
+
+    <div class="permission-box" id="permissionBox">
+        Microphone/camera permission may be required.
+    </div>
+
+
+    <div class="call-controls">
+
+        <button
+            class="call-control"
+            id="muteButton"
+            onclick="toggleMute()">
+            🎤
+        </button>
+
+        <button
+            class="call-control"
+            id="cameraButton"
+            onclick="toggleCamera()">
+            📷
+        </button>
+
+        <button
+            class="call-control"
+            onclick="toggleSpeaker()">
+            🔊
+        </button>
+
+        <button
+            class="end-call"
+            onclick="endCall()">
+            📞
         </button>
 
     </div>
@@ -330,35 +556,38 @@ CROCKCELL
 <script>
 
 let currentUser = null;
+let currentCallType = null;
+let localStream = null;
+let audioMuted = false;
+let cameraDisabled = false;
+let speakerEnabled = true;
 
 
-/* GET PROFILE */
+/* PROFILE */
 
-function getProfile() {
+function getProfile(){
 
     let data =
-        localStorage.getItem(
-            "crockcellProfile"
-        );
+        localStorage.getItem("crockcellProfile");
 
-    if (!data) {
+    if(!data){
 
         return {
-            username: "krishna",
-            photo: ""
+            username:"krishna",
+            photo:""
         };
 
     }
 
-    try {
+    try{
 
         return JSON.parse(data);
 
-    } catch (error) {
+    }catch(error){
 
         return {
-            username: "krishna",
-            photo: ""
+            username:"krishna",
+            photo:""
         };
 
     }
@@ -366,51 +595,36 @@ function getProfile() {
 }
 
 
-/* LOAD USERS */
+/* LOAD CHAT USERS */
 
-function loadUsers() {
+function loadUsers(){
 
     const chatList =
-        document.getElementById(
-            "chatList"
-        );
-
+        document.getElementById("chatList");
 
     let profile =
         getProfile();
 
-
-    /*
-        Abhi local app hai,
-        isliye saved profile ko
-        chat list me show kar rahe hain.
-    */
-
     let username =
         profile.username || "krishna";
 
-
     let photo =
         profile.photo || "";
-
 
     let avatarHTML =
         photo
         ? `<img src="${photo}" alt="Profile">`
         : `<div class="avatar">
-               ${username.charAt(0).toUpperCase()}
+            ${username.charAt(0).toUpperCase()}
            </div>`;
-
 
     let savedMessages =
         getMessages(username);
 
-
     let lastMessage =
         "Start a conversation";
 
-
-    if (savedMessages.length > 0) {
+    if(savedMessages.length > 0){
 
         lastMessage =
             savedMessages[
@@ -419,24 +633,39 @@ function loadUsers() {
 
     }
 
-
     chatList.innerHTML = `
 
-        <div
-            class="chat-user"
-            onclick="openChat('${username}')">
+        <div class="chat-user">
 
             ${avatarHTML}
 
-            <div class="user-info">
+            <div
+                class="user-info"
+                onclick="openChat('${username}')">
 
                 <div class="username">
                     @${username}
                 </div>
 
                 <div class="last-message">
-                    ${lastMessage}
+                    ${escapeHTML(lastMessage)}
                 </div>
+
+            </div>
+
+            <div class="call-icons">
+
+                <button
+                    class="call-icon"
+                    onclick="quickCall(event,'${username}','audio')">
+                    📞
+                </button>
+
+                <button
+                    class="call-icon"
+                    onclick="quickCall(event,'${username}','video')">
+                    📹
+                </button>
 
             </div>
 
@@ -447,63 +676,61 @@ function loadUsers() {
 }
 
 
-/* GET MESSAGES */
+/* ESCAPE HTML */
 
-function getMessages(username) {
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* MESSAGES */
+
+function getMessages(username){
 
     let key =
         "crockcellMessages_" +
         username;
 
-
     let data =
         localStorage.getItem(key);
 
-
-    if (!data) {
+    if(!data){
         return [];
     }
 
-
-    try {
+    try{
 
         let messages =
             JSON.parse(data);
 
-        if (Array.isArray(messages)) {
-
+        if(Array.isArray(messages)){
             return messages;
-
         }
 
-    } catch (error) {
+    }catch(error){
 
-        console.log(
-            "Message error"
-        );
+        console.log("Message error");
 
     }
-
 
     return [];
 
 }
 
 
-/* SAVE MESSAGES */
-
-function saveMessages(
-    username,
-    messages
-) {
+function saveMessages(username,messages){
 
     localStorage.setItem(
-
         "crockcellMessages_" +
         username,
-
         JSON.stringify(messages)
-
     );
 
 }
@@ -511,75 +738,64 @@ function saveMessages(
 
 /* OPEN CHAT */
 
-function openChat(username) {
+function openChat(username){
 
     currentUser =
         username;
 
-
     document.getElementById(
         "chatScreen"
     ).style.display = "block";
-
 
     document.getElementById(
         "chatTitle"
     ).innerText =
         "@" + username;
 
-
     loadMessages();
 
-
-    setTimeout(function() {
+    setTimeout(function(){
 
         document.getElementById(
             "messageInput"
         ).focus();
 
-    }, 100);
+    },100);
 
 }
 
 
 /* CLOSE CHAT */
 
-function closeChat() {
+function closeChat(){
 
     document.getElementById(
         "chatScreen"
     ).style.display = "none";
 
-
     currentUser =
         null;
-
 
     loadUsers();
 
 }
 
 
-/* SHOW MESSAGES */
+/* LOAD MESSAGES */
 
-function loadMessages() {
+function loadMessages(){
 
-    if (!currentUser) {
+    if(!currentUser){
         return;
     }
 
-
     let messageContainer =
-        document.getElementById(
-            "messages"
-        );
-
+        document.getElementById("messages");
 
     let messages =
         getMessages(currentUser);
 
-
-    if (messages.length === 0) {
+    if(messages.length === 0){
 
         messageContainer.innerHTML = `
 
@@ -593,7 +809,7 @@ function loadMessages() {
                 👋<br><br>
 
                 Start chatting with
-                @${currentUser}
+                @${escapeHTML(currentUser)}
 
             </div>
 
@@ -603,28 +819,23 @@ function loadMessages() {
 
     }
 
-
     let html = "";
 
-
-    messages.forEach(function(message) {
+    messages.forEach(function(message){
 
         let messageClass =
             message.sender === "me"
             ? "sent"
             : "received";
 
-
         html += `
 
             <div class="message ${messageClass}">
 
-                ${message.text}
+                ${escapeHTML(message.text)}
 
                 <div class="message-time">
-
-                    ${message.time}
-
+                    ${escapeHTML(message.time)}
                 </div>
 
             </div>
@@ -633,10 +844,8 @@ function loadMessages() {
 
     });
 
-
     messageContainer.innerHTML =
         html;
-
 
     messageContainer.scrollTop =
         messageContainer.scrollHeight;
@@ -646,85 +855,329 @@ function loadMessages() {
 
 /* SEND MESSAGE */
 
-function sendMessage() {
+function sendMessage(){
 
-    if (!currentUser) {
+    if(!currentUser){
         return;
     }
-
 
     let input =
         document.getElementById(
             "messageInput"
         );
 
-
     let text =
         input.value.trim();
 
-
-    if (text === "") {
+    if(text === ""){
         return;
     }
-
 
     let messages =
         getMessages(currentUser);
 
-
     let now =
         new Date();
-
 
     let time =
         now.toLocaleTimeString(
             [],
             {
-                hour: "2-digit",
-                minute: "2-digit"
+                hour:"2-digit",
+                minute:"2-digit"
             }
         );
 
-
     messages.push({
 
-        sender:
-            "me",
-
-        text:
-            text,
-
-        time:
-            time
+        sender:"me",
+        text:text,
+        time:time
 
     });
-
 
     saveMessages(
         currentUser,
         messages
     );
 
-
     input.value = "";
 
-
     loadMessages();
-
     loadUsers();
 
 }
 
 
-/* ENTER KEY */
+/* ENTER */
 
-function handleEnter(event) {
+function handleEnter(event){
 
-    if (event.key === "Enter") {
+    if(event.key === "Enter"){
 
         sendMessage();
 
     }
+
+}
+
+
+/* QUICK CALL */
+
+function quickCall(event,username,type){
+
+    event.stopPropagation();
+
+    openChat(username);
+
+    setTimeout(function(){
+
+        startCall(type);
+
+    },150);
+
+}
+
+
+/* START CALL */
+
+async function startCall(type){
+
+    if(!currentUser){
+
+        alert("Pehle chat open karo.");
+
+        return;
+
+    }
+
+    currentCallType =
+        type;
+
+    document.getElementById(
+        "callScreen"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "callName"
+    ).innerText =
+        "@" + currentUser;
+
+    document.getElementById(
+        "callStatus"
+    ).innerText =
+        type === "video"
+        ? "Starting video call..."
+        : "Starting voice call...";
+
+    const video =
+        document.getElementById("localVideo");
+
+    const remote =
+        document.getElementById("remoteVideo");
+
+    const placeholder =
+        document.getElementById(
+            "audioPlaceholder"
+        );
+
+    if(type === "video"){
+
+        video.style.display =
+            "block";
+
+        remote.style.display =
+            "block";
+
+        placeholder.style.display =
+            "none";
+
+    }else{
+
+        video.style.display =
+            "none";
+
+        remote.style.display =
+            "none";
+
+        placeholder.style.display =
+            "flex";
+
+    }
+
+    try{
+
+        if(type === "video"){
+
+            localStream =
+                await navigator.mediaDevices
+                .getUserMedia({
+                    audio:true,
+                    video:true
+                });
+
+        }else{
+
+            localStream =
+                await navigator.mediaDevices
+                .getUserMedia({
+                    audio:true,
+                    video:false
+                });
+
+        }
+
+        video.srcObject =
+            localStream;
+
+        document.getElementById(
+            "permissionBox"
+        ).innerText =
+            "Device permission mil gaya. Real user-to-user connection next WebRTC step mein connect hoga.";
+
+        document.getElementById(
+            "callStatus"
+        ).innerText =
+            "Calling @"+currentUser+"...";
+
+    }catch(error){
+
+        console.log(error);
+
+        document.getElementById(
+            "permissionBox"
+        ).innerText =
+            "Microphone/camera permission allow karo.";
+
+        document.getElementById(
+            "callStatus"
+        ).innerText =
+            "Permission required";
+
+    }
+
+}
+
+
+/* MUTE */
+
+function toggleMute(){
+
+    if(!localStream){
+        return;
+    }
+
+    let tracks =
+        localStream.getAudioTracks();
+
+    if(tracks.length === 0){
+        return;
+    }
+
+    audioMuted =
+        !audioMuted;
+
+    tracks.forEach(function(track){
+
+        track.enabled =
+            !audioMuted;
+
+    });
+
+    document.getElementById(
+        "muteButton"
+    ).innerText =
+        audioMuted
+        ? "🔇"
+        : "🎤";
+
+}
+
+
+/* CAMERA */
+
+function toggleCamera(){
+
+    if(!localStream){
+        return;
+    }
+
+    let tracks =
+        localStream.getVideoTracks();
+
+    if(tracks.length === 0){
+        return;
+    }
+
+    cameraDisabled =
+        !cameraDisabled;
+
+    tracks.forEach(function(track){
+
+        track.enabled =
+            !cameraDisabled;
+
+    });
+
+    document.getElementById(
+        "cameraButton"
+    ).innerText =
+        cameraDisabled
+        ? "🚫"
+        : "📷";
+
+}
+
+
+/* SPEAKER */
+
+function toggleSpeaker(){
+
+    speakerEnabled =
+        !speakerEnabled;
+
+    let remote =
+        document.getElementById(
+            "remoteVideo"
+        );
+
+    remote.muted =
+        !speakerEnabled;
+
+}
+
+
+/* END CALL */
+
+function endCall(){
+
+    if(localStream){
+
+        localStream.getTracks()
+        .forEach(function(track){
+
+            track.stop();
+
+        });
+
+        localStream =
+            null;
+
+    }
+
+    document.getElementById(
+        "callScreen"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "callStatus"
+    ).innerText =
+        "Call ended";
+
+    currentCallType =
+        null;
 
 }
 
@@ -736,5 +1189,4 @@ loadUsers();
 </script>
 
 </body>
-
 </html>
