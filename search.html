@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>CROCKCELL Search</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -62,7 +57,6 @@ body{
   background:#fff;
   color:#000;
   font-size:22px;
-  cursor:pointer;
 }
 
 .message{
@@ -76,8 +70,6 @@ body{
   padding:8px 15px 100px;
 }
 
-/* USER CARD */
-
 .user-card{
   display:flex;
   align-items:center;
@@ -85,12 +77,10 @@ body{
   padding:14px 5px;
   border-bottom:1px solid #181818;
   cursor:pointer;
-  transition:.15s;
 }
 
 .user-card:active{
   background:#111;
-  transform:scale(.985);
 }
 
 .avatar{
@@ -110,26 +100,17 @@ body{
 .name{
   font-size:17px;
   font-weight:bold;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
 
 .username{
   margin-top:4px;
   color:#888;
   font-size:14px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
-
-/* ARROW */
 
 .profile-arrow{
   color:#777;
   font-size:25px;
-  padding:8px;
 }
 
 .empty{
@@ -173,19 +154,14 @@ body{
   font-size:20px;
   margin-bottom:3px;
 }
-
 </style>
-
 </head>
 
 <body>
 
-
 <div class="header">
 
-  <div class="title">
-    Search
-  </div>
+  <div class="title">Search</div>
 
   <div class="search-row">
 
@@ -210,9 +186,7 @@ body{
 
 </div>
 
-
 <div id="message" class="message"></div>
-
 
 <div id="results" class="results">
 
@@ -222,8 +196,6 @@ body{
 
 </div>
 
-
-<!-- BOTTOM NAV -->
 
 <div class="bottom-nav">
 
@@ -264,80 +236,44 @@ const PROJECT_ID =
 "crockcell-cd2e6";
 
 
-/* =========================
-   SESSION
-========================= */
-
 let token =
-localStorage.getItem(
-  "crockcell_idToken"
-);
+localStorage.getItem("crockcell_idToken");
 
 let uid =
-localStorage.getItem(
-  "crockcell_uid"
-);
+localStorage.getItem("crockcell_uid");
 
 
 if(!token){
-
   token =
-  sessionStorage.getItem(
-    "crockcell_idToken"
-  );
-
+  sessionStorage.getItem("crockcell_idToken");
 }
 
 if(!uid){
-
   uid =
-  sessionStorage.getItem(
-    "crockcell_uid"
-  );
-
+  sessionStorage.getItem("crockcell_uid");
 }
 
 
 if(!token || !uid){
-
-  window.location.replace(
-    "index.html"
-  );
-
+  window.location.replace("index.html");
 }
 
 
-/* =========================
-   ELEMENTS
-========================= */
-
 const searchInput =
-document.getElementById(
-  "searchInput"
-);
+document.getElementById("searchInput");
 
 const searchButton =
-document.getElementById(
-  "searchButton"
-);
+document.getElementById("searchButton");
 
 const results =
-document.getElementById(
-  "results"
-);
+document.getElementById("results");
 
 const message =
-document.getElementById(
-  "message"
-);
+document.getElementById("message");
 
 
-let searchTimer = null;
+let searchTimer=null;
 
-
-/* =========================
-   LIVE SEARCH
-========================= */
 
 searchInput.addEventListener(
   "input",
@@ -346,10 +282,7 @@ searchInput.addEventListener(
     clearTimeout(searchTimer);
 
     const text =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
+    searchInput.value.trim().toLowerCase();
 
     if(!text){
 
@@ -358,60 +291,46 @@ searchInput.addEventListener(
         Username ya alphabet type karo
       </div>`;
 
-      message.textContent = "";
-
+      message.textContent="";
       return;
 
     }
 
-
     searchTimer =
-    setTimeout(
-      searchUsers,
-      250
-    );
+    setTimeout(searchUsers,250);
 
   }
 );
 
 
-/* =========================
-   SEARCH BUTTON
-========================= */
+searchButton.onclick =
+searchUsers;
 
-searchButton.addEventListener(
-  "click",
-  searchUsers
+
+searchInput.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key==="Enter"){
+      searchUsers();
+    }
+
+  }
 );
 
-
-/* =========================
-   SEARCH USERS
-========================= */
 
 async function searchUsers(){
 
   const text =
-  searchInput.value
-    .trim()
-    .toLowerCase();
+  searchInput.value.trim().toLowerCase();
+
+  if(!text)return;
 
 
-  if(!text){
-
-    return;
-
-  }
-
-
-  message.textContent =
-  "Searching...";
-
+  message.textContent="Searching...";
 
   results.innerHTML =
-  `<div class="empty">
-    Searching...
-  </div>`;
+  `<div class="empty">Searching...</div>`;
 
 
   try{
@@ -428,44 +347,35 @@ async function searchUsers(){
     API_KEY;
 
 
-    const body = {
+    const body={
 
-      structuredQuery: {
+      structuredQuery:{
 
-        from: [
-
+        from:[
           {
             collectionId:"users"
           }
-
         ],
 
-        where: {
+        where:{
 
-          compositeFilter: {
+          compositeFilter:{
 
             op:"AND",
 
-            filters: [
+            filters:[
 
               {
+                fieldFilter:{
 
-                fieldFilter: {
-
-                  field: {
-
+                  field:{
                     fieldPath:"username"
-
                   },
 
-                  op:
-                  "GREATER_THAN_OR_EQUAL",
+                  op:"GREATER_THAN_OR_EQUAL",
 
-                  value: {
-
-                    stringValue:
-                    text
-
+                  value:{
+                    stringValue:text
                   }
 
                 }
@@ -473,22 +383,16 @@ async function searchUsers(){
               },
 
               {
+                fieldFilter:{
 
-                fieldFilter: {
-
-                  field: {
-
+                  field:{
                     fieldPath:"username"
-
                   },
 
                   op:"LESS_THAN",
 
-                  value: {
-
-                    stringValue:
-                    endText
-
+                  value:{
+                    stringValue:endText
                   }
 
                 }
@@ -501,19 +405,14 @@ async function searchUsers(){
 
         },
 
-        orderBy: [
+        orderBy:[
 
           {
-
-            field: {
-
+            field:{
               fieldPath:"username"
-
             },
 
-            direction:
-            "ASCENDING"
-
+            direction:"ASCENDING"
           }
 
         ],
@@ -532,29 +431,19 @@ async function searchUsers(){
 
         method:"POST",
 
-        headers: {
-
-          Authorization:
-          "Bearer " + token,
-
-          "Content-Type":
-          "application/json"
-
+        headers:{
+          Authorization:"Bearer "+token,
+          "Content-Type":"application/json"
         },
 
-        body:
-        JSON.stringify(body)
+        body:JSON.stringify(body)
 
       }
     );
 
 
     if(!response.ok){
-
-      throw new Error(
-        "SEARCH_FAILED"
-      );
-
+      throw new Error("SEARCH_FAILED");
     }
 
 
@@ -562,16 +451,12 @@ async function searchUsers(){
     await response.json();
 
 
-    const users = [];
+    const users=[];
 
 
-    rows.forEach(row => {
+    rows.forEach(row=>{
 
-      if(!row.document){
-
-        return;
-
-      }
+      if(!row.document)return;
 
 
       const f =
@@ -586,38 +471,24 @@ async function searchUsers(){
       f.username?.stringValue || "";
 
 
-      if(!foundUID ||
-         !foundUsername){
-
-        return;
-
-      }
+      if(!foundUID || !foundUsername)return;
 
 
-      /* CURRENT USER HIDE */
-
-      if(foundUID === uid){
-
-        return;
-
-      }
+      if(foundUID===uid)return;
 
 
       users.push({
 
-        uid:
-        foundUID,
+        uid:foundUID,
 
-        username:
-        foundUsername,
+        username:foundUsername,
 
         name:
         f.name?.stringValue ||
         foundUsername,
 
         photoURL:
-        f.photoURL?.stringValue ||
-        ""
+        f.photoURL?.stringValue || ""
 
       });
 
@@ -626,19 +497,12 @@ async function searchUsers(){
 
     renderUsers(users);
 
-
   }
   catch(error){
 
-    console.error(
-      "Search error:",
-      error
-    );
+    console.error(error);
 
-
-    message.textContent =
-    "Search failed.";
-
+    message.textContent="Search failed.";
 
     results.innerHTML =
     `<div class="empty">
@@ -650,20 +514,14 @@ async function searchUsers(){
 }
 
 
-/* =========================
-   RENDER USERS
-========================= */
-
 function renderUsers(users){
 
-  results.innerHTML = "";
+  results.innerHTML="";
 
 
   if(!users.length){
 
-    message.textContent =
-    "No users found.";
-
+    message.textContent="No users found.";
 
     results.innerHTML =
     `<div class="empty">
@@ -676,23 +534,19 @@ function renderUsers(users){
 
 
   message.textContent =
-  users.length +
-  " users found";
+  users.length+" users found";
 
 
-  users.forEach(user => {
+  users.forEach(user=>{
 
     const card =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
-    card.className =
-    "user-card";
+    card.className="user-card";
 
 
-    card.innerHTML = `
+    card.innerHTML=`
 
       <img
         class="avatar"
@@ -708,15 +562,11 @@ function renderUsers(users){
       <div class="user-info">
 
         <div class="name">
-          ${escapeHTML(
-            user.name
-          )}
+          ${escapeHTML(user.name)}
         </div>
 
         <div class="username">
-          @${escapeHTML(
-            user.username
-          )}
+          @${escapeHTML(user.username)}
         </div>
 
       </div>
@@ -729,78 +579,46 @@ function renderUsers(users){
 
 
     /*
-      IMPORTANT:
-
-      Ab button nahi hai.
-
-      Pura profile card clickable hai.
+      USER CARD PAR DIRECT CLICK
+      OPEN PROFILE
     */
 
-    card.addEventListener(
-      "click",
-      function(){
+    card.onclick =
+    function(){
 
-        openProfile(user);
+      openProfile(user);
 
-      }
-    );
+    };
 
 
-    results.appendChild(
-      card
-    );
+    results.appendChild(card);
 
   });
 
 }
 
 
-/* =========================
-   OPEN PROFILE
-========================= */
-
 function openProfile(user){
 
   /*
-    Target profile ko session me bhi save
-    kar rahe hain.
+    Sabse important:
+    poora user object sessionStorage me save.
 
-    Isse Profile → Message flow me
-    target UID available rahega.
+    Ab profile ko Firebase se user details
+    dobara lene ka wait nahi karna padega.
   */
-
-  const targetProfile = {
-
-    uid:
-    user.uid,
-
-    username:
-    user.username,
-
-    name:
-    user.name,
-
-    photoURL:
-    user.photoURL || ""
-
-  };
-
 
   try{
 
     sessionStorage.setItem(
       "crockcell_profile_target",
-      JSON.stringify(
-        targetProfile
-      )
+      JSON.stringify(user)
     );
 
   }
   catch(error){
 
-    console.log(
-      "Session save skipped"
-    );
+    console.error(error);
 
   }
 
@@ -808,80 +626,30 @@ function openProfile(user){
   const url =
     "profile.html" +
     "?uid=" +
-    encodeURIComponent(
-      user.uid
-    ) +
+    encodeURIComponent(user.uid) +
     "&username=" +
-    encodeURIComponent(
-      user.username
-    ) +
+    encodeURIComponent(user.username) +
     "&name=" +
-    encodeURIComponent(
-      user.name || user.username
-    ) +
+    encodeURIComponent(user.name) +
+    "&photo=" +
+    encodeURIComponent(user.photoURL || "") +
     "&v=" +
     Date.now();
 
 
-  window.location.assign(
-    url
-  );
+  window.location.assign(url);
 
 }
 
 
-/* =========================
-   ENTER SEARCH
-========================= */
-
-searchInput.addEventListener(
-  "keydown",
-  function(e){
-
-    if(e.key === "Enter"){
-
-      e.preventDefault();
-
-      searchUsers();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   HTML ESCAPE
-========================= */
-
 function escapeHTML(text){
 
   return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
@@ -889,46 +657,19 @@ function escapeHTML(text){
 function escapeAttribute(text){
 
   return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    );
+    .replaceAll("&","&amp;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
 
 }
 
 
-/* =========================
-   PLACEHOLDER PHOTO
-========================= */
-
 function placeholderPhoto(){
 
-  return "data:image/svg+xml," +
-
-  "<svg xmlns='http://www.w3.org/2000/svg' " +
-
-  "width='100' height='100'>" +
-
-  "<rect width='100' height='100' " +
-
-  "fill='%23333333'/>" +
-
+  return "data:image/svg+xml,"+
+  "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'>"+
+  "<rect width='100' height='100' fill='%23333333'/>"+
   "</svg>";
 
 }
