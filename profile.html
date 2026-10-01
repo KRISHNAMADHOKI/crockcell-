@@ -192,14 +192,11 @@ body{
 
 <body>
 
-
 <div id="loading" class="loading">
   Loading profile...
 </div>
 
-
 <div id="profilePage" style="display:none;">
-
 
   <div class="header">
 
@@ -209,41 +206,34 @@ body{
         id="profilePhoto"
         class="avatar"
         src=""
-        alt=""
+        alt="Profile"
       >
 
       <div class="info">
 
         <div
           id="profileName"
-          class="name"
-        >
+          class="name">
         </div>
 
         <div
           id="profileUsername"
-          class="username"
-        >
+          class="username">
         </div>
 
       </div>
 
     </div>
 
-
     <div
       id="profileBio"
-      class="bio"
-    >
+      class="bio">
     </div>
-
 
     <div
       id="actions"
-      class="actions"
-    >
+      class="actions">
     </div>
-
 
     <div class="stats">
 
@@ -251,8 +241,7 @@ body{
 
         <div
           id="postCount"
-          class="stat-number"
-        >
+          class="stat-number">
           0
         </div>
 
@@ -262,13 +251,11 @@ body{
 
       </div>
 
-
       <div class="stat">
 
         <div
           id="followers"
-          class="stat-number"
-        >
+          class="stat-number">
           0
         </div>
 
@@ -278,13 +265,11 @@ body{
 
       </div>
 
-
       <div class="stat">
 
         <div
           id="following"
-          class="stat-number"
-        >
+          class="stat-number">
           0
         </div>
 
@@ -298,7 +283,6 @@ body{
 
   </div>
 
-
   <div class="section">
 
     <div class="section-title">
@@ -307,12 +291,10 @@ body{
 
     <div
       id="posts"
-      class="posts"
-    >
+      class="posts">
     </div>
 
   </div>
-
 
 </div>
 
@@ -323,40 +305,35 @@ body{
 
   <a
     class="nav-item"
-    href="home.html"
-  >
+    href="home.html">
     <span class="nav-icon">⌂</span>
     Home
   </a>
 
   <a
     class="nav-item"
-    href="search.html"
-  >
+    href="search.html">
     <span class="nav-icon">⌕</span>
     Search
   </a>
 
   <a
     class="nav-item"
-    href="reels.html"
-  >
+    href="reels.html">
     <span class="nav-icon">▶</span>
     Reels
   </a>
 
   <a
     class="nav-item"
-    href="messages.html"
-  >
+    href="messages.html">
     <span class="nav-icon">♡</span>
     Messages
   </a>
 
   <a
     class="nav-item active"
-    href="profile.html"
-  >
+    href="profile.html">
     <span class="nav-icon">◯</span>
     Profile
   </a>
@@ -378,56 +355,40 @@ const PROJECT_ID =
 
 
 /* =========================
-   CURRENT LOGIN SESSION
+   LOGIN SESSION
 ========================= */
 
 let token =
-localStorage.getItem(
-  "crockcell_idToken"
-);
+localStorage.getItem("crockcell_idToken");
 
 let currentUID =
-localStorage.getItem(
-  "crockcell_uid"
-);
+localStorage.getItem("crockcell_uid");
 
-
-/* SESSION STORAGE FALLBACK */
 
 if(!token){
 
   token =
-  sessionStorage.getItem(
-    "crockcell_idToken"
-  );
+  sessionStorage.getItem("crockcell_idToken");
 
 }
 
 if(!currentUID){
 
   currentUID =
-  sessionStorage.getItem(
-    "crockcell_uid"
-  );
+  sessionStorage.getItem("crockcell_uid");
 
 }
 
-
-/* =========================
-   CHECK LOGIN
-========================= */
 
 if(!token || !currentUID){
 
-  window.location.replace(
-    "index.html"
-  );
+  window.location.replace("index.html");
 
 }
 
 
 /* =========================
-   URL PARAMETERS
+   URL DATA
 ========================= */
 
 const params =
@@ -435,27 +396,22 @@ new URLSearchParams(
   window.location.search
 );
 
-
 const requestedUID =
 params.get("uid");
-
 
 const requestedUsername =
 params.get("username");
 
 
 /*
-  Agar Search se kisi user ka
-  profile khola gaya hai to
-  requestedUID use hoga.
+  Search/profile link se aaye
+  to requestedUID use hoga.
 
-  Agar apna profile khola gaya
-  hai to currentUID use hoga.
+  Apna profile ho to currentUID.
 */
 
 const profileUID =
-requestedUID ||
-currentUID;
+requestedUID || currentUID;
 
 
 /* =========================
@@ -529,13 +485,15 @@ async function loadProfile(){
 
     showProfile(profile);
 
-
     await loadPosts(profileUID);
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Profile error:",
+      error
+    );
 
     document.getElementById(
       "loading"
@@ -555,12 +513,14 @@ function showProfile(profile){
 
   document.getElementById(
     "loading"
-  ).style.display="none";
+  ).style.display =
+  "none";
 
 
   document.getElementById(
     "profilePage"
-  ).style.display="block";
+  ).style.display =
+  "block";
 
 
   document.getElementById(
@@ -572,7 +532,9 @@ function showProfile(profile){
   document.getElementById(
     "profileUsername"
   ).textContent =
-  "@" + profile.username;
+  profile.username
+  ? "@" + profile.username
+  : "";
 
 
   document.getElementById(
@@ -594,37 +556,42 @@ function showProfile(profile){
   );
 
 
-  actions.innerHTML="";
+  actions.innerHTML =
+  "";
 
 
   /* =====================
      OWN PROFILE
   ===================== */
 
-  if(profile.uid===currentUID){
+  if(profile.uid === currentUID){
 
     const editButton =
     document.createElement(
       "button"
     );
 
-    editButton.className=
+    editButton.className =
     "action-btn";
 
-    editButton.textContent=
+    editButton.textContent =
     "Edit Profile";
 
-    editButton.onclick=function(){
 
-      window.location.href=
+    editButton.onclick =
+    function(){
+
+      window.location.href =
       "edit-profile.html";
 
     };
+
 
     actions.appendChild(
       editButton
     );
 
+    return;
 
   }
 
@@ -633,63 +600,103 @@ function showProfile(profile){
      OTHER USER
   ===================== */
 
-  else{
+  const followButton =
+  document.createElement(
+    "button"
+  );
 
-    const followButton =
-    document.createElement(
-      "button"
+  followButton.className =
+  "action-btn";
+
+  followButton.textContent =
+  "Follow";
+
+
+  followButton.onclick =
+  function(){
+
+    alert(
+      "Follow system next update me connect karenge."
     );
 
-    followButton.className=
-    "action-btn";
+  };
 
-    followButton.textContent=
-    "Follow";
 
-    followButton.onclick=function(){
+  /* =====================
+     MESSAGE BUTTON
+  ===================== */
+
+  const messageButton =
+  document.createElement(
+    "button"
+  );
+
+  messageButton.className =
+  "action-btn message-btn";
+
+  messageButton.textContent =
+  "Message";
+
+
+  messageButton.onclick =
+  function(){
+
+    /*
+      IMPORTANT:
+      Target user ka UID directly
+      messages.html ko bhej rahe hain.
+    */
+
+    const targetUID =
+    profile.uid;
+
+    const targetUsername =
+    profile.username || "";
+
+    const targetName =
+    profile.name || "User";
+
+
+    if(!targetUID){
 
       alert(
-        "Follow system next update me connect karenge."
+        "User ID nahi mili."
       );
 
-    };
+      return;
+
+    }
 
 
-    const messageButton =
-    document.createElement(
-      "button"
-    );
-
-    messageButton.className=
-    "action-btn message-btn";
-
-    messageButton.textContent=
-    "Message";
-
-    messageButton.onclick=function(){
-
-      window.location.href=
-      "messages.html?uid=" +
+    const chatURL =
+      "messages.html" +
+      "?uid=" +
       encodeURIComponent(
-        profile.uid
+        targetUID
       ) +
       "&username=" +
       encodeURIComponent(
-        profile.username
+        targetUsername
+      ) +
+      "&name=" +
+      encodeURIComponent(
+        targetName
       );
 
-    };
+
+    window.location.href =
+    chatURL;
+
+  };
 
 
-    actions.appendChild(
-      followButton
-    );
+  actions.appendChild(
+    followButton
+  );
 
-    actions.appendChild(
-      messageButton
-    );
-
-  }
+  actions.appendChild(
+    messageButton
+  );
 
 }
 
@@ -716,13 +723,14 @@ async function loadPosts(uid){
     API_KEY;
 
 
-    const queryBody={
+    const queryBody = {
 
       structuredQuery:{
 
         from:[
           {
-            collectionId:"posts"
+            collectionId:
+            "posts"
           }
         ],
 
@@ -731,13 +739,16 @@ async function loadPosts(uid){
           fieldFilter:{
 
             field:{
-              fieldPath:"uid"
+              fieldPath:
+              "uid"
             },
 
-            op:"EQUAL",
+            op:
+            "EQUAL",
 
             value:{
-              stringValue:uid
+              stringValue:
+              uid
             }
 
           }
@@ -756,14 +767,17 @@ async function loadPosts(uid){
       queryURL,
       {
 
-        method:"POST",
+        method:
+        "POST",
 
         headers:{
+
           Authorization:
           "Bearer " + token,
 
           "Content-Type":
           "application/json"
+
         },
 
         body:
@@ -793,7 +807,8 @@ async function loadPosts(uid){
 
     const posts =
     rows.filter(
-      row=>row.document
+      row =>
+      row.document
     );
 
 
@@ -803,7 +818,8 @@ async function loadPosts(uid){
     posts.length;
 
 
-    postsBox.innerHTML="";
+    postsBox.innerHTML =
+    "";
 
 
     if(!posts.length){
@@ -818,44 +834,56 @@ async function loadPosts(uid){
     }
 
 
-    posts.forEach(row=>{
+    posts.forEach(
+      row => {
 
-      const f =
-      row.document.fields || {};
-
-
-      const imageURL =
-      f.imageURL?.stringValue ||
-      f.image?.stringValue ||
-      "";
+        const f =
+        row.document.fields ||
+        {};
 
 
-      if(!imageURL)return;
+        const imageURL =
+        f.imageURL?.stringValue ||
+        f.image?.stringValue ||
+        "";
 
 
-      const post =
-      document.createElement(
-        "div"
-      );
-
-      post.className="post";
+        if(!imageURL)
+          return;
 
 
-      const img =
-      document.createElement(
-        "img"
-      );
+        const post =
+        document.createElement(
+          "div"
+        );
 
-      img.src=imageURL;
+        post.className =
+        "post";
 
-      img.loading="lazy";
+
+        const img =
+        document.createElement(
+          "img"
+        );
+
+        img.src =
+        imageURL;
+
+        img.loading =
+        "lazy";
 
 
-      post.appendChild(img);
+        post.appendChild(
+          img
+        );
 
-      postsBox.appendChild(post);
 
-    });
+        postsBox.appendChild(
+          post
+        );
+
+      }
+    );
 
 
   }catch(error){
@@ -864,6 +892,7 @@ async function loadPosts(uid){
       "Posts error:",
       error
     );
+
 
     postsBox.innerHTML =
     `<div class="empty">
@@ -876,7 +905,7 @@ async function loadPosts(uid){
 
 
 /* =========================
-   PLACEHOLDER
+   PLACEHOLDER PHOTO
 ========================= */
 
 function placeholderPhoto(){
