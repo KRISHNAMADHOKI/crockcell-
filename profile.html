@@ -19,22 +19,31 @@ body{
   color:#fff;
   font-family:Arial,Helvetica,sans-serif;
   min-height:100vh;
-  padding-bottom:100px;
 }
 
 .header{
-  padding:20px 18px 10px;
+  padding:22px 18px 15px;
+  border-bottom:1px solid #222;
+}
+
+.title{
+  font-size:28px;
+  font-weight:bold;
+}
+
+.profile{
+  padding:25px 18px 110px;
 }
 
 .top{
   display:flex;
   align-items:center;
-  gap:15px;
+  gap:18px;
 }
 
-.avatar{
-  width:92px;
-  height:92px;
+.photo{
+  width:90px;
+  height:90px;
   border-radius:50%;
   object-fit:cover;
   background:#222;
@@ -45,109 +54,42 @@ body{
 }
 
 .name{
-  font-size:23px;
+  font-size:22px;
   font-weight:bold;
 }
 
 .username{
   color:#888;
   margin-top:5px;
-  font-size:15px;
 }
 
 .bio{
-  margin-top:18px;
+  margin-top:20px;
   color:#ccc;
-  line-height:1.4;
-  font-size:15px;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-}
-
-.action-btn{
-  flex:1;
-  height:44px;
-  border:0;
-  border-radius:16px;
-  background:#fff;
-  color:#000;
-  font-weight:bold;
-  font-size:14px;
+  line-height:1.5;
 }
 
 .message-btn{
-  background:#202020;
-  color:#fff;
-  border:1px solid #444;
-}
-
-.stats{
-  display:flex;
-  margin-top:22px;
-  padding:16px 0;
-  border-top:1px solid #222;
-  border-bottom:1px solid #222;
-}
-
-.stat{
-  flex:1;
-  text-align:center;
-}
-
-.stat-number{
-  font-size:19px;
-  font-weight:bold;
-}
-
-.stat-label{
-  color:#888;
-  font-size:12px;
-  margin-top:4px;
-}
-
-.section{
-  padding:18px;
-}
-
-.section-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
-.posts{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:3px;
-}
-
-.post{
-  aspect-ratio:1;
-  background:#181818;
-  overflow:hidden;
-}
-
-.post img{
   width:100%;
-  height:100%;
-  object-fit:cover;
+  height:48px;
+  margin-top:22px;
+  border:0;
+  border-radius:17px;
+  background:#fff;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.empty{
-  text-align:center;
-  color:#666;
-  padding:45px 10px;
-  font-size:14px;
+.message-btn:active{
+  transform:scale(.98);
 }
 
-.loading{
+.status{
   text-align:center;
-  color:#888;
-  padding:60px 20px;
+  color:#777;
+  padding:45px 20px;
 }
 
 .bottom-nav{
@@ -157,7 +99,6 @@ body{
   bottom:12px;
   z-index:20;
   display:flex;
-  justify-content:space-around;
   padding:8px;
   border-radius:24px;
   background:rgba(25,25,25,.92);
@@ -192,148 +133,42 @@ body{
 
 <body>
 
-<div id="loading" class="loading">
-  Loading profile...
+<div class="header">
+  <div class="title">Profile</div>
 </div>
 
-<div id="profilePage" style="display:none;">
+<div id="profileArea" class="profile">
 
-  <div class="header">
-
-    <div class="top">
-
-      <img
-        id="profilePhoto"
-        class="avatar"
-        src=""
-        alt="Profile"
-      >
-
-      <div class="info">
-
-        <div
-          id="profileName"
-          class="name">
-        </div>
-
-        <div
-          id="profileUsername"
-          class="username">
-        </div>
-
-      </div>
-
-    </div>
-
-    <div
-      id="profileBio"
-      class="bio">
-    </div>
-
-    <div
-      id="actions"
-      class="actions">
-    </div>
-
-    <div class="stats">
-
-      <div class="stat">
-
-        <div
-          id="postCount"
-          class="stat-number">
-          0
-        </div>
-
-        <div class="stat-label">
-          Posts
-        </div>
-
-      </div>
-
-      <div class="stat">
-
-        <div
-          id="followers"
-          class="stat-number">
-          0
-        </div>
-
-        <div class="stat-label">
-          Followers
-        </div>
-
-      </div>
-
-      <div class="stat">
-
-        <div
-          id="following"
-          class="stat-number">
-          0
-        </div>
-
-        <div class="stat-label">
-          Following
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div class="section-title">
-      Posts
-    </div>
-
-    <div
-      id="posts"
-      class="posts">
-    </div>
-
+  <div class="status">
+    Loading profile...
   </div>
 
 </div>
 
-
-<!-- BOTTOM NAV -->
 
 <div class="bottom-nav">
 
-  <a
-    class="nav-item"
-    href="home.html">
+  <a class="nav-item" href="home.html">
     <span class="nav-icon">⌂</span>
     Home
   </a>
 
-  <a
-    class="nav-item"
-    href="search.html">
+  <a class="nav-item" href="search.html">
     <span class="nav-icon">⌕</span>
     Search
   </a>
 
-  <a
-    class="nav-item"
-    href="reels.html">
+  <a class="nav-item" href="reels.html">
     <span class="nav-icon">▶</span>
     Reels
   </a>
 
-  <a
-    class="nav-item"
-    href="messages.html">
+  <a class="nav-item" href="messages.html">
     <span class="nav-icon">♡</span>
     Messages
   </a>
 
-  <a
-    class="nav-item active"
-    href="profile.html">
+  <a class="nav-item active" href="profile.html">
     <span class="nav-icon">◯</span>
     Profile
   </a>
@@ -343,10 +178,6 @@ body{
 
 <script>
 
-/* =========================
-   FIREBASE
-========================= */
-
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
@@ -355,40 +186,50 @@ const PROJECT_ID =
 
 
 /* =========================
-   LOGIN SESSION
+   SESSION
 ========================= */
 
 let token =
-localStorage.getItem("crockcell_idToken");
+localStorage.getItem(
+  "crockcell_idToken"
+);
 
 let currentUID =
-localStorage.getItem("crockcell_uid");
+localStorage.getItem(
+  "crockcell_uid"
+);
 
 
 if(!token){
 
   token =
-  sessionStorage.getItem("crockcell_idToken");
+  sessionStorage.getItem(
+    "crockcell_idToken"
+  );
 
 }
 
 if(!currentUID){
 
   currentUID =
-  sessionStorage.getItem("crockcell_uid");
+  sessionStorage.getItem(
+    "crockcell_uid"
+  );
 
 }
 
 
 if(!token || !currentUID){
 
-  window.location.replace("index.html");
+  window.location.replace(
+    "index.html"
+  );
 
 }
 
 
 /* =========================
-   URL DATA
+   URL
 ========================= */
 
 const params =
@@ -404,14 +245,25 @@ params.get("username");
 
 
 /*
-  Search/profile link se aaye
-  to requestedUID use hoga.
+  Agar UID diya gaya hai to
+  wahi profile open hogi.
 
-  Apna profile ho to currentUID.
+  Warna current user.
 */
 
 const profileUID =
-requestedUID || currentUID;
+requestedUID ||
+currentUID;
+
+
+/* =========================
+   ELEMENT
+========================= */
+
+const profileArea =
+document.getElementById(
+  "profileArea"
+);
 
 
 /* =========================
@@ -422,16 +274,18 @@ async function loadProfile(){
 
   try{
 
-    const profileURL =
+    const url =
     "https://firestore.googleapis.com/v1/projects/" +
     PROJECT_ID +
     "/databases/(default)/documents/users/" +
-    encodeURIComponent(profileUID);
+    encodeURIComponent(profileUID) +
+    "?key=" +
+    API_KEY;
 
 
     const response =
     await fetch(
-      profileURL,
+      url,
       {
         headers:{
           Authorization:
@@ -444,7 +298,7 @@ async function loadProfile(){
     if(!response.ok){
 
       throw new Error(
-        "Profile not found"
+        "PROFILE_NOT_FOUND"
       );
 
     }
@@ -460,7 +314,8 @@ async function loadProfile(){
 
     const profile = {
 
-      uid:profileUID,
+      uid:
+      profileUID,
 
       name:
       f.name?.stringValue ||
@@ -483,22 +338,26 @@ async function loadProfile(){
     };
 
 
-    showProfile(profile);
+    renderProfile(
+      profile
+    );
 
-    await loadPosts(profileUID);
 
-
-  }catch(error){
+  }
+  catch(error){
 
     console.error(
-      "Profile error:",
       error
     );
 
-    document.getElementById(
-      "loading"
-    ).innerHTML =
-    "Profile load nahi ho paayi.";
+
+    profileArea.innerHTML = `
+
+      <div class="status">
+        Profile load nahi ho paayi.
+      </div>
+
+    `;
 
   }
 
@@ -506,407 +365,259 @@ async function loadProfile(){
 
 
 /* =========================
-   SHOW PROFILE
+   RENDER
 ========================= */
 
-function showProfile(profile){
+function renderProfile(profile){
 
-  document.getElementById(
-    "loading"
-  ).style.display =
-  "none";
+  const isOwn =
+  profile.uid === currentUID;
 
 
-  document.getElementById(
-    "profilePage"
-  ).style.display =
-  "block";
+  profileArea.innerHTML = `
+
+    <div class="top">
+
+      <img
+        id="profilePhoto"
+        class="photo"
+        src="${
+          escapeAttribute(
+            profile.photoURL ||
+            placeholderPhoto()
+          )
+        }"
+        alt=""
+      >
+
+      <div class="info">
+
+        <div class="name">
+          ${escapeHTML(
+            profile.name
+          )}
+        </div>
+
+        <div class="username">
+          @${escapeHTML(
+            profile.username
+          )}
+        </div>
+
+      </div>
+
+    </div>
 
 
-  document.getElementById(
-    "profileName"
-  ).textContent =
-  profile.name;
+    <div class="bio">
+      ${escapeHTML(
+        profile.bio ||
+        "No bio yet."
+      )}
+    </div>
 
+    ${
+      isOwn
 
-  document.getElementById(
-    "profileUsername"
-  ).textContent =
-  profile.username
-  ? "@" + profile.username
-  : "";
+      ?
 
+      `<button
+        class="message-btn"
+        type="button"
+        onclick="editOwnProfile()"
+      >
+        Edit Profile
+      </button>`
 
-  document.getElementById(
-    "profileBio"
-  ).textContent =
-  profile.bio;
+      :
 
-
-  document.getElementById(
-    "profilePhoto"
-  ).src =
-  profile.photoURL ||
-  placeholderPhoto();
-
-
-  const actions =
-  document.getElementById(
-    "actions"
-  );
-
-
-  actions.innerHTML =
-  "";
-
-
-  /* =====================
-     OWN PROFILE
-  ===================== */
-
-  if(profile.uid === currentUID){
-
-    const editButton =
-    document.createElement(
-      "button"
-    );
-
-    editButton.className =
-    "action-btn";
-
-    editButton.textContent =
-    "Edit Profile";
-
-
-    editButton.onclick =
-    function(){
-
-      window.location.href =
-      "edit-profile.html";
-
-    };
-
-
-    actions.appendChild(
-      editButton
-    );
-
-    return;
-
-  }
-
-
-  /* =====================
-     OTHER USER
-  ===================== */
-
-  const followButton =
-  document.createElement(
-    "button"
-  );
-
-  followButton.className =
-  "action-btn";
-
-  followButton.textContent =
-  "Follow";
-
-
-  followButton.onclick =
-  function(){
-
-    alert(
-      "Follow system next update me connect karenge."
-    );
-
-  };
-
-
-  /* =====================
-     MESSAGE BUTTON
-  ===================== */
-
-  const messageButton =
-  document.createElement(
-    "button"
-  );
-
-  messageButton.className =
-  "action-btn message-btn";
-
-  messageButton.textContent =
-  "Message";
-
-
-  messageButton.onclick =
-  function(){
-
-    /*
-      IMPORTANT:
-      Target user ka UID directly
-      messages.html ko bhej rahe hain.
-    */
-
-    const targetUID =
-    profile.uid;
-
-    const targetUsername =
-    profile.username || "";
-
-    const targetName =
-    profile.name || "User";
-
-
-    if(!targetUID){
-
-      alert(
-        "User ID nahi mili."
-      );
-
-      return;
+      `<button
+        id="messageButton"
+        class="message-btn"
+        type="button"
+      >
+        Message
+      </button>`
 
     }
 
+  `;
 
-    const chatURL =
-      "messages.html" +
-      "?uid=" +
-      encodeURIComponent(
-        targetUID
-      ) +
-      "&username=" +
-      encodeURIComponent(
-        targetUsername
-      ) +
-      "&name=" +
-      encodeURIComponent(
-        targetName
+
+  if(!isOwn){
+
+    const messageButton =
+    document.getElementById(
+      "messageButton"
+    );
+
+
+    messageButton.onclick =
+    function(){
+
+      openMessage(
+        profile
       );
 
+    };
 
-    window.location.href =
-    chatURL;
-
-  };
-
-
-  actions.appendChild(
-    followButton
-  );
-
-  actions.appendChild(
-    messageButton
-  );
+  }
 
 }
 
 
 /* =========================
-   LOAD POSTS
+   OPEN MESSAGE
 ========================= */
 
-async function loadPosts(uid){
+function openMessage(profile){
 
-  const postsBox =
-  document.getElementById(
-    "posts"
-  );
+  /*
+    SABSE IMPORTANT PART
+
+    Target user ko sessionStorage
+    me save kar rahe hain.
+  */
+
+  const target = {
+
+    uid:
+    profile.uid,
+
+    username:
+    profile.username,
+
+    name:
+    profile.name,
+
+    photoURL:
+    profile.photoURL || ""
+
+  };
 
 
   try{
 
-    const queryURL =
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents:runQuery" +
-    "?key=" +
-    API_KEY;
-
-
-    const queryBody = {
-
-      structuredQuery:{
-
-        from:[
-          {
-            collectionId:
-            "posts"
-          }
-        ],
-
-        where:{
-
-          fieldFilter:{
-
-            field:{
-              fieldPath:
-              "uid"
-            },
-
-            op:
-            "EQUAL",
-
-            value:{
-              stringValue:
-              uid
-            }
-
-          }
-
-        },
-
-        limit:50
-
-      }
-
-    };
-
-
-    const response =
-    await fetch(
-      queryURL,
-      {
-
-        method:
-        "POST",
-
-        headers:{
-
-          Authorization:
-          "Bearer " + token,
-
-          "Content-Type":
-          "application/json"
-
-        },
-
-        body:
-        JSON.stringify(
-          queryBody
-        )
-
-      }
+    sessionStorage.setItem(
+      "crockcell_chat_target",
+      JSON.stringify(
+        target
+      )
     );
 
-
-    if(!response.ok){
-
-      postsBox.innerHTML =
-      `<div class="empty">
-        No posts yet
-      </div>`;
-
-      return;
-
-    }
-
-
-    const rows =
-    await response.json();
-
-
-    const posts =
-    rows.filter(
-      row =>
-      row.document
-    );
-
-
-    document.getElementById(
-      "postCount"
-    ).textContent =
-    posts.length;
-
-
-    postsBox.innerHTML =
-    "";
-
-
-    if(!posts.length){
-
-      postsBox.innerHTML =
-      `<div class="empty">
-        No posts yet
-      </div>`;
-
-      return;
-
-    }
-
-
-    posts.forEach(
-      row => {
-
-        const f =
-        row.document.fields ||
-        {};
-
-
-        const imageURL =
-        f.imageURL?.stringValue ||
-        f.image?.stringValue ||
-        "";
-
-
-        if(!imageURL)
-          return;
-
-
-        const post =
-        document.createElement(
-          "div"
-        );
-
-        post.className =
-        "post";
-
-
-        const img =
-        document.createElement(
-          "img"
-        );
-
-        img.src =
-        imageURL;
-
-        img.loading =
-        "lazy";
-
-
-        post.appendChild(
-          img
-        );
-
-
-        postsBox.appendChild(
-          post
-        );
-
-      }
-    );
-
-
-  }catch(error){
+  }
+  catch(error){
 
     console.error(
-      "Posts error:",
       error
     );
 
-
-    postsBox.innerHTML =
-    `<div class="empty">
-      No posts yet
-    </div>`;
-
   }
+
+
+  /*
+    URL me bhi target UID bhej rahe hain.
+    Dono methods rakhe gaye hain.
+  */
+
+  const url =
+    "messages.html" +
+    "?uid=" +
+    encodeURIComponent(
+      target.uid
+    ) +
+    "&username=" +
+    encodeURIComponent(
+      target.username
+    ) +
+    "&name=" +
+    encodeURIComponent(
+      target.name
+    );
+
+
+  window.location.assign(
+    url
+  );
 
 }
 
 
 /* =========================
-   PLACEHOLDER PHOTO
+   OWN PROFILE
 ========================= */
+
+function editOwnProfile(){
+
+  window.location.assign(
+    "edit-profile.html"
+  );
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(text){
+
+  return String(text)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    );
+
+}
+
 
 function placeholderPhoto(){
 
@@ -924,10 +635,6 @@ function placeholderPhoto(){
 
 }
 
-
-/* =========================
-   START
-========================= */
 
 loadProfile();
 
