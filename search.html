@@ -62,6 +62,7 @@ body{
   background:#fff;
   color:#000;
   font-size:22px;
+  cursor:pointer;
 }
 
 .message{
@@ -75,12 +76,21 @@ body{
   padding:8px 15px 100px;
 }
 
+/* USER CARD */
+
 .user-card{
   display:flex;
   align-items:center;
   gap:13px;
   padding:14px 5px;
   border-bottom:1px solid #181818;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.user-card:active{
+  background:#111;
+  transform:scale(.985);
 }
 
 .avatar{
@@ -100,21 +110,26 @@ body{
 .name{
   font-size:17px;
   font-weight:bold;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .username{
   margin-top:4px;
   color:#888;
   font-size:14px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-.open-btn{
-  border:0;
-  border-radius:15px;
-  background:#fff;
-  color:#000;
-  padding:9px 14px;
-  font-weight:bold;
+/* ARROW */
+
+.profile-arrow{
+  color:#777;
+  font-size:25px;
+  padding:8px;
 }
 
 .empty{
@@ -165,6 +180,7 @@ body{
 
 <body>
 
+
 <div class="header">
 
   <div class="title">
@@ -183,8 +199,9 @@ body{
     >
 
     <button
+      id="searchButton"
       class="search-btn"
-      onclick="searchUsers()"
+      type="button"
     >
       ⌕
     </button>
@@ -193,7 +210,9 @@ body{
 
 </div>
 
+
 <div id="message" class="message"></div>
+
 
 <div id="results" class="results">
 
@@ -203,6 +222,8 @@ body{
 
 </div>
 
+
+<!-- BOTTOM NAV -->
 
 <div class="bottom-nav">
 
@@ -295,6 +316,11 @@ document.getElementById(
   "searchInput"
 );
 
+const searchButton =
+document.getElementById(
+  "searchButton"
+);
+
 const results =
 document.getElementById(
   "results"
@@ -306,7 +332,7 @@ document.getElementById(
 );
 
 
-let searchTimer=null;
+let searchTimer = null;
 
 
 /* =========================
@@ -332,7 +358,7 @@ searchInput.addEventListener(
         Username ya alphabet type karo
       </div>`;
 
-      message.textContent="";
+      message.textContent = "";
 
       return;
 
@@ -350,7 +376,17 @@ searchInput.addEventListener(
 
 
 /* =========================
-   SEARCH
+   SEARCH BUTTON
+========================= */
+
+searchButton.addEventListener(
+  "click",
+  searchUsers
+);
+
+
+/* =========================
+   SEARCH USERS
 ========================= */
 
 async function searchUsers(){
@@ -361,7 +397,11 @@ async function searchUsers(){
     .toLowerCase();
 
 
-  if(!text)return;
+  if(!text){
+
+    return;
+
+  }
 
 
   message.textContent =
@@ -388,35 +428,44 @@ async function searchUsers(){
     API_KEY;
 
 
-    const body={
+    const body = {
 
-      structuredQuery:{
+      structuredQuery: {
 
-        from:[
+        from: [
+
           {
             collectionId:"users"
           }
+
         ],
 
-        where:{
+        where: {
 
-          compositeFilter:{
+          compositeFilter: {
 
             op:"AND",
 
-            filters:[
+            filters: [
 
               {
-                fieldFilter:{
 
-                  field:{
+                fieldFilter: {
+
+                  field: {
+
                     fieldPath:"username"
+
                   },
 
-                  op:"GREATER_THAN_OR_EQUAL",
+                  op:
+                  "GREATER_THAN_OR_EQUAL",
 
-                  value:{
-                    stringValue:text
+                  value: {
+
+                    stringValue:
+                    text
+
                   }
 
                 }
@@ -424,16 +473,22 @@ async function searchUsers(){
               },
 
               {
-                fieldFilter:{
 
-                  field:{
+                fieldFilter: {
+
+                  field: {
+
                     fieldPath:"username"
+
                   },
 
                   op:"LESS_THAN",
 
-                  value:{
-                    stringValue:endText
+                  value: {
+
+                    stringValue:
+                    endText
+
                   }
 
                 }
@@ -446,14 +501,19 @@ async function searchUsers(){
 
         },
 
-        orderBy:[
+        orderBy: [
 
           {
-            field:{
+
+            field: {
+
               fieldPath:"username"
+
             },
 
-            direction:"ASCENDING"
+            direction:
+            "ASCENDING"
+
           }
 
         ],
@@ -472,10 +532,10 @@ async function searchUsers(){
 
         method:"POST",
 
-        headers:{
+        headers: {
 
           Authorization:
-          "Bearer "+token,
+          "Bearer " + token,
 
           "Content-Type":
           "application/json"
@@ -502,12 +562,16 @@ async function searchUsers(){
     await response.json();
 
 
-    const users=[];
+    const users = [];
 
 
-    rows.forEach(row=>{
+    rows.forEach(row => {
 
-      if(!row.document)return;
+      if(!row.document){
+
+        return;
+
+      }
 
 
       const f =
@@ -530,7 +594,9 @@ async function searchUsers(){
       }
 
 
-      if(foundUID===uid){
+      /* CURRENT USER HIDE */
+
+      if(foundUID === uid){
 
         return;
 
@@ -539,9 +605,11 @@ async function searchUsers(){
 
       users.push({
 
-        uid:foundUID,
+        uid:
+        foundUID,
 
-        username:foundUsername,
+        username:
+        foundUsername,
 
         name:
         f.name?.stringValue ||
@@ -559,12 +627,18 @@ async function searchUsers(){
     renderUsers(users);
 
 
-  }catch(error){
+  }
+  catch(error){
 
-    console.error(error);
+    console.error(
+      "Search error:",
+      error
+    );
+
 
     message.textContent =
     "Search failed.";
+
 
     results.innerHTML =
     `<div class="empty">
@@ -577,18 +651,19 @@ async function searchUsers(){
 
 
 /* =========================
-   SHOW RESULTS
+   RENDER USERS
 ========================= */
 
 function renderUsers(users){
 
-  results.innerHTML="";
+  results.innerHTML = "";
 
 
   if(!users.length){
 
     message.textContent =
     "No users found.";
+
 
     results.innerHTML =
     `<div class="empty">
@@ -601,27 +676,31 @@ function renderUsers(users){
 
 
   message.textContent =
-  users.length+" users found";
+  users.length +
+  " users found";
 
 
-  users.forEach(user=>{
+  users.forEach(user => {
 
     const card =
     document.createElement(
       "div"
     );
 
-    card.className=
+
+    card.className =
     "user-card";
 
 
-    card.innerHTML=`
+    card.innerHTML = `
 
       <img
         class="avatar"
         src="${
-          user.photoURL ||
-          placeholderPhoto()
+          escapeAttribute(
+            user.photoURL ||
+            placeholderPhoto()
+          )
         }"
         alt=""
       >
@@ -629,35 +708,47 @@ function renderUsers(users){
       <div class="user-info">
 
         <div class="name">
-          ${escapeHTML(user.name)}
+          ${escapeHTML(
+            user.name
+          )}
         </div>
 
         <div class="username">
-          @${escapeHTML(user.username)}
+          @${escapeHTML(
+            user.username
+          )}
         </div>
 
       </div>
 
-      <button
-        class="open-btn"
-        type="button"
-      >
-        Open
-      </button>
+      <div class="profile-arrow">
+        ›
+      </div>
 
     `;
 
 
-    card
-      .querySelector(".open-btn")
-      .onclick=function(){
+    /*
+      IMPORTANT:
+
+      Ab button nahi hai.
+
+      Pura profile card clickable hai.
+    */
+
+    card.addEventListener(
+      "click",
+      function(){
 
         openProfile(user);
 
-      };
+      }
+    );
 
 
-    results.appendChild(card);
+    results.appendChild(
+      card
+    );
 
   });
 
@@ -666,34 +757,90 @@ function renderUsers(users){
 
 /* =========================
    OPEN PROFILE
-   CACHE BUSTER ADDED
 ========================= */
 
 function openProfile(user){
 
+  /*
+    Target profile ko session me bhi save
+    kar rahe hain.
+
+    Isse Profile → Message flow me
+    target UID available rahega.
+  */
+
+  const targetProfile = {
+
+    uid:
+    user.uid,
+
+    username:
+    user.username,
+
+    name:
+    user.name,
+
+    photoURL:
+    user.photoURL || ""
+
+  };
+
+
+  try{
+
+    sessionStorage.setItem(
+      "crockcell_profile_target",
+      JSON.stringify(
+        targetProfile
+      )
+    );
+
+  }
+  catch(error){
+
+    console.log(
+      "Session save skipped"
+    );
+
+  }
+
+
   const url =
     "profile.html" +
     "?uid=" +
-    encodeURIComponent(user.uid) +
+    encodeURIComponent(
+      user.uid
+    ) +
     "&username=" +
-    encodeURIComponent(user.username) +
+    encodeURIComponent(
+      user.username
+    ) +
+    "&name=" +
+    encodeURIComponent(
+      user.name || user.username
+    ) +
     "&v=" +
     Date.now();
 
-  window.location.assign(url);
+
+  window.location.assign(
+    url
+  );
 
 }
 
 
 /* =========================
-   ENTER
+   ENTER SEARCH
 ========================= */
 
 searchInput.addEventListener(
   "keydown",
   function(e){
 
-    if(e.key==="Enter"){
+    if(e.key === "Enter"){
+
+      e.preventDefault();
 
       searchUsers();
 
@@ -704,25 +851,75 @@ searchInput.addEventListener(
 
 
 /* =========================
-   HELPERS
+   HTML ESCAPE
 ========================= */
 
 function escapeHTML(text){
 
   return String(text)
 
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
+function escapeAttribute(text){
+
+  return String(text)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    );
+
+}
+
+
+/* =========================
+   PLACEHOLDER PHOTO
+========================= */
+
 function placeholderPhoto(){
 
-  return "data:image/svg+xml,"+
+  return "data:image/svg+xml," +
 
   "<svg xmlns='http://www.w3.org/2000/svg' " +
 
