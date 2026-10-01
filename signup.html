@@ -1,352 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CROCKCELL - Sign Up</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CROCKCELL - Sign Up</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+    }
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
+    body{
+      min-height:100vh;
+      background:#000;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
 
-body{
-  min-height:100vh;
-  background:#fafafa;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
+    .box{
+      width:100%;
+      max-width:420px;
+      text-align:center;
+    }
 
-.box{
-  width:100%;
-  max-width:410px;
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:28px 22px;
-}
+    .logo{
+      font-size:40px;
+      font-weight:800;
+      letter-spacing:2px;
+      margin-bottom:8px;
+    }
 
-h1{
-  text-align:center;
-  font-size:30px;
-  margin-bottom:7px;
-}
+    .tagline{
+      color:#aaa;
+      font-size:14px;
+      margin-bottom:25px;
+    }
 
-.sub{
-  text-align:center;
-  color:#777;
-  margin-bottom:22px;
-}
+    .input-box{
+      position:relative;
+      margin-bottom:13px;
+    }
 
-input{
-  width:100%;
-  padding:13px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  font-size:16px;
-  margin-bottom:12px;
-  outline:none;
-}
+    input{
+      width:100%;
+      padding:15px;
+      padding-right:55px;
+      border:1px solid #333;
+      border-radius:12px;
+      background:#111;
+      color:#fff;
+      font-size:16px;
+      outline:none;
+    }
 
-input:focus{
-  border-color:#555;
-}
+    input:focus{
+      border-color:#777;
+    }
 
-.usernameNote{
-  color:#777;
-  font-size:12px;
-  margin-top:-7px;
-  margin-bottom:12px;
-}
+    .toggle{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      color:#aaa;
+      cursor:pointer;
+      padding:8px;
+    }
 
-.passwordBox{
-  position:relative;
-  margin-bottom:12px;
-}
+    .otp-row{
+      display:flex;
+      gap:8px;
+    }
 
-.passwordBox input{
-  margin-bottom:0;
-  padding-right:75px;
-}
+    .otp-row input{
+      flex:1;
+      min-width:0;
+    }
 
-.showBtn{
-  position:absolute;
-  right:7px;
-  top:7px;
-  border:0;
-  background:#eee;
-  padding:7px 11px;
-  border-radius:6px;
-}
+    .small-btn{
+      width:125px;
+      border:none;
+      border-radius:12px;
+      background:#222;
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+    }
 
-.phoneRow{
-  display:flex;
-  gap:8px;
-}
+    .small-btn:disabled{
+      opacity:.5;
+    }
 
-.phoneRow input{
-  flex:1;
-}
+    .main-btn{
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      background:#fff;
+      color:#000;
+      font-size:17px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:5px;
+    }
 
-.otpBtn{
-  border:0;
-  border-radius:8px;
-  background:#000;
-  color:#fff;
-  padding:0 13px;
-  font-size:14px;
-}
+    .main-btn:disabled{
+      opacity:.5;
+    }
 
-.verifyBtn,
-.createBtn{
-  width:100%;
-  border:0;
-  border-radius:8px;
-  padding:13px;
-  font-size:16px;
-}
+    .message{
+      min-height:22px;
+      margin-top:15px;
+      font-size:14px;
+      color:#ff7777;
+    }
 
-.verifyBtn{
-  background:#16852a;
-  color:#fff;
-  margin-top:8px;
-}
+    .login{
+      margin-top:20px;
+      color:#aaa;
+      font-size:14px;
+    }
 
-.createBtn{
-  background:#000;
-  color:#fff;
-  margin-top:12px;
-}
+    .login a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
 
-.status{
-  min-height:22px;
-  text-align:center;
-  margin:13px 0;
-  font-size:14px;
-}
-
-.ok{
-  color:green;
-  font-weight:bold;
-}
-
-.error{
-  color:#d00000;
-}
-
-.note{
-  color:#777;
-  font-size:12px;
-  margin-top:-7px;
-  margin-bottom:12px;
-}
-
-#recaptcha-container{
-  display:flex;
-  justify-content:center;
-  margin:8px 0;
-}
-
-.back{
-  display:block;
-  text-align:center;
-  margin-top:18px;
-  color:#333;
-  text-decoration:none;
-}
-</style>
+    #recaptcha-container{
+      margin:12px 0;
+      display:flex;
+      justify-content:center;
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="box">
 
-<h1>CROCKCELL</h1>
+  <div class="logo">CROCKCELL</div>
 
-<div class="sub">
-Create your account
-</div>
+  <div class="tagline">
+    Create your account
+  </div>
 
+  <form id="signupForm">
 
-<input
-  id="name"
-  type="text"
-  maxlength="50"
-  placeholder="Full Name"
->
+    <div class="input-box">
+      <input
+        type="text"
+        id="name"
+        placeholder="Full Name"
+        autocomplete="name"
+        required
+      >
+    </div>
 
+    <div class="input-box">
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+        autocomplete="username"
+        required
+      >
+    </div>
 
-<input
-  id="username"
-  type="text"
-  maxlength="30"
-  autocomplete="username"
-  placeholder="Username"
->
+    <div class="input-box">
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        autocomplete="email"
+        required
+      >
+    </div>
 
-<div class="usernameNote">
-Username me sirf a-z, 0-9 aur _ use karo.
-</div>
+    <div class="input-box">
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="new-password"
+        required
+      >
 
+      <button
+        type="button"
+        class="toggle"
+        id="togglePassword"
+      >
+        Show
+      </button>
+    </div>
 
-<input
-  id="email"
-  type="email"
-  autocomplete="email"
-  placeholder="Email"
->
+    <div class="input-box">
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Mobile Number (+91XXXXXXXXXX)"
+        autocomplete="tel"
+        required
+      >
+    </div>
 
+    <div class="otp-row">
 
-<div class="passwordBox">
+      <input
+        type="text"
+        id="otp"
+        placeholder="OTP"
+        inputmode="numeric"
+        maxlength="6"
+      >
 
-<input
-  id="password"
-  type="password"
-  autocomplete="new-password"
-  placeholder="Password"
->
+      <button
+        type="button"
+        class="small-btn"
+        id="sendOtp"
+      >
+        Send OTP
+      </button>
 
-<button
-  type="button"
-  class="showBtn"
-  id="showPassword">
-Show
-</button>
+    </div>
 
-</div>
+    <div id="recaptcha-container"></div>
 
+    <button
+      type="button"
+      class="main-btn"
+      id="verifyOtp"
+    >
+      Verify Mobile
+    </button>
 
-<div class="phoneRow">
+    <button
+      type="submit"
+      class="main-btn"
+      id="createAccount"
+      style="margin-top:12px;"
+    >
+      Create Account
+    </button>
 
-<input
-  id="phone"
-  type="tel"
-  inputmode="tel"
-  placeholder="Mobile Number"
->
+  </form>
 
-<button
-  type="button"
-  class="otpBtn"
-  id="sendOtp">
-Send OTP
-</button>
+  <div class="message" id="message"></div>
 
-</div>
-
-<div class="note">
-India number enter karo, jaise 9876543210
-</div>
-
-
-<div id="recaptcha-container"></div>
-
-
-<input
-  id="otp"
-  type="text"
-  inputmode="numeric"
-  maxlength="6"
-  placeholder="6 digit OTP"
->
-
-
-<button
-  type="button"
-  class="verifyBtn"
-  id="verifyOtp">
-Verify Mobile
-</button>
-
-
-<div
-  id="status"
-  class="status">
-</div>
-
-
-<button
-  type="button"
-  class="createBtn"
-  id="createAccount">
-Create Account
-</button>
-
-
-<a
-  class="back"
-  href="index.html">
-Already have an account? Login
-</a>
+  <div class="login">
+    Already have an account?
+    <a href="index.html">Login</a>
+  </div>
 
 </div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 
 
 <script>
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
 const firebaseConfig = {
 
-  apiKey:
-    "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk",
+  apiKey:"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk",
 
-  authDomain:
-    "crockcell-cd2e6.firebaseapp.com",
+  authDomain:"crockcell-cd2e6.firebaseapp.com",
 
-  projectId:
-    "crockcell-cd2e6",
+  projectId:"crockcell-cd2e6",
 
-  storageBucket:
-    "crockcell-cd2e6.firebasestorage.app",
+  storageBucket:"crockcell-cd2e6.firebasestorage.app",
 
-  messagingSenderId:
-    "272223260943",
+  messagingSenderId:"272223260943",
 
-  appId:
-    "1:272223260943:web:14db9eda3a5ba4b137ae7a",
+  appId:"1:272223260943:web:14db9eda3a5ba4b137ae7a",
 
-  measurementId:
-    "G-GG36JYC0DX"
+  measurementId:"G-GG36JYC0DX"
 
 };
 
 
-firebase.initializeApp(
-  firebaseConfig
-);
+firebase.initializeApp(firebaseConfig);
 
-
-const auth =
-  firebase.auth();
+const auth = firebase.auth();
 
 
 const API_KEY =
-  firebaseConfig.apiKey;
+  "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
+const PROJECT_ID =
+  "crockcell-cd2e6";
 
-/* =========================
-   VARIABLES
-========================= */
-
-let confirmationResult = null;
-
-let verifiedPhone = false;
-
-
-/* =========================
-   ELEMENTS
-========================= */
 
 const nameInput =
   document.getElementById("name");
@@ -366,351 +319,135 @@ const phoneInput =
 const otpInput =
   document.getElementById("otp");
 
-const statusBox =
-  document.getElementById("status");
-
-const sendOtpButton =
+const sendOtp =
   document.getElementById("sendOtp");
 
-const verifyOtpButton =
+const verifyOtp =
   document.getElementById("verifyOtp");
 
-const createAccountButton =
+const createAccount =
   document.getElementById("createAccount");
 
-const showPasswordButton =
-  document.getElementById("showPassword");
+const togglePassword =
+  document.getElementById("togglePassword");
+
+const message =
+  document.getElementById("message");
 
 
-/* =========================
-   SHOW / HIDE PASSWORD
-========================= */
+let confirmationResult = null;
 
-showPasswordButton.addEventListener(
-  "click",
-  function(){
+let phoneVerified = false;
 
-    if(
-      passwordInput.type === "password"
-    ){
+let recaptchaVerifier = null;
 
-      passwordInput.type = "text";
 
-      showPasswordButton.textContent =
-        "Hide";
+/* PASSWORD SHOW / HIDE */
 
-    }else{
+togglePassword.addEventListener("click",function(){
 
-      passwordInput.type = "password";
+  if(passwordInput.type === "password"){
 
-      showPasswordButton.textContent =
-        "Show";
+    passwordInput.type = "text";
 
-    }
+    togglePassword.textContent = "Hide";
+
+  }else{
+
+    passwordInput.type = "password";
+
+    togglePassword.textContent = "Show";
 
   }
-);
+
+});
 
 
-/* =========================
-   STATUS
-========================= */
+/* MESSAGE */
 
-function showStatus(
-  message,
-  type=""
-){
+function showMessage(text,color="#ff7777"){
 
-  statusBox.textContent =
-    message;
+  message.style.color = color;
 
-  statusBox.className =
-    "status " + type;
+  message.textContent = text;
 
 }
 
 
-/* =========================
-   USERNAME
-========================= */
+/* USERNAME CHECK */
 
-function getUsername(){
-
-  let username =
-    usernameInput.value
-      .trim()
-      .toLowerCase();
-
-  /*
-    Username rules:
-
-    3-30 characters
-    a-z
-    0-9
-    underscore
-  */
-
-  if(
-    !/^[a-z0-9_]{3,30}$/.test(username)
-  ){
-
-    return null;
-
-  }
-
-  return username;
-
-}
-
-
-/* =========================
-   PHONE FORMAT
-========================= */
-
-function getPhone(){
-
-  let phone =
-    phoneInput.value.trim();
-
-  phone =
-    phone.replace(/\s+/g,"");
-
-
-  if(phone.startsWith("+91")){
-
-    phone =
-      phone.substring(3);
-
-  }
-
-
-  if(
-    phone.startsWith("91") &&
-    phone.length === 12
-  ){
-
-    phone =
-      phone.substring(2);
-
-  }
-
-
-  if(
-    !/^[6-9][0-9]{9}$/.test(phone)
-  ){
-
-    return null;
-
-  }
-
-
-  return "+91" + phone;
-
-}
-
-
-/* =========================
-   FIRESTORE COLLECTION URL
-========================= */
-
-function firestoreCollection(
-  collection
-){
-
-  return (
-    "https://firestore.googleapis.com/v1/projects/"
-    +
-    firebaseConfig.projectId
-    +
-    "/databases/(default)/documents/"
-    +
-    collection
-  );
-
-}
-
-
-/* =========================
-   CHECK USERNAME
-========================= */
-
-async function checkUsernameExists(
-  username,
-  idToken
-){
-
-  /*
-    usernameIndex document ID itself
-    username hai.
-
-    Example:
-
-    usernameIndex/krishna123
-  */
+async function usernameExists(username){
 
   const url =
-    firestoreCollection(
-      "usernameIndex"
-    )
-    +
-    "/"
-    +
-    encodeURIComponent(username);
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/usernameIndex/" +
+    encodeURIComponent(username) +
+    "?key=" +
+    API_KEY;
 
 
   const response =
-    await fetch(
-      url,
-      {
-        headers:{
-          "Authorization":
-            "Bearer " + idToken
-        }
-      }
-    );
+    await fetch(url);
 
 
-  return response.ok;
+  if(response.status === 404){
 
-}
+    return false;
 
-
-/* =========================
-   CREATE USERNAME INDEX
-========================= */
-
-async function createUsernameIndex(
-  username,
-  uid,
-  idToken
-){
-
-  const url =
-    firestoreCollection(
-      "usernameIndex"
-    )
-    +
-    "/"
-    +
-    encodeURIComponent(username);
-
-
-  const response =
-    await fetch(
-      url,
-      {
-        method:"PATCH",
-
-        headers:{
-          "Authorization":
-            "Bearer " + idToken,
-
-          "Content-Type":
-            "application/json"
-        },
-
-        body:JSON.stringify({
-
-          fields:{
-
-            username:{
-              stringValue:
-                username
-            },
-
-            uid:{
-              stringValue:
-                uid
-            },
-
-            createdAt:{
-              timestampValue:
-                new Date().toISOString()
-            }
-
-          }
-
-        })
-      }
-    );
+  }
 
 
   if(!response.ok){
 
-    const error =
-      await response.text();
-
-    console.error(
-      "USERNAME INDEX ERROR",
-      error
-    );
-
     throw new Error(
-      "Username save nahi hua."
+      "Username check nahi ho pa raha."
     );
 
   }
 
+
+  return true;
+
 }
 
 
-/* =========================
-   CREATE RECAPTCHA
-========================= */
+/* CREATE RECAPTCHA */
 
-function createRecaptcha(){
+function setupRecaptcha(){
 
-  return new firebase.auth.RecaptchaVerifier(
+  if(recaptchaVerifier){
 
-    "recaptcha-container",
+    return;
 
-    {
+  }
 
-      size:"normal",
 
-      callback:function(){
-
-        console.log(
-          "reCAPTCHA completed"
-        );
-
-      },
-
-      "expired-callback":function(){
-
-        showStatus(
-          "reCAPTCHA expire ho gaya. Dobara OTP bhejo.",
-          "error"
-        );
-
+  recaptchaVerifier =
+    new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size:"normal"
       }
-
-    },
-
-    auth
-
-  );
+    );
 
 }
 
 
-/* =========================
-   SEND OTP
-========================= */
+/* SEND OTP */
 
-sendOtpButton.addEventListener(
-  "click",
-  async function(){
+sendOtp.addEventListener("click",async function(){
 
-    const phone =
-      getPhone();
+  try{
+
+    let phone =
+      phoneInput.value.trim();
 
 
     if(!phone){
 
-      showStatus(
-        "Valid 10 digit Indian mobile number enter karo.",
-        "error"
+      showMessage(
+        "Mobile number enter karo."
       );
 
       return;
@@ -718,134 +455,81 @@ sendOtpButton.addEventListener(
     }
 
 
-    try{
+    if(!phone.startsWith("+")){
 
-      sendOtpButton.disabled =
-        true;
-
-
-      showStatus(
-        "reCAPTCHA load ho raha hai..."
-      );
-
-
-      const verifier =
-        createRecaptcha();
-
-
-      await verifier.render();
-
-
-      showStatus(
-        "OTP bheja ja raha hai..."
-      );
-
-
-      confirmationResult =
-        await auth.signInWithPhoneNumber(
-          phone,
-          verifier
-        );
-
-
-      showStatus(
-        "OTP tumhare mobile par bhej diya gaya hai."
-      );
-
-
-    }catch(error){
-
-      console.error(error);
-
-
-      sendOtpButton.disabled =
-        false;
-
-
-      if(
-        error.code ===
-        "auth/invalid-api-key"
-      ){
-
-        showStatus(
-          "Firebase API key Phone Auth ke liye accept nahi ho rahi.",
-          "error"
-        );
-
-      }
-      else if(
-        error.code ===
-        "auth/unauthorized-domain"
-      ){
-
-        showStatus(
-          "Website domain Firebase me authorized nahi hai.",
-          "error"
-        );
-
-      }
-      else if(
-        error.code ===
-        "auth/operation-not-allowed"
-      ){
-
-        showStatus(
-          "Firebase Phone Authentication enabled nahi hai.",
-          "error"
-        );
-
-      }
-      else if(
-        error.code ===
-        "auth/invalid-phone-number"
-      ){
-
-        showStatus(
-          "Mobile number galat hai.",
-          "error"
-        );
-
-      }
-      else if(
-        error.code ===
-        "auth/quota-exceeded"
-      ){
-
-        showStatus(
-          "SMS quota exceed ho gaya.",
-          "error"
-        );
-
-      }
-      else{
-
-        showStatus(
-          "OTP error: " +
-          error.message,
-          "error"
-        );
-
-      }
+      phone =
+        "+91" +
+        phone.replace(/\D/g,"");
 
     }
 
+
+    if(phone.length !== 13){
+
+      showMessage(
+        "Valid Indian mobile number enter karo."
+      );
+
+      return;
+
+    }
+
+
+    sendOtp.disabled = true;
+
+    sendOtp.textContent = "Sending...";
+
+
+    setupRecaptcha();
+
+
+    confirmationResult =
+      await auth.signInWithPhoneNumber(
+        phone,
+        recaptchaVerifier
+      );
+
+
+    showMessage(
+      "OTP bhej diya gaya hai.",
+      "#77ff99"
+    );
+
+
+    sendOtp.textContent =
+      "OTP Sent";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "OTP send nahi ho paya."
+    );
+
+
+    sendOtp.disabled = false;
+
+    sendOtp.textContent =
+      "Send OTP";
+
   }
-);
+
+});
 
 
-/* =========================
-   VERIFY OTP
-========================= */
+/* VERIFY OTP */
 
-verifyOtpButton.addEventListener(
-  "click",
-  async function(){
+verifyOtp.addEventListener("click",async function(){
+
+  try{
 
     if(!confirmationResult){
 
-      showStatus(
-        "Pehle Send OTP dabao.",
-        "error"
+      showMessage(
+        "Pehle Send OTP dabao."
       );
 
       return;
@@ -857,13 +541,10 @@ verifyOtpButton.addEventListener(
       otpInput.value.trim();
 
 
-    if(
-      !/^[0-9]{6}$/.test(code)
-    ){
+    if(code.length !== 6){
 
-      showStatus(
-        "6 digit OTP enter karo.",
-        "error"
+      showMessage(
+        "6 digit OTP enter karo."
       );
 
       return;
@@ -871,113 +552,72 @@ verifyOtpButton.addEventListener(
     }
 
 
-    try{
+    verifyOtp.disabled = true;
 
-      showStatus(
-        "OTP verify ho raha hai..."
-      );
-
-
-      const result =
-        await confirmationResult.confirm(
-          code
-        );
+    verifyOtp.textContent =
+      "Verifying...";
 
 
-      if(!result.user){
-
-        throw new Error(
-          "Firebase user nahi mila."
-        );
-
-      }
+    await confirmationResult.confirm(code);
 
 
-      verifiedPhone =
-        true;
+    phoneVerified = true;
 
 
-      phoneInput.disabled =
-        true;
-
-      otpInput.disabled =
-        true;
-
-      sendOtpButton.disabled =
-        true;
-
-      verifyOtpButton.disabled =
-        true;
+    showMessage(
+      "Mobile number verified!",
+      "#77ff99"
+    );
 
 
-      showStatus(
-        "Mobile number verified ✓",
-        "ok"
-      );
+    verifyOtp.textContent =
+      "Mobile Verified";
 
 
-    }catch(error){
+  }catch(error){
 
-      console.error(error);
+    console.error(error);
+
+    phoneVerified = false;
+
+    verifyOtp.disabled = false;
+
+    verifyOtp.textContent =
+      "Verify Mobile";
 
 
-      if(
-        error.code ===
-        "auth/invalid-verification-code"
-      ){
-
-        showStatus(
-          "OTP galat hai.",
-          "error"
-        );
-
-      }
-      else if(
-        error.code ===
-        "auth/code-expired"
-      ){
-
-        showStatus(
-          "OTP expire ho gaya. Dobara OTP bhejo.",
-          "error"
-        );
-
-      }
-      else{
-
-        showStatus(
-          "OTP verification failed: "
-          +
-          error.message,
-          "error"
-        );
-
-      }
-
-    }
+    showMessage(
+      "OTP galat ya expire ho gaya."
+    );
 
   }
-);
+
+});
 
 
-/* =========================
-   CREATE ACCOUNT
-========================= */
+/* CREATE ACCOUNT */
 
-createAccountButton.addEventListener(
-  "click",
-  async function(){
+document.getElementById("signupForm")
+.addEventListener("submit",async function(e){
+
+  e.preventDefault();
+
+
+  try{
 
     const name =
       nameInput.value.trim();
 
 
     const username =
-      getUsername();
+      usernameInput.value
+      .trim()
+      .toLowerCase();
 
 
     const email =
-      emailInput.value.trim();
+      emailInput.value.trim()
+      .toLowerCase();
 
 
     const password =
@@ -985,440 +625,409 @@ createAccountButton.addEventListener(
 
 
     const phone =
-      getPhone();
+      phoneInput.value.trim();
 
 
-    /* =========================
-       BASIC CHECKS
-    ========================= */
+    /* VALIDATION */
 
-    if(!name){
+    if(name.length < 2){
 
-      showStatus(
-        "Name enter karo.",
-        "error"
+      throw new Error(
+        "Full Name enter karo."
       );
-
-      return;
 
     }
 
 
-    if(!username){
+    if(!/^[a-z0-9_]{3,30}$/.test(username)){
 
-      showStatus(
-        "Username 3-30 characters ka hona chahiye. Sirf a-z, 0-9 aur _ use karo.",
-        "error"
+      throw new Error(
+        "Username 3-30 characters ka ho. Sirf a-z, 0-9 aur _ use karo."
       );
-
-      return;
-
-    }
-
-
-    if(!email){
-
-      showStatus(
-        "Email enter karo.",
-        "error"
-      );
-
-      return;
 
     }
 
 
     if(password.length < 6){
 
-      showStatus(
-        "Password kam se kam 6 characters ka hona chahiye.",
-        "error"
+      throw new Error(
+        "Password kam se kam 6 characters ka hona chahiye."
       );
-
-      return;
 
     }
 
 
-    if(!phone){
+    if(!phoneVerified){
 
-      showStatus(
-        "Valid mobile number enter karo.",
-        "error"
+      throw new Error(
+        "Pehle mobile number verify karo."
       );
-
-      return;
 
     }
 
 
-    if(!verifiedPhone){
+    createAccount.disabled = true;
 
-      showStatus(
-        "Pehle mobile number verify karo.",
-        "error"
+    createAccount.textContent =
+      "Creating Account...";
+
+
+    /* CHECK USERNAME */
+
+    const exists =
+      await usernameExists(username);
+
+
+    if(exists){
+
+      throw new Error(
+        "Ye username already taken hai."
       );
 
-      return;
+    }
+
+
+    /*
+      PHONE USER CURRENTLY LOGGED IN HAI
+      PHONE AUTH KE THROUGH
+    */
+
+    const currentUser =
+      auth.currentUser;
+
+
+    if(!currentUser){
+
+      throw new Error(
+        "Mobile verification session expire ho gaya. Dobara OTP verify karo."
+      );
 
     }
+
+
+    /* LINK EMAIL + PASSWORD */
+
+    const credential =
+      firebase.auth.EmailAuthProvider
+      .credential(
+        email,
+        password
+      );
+
+
+    let linkedUser;
 
 
     try{
-
-      createAccountButton.disabled =
-        true;
-
-
-      showStatus(
-        "Username check ho raha hai..."
-      );
-
-
-      /* =========================
-         CURRENT PHONE USER
-      ========================= */
-
-      const currentUser =
-        auth.currentUser;
-
-
-      if(!currentUser){
-
-        throw new Error(
-          "Verified Firebase user nahi mila. Dobara OTP verify karo."
-        );
-
-      }
-
-
-      /* =========================
-         TEMP TOKEN
-      ========================= */
-
-      const tempToken =
-        await currentUser.getIdToken(
-          true
-        );
-
-
-      /* =========================
-         USERNAME CHECK
-      ========================= */
-
-      const usernameExists =
-        await checkUsernameExists(
-          username,
-          tempToken
-        );
-
-
-      if(usernameExists){
-
-        createAccountButton.disabled =
-          false;
-
-
-        showStatus(
-          "Ye username already taken hai. Dusra username choose karo.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      /* =========================
-         EMAIL + PASSWORD LINK
-      ========================= */
-
-      showStatus(
-        "Account details save ho rahi hain..."
-      );
-
-
-      const credential =
-        firebase.auth.EmailAuthProvider.credential(
-          email,
-          password
-        );
-
 
       const linked =
         await currentUser.linkWithCredential(
           credential
         );
 
-
-      const user =
+      linkedUser =
         linked.user;
-
-
-      const idToken =
-        await user.getIdToken(
-          true
-        );
-
-
-      const refreshToken =
-        user.refreshToken;
-
-
-      const uid =
-        user.uid;
-
-
-      const now =
-        new Date().toISOString();
-
-
-      /* =========================
-         SAVE USER PROFILE
-      ========================= */
-
-      const userURL =
-        firestoreCollection(
-          "users"
-        )
-        +
-        "/"
-        +
-        encodeURIComponent(uid);
-
-
-      const firestoreResponse =
-        await fetch(
-          userURL,
-          {
-            method:"PATCH",
-
-            headers:{
-              "Authorization":
-                "Bearer " + idToken,
-
-              "Content-Type":
-                "application/json"
-            },
-
-            body:JSON.stringify({
-
-              fields:{
-
-                uid:{
-                  stringValue:
-                    uid
-                },
-
-                name:{
-                  stringValue:
-                    name
-                },
-
-                username:{
-                  stringValue:
-                    username
-                },
-
-                email:{
-                  stringValue:
-                    email
-                },
-
-                phoneNumber:{
-                  stringValue:
-                    phone
-                },
-
-                phoneVerified:{
-                  booleanValue:
-                    true
-                },
-
-                photoURL:{
-                  stringValue:
-                    ""
-                },
-
-                bio:{
-                  stringValue:
-                    ""
-                },
-
-                createdAt:{
-                  stringValue:
-                    now
-                },
-
-                updatedAt:{
-                  stringValue:
-                    now
-                }
-
-              }
-
-            })
-
-          }
-        );
-
-
-      if(!firestoreResponse.ok){
-
-        const firestoreError =
-          await firestoreResponse.text();
-
-
-        console.error(
-          "Firestore error:",
-          firestoreError
-        );
-
-
-        throw new Error(
-          "Account ban gaya, lekin profile save nahi hui."
-        );
-
-      }
-
-
-      /* =========================
-         SAVE USERNAME INDEX
-      ========================= */
-
-      await createUsernameIndex(
-        username,
-        uid,
-        idToken
-      );
-
-
-      /* =========================
-         LOCAL STORAGE
-      ========================= */
-
-      localStorage.setItem(
-        "crockcellIdToken",
-        idToken
-      );
-
-
-      localStorage.setItem(
-        "crockcellRefreshToken",
-        refreshToken
-      );
-
-
-      localStorage.setItem(
-        "crockcellUid",
-        uid
-      );
-
-
-      localStorage.setItem(
-        "crockcellProfile",
-        JSON.stringify({
-
-          email:
-            email,
-
-          uid:
-            uid,
-
-          name:
-            name,
-
-          username:
-            username,
-
-          phoneNumber:
-            phone,
-
-          phoneVerified:
-            true
-
-        })
-      );
-
-
-      /* =========================
-         SUCCESS
-      ========================= */
-
-      showStatus(
-        "CROCKCELL account successfully create ho gaya ✓",
-        "ok"
-      );
-
-
-      setTimeout(
-        function(){
-
-          location.href =
-            "home.html";
-
-        },
-        1200
-      );
-
 
     }catch(error){
 
-      console.error(error);
-
-
-      createAccountButton.disabled =
-        false;
-
+      /*
+        Agar email/password already linked
+        ho chuka ho to current user use karo.
+      */
 
       if(
-        error.code ===
-        "auth/email-already-in-use"
-      ){
-
-        showStatus(
-          "Ye email already kisi account me registered hai.",
-          "error"
-        );
-
-      }
-      else if(
         error.code ===
         "auth/provider-already-linked"
       ){
 
-        showStatus(
-          "Email/password already linked hai.",
-          "error"
-        );
+        linkedUser =
+          currentUser;
 
-      }
-      else if(
-        error.code ===
-        "auth/credential-already-in-use"
-      ){
+      }else{
 
-        showStatus(
-          "Ye email kisi dusre Firebase account me use ho raha hai.",
-          "error"
-        );
-
-      }
-      else{
-
-        showStatus(
-          "Signup error: "
-          +
-          error.message,
-          "error"
-        );
+        throw error;
 
       }
 
     }
 
+
+    const uid =
+      linkedUser.uid;
+
+
+    /*
+      USERNAME INDEX
+
+      IMPORTANT:
+      Ab email bhi save ho raha hai.
+      Isse username se login possible hoga.
+    */
+
+    const usernameIndexUrl =
+      "https://firestore.googleapis.com/v1/projects/" +
+      PROJECT_ID +
+      "/databases/(default)/documents/usernameIndex/" +
+      encodeURIComponent(username) +
+      "?key=" +
+      API_KEY;
+
+
+    const usernameIndexBody = {
+
+      fields:{
+
+        username:{
+          stringValue:username
+        },
+
+        uid:{
+          stringValue:uid
+        },
+
+        email:{
+          stringValue:email
+        },
+
+        createdAt:{
+          timestampValue:
+            new Date().toISOString()
+        }
+
+      }
+
+    };
+
+
+    const usernameResponse =
+      await fetch(
+        usernameIndexUrl,
+        {
+          method:"PATCH",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              usernameIndexBody
+            )
+        }
+      );
+
+
+    if(!usernameResponse.ok){
+
+      const errorData =
+        await usernameResponse.json();
+
+      console.error(
+        errorData
+      );
+
+      throw new Error(
+        "Username save nahi ho paya."
+      );
+
+    }
+
+
+    /*
+      GET ID TOKEN
+    */
+
+    const idToken =
+      await linkedUser.getIdToken(true);
+
+
+    const refreshToken =
+      linkedUser.refreshToken;
+
+
+    /*
+      USER PROFILE
+    */
+
+    const profileUrl =
+      "https://firestore.googleapis.com/v1/projects/" +
+      PROJECT_ID +
+      "/databases/(default)/documents/users/" +
+      uid +
+      "?key=" +
+      API_KEY;
+
+
+    const profileBody = {
+
+      fields:{
+
+        uid:{
+          stringValue:uid
+        },
+
+        name:{
+          stringValue:name
+        },
+
+        username:{
+          stringValue:username
+        },
+
+        email:{
+          stringValue:email
+        },
+
+        phoneNumber:{
+          stringValue:phone
+        },
+
+        phoneVerified:{
+          booleanValue:true
+        },
+
+        photoURL:{
+          stringValue:""
+        },
+
+        bio:{
+          stringValue:""
+        },
+
+        createdAt:{
+          timestampValue:
+            new Date().toISOString()
+        },
+
+        updatedAt:{
+          timestampValue:
+            new Date().toISOString()
+        }
+
+      }
+
+    };
+
+
+    const profileResponse =
+      await fetch(
+        profileUrl,
+        {
+          method:"PATCH",
+
+          headers:{
+
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              "Bearer " + idToken
+
+          },
+
+          body:
+            JSON.stringify(
+              profileBody
+            )
+
+        }
+      );
+
+
+    if(!profileResponse.ok){
+
+      console.error(
+        await profileResponse.json()
+      );
+
+      throw new Error(
+        "Profile save nahi ho paya."
+      );
+
+    }
+
+
+    /*
+      SAVE LOGIN INFORMATION
+    */
+
+    localStorage.setItem(
+      "crockcellIdToken",
+      idToken
+    );
+
+
+    localStorage.setItem(
+      "crockcellRefreshToken",
+      refreshToken
+    );
+
+
+    localStorage.setItem(
+      "crockcellUid",
+      uid
+    );
+
+
+    localStorage.setItem(
+
+      "crockcellProfile",
+
+      JSON.stringify({
+
+        uid:uid,
+
+        name:name,
+
+        username:username,
+
+        email:email,
+
+        phoneNumber:phone,
+
+        photoURL:"",
+
+        bio:""
+
+      })
+
+    );
+
+
+    showMessage(
+      "Account created successfully!",
+      "#77ff99"
+    );
+
+
+    setTimeout(function(){
+
+      location.href =
+        "home.html";
+
+    },800);
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      error.message ||
+      "Account create nahi ho paya."
+    );
+
+
+    createAccount.disabled =
+      false;
+
+    createAccount.textContent =
+      "Create Account";
+
   }
-);
+
+});
 
 </script>
 
