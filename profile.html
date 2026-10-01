@@ -21,9 +21,19 @@ body{
   min-height:100vh;
 }
 
+
+/* =========================
+   HEADER
+========================= */
+
 .header{
   padding:22px 18px 15px;
   border-bottom:1px solid #222;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(0,0,0,.95);
+  backdrop-filter:blur(15px);
 }
 
 .title{
@@ -31,8 +41,13 @@ body{
   font-weight:bold;
 }
 
+
+/* =========================
+   PROFILE
+========================= */
+
 .profile{
-  padding:25px 18px 110px;
+  padding:25px 18px 115px;
 }
 
 .top{
@@ -47,21 +62,70 @@ body{
   border-radius:50%;
   object-fit:cover;
   background:#222;
+  flex-shrink:0;
 }
 
 .info{
   flex:1;
+  min-width:0;
 }
 
 .name{
   font-size:22px;
   font-weight:bold;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .username{
   color:#888;
   margin-top:5px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:flex;
+  justify-content:space-around;
+  margin-top:25px;
+  padding:16px 5px;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+}
+
+.stat{
+  flex:1;
+  text-align:center;
+  cursor:pointer;
+  padding:4px;
+}
+
+.stat:active{
+  transform:scale(.97);
+}
+
+.stat-number{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.stat-label{
+  margin-top:5px;
+  color:#888;
+  font-size:13px;
+}
+
+
+/* =========================
+   BIO
+========================= */
 
 .bio{
   margin-top:20px;
@@ -69,28 +133,166 @@ body{
   line-height:1.5;
 }
 
-.message-btn{
-  width:100%;
-  height:48px;
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.actions{
+  display:flex;
+  gap:10px;
   margin-top:22px;
+}
+
+.action-btn{
+  flex:1;
+  height:48px;
   border:0;
   border-radius:17px;
   background:#fff;
   color:#000;
-  font-size:16px;
+  font-size:15px;
   font-weight:bold;
   cursor:pointer;
 }
 
-.message-btn:active{
+.action-btn:active{
   transform:scale(.98);
 }
+
+
+/* FOLLOWING BUTTON */
+
+.following-btn{
+  background:#222;
+  color:#fff;
+  border:1px solid #444;
+}
+
+
+/* =========================
+   STATUS
+========================= */
 
 .status{
   text-align:center;
   color:#777;
   padding:45px 20px;
 }
+
+
+/* =========================
+   LIST MODAL
+========================= */
+
+.list-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+}
+
+.list-box{
+  width:100%;
+  max-height:78vh;
+  background:#111;
+  border-radius:25px 25px 0 0;
+  border:1px solid #333;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px;
+  border-bottom:1px solid #292929;
+}
+
+.list-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.close-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:50%;
+  background:#222;
+  color:#fff;
+  font-size:22px;
+}
+
+.list-content{
+  overflow-y:auto;
+  padding:8px 15px 25px;
+}
+
+.user-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 5px;
+  border-bottom:1px solid #222;
+  cursor:pointer;
+}
+
+.user-row:active{
+  background:#181818;
+}
+
+.user-avatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#222;
+  flex-shrink:0;
+}
+
+.user-details{
+  flex:1;
+  min-width:0;
+}
+
+.user-name{
+  font-size:16px;
+  font-weight:bold;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.user-username{
+  color:#888;
+  font-size:13px;
+  margin-top:4px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.user-arrow{
+  color:#777;
+  font-size:24px;
+}
+
+.list-empty{
+  text-align:center;
+  color:#777;
+  padding:45px 20px;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom-nav{
   position:fixed;
@@ -133,9 +335,23 @@ body{
 
 <body>
 
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <div class="header">
-  <div class="title">Profile</div>
+
+  <div class="title">
+    Profile
+  </div>
+
 </div>
+
+
+<!-- =========================
+     PROFILE AREA
+========================= -->
 
 <div id="profileArea" class="profile">
 
@@ -146,29 +362,95 @@ body{
 </div>
 
 
+<!-- =========================
+     FOLLOWERS / FOLLOWING MODAL
+========================= -->
+
+<div
+  id="listModal"
+  class="list-modal"
+>
+
+  <div class="list-box">
+
+    <div class="list-header">
+
+      <div
+        id="listTitle"
+        class="list-title"
+      >
+        Followers
+      </div>
+
+      <button
+        id="closeList"
+        class="close-btn"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="listContent"
+      class="list-content"
+    >
+
+      <div class="list-empty">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
 <div class="bottom-nav">
 
-  <a class="nav-item" href="home.html">
+  <a
+    class="nav-item"
+    href="home.html"
+  >
     <span class="nav-icon">⌂</span>
     Home
   </a>
 
-  <a class="nav-item" href="search.html">
+  <a
+    class="nav-item"
+    href="search.html"
+  >
     <span class="nav-icon">⌕</span>
     Search
   </a>
 
-  <a class="nav-item" href="reels.html">
+  <a
+    class="nav-item"
+    href="reels.html"
+  >
     <span class="nav-icon">▶</span>
     Reels
   </a>
 
-  <a class="nav-item" href="messages.html">
+  <a
+    class="nav-item"
+    href="messages.html"
+  >
     <span class="nav-icon">♡</span>
     Messages
   </a>
 
-  <a class="nav-item active" href="profile.html">
+  <a
+    class="nav-item active"
+    href="profile.html"
+  >
     <span class="nav-icon">◯</span>
     Profile
   </a>
@@ -177,6 +459,11 @@ body{
 
 
 <script>
+
+
+/* =========================
+   FIREBASE REST CONFIG
+========================= */
 
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
@@ -209,6 +496,7 @@ if(!token){
 
 }
 
+
 if(!currentUID){
 
   currentUID =
@@ -237,19 +525,14 @@ new URLSearchParams(
   window.location.search
 );
 
+
 const requestedUID =
 params.get("uid");
+
 
 const requestedUsername =
 params.get("username");
 
-
-/*
-  Agar UID diya gaya hai to
-  wahi profile open hogi.
-
-  Warna current user.
-*/
 
 const profileUID =
 requestedUID ||
@@ -257,13 +540,44 @@ currentUID;
 
 
 /* =========================
-   ELEMENT
+   ELEMENTS
 ========================= */
 
 const profileArea =
 document.getElementById(
   "profileArea"
 );
+
+const listModal =
+document.getElementById(
+  "listModal"
+);
+
+const listTitle =
+document.getElementById(
+  "listTitle"
+);
+
+const listContent =
+document.getElementById(
+  "listContent"
+);
+
+const closeList =
+document.getElementById(
+  "closeList"
+);
+
+
+/* =========================
+   PROFILE DATA
+========================= */
+
+let currentProfile = null;
+
+let followersUsers = [];
+
+let followingUsers = [];
 
 
 /* =========================
@@ -278,7 +592,9 @@ async function loadProfile(){
     "https://firestore.googleapis.com/v1/projects/" +
     PROJECT_ID +
     "/databases/(default)/documents/users/" +
-    encodeURIComponent(profileUID) +
+    encodeURIComponent(
+      profileUID
+    ) +
     "?key=" +
     API_KEY;
 
@@ -287,10 +603,14 @@ async function loadProfile(){
     await fetch(
       url,
       {
+
         headers:{
+
           Authorization:
           "Bearer " + token
+
         }
+
       }
     );
 
@@ -312,7 +632,7 @@ async function loadProfile(){
     data.fields || {};
 
 
-    const profile = {
+    currentProfile = {
 
       uid:
       profileUID,
@@ -338,9 +658,7 @@ async function loadProfile(){
     };
 
 
-    renderProfile(
-      profile
-    );
+    await renderProfile();
 
 
   }
@@ -365,13 +683,48 @@ async function loadProfile(){
 
 
 /* =========================
-   RENDER
+   RENDER PROFILE
 ========================= */
 
-function renderProfile(profile){
+async function renderProfile(){
+
+  if(!currentProfile){
+
+    return;
+
+  }
+
 
   const isOwn =
-  profile.uid === currentUID;
+  currentProfile.uid === currentUID;
+
+
+  /*
+    Followers / following count
+  */
+
+  const counts =
+  await getFollowCounts(
+    currentProfile.uid
+  );
+
+
+  /*
+    Follow status
+  */
+
+  let isFollowing = false;
+
+
+  if(!isOwn){
+
+    isFollowing =
+    await checkFollowing(
+      currentUID,
+      currentProfile.uid
+    );
+
+  }
 
 
   profileArea.innerHTML = `
@@ -383,24 +736,25 @@ function renderProfile(profile){
         class="photo"
         src="${
           escapeAttribute(
-            profile.photoURL ||
+            currentProfile.photoURL ||
             placeholderPhoto()
           )
         }"
         alt=""
       >
 
+
       <div class="info">
 
         <div class="name">
           ${escapeHTML(
-            profile.name
+            currentProfile.name
           )}
         </div>
 
         <div class="username">
           @${escapeHTML(
-            profile.username
+            currentProfile.username
           )}
         </div>
 
@@ -409,42 +763,229 @@ function renderProfile(profile){
     </div>
 
 
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div
+        class="stat"
+        id="followersStat"
+      >
+
+        <div
+          id="followersCount"
+          class="stat-number"
+        >
+          ${counts.followers}
+        </div>
+
+        <div class="stat-label">
+          Followers
+        </div>
+
+      </div>
+
+
+      <div
+        class="stat"
+        id="followingStat"
+      >
+
+        <div
+          id="followingCount"
+          class="stat-number"
+        >
+          ${counts.following}
+        </div>
+
+        <div class="stat-label">
+          Following
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="postsCount"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Posts
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- BIO -->
+
     <div class="bio">
+
       ${escapeHTML(
-        profile.bio ||
+        currentProfile.bio ||
         "No bio yet."
       )}
+
     </div>
+
+
+    <!-- ACTIONS -->
 
     ${
       isOwn
 
       ?
 
-      `<button
-        class="message-btn"
-        type="button"
-        onclick="editOwnProfile()"
-      >
-        Edit Profile
-      </button>`
+      `
+        <div class="actions">
+
+          <button
+            class="action-btn"
+            type="button"
+            id="editProfileButton"
+          >
+            Edit Profile
+          </button>
+
+        </div>
+      `
 
       :
 
-      `<button
-        id="messageButton"
-        class="message-btn"
-        type="button"
-      >
-        Message
-      </button>`
+      `
+        <div class="actions">
+
+          <button
+            id="followButton"
+            class="
+              action-btn
+              ${
+                isFollowing
+                ?
+                "following-btn"
+                :
+                ""
+              }
+            "
+            type="button"
+          >
+            ${
+              isFollowing
+              ?
+              "Following"
+              :
+              "Follow"
+            }
+          </button>
+
+
+          <button
+            id="messageButton"
+            class="action-btn"
+            type="button"
+          >
+            Message
+          </button>
+
+        </div>
+      `
 
     }
 
   `;
 
 
+  /* =========================
+     FOLLOWERS CLICK
+  ========================= */
+
+  document
+    .getElementById(
+      "followersStat"
+    )
+    .addEventListener(
+      "click",
+      function(){
+
+        openUserList(
+          "Followers"
+        );
+
+      }
+    );
+
+
+  /* =========================
+     FOLLOWING CLICK
+  ========================= */
+
+  document
+    .getElementById(
+      "followingStat"
+    )
+    .addEventListener(
+      "click",
+      function(){
+
+        openUserList(
+          "Following"
+        );
+
+      }
+    );
+
+
+  /* =========================
+     OWN PROFILE
+  ========================= */
+
+  if(isOwn){
+
+    document
+      .getElementById(
+        "editProfileButton"
+      )
+      .addEventListener(
+        "click",
+        function(){
+
+          window.location.assign(
+            "edit-profile.html"
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =========================
+     OTHER USER
+  ========================= */
+
   if(!isOwn){
+
+    const followButton =
+    document.getElementById(
+      "followButton"
+    );
+
+
+    followButton.addEventListener(
+      "click",
+      function(){
+
+        toggleFollow();
+
+      }
+    );
+
 
     const messageButton =
     document.getElementById(
@@ -452,12 +993,334 @@ function renderProfile(profile){
     );
 
 
-    messageButton.onclick =
-    function(){
+    messageButton.addEventListener(
+      "click",
+      function(){
 
-      openMessage(
-        profile
+        openMessage(
+          currentProfile
+        );
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================
+   FOLLOW DOCUMENT ID
+========================= */
+
+function followDocumentID(
+  followerID,
+  followingID
+){
+
+  return (
+    followerID +
+    "_" +
+    followingID
+  );
+
+}
+
+
+/* =========================
+   CHECK FOLLOWING
+========================= */
+
+async function checkFollowing(
+  followerID,
+  followingID
+){
+
+  try{
+
+    const documentID =
+    followDocumentID(
+      followerID,
+      followingID
+    );
+
+
+    const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/follows/" +
+    encodeURIComponent(
+      documentID
+    ) +
+    "?key=" +
+    API_KEY;
+
+
+    const response =
+    await fetch(
+      url,
+      {
+
+        headers:{
+
+          Authorization:
+          "Bearer " + token
+
+        }
+
+      }
+    );
+
+
+    return response.ok;
+
+  }
+  catch(error){
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================
+   TOGGLE FOLLOW
+========================= */
+
+async function toggleFollow(){
+
+  if(!currentProfile){
+
+    return;
+
+  }
+
+
+  if(
+    currentProfile.uid ===
+    currentUID
+  ){
+
+    return;
+
+  }
+
+
+  const button =
+  document.getElementById(
+    "followButton"
+  );
+
+
+  button.disabled = true;
+
+
+  const currentlyFollowing =
+  await checkFollowing(
+    currentUID,
+    currentProfile.uid
+  );
+
+
+  try{
+
+    const documentID =
+    followDocumentID(
+      currentUID,
+      currentProfile.uid
+    );
+
+
+    const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/follows/" +
+    encodeURIComponent(
+      documentID
+    ) +
+    "?key=" +
+    API_KEY;
+
+
+    if(currentlyFollowing){
+
+      /*
+        UNFOLLOW
+      */
+
+      const response =
+      await fetch(
+        url,
+        {
+
+          method:"DELETE",
+
+          headers:{
+
+            Authorization:
+            "Bearer " + token
+
+          }
+
+        }
       );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "UNFOLLOW_FAILED"
+        );
+
+      }
+
+    }
+    else{
+
+      /*
+        FOLLOW
+      */
+
+      const body = {
+
+        fields:{
+
+          followerId:{
+
+            stringValue:
+            currentUID
+
+          },
+
+          followingId:{
+
+            stringValue:
+            currentProfile.uid
+
+          },
+
+          createdAt:{
+
+            timestampValue:
+            new Date().toISOString()
+
+          }
+
+        }
+
+      };
+
+
+      const response =
+      await fetch(
+        url,
+        {
+
+          method:"PATCH",
+
+          headers:{
+
+            Authorization:
+            "Bearer " + token,
+
+            "Content-Type":
+            "application/json"
+
+          },
+
+          body:
+          JSON.stringify(body)
+
+        }
+      );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "FOLLOW_FAILED"
+        );
+
+      }
+
+    }
+
+
+    /*
+      Profile refresh
+    */
+
+    await renderProfile();
+
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Follow update nahi ho paaya."
+    );
+
+  }
+
+
+  button.disabled = false;
+
+}
+
+
+/* =========================
+   FOLLOW COUNTS
+========================= */
+
+async function getFollowCounts(
+  targetUID
+){
+
+  try{
+
+    const followers =
+    await getFollowDocuments(
+      "followingId",
+      targetUID
+    );
+
+
+    const following =
+    await getFollowDocuments(
+      "followerId",
+      targetUID
+    );
+
+
+    return {
+
+      followers:
+      followers.length,
+
+      following:
+      following.length
+
+    };
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    return {
+
+      followers:0,
+
+      following:0
 
     };
 
@@ -467,42 +1330,261 @@ function renderProfile(profile){
 
 
 /* =========================
-   OPEN MESSAGE
+   GET FOLLOW DOCUMENTS
 ========================= */
 
-function openMessage(profile){
+async function getFollowDocuments(
+  fieldName,
+  targetUID
+){
 
-  /*
-    SABSE IMPORTANT PART
+  const url =
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents:runQuery" +
+  "?key=" +
+  API_KEY;
 
-    Target user ko sessionStorage
-    me save kar rahe hain.
-  */
 
-  const target = {
+  const body = {
 
-    uid:
-    profile.uid,
+    structuredQuery:{
 
-    username:
-    profile.username,
+      from:[
 
-    name:
-    profile.name,
+        {
+          collectionId:
+          "follows"
+        }
 
-    photoURL:
-    profile.photoURL || ""
+      ],
+
+      where:{
+
+        fieldFilter:{
+
+          field:{
+
+            fieldPath:
+            fieldName
+
+          },
+
+          op:
+          "EQUAL",
+
+          value:{
+
+            stringValue:
+            targetUID
+
+          }
+
+        }
+
+      },
+
+      limit:1000
+
+    }
 
   };
 
 
+  const response =
+  await fetch(
+    url,
+    {
+
+      method:"POST",
+
+      headers:{
+
+        Authorization:
+        "Bearer " + token,
+
+        "Content-Type":
+        "application/json"
+
+      },
+
+      body:
+      JSON.stringify(body)
+
+    }
+  );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "FOLLOW_QUERY_FAILED"
+    );
+
+  }
+
+
+  const rows =
+  await response.json();
+
+
+  const result=[];
+
+
+  rows.forEach(row=>{
+
+    if(!row.document){
+
+      return;
+
+    }
+
+
+    const f =
+    row.document.fields || {};
+
+
+    result.push({
+
+      followerId:
+      f.followerId?.stringValue ||
+      "",
+
+      followingId:
+      f.followingId?.stringValue ||
+      ""
+
+    });
+
+  });
+
+
+  return result;
+
+}
+
+
+/* =========================
+   OPEN USER LIST
+========================= */
+
+async function openUserList(
+  type
+){
+
+  listModal.style.display =
+  "flex";
+
+
+  listTitle.textContent =
+  type;
+
+
+  listContent.innerHTML = `
+
+    <div class="list-empty">
+      Loading ${type.toLowerCase()}...
+    </div>
+
+  `;
+
+
   try{
 
-    sessionStorage.setItem(
-      "crockcell_chat_target",
-      JSON.stringify(
-        target
-      )
+    let followDocuments;
+
+
+    if(type === "Followers"){
+
+      followDocuments =
+      await getFollowDocuments(
+        "followingId",
+        currentProfile.uid
+      );
+
+    }
+    else{
+
+      followDocuments =
+      await getFollowDocuments(
+        "followerId",
+        currentProfile.uid
+      );
+
+    }
+
+
+    const userIDs =
+    followDocuments.map(
+      item => {
+
+        if(type === "Followers"){
+
+          return item.followerId;
+
+        }
+
+        return item.followingId;
+
+      }
+    );
+
+
+    if(!userIDs.length){
+
+      listContent.innerHTML = `
+
+        <div class="list-empty">
+          ${type === "Followers"
+            ? "Abhi koi followers nahi hain."
+            : "Abhi kisi ko follow nahi kiya."
+          }
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    const users=[];
+
+
+    /*
+      Har UID ka profile load
+    */
+
+    for(
+      const id of userIDs
+    ){
+
+      if(!id){
+
+        continue;
+
+      }
+
+
+      const user =
+      await getUserByUID(
+        id
+      );
+
+
+      if(user){
+
+        users.push(
+          user
+        );
+
+      }
+
+    }
+
+
+    renderUserList(
+      users
     );
 
   }
@@ -512,133 +1594,29 @@ function openMessage(profile){
       error
     );
 
+
+    listContent.innerHTML = `
+
+      <div class="list-empty">
+        List load nahi ho paayi.
+      </div>
+
+    `;
+
   }
 
+}
 
-  /*
-    URL me bhi target UID bhej rahe hain.
-    Dono methods rakhe gaye hain.
-  */
+
+/* =========================
+   GET USER
+========================= */
+
+async function getUserByUID(
+  targetUID
+){
 
   const url =
-    "messages.html" +
-    "?uid=" +
-    encodeURIComponent(
-      target.uid
-    ) +
-    "&username=" +
-    encodeURIComponent(
-      target.username
-    ) +
-    "&name=" +
-    encodeURIComponent(
-      target.name
-    );
-
-
-  window.location.assign(
-    url
-  );
-
-}
-
-
-/* =========================
-   OWN PROFILE
-========================= */
-
-function editOwnProfile(){
-
-  window.location.assign(
-    "edit-profile.html"
-  );
-
-}
-
-
-/* =========================
-   HELPERS
-========================= */
-
-function escapeHTML(text){
-
-  return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
-}
-
-
-function escapeAttribute(text){
-
-  return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    );
-
-}
-
-
-function placeholderPhoto(){
-
-  return "data:image/svg+xml," +
-
-  "<svg xmlns='http://www.w3.org/2000/svg' " +
-
-  "width='100' height='100'>" +
-
-  "<rect width='100' height='100' " +
-
-  "fill='%23333333'/>" +
-
-  "</svg>";
-
-}
-
-
-loadProfile();
-
-</script>
-
-</body>
-</html>
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/database
