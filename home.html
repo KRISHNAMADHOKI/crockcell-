@@ -4,557 +4,1337 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CROCKCELL</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
-header{height:58px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;background:#000;z-index:5}
-.logo{font-size:22px;font-weight:bold;letter-spacing:1px}
-button{border:0;background:none;color:#fff;cursor:pointer}
-#profile{padding:14px 16px;border-bottom:1px solid #222;color:#aaa}
-#profile b{color:#fff;font-size:18px}
-#feed{max-width:600px;margin:auto;padding-bottom:70px}
-.post{border-bottom:1px solid #222;padding-bottom:15px;margin-bottom:8px}
-.top{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.avatar{width:38px;height:38px;border-radius:50%;background:#222}
-.name{font-weight:bold}
-.photo{width:100%;max-height:650px;object-fit:cover;display:block}
-.actions{display:flex;gap:18px;padding:10px 14px 5px;font-size:23px}
-.info{padding:0 14px}
-.caption{margin-top:7px}
-.comments{padding:8px 14px}
-.comment{font-size:14px;margin:7px 0;color:#ddd}
-.comment b{color:#fff}
-.comment button{color:#888;margin-left:6px}
-.form{display:flex;gap:7px;padding:0 14px}
-.form input{flex:1;background:#111;border:1px solid #333;border-radius:20px;padding:10px;color:#fff;outline:none}
-.form button{background:#fff;color:#000;border-radius:20px;padding:0 14px}
-.del{color:#f66;font-size:12px}
-.loading{text-align:center;padding:35px;color:#aaa}
-.error{text-align:center;padding:25px;color:#f66}
-nav{position:fixed;bottom:0;left:0;right:0;height:58px;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;z-index:9}
-nav a{color:#fff;text-decoration:none;font-size:22px}
+
+body{
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    padding-bottom:65px;
+}
+
+header{
+    height:58px;
+    border-bottom:1px solid #222;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    position:sticky;
+    top:0;
+    background:#000;
+    z-index:5;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.header-btn{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    font-size:22px;
+    border-radius:50%;
+}
+
+.header-btn:active{
+    background:#222;
+}
+
+#profile{
+    padding:14px 16px;
+    border-bottom:1px solid #222;
+    color:#aaa;
+}
+
+#profile b{
+    color:#fff;
+    font-size:18px;
+}
+
+#feed{
+    max-width:600px;
+    margin:auto;
+    padding-bottom:20px;
+}
+
+.post{
+    border-bottom:1px solid #222;
+    padding-bottom:15px;
+    margin-bottom:8px;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#222;
+}
+
+.name{
+    font-weight:bold;
+}
+
+.photo{
+    width:100%;
+    max-height:650px;
+    object-fit:cover;
+    display:block;
+}
+
+.actions{
+    display:flex;
+    gap:18px;
+    padding:10px 14px 5px;
+    font-size:23px;
+}
+
+.actions button{
+    border:0;
+    background:none;
+    color:#fff;
+    cursor:pointer;
+}
+
+.info{
+    padding:0 14px;
+}
+
+.caption{
+    margin-top:7px;
+}
+
+.comments{
+    padding:8px 14px;
+}
+
+.comment{
+    font-size:14px;
+    margin:7px 0;
+    color:#ddd;
+}
+
+.comment b{
+    color:#fff;
+}
+
+.comment button{
+    color:#888;
+    margin-left:6px;
+    background:none;
+    border:0;
+}
+
+.form{
+    display:flex;
+    gap:7px;
+    padding:0 14px;
+}
+
+.form input{
+    flex:1;
+    background:#111;
+    border:1px solid #333;
+    border-radius:20px;
+    padding:10px;
+    color:#fff;
+    outline:none;
+}
+
+.form button{
+    background:#fff;
+    color:#000;
+    border:0;
+    border-radius:20px;
+    padding:0 14px;
+}
+
+.del{
+    color:#f66;
+    font-size:12px;
+    background:none;
+    border:0;
+}
+
+.loading{
+    text-align:center;
+    padding:35px;
+    color:#aaa;
+}
+
+.error{
+    text-align:center;
+    padding:25px;
+    color:#f66;
+}
+
+
+/* BOTTOM NAV */
+
+nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:#000;
+    border-top:1px solid #222;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:20;
+}
+
+nav a{
+    color:#fff;
+    text-decoration:none;
+    font-size:22px;
+    width:25%;
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+nav a span{
+    font-size:9px;
+    margin-top:2px;
+    color:#aaa;
+}
+
+nav a:active{
+    background:#151515;
+    border-radius:12px;
+}
+
+
+/* PROFILE MENU */
+
+.profile-menu{
+    display:none;
+    position:fixed;
+    right:12px;
+    bottom:72px;
+    width:190px;
+    background:#151515;
+    border:1px solid #333;
+    border-radius:15px;
+    overflow:hidden;
+    z-index:30;
+    box-shadow:0 5px 25px rgba(0,0,0,.5);
+}
+
+.profile-menu a,
+.profile-menu button{
+    width:100%;
+    display:block;
+    padding:15px;
+    color:#fff;
+    text-decoration:none;
+    background:none;
+    border:0;
+    border-bottom:1px solid #292929;
+    text-align:left;
+    font-size:14px;
+}
+
+.profile-menu a:active,
+.profile-menu button:active{
+    background:#222;
+}
+
+.profile-menu .logout{
+    color:#ff6262;
+    border-bottom:0;
+}
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:25;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">CROCKCELL</div>
-<button onclick="logout()">Logout</button>
+
+<div class="logo">
+CROCKCELL
+</div>
+
+<div class="header-actions">
+
+<a
+    href="activity.html"
+    class="header-btn"
+    title="Activity">
+    🔔
+</a>
+
+<a
+    href="messages.html"
+    class="header-btn"
+    title="Messages">
+    💬
+</a>
+
+</div>
+
 </header>
 
-<section id="profile">Loading profile...</section>
+
+<section id="profile">
+Loading profile...
+</section>
+
 
 <main id="feed">
-<div class="loading">Loading posts...</div>
+
+<div class="loading">
+Loading posts...
+</div>
+
 </main>
 
+
+<!-- PROFILE MENU OVERLAY -->
+
+<div
+    id="menuOverlay"
+    class="overlay"
+    onclick="closeProfileMenu()">
+</div>
+
+
+<!-- PROFILE MENU -->
+
+<div
+    id="profileMenu"
+    class="profile-menu">
+
+<a href="profile.html">
+👤 My Profile
+</a>
+
+<a href="create.html">
+➕ Create Post
+</a>
+
+<a href="edit-profile.html">
+✏️ Edit Profile
+</a>
+
+<button
+    class="logout"
+    onclick="logout()">
+🚪 Logout
+</button>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
 <nav>
-<a href="home.html">⌂</a>
-<a href="search.html">⌕</a>
-<a href="create.html">＋</a>
-<a href="activity.html">♡</a>
-<a href="profile.html">◉</a>
+
+<a href="home.html">
+🏠
+<span>Home</span>
+</a>
+
+<a href="search.html">
+🔍
+<span>Search</span>
+</a>
+
+<a href="reels.html">
+🎬
+<span>Reels</span>
+</a>
+
+<a
+    href="javascript:void(0)"
+    onclick="toggleProfileMenu()">
+
+👤
+<span>Profile</span>
+
+</a>
+
 </nav>
 
+
 <script>
-const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-const PROJECT_ID="crockcell-cd2e6";
-const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-let token=localStorage.getItem("crockcellIdToken");
-let uid=localStorage.getItem("crockcellUid");
-let refreshToken=localStorage.getItem("crockcellRefreshToken");
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-const val=f=>f?.stringValue??f?.integerValue??f?.timestampValue??"";
+const PROJECT_ID =
+"crockcell-cd2e6";
 
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+const BASE =
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+
+let token =
+localStorage.getItem("crockcellIdToken");
+
+let uid =
+localStorage.getItem("crockcellUid");
+
+let refreshToken =
+localStorage.getItem("crockcellRefreshToken");
+
+
+const val =
+f =>
+f?.stringValue ??
+f?.integerValue ??
+f?.timestampValue ??
+"";
+
+
+const esc =
+s =>
+String(s ?? "")
+.replace(/[&<>"']/g,m=>({
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+
 }[m]));
+
+
+/* REFRESH TOKEN */
 
 async function refresh(){
 
-if(!refreshToken)return false;
+if(!refreshToken)
+return false;
 
 try{
 
-let r=await fetch(
+let r =
+await fetch(
 `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
 {
 method:"POST",
 headers:{
-"Content-Type":"application/x-www-form-urlencoded"
+"Content-Type":
+"application/x-www-form-urlencoded"
 },
 body:
 `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
-});
+}
+);
 
-let d=await r.json();
+let d =
+await r.json();
 
-if(!r.ok||!d.id_token)return false;
+if(!r.ok || !d.id_token)
+return false;
 
-token=d.id_token;
-uid=d.user_id||uid;
-refreshToken=d.refresh_token||refreshToken;
+token =
+d.id_token;
 
-localStorage.setItem("crockcellIdToken",token);
-localStorage.setItem("crockcellRefreshToken",refreshToken);
-localStorage.setItem("crockcellUid",uid);
+uid =
+d.user_id || uid;
+
+refreshToken =
+d.refresh_token || refreshToken;
+
+
+localStorage.setItem(
+"crockcellIdToken",
+token
+);
+
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
+
+localStorage.setItem(
+"crockcellUid",
+uid
+);
 
 return true;
 
 }catch(e){
+
 return false;
-}
+
 }
 
-async function api(path,opt={},retry=true){
+}
 
-if(!token)return null;
+
+/* FIRESTORE API */
+
+async function api(
+path,
+opt={},
+retry=true
+){
+
+if(!token)
+return null;
 
 opt={
 ...opt,
+
 headers:{
 ...(opt.headers||{}),
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 }
+
 };
 
-let r=await fetch(BASE+path,opt);
+let r =
+await fetch(BASE+path,opt);
+
 
 if(
-(r.status===401||r.status===403)&&
-retry&&
+(r.status===401 || r.status===403) &&
+retry &&
 await refresh()
 ){
-return api(path,opt,false);
+
+return api(
+path,
+opt,
+false
+);
+
 }
 
 return r;
+
 }
+
+
+/* PROFILE */
 
 async function profile(){
 
-let r=await api(`/users/${encodeURIComponent(uid)}`);
+let r =
+await api(
+`/users/${encodeURIComponent(uid)}`
+);
 
-if(!r||!r.ok){
-document.getElementById("profile").innerHTML=
+if(!r || !r.ok){
+
+document.getElementById(
+"profile"
+).innerHTML =
 "<b>CROCKCELL</b><br>Profile unavailable";
+
 return;
+
 }
 
-let d=await r.json();
-let f=d.fields||{};
+let d =
+await r.json();
 
-document.getElementById("profile").innerHTML=
-`<b>${esc(val(f.name)||val(f.username)||"User")}</b>
-<br>@${esc(val(f.username)||"user")}`;
+let f =
+d.fields || {};
+
+
+document.getElementById(
+"profile"
+).innerHTML =
+
+`<b>${esc(
+val(f.name) ||
+val(f.username) ||
+"User"
+)}</b>
+
+<br>
+
+@${esc(
+val(f.username) ||
+"user"
+)}`;
+
 }
+
+
+/* POSTS */
 
 async function posts(){
 
-let box=document.getElementById("feed");
+let box =
+document.getElementById("feed");
 
-let r=await api("/posts?pageSize=50");
+let r =
+await api("/posts?pageSize=50");
 
-if(!r||!r.ok){
+if(!r || !r.ok){
 
-box.innerHTML=
+box.innerHTML =
 `<div class="error">
 Posts load nahi hui.<br>
 Please refresh the page.
 </div>`;
 
 return;
+
 }
 
-let d=await r.json();
+let d =
+await r.json();
 
-let arr=(d.documents||[]).sort((a,b)=>
+
+let arr =
+(d.documents || [])
+.sort((a,b)=>
 String(val(b.fields?.createdAt))
 .localeCompare(
 String(val(a.fields?.createdAt))
 )
 );
 
+
 box.innerHTML="";
+
 
 if(!arr.length){
 
-box.innerHTML=
+box.innerHTML =
 `<div class="loading">
 Abhi koi post nahi hai.
 </div>`;
 
 return;
+
 }
 
+
 arr.forEach(renderPost);
+
 }
+
+
+/* RENDER POST */
 
 function renderPost(doc){
 
-let f=doc.fields||{};
+let f =
+doc.fields || {};
 
-let id=val(f.postId)||doc.name.split("/").pop();
-let image=val(f.image);
-let username=val(f.username)||"user";
-let caption=val(f.caption);
-let likes=Number(val(f.likes)||0);
 
-let el=document.createElement("article");
+let id =
+val(f.postId) ||
+doc.name.split("/").pop();
+
+let image =
+val(f.image);
+
+let username =
+val(f.username) ||
+"user";
+
+let caption =
+val(f.caption);
+
+let likes =
+Number(val(f.likes)||0);
+
+
+let el =
+document.createElement("article");
 
 el.className="post";
-el.id="post_"+id;
+
+el.id=
+"post_"+id;
+
 
 el.innerHTML=`
 
 <div class="top">
+
 <div class="avatar"></div>
-<div class="name">${esc(username)}</div>
+
+<div class="name">
+${esc(username)}
 </div>
 
-${image?
-`<img class="photo" src="${image}" alt="post">`
-:""}
+</div>
+
+
+${
+image ?
+
+`<img
+class="photo"
+src="${esc(image)}"
+alt="post">`
+
+:
+
+""
+}
+
 
 <div class="actions">
 
-<button id="like_${id}"
-onclick="likePost('${esc(id)}')">♡</button>
+<button
+id="like_${esc(id)}"
+onclick="likePost('${esc(id)}')">
+♡
+</button>
 
-<button onclick="focusComment('${esc(id)}')">💬</button>
+<button
+onclick="focusComment('${esc(id)}')">
+💬
+</button>
 
-<button onclick="sharePost('${esc(id)}')">↗</button>
+<button
+onclick="sharePost('${esc(id)}')">
+↗
+</button>
 
 </div>
+
 
 <div class="info">
 
-<b id="count_${id}">
+<b id="count_${esc(id)}">
 ${likes} likes
 </b>
 
-${caption?
-`<div class="caption">
-<b>${esc(username)}</b> ${esc(caption)}
-</div>`
-:""}
 
-${String(val(f.userId))===String(uid)?
-`<button class="del"
+${
+caption ?
+
+`<div class="caption">
+<b>${esc(username)}</b>
+${esc(caption)}
+</div>`
+
+:
+
+""
+}
+
+
+${
+String(val(f.userId))===String(uid)
+
+?
+
+`<button
+class="del"
 onclick="deletePost('${esc(id)}')">
 Delete post
 </button>`
-:""}
+
+:
+
+""
+}
 
 </div>
 
-<div class="comments" id="comments_${id}">
+
+<div
+class="comments"
+id="comments_${esc(id)}">
+
 <div style="color:#777">
 Loading comments...
 </div>
+
 </div>
+
 
 <div class="form">
 
 <input
-id="input_${id}"
+id="input_${esc(id)}"
 placeholder="Add a comment..."
 >
 
-<button onclick="sendComment('${esc(id)}')">
+<button
+onclick="sendComment('${esc(id)}')">
 Post
 </button>
 
 </div>
+
 `;
 
-document.getElementById("feed").appendChild(el);
+
+document
+.getElementById("feed")
+.appendChild(el);
+
 
 checkLike(id);
+
 loadComments(id);
+
 }
+
+
+/* CHECK LIKE */
 
 async function checkLike(id){
 
-let r=await api(
+let r =
+await api(
 `/likes/${encodeURIComponent(id+"_"+uid)}`
 );
 
-let b=document.getElementById("like_"+id);
+let b =
+document.getElementById(
+"like_"+id
+);
 
-if(r&&r.ok&&b)b.textContent="♥";
+if(r && r.ok && b)
+b.textContent="♥";
+
 }
+
+
+/* LIKE */
 
 async function likePost(id){
 
-let likeId=id+"_"+uid;
+let likeId =
+id+"_"+uid;
 
-let r=await api(
+
+let r =
+await api(
 `/likes/${encodeURIComponent(likeId)}`
 );
 
-if(!r)return;
+if(!r)
+return;
+
 
 if(r.ok){
 
 await api(
 `/likes/${encodeURIComponent(likeId)}`,
-{method:"DELETE"}
+{
+method:"DELETE"
+}
 );
 
 await changeLikeCount(id,-1);
 
-let b=document.getElementById("like_"+id);
+let b =
+document.getElementById(
+"like_"+id
+);
 
-if(b)b.textContent="♡";
+if(b)
+b.textContent="♡";
 
-}else{
+}
 
-let now=new Date().toISOString();
+else{
+
+let now =
+new Date().toISOString();
+
 
 await api(
 `/likes/${encodeURIComponent(likeId)}`,
 {
 method:"PATCH",
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
-body:JSON.stringify({
+body:
+JSON.stringify({
+
 fields:{
-postId:{stringValue:id},
-userId:{stringValue:uid},
-createdAt:{timestampValue:now}
+
+postId:{
+stringValue:id
+},
+
+userId:{
+stringValue:uid
+},
+
+createdAt:{
+timestampValue:now
 }
+
+}
+
 })
 }
 );
 
 await changeLikeCount(id,1);
 
-let b=document.getElementById("like_"+id);
+let b =
+document.getElementById(
+"like_"+id
+);
 
-if(b)b.textContent="♥";
+if(b)
+b.textContent="♥";
+
 }
+
 }
+
+
+/* LIKE COUNT */
 
 async function changeLikeCount(id,n){
 
-let r=await api(
+let r =
+await api(
 `/posts/${encodeURIComponent(id)}`
 );
 
-if(!r||!r.ok)return;
+if(!r || !r.ok)
+return;
 
-let d=await r.json();
-let f=d.fields||{};
 
-let count=Number(val(f.likes)||0)+n;
+let d =
+await r.json();
 
-if(count<0)count=0;
+let f =
+d.fields || {};
+
+
+let count =
+Number(val(f.likes)||0)+n;
+
+
+if(count<0)
+count=0;
+
 
 await api(
 `/posts/${encodeURIComponent(id)}?updateMask.fieldPaths=likes`,
 {
 method:"PATCH",
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
-body:JSON.stringify({
+body:
+JSON.stringify({
+
 fields:{
+
 likes:{
 integerValue:String(count)
 }
+
 }
+
 })
 }
 );
 
-let c=document.getElementById("count_"+id);
 
-if(c)c.textContent=count+" likes";
+let c =
+document.getElementById(
+"count_"+id
+);
+
+if(c)
+c.textContent=
+count+" likes";
+
 }
+
+
+/* COMMENTS */
 
 async function loadComments(id){
 
-let box=document.getElementById("comments_"+id);
+let box =
+document.getElementById(
+"comments_"+id
+);
 
-let r=await api("/comments?pageSize=300");
+let r =
+await api("/comments?pageSize=300");
 
-if(!r||!r.ok){
+if(!r || !r.ok){
+
 box.innerHTML="";
+
 return;
+
 }
 
-let d=await r.json();
 
-let list=(d.documents||[])
-.filter(x=>val(x.fields?.postId)===id)
-.sort((a,b)=>
-String(val(a.fields?.createdAt))
+let d =
+await r.json();
+
+
+let list =
+(d.documents||[])
+.filter(
+x =>
+val(x.fields?.postId)===id
+)
+.sort(
+(a,b)=>
+String(
+val(a.fields?.createdAt)
+)
 .localeCompare(
-String(val(b.fields?.createdAt))
+String(
+val(b.fields?.createdAt)
+)
 )
 );
 
+
 if(!list.length){
 
-box.innerHTML=
+box.innerHTML =
 `<div style="color:#777">
 No comments yet.
 </div>`;
 
 return;
+
 }
 
-box.innerHTML=list.map(x=>{
 
-let f=x.fields||{};
-let cid=x.name.split("/").pop();
+box.innerHTML =
+list.map(x=>{
+
+let f =
+x.fields||{};
+
+let cid =
+x.name.split("/").pop();
+
 
 return `
 <div class="comment">
-<b>${esc(val(f.username)||"user")}</b>
-${esc(val(f.text))}
+
+<b>
+${esc(
+val(f.username)||"user"
+)}
+</b>
+
+${esc(
+val(f.text)
+)}
+
 ${
-val(f.userId)===uid?
-`<button onclick="deleteComment('${cid}','${esc(id)}')">
+val(f.userId)===uid
+
+?
+
+`<button
+onclick="deleteComment(
+'${cid}',
+'${esc(id)}'
+)">
 Delete
-</button>`:""
+</button>`
+
+:
+
+""
 }
-</div>`;
+
+</div>
+`;
 
 }).join("");
+
 }
+
+
+/* SEND COMMENT */
 
 async function sendComment(id){
 
-let input=document.getElementById("input_"+id);
-let text=input.value.trim();
+let input =
+document.getElementById(
+"input_"+id
+);
 
-if(!text)return;
+let text =
+input.value.trim();
+
+
+if(!text)
+return;
+
 
 let p={};
 
 try{
-p=JSON.parse(
-localStorage.getItem("crockcellProfile")||"{}"
+
+p=
+JSON.parse(
+localStorage.getItem(
+"crockcellProfile"
+)||"{}"
 );
+
 }catch(e){}
+
 
 await api(
 "/comments",
 {
 method:"POST",
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
-body:JSON.stringify({
+body:
+JSON.stringify({
+
 fields:{
-postId:{stringValue:id},
-userId:{stringValue:uid},
-username:{
-stringValue:p.username||p.name||"user"
+
+postId:{
+stringValue:id
 },
-text:{stringValue:text},
+
+userId:{
+stringValue:uid
+},
+
+username:{
+stringValue:
+p.username||
+p.name||
+"user"
+},
+
+text:{
+stringValue:text
+},
+
 createdAt:{
-timestampValue:new Date().toISOString()
+timestampValue:
+new Date().toISOString()
 }
+
 }
+
 })
 }
 );
 
+
 input.value="";
+
 loadComments(id);
+
 }
+
+
+/* DELETE COMMENT */
 
 async function deleteComment(cid,id){
 
-let r=await api(
+let r =
+await api(
 `/comments/${encodeURIComponent(cid)}`
 );
 
-if(!r||!r.ok)return;
+if(!r || !r.ok)
+return;
 
-let d=await r.json();
 
-if(val(d.fields?.userId)!==uid)return;
+let d =
+await r.json();
+
+
+if(
+val(d.fields?.userId)!==uid
+)
+return;
+
 
 await api(
 `/comments/${encodeURIComponent(cid)}`,
-{method:"DELETE"}
+{
+method:"DELETE"
+}
 );
 
+
 loadComments(id);
+
 }
+
+
+/* DELETE POST */
 
 async function deletePost(id){
 
-if(!confirm("Delete this post?"))return;
+if(
+!confirm("Delete this post?")
+)
+return;
 
-let r=await api(
+
+let r =
+await api(
 `/posts/${encodeURIComponent(id)}`
 );
 
-if(!r||!r.ok)return;
-
-let d=await r.json();
-
-if(val(d.fields?.userId)!==uid){
-
-alert("You can delete only your own post.");
+if(!r || !r.ok)
 return;
+
+
+let d =
+await r.json();
+
+
+if(
+val(d.fields?.userId)!==uid
+){
+
+alert(
+"You can delete only your own post."
+);
+
+return;
+
 }
 
-for(let collection of ["likes","comments"]){
 
-let q=await api(
+for(
+let collection
+of ["likes","comments"]
+){
+
+let q =
+await api(
 `/${collection}?pageSize=300`
 );
 
-if(!q||!q.ok)continue;
+if(!q || !q.ok)
+continue;
 
-let data=await q.json();
 
-for(let x of data.documents||[]){
+let data =
+await q.json();
 
-let f=x.fields||{};
+
+for(
+let x
+of data.documents||[]
+){
+
+let f =
+x.fields||{};
+
 
 if(
-val(f.postId)===id||
+val(f.postId)===id ||
 val(f.reelId)===id
 ){
 
-let cid=x.name.split("/").pop();
+let cid =
+x.name.split("/").pop();
+
 
 await api(
 `/${collection}/${encodeURIComponent(cid)}`,
-{method:"DELETE"}
+{
+method:"DELETE"
+}
 );
+
 }
+
 }
+
 }
+
 
 await api(
 `/posts/${encodeURIComponent(id)}`,
-{method:"DELETE"}
+{
+method:"DELETE"
+}
 );
 
-document.getElementById("post_"+id)?.remove();
+
+document
+.getElementById(
+"post_"+id
+)
+?.remove();
+
 }
 
+
+/* COMMENT FOCUS */
+
 function focusComment(id){
-document.getElementById("input_"+id)?.focus();
+
+document
+.getElementById(
+"input_"+id
+)
+?.focus();
+
 }
+
+
+/* SHARE */
 
 async function sharePost(id){
 
-let url=
+let url =
 location.origin+
 location.pathname+
-"?post="+encodeURIComponent(id);
+"?post="+
+encodeURIComponent(id);
+
 
 try{
 
@@ -565,38 +1345,107 @@ title:"CROCKCELL",
 url:url
 });
 
-}else{
+}
 
-await navigator.clipboard.writeText(url);
+else{
+
+await navigator.clipboard
+.writeText(url);
+
 alert("Post link copied");
 
 }
 
 }catch(e){}
+
 }
+
+
+/* PROFILE MENU */
+
+function toggleProfileMenu(){
+
+let menu =
+document.getElementById(
+"profileMenu"
+);
+
+let overlay =
+document.getElementById(
+"menuOverlay"
+);
+
+
+let open =
+menu.style.display==="block";
+
+
+if(open){
+
+closeProfileMenu();
+
+}else{
+
+menu.style.display="block";
+
+overlay.style.display="block";
+
+}
+
+}
+
+
+function closeProfileMenu(){
+
+document.getElementById(
+"profileMenu"
+).style.display="none";
+
+document.getElementById(
+"menuOverlay"
+).style.display="none";
+
+}
+
+
+/* LOGOUT */
 
 function logout(){
 
-localStorage.removeItem("crockcellIdToken");
-localStorage.removeItem("crockcellRefreshToken");
-localStorage.removeItem("crockcellUid");
-localStorage.removeItem("crockcellProfile");
+localStorage.removeItem(
+"crockcellIdToken"
+);
+
+localStorage.removeItem(
+"crockcellRefreshToken"
+);
+
+localStorage.removeItem(
+"crockcellUid"
+);
+
+localStorage.removeItem(
+"crockcellProfile"
+);
+
 
 location.href="index.html";
+
 }
+
+
+/* START */
 
 async function start(){
 
-/*
-पहले saved ID token इस्तेमाल होगा।
-Refresh token हो तो उसे भी refresh करेंगे।
-*/
-
-if(!token||!uid){
+if(!token || !uid){
 
 location.href="index.html";
+
 return;
+
 }
+
 
 if(refreshToken){
 
@@ -604,12 +1453,16 @@ await refresh();
 
 }
 
+
 await profile();
+
 await posts();
 
 }
 
+
 start();
+
 </script>
 
 </body>
