@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>CROCKCELL Messages</title>
 
@@ -19,20 +14,11 @@
 }
 
 body{
-
   margin:0;
-
   background:#000;
-
   color:#fff;
-
-  font-family:
-  Arial,
-  Helvetica,
-  sans-serif;
-
+  font-family:Arial,Helvetica,sans-serif;
   min-height:100vh;
-
 }
 
 
@@ -41,162 +27,102 @@ body{
 ========================= */
 
 .header{
-
   position:sticky;
-
   top:0;
-
-  z-index:10;
-
-  padding:18px 18px 12px;
-
-  background:
-  rgba(0,0,0,.92);
-
-  backdrop-filter:
-  blur(15px);
-
-  border-bottom:
-  1px solid #222;
-
+  z-index:20;
+  padding:18px 16px 14px;
+  background:rgba(0,0,0,.95);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #222;
 }
 
-.header h1{
-
-  margin:0;
-
+.header-title{
   font-size:27px;
-
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-box{
-
-  display:flex;
-
-  gap:8px;
-
-  margin-top:15px;
-
-}
-
-.search-input{
-
-  flex:1;
-
-  height:48px;
-
-  border:0;
-
-  outline:none;
-
-  border-radius:18px;
-
-  padding:0 16px;
-
-  background:#191919;
-
-  color:#fff;
-
-  font-size:16px;
-
-}
-
-.search-btn{
-
-  width:52px;
-
-  border:0;
-
-  border-radius:18px;
-
-  background:#fff;
-
-  color:#000;
-
-  font-size:20px;
-
-}
-
-
-/* =========================
-   SEARCH RESULT
-========================= */
-
-.result{
-
-  display:none;
-
-  margin-top:12px;
-
-  padding:12px;
-
-  border-radius:18px;
-
-  background:#151515;
-
-  align-items:center;
-
-  gap:12px;
-
-}
-
-.result img{
-
-  width:48px;
-
-  height:48px;
-
-  border-radius:50%;
-
-  object-fit:cover;
-
-  background:#333;
-
-}
-
-.result-info{
-
-  flex:1;
-
-}
-
-.result-name{
-
   font-weight:bold;
-
-  font-size:16px;
-
+  margin-bottom:14px;
 }
 
-.result-username{
 
+/* =========================
+   NEW CHAT SEARCH
+========================= */
+
+.new-chat-row{
+  display:flex;
+  gap:8px;
+}
+
+.new-chat-input{
+  flex:1;
+  height:46px;
+  border:0;
+  outline:none;
+  border-radius:18px;
+  background:#191919;
+  color:#fff;
+  padding:0 15px;
+  font-size:15px;
+}
+
+.new-chat-btn{
+  width:50px;
+  height:46px;
+  border:0;
+  border-radius:18px;
+  background:#fff;
+  color:#000;
+  font-size:21px;
+}
+
+
+/* =========================
+   USER SEARCH RESULTS
+========================= */
+
+.search-results{
+  display:none;
+  padding:5px 16px 10px;
+  border-bottom:1px solid #222;
+}
+
+.search-user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 3px;
+  border-bottom:1px solid #1c1c1c;
+}
+
+.search-avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#292929;
+}
+
+.search-info{
+  flex:1;
+}
+
+.search-name{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.search-username{
   color:#888;
-
-  font-size:14px;
-
+  font-size:13px;
   margin-top:3px;
-
 }
 
 .chat-btn{
-
   border:0;
-
   border-radius:14px;
-
-  padding:10px 14px;
-
+  padding:9px 13px;
   background:#fff;
-
   color:#000;
-
   font-weight:bold;
-
 }
 
 
@@ -204,340 +130,198 @@ body{
    CHAT LIST
 ========================= */
 
-.section-title{
-
-  padding:18px 18px 8px;
-
-  color:#999;
-
-  font-size:14px;
-
-  font-weight:bold;
-
-  text-transform:uppercase;
-
-}
-
 .chat-list{
-
-  padding-bottom:90px;
-
+  padding:8px 15px 100px;
 }
 
 .chat-item{
-
   display:flex;
-
   align-items:center;
-
   gap:13px;
-
-  padding:14px 18px;
-
-  cursor:pointer;
-
-}
-
-.chat-item:active{
-
-  background:#111;
-
+  padding:14px 5px;
+  border-bottom:1px solid #181818;
 }
 
 .chat-avatar{
-
-  width:56px;
-
-  height:56px;
-
+  width:57px;
+  height:57px;
   border-radius:50%;
-
   object-fit:cover;
-
-  background:#222;
-
+  background:#292929;
+  flex-shrink:0;
 }
 
 .chat-info{
-
   flex:1;
-
   min-width:0;
-
 }
 
 .chat-name{
-
   font-size:17px;
-
   font-weight:bold;
-
 }
 
-.chat-last{
-
+.chat-username{
   color:#888;
-
-  margin-top:5px;
-
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
+  font-size:13px;
+  margin-top:4px;
 }
 
-.chat-time{
+.chat-open{
+  border:0;
+  border-radius:14px;
+  padding:9px 12px;
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+}
 
+.empty{
+  text-align:center;
   color:#666;
-
-  font-size:12px;
-
+  padding:55px 20px;
 }
 
 
 /* =========================
-   CHAT SCREEN
+   CHAT WINDOW
 ========================= */
 
-.chat-screen{
-
+.chat-window{
   display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:50;
-
-  background:#000;
-
-  flex-direction:column;
-
+  min-height:calc(100vh - 160px);
+  padding-bottom:82px;
 }
 
 .chat-header{
-
   display:flex;
-
   align-items:center;
-
   gap:12px;
-
-  padding:15px;
-
+  padding:12px 16px;
   border-bottom:1px solid #222;
-
-  background:#050505;
-
+  background:#090909;
 }
 
-.back-btn{
-
-  width:42px;
-
-  height:42px;
-
+.back-chat{
+  width:38px;
+  height:38px;
   border:0;
-
-  border-radius:50%;
-
-  background:#171717;
-
+  border-radius:14px;
+  background:#1c1c1c;
   color:#fff;
-
-  font-size:22px;
-
+  font-size:20px;
 }
 
-.chat-avatar-small{
-
+.chat-header-avatar{
   width:43px;
-
   height:43px;
-
   border-radius:50%;
-
   object-fit:cover;
-
-  background:#222;
-
+  background:#292929;
 }
 
 .chat-header-info{
-
   flex:1;
-
 }
 
 .chat-header-name{
-
-  font-size:17px;
-
+  font-size:16px;
   font-weight:bold;
-
 }
 
 .chat-header-username{
-
-  color:#777;
-
-  font-size:13px;
-
+  color:#888;
+  font-size:12px;
+  margin-top:2px;
 }
 
+.messages-area{
+  padding:18px 13px 90px;
+}
 
-/* =========================
-   MESSAGES
-========================= */
-
-.messages{
-
-  flex:1;
-
-  overflow-y:auto;
-
-  padding:18px 14px;
-
+.message-row{
   display:flex;
-
-  flex-direction:column;
-
-  gap:8px;
-
+  margin:8px 0;
 }
 
-.bubble{
+.message-row.mine{
+  justify-content:flex-end;
+}
 
+.message-row.theirs{
+  justify-content:flex-start;
+}
+
+.message-bubble{
   max-width:78%;
-
-  padding:11px 14px;
-
+  padding:10px 13px;
   border-radius:18px;
-
-  font-size:16px;
-
+  font-size:15px;
   line-height:1.35;
-
-  word-wrap:break-word;
-
+  word-break:break-word;
 }
 
-.mine{
-
-  align-self:flex-end;
-
+.mine .message-bubble{
   background:#fff;
-
   color:#000;
-
   border-bottom-right-radius:5px;
-
 }
 
-.theirs{
-
-  align-self:flex-start;
-
+.theirs .message-bubble{
   background:#202020;
-
   color:#fff;
-
   border-bottom-left-radius:5px;
-
 }
 
-.msg-time{
-
-  display:block;
-
-  font-size:10px;
-
+.message-time{
+  font-size:9px;
   opacity:.5;
-
   margin-top:4px;
-
+  text-align:right;
 }
 
 
 /* =========================
-   SEND
+   MESSAGE INPUT
 ========================= */
 
-.send-area{
-
-  display:flex;
-
-  gap:8px;
-
-  padding:10px;
-
-  border-top:1px solid #222;
-
-  background:#050505;
-
+.message-input-bar{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:76px;
+  z-index:30;
+  display:none;
+  gap:7px;
+  padding:7px;
+  border-radius:21px;
+  background:rgba(25,25,25,.95);
+  border:1px solid #333;
+  backdrop-filter:blur(15px);
 }
 
 .message-input{
-
   flex:1;
-
   min-width:0;
-
-  height:48px;
-
+  height:43px;
   border:0;
-
   outline:none;
-
-  border-radius:20px;
-
-  background:#191919;
-
+  border-radius:16px;
+  background:#111;
   color:#fff;
-
-  padding:0 16px;
-
-  font-size:16px;
-
+  padding:0 13px;
+  font-size:15px;
 }
 
 .send-btn{
-
-  width:52px;
-
-  height:48px;
-
+  width:45px;
+  height:43px;
   border:0;
-
-  border-radius:20px;
-
+  border-radius:16px;
   background:#fff;
-
   color:#000;
-
-  font-size:20px;
-
+  font-size:19px;
   font-weight:bold;
-
-}
-
-
-/* =========================
-   EMPTY
-========================= */
-
-.empty{
-
-  text-align:center;
-
-  color:#666;
-
-  padding:50px 20px;
-
-  font-size:15px;
-
 }
 
 
@@ -546,135 +330,78 @@ body{
 ========================= */
 
 .bottom-nav{
-
   position:fixed;
-
   left:12px;
-
   right:12px;
-
   bottom:12px;
-
-  z-index:20;
-
+  z-index:40;
   display:flex;
-
   justify-content:space-around;
-
   padding:8px;
-
   border-radius:24px;
-
-  background:
-  rgba(25,25,25,.88);
-
-  backdrop-filter:
-  blur(18px);
-
+  background:rgba(25,25,25,.92);
+  backdrop-filter:blur(18px);
   border:1px solid #333;
-
 }
 
 .nav-item{
-
   flex:1;
-
   text-align:center;
-
-  padding:9px 5px;
-
+  padding:8px 4px;
   border-radius:17px;
-
   color:#999;
-
   text-decoration:none;
-
-  font-size:12px;
-
+  font-size:11px;
 }
 
 .nav-item.active{
-
   background:#fff;
-
   color:#000;
-
 }
 
 .nav-icon{
-
   display:block;
-
   font-size:20px;
-
   margin-bottom:3px;
-
 }
 
 </style>
 
 </head>
 
-
 <body>
 
 
 <!-- =========================
-     MAIN MESSAGES
+     MAIN MESSAGES PAGE
 ========================= -->
 
 <div id="mainPage">
 
+
   <div class="header">
 
-    <h1>Messages</h1>
-
-    <div class="search-box">
-
-      <input
-        id="searchInput"
-        class="search-input"
-        placeholder="Search username..."
-        autocomplete="off"
-      >
-
-      <button
-        class="search-btn"
-        onclick="searchUser()"
-      >⌕</button>
-
+    <div class="header-title">
+      Messages
     </div>
 
-    <div
-      id="searchResult"
-      class="result"
-    >
+    <div class="new-chat-row">
 
-      <img
-        id="resultPhoto"
-        src=""
-        alt=""
+      <input
+        id="newChatInput"
+        class="new-chat-input"
+        type="text"
+        placeholder="Search people..."
+        autocomplete="off"
+        autocapitalize="none"
       >
-
-      <div class="result-info">
-
-        <div
-          id="resultName"
-          class="result-name"
-        ></div>
-
-        <div
-          id="resultUsername"
-          class="result-username"
-        ></div>
-
-      </div>
 
       <button
-        class="chat-btn"
-        onclick="openSearchedChat()"
+        id="newChatBtn"
+        class="new-chat-btn"
+        type="button"
       >
-        Message
+        ⌕
       </button>
 
     </div>
@@ -682,9 +409,11 @@ body{
   </div>
 
 
-  <div class="section-title">
-    Chats
-  </div>
+  <div
+    id="searchResults"
+    class="search-results"
+  ></div>
+
 
   <div
     id="chatList"
@@ -692,7 +421,7 @@ body{
   >
 
     <div class="empty">
-      Loading chats...
+      Loading messages...
     </div>
 
   </div>
@@ -701,41 +430,46 @@ body{
 
 
 <!-- =========================
-     CHAT SCREEN
+     CHAT WINDOW
 ========================= -->
 
 <div
-  id="chatScreen"
-  class="chat-screen"
+  id="chatWindow"
+  class="chat-window"
 >
 
   <div class="chat-header">
 
     <button
-      class="back-btn"
-      onclick="closeChat()"
+      id="backChat"
+      class="back-chat"
+      type="button"
     >
       ‹
     </button>
 
+
     <img
-      id="chatPhoto"
-      class="chat-avatar-small"
+      id="chatHeaderAvatar"
+      class="chat-header-avatar"
       src=""
       alt=""
     >
 
+
     <div class="chat-header-info">
 
       <div
-        id="chatName"
+        id="chatHeaderName"
         class="chat-header-name"
-      ></div>
+      >
+      </div>
 
       <div
-        id="chatUsername"
+        id="chatHeaderUsername"
         class="chat-header-username"
-      ></div>
+      >
+      </div>
 
     </div>
 
@@ -743,28 +477,38 @@ body{
 
 
   <div
-    id="messages"
-    class="messages"
-  ></div>
-
-
-  <div class="send-area">
-
-    <input
-      id="messageInput"
-      class="message-input"
-      placeholder="Message..."
-      autocomplete="off"
-    >
-
-    <button
-      class="send-btn"
-      onclick="sendMessage()"
-    >
-      ➤
-    </button>
-
+    id="messagesArea"
+    class="messages-area"
+  >
   </div>
+
+</div>
+
+
+<!-- =========================
+     MESSAGE INPUT
+========================= -->
+
+<div
+  id="messageInputBar"
+  class="message-input-bar"
+>
+
+  <input
+    id="messageInput"
+    class="message-input"
+    type="text"
+    placeholder="Message..."
+    autocomplete="off"
+  >
+
+  <button
+    id="sendBtn"
+    class="send-btn"
+    type="button"
+  >
+    ➤
+  </button>
 
 </div>
 
@@ -820,9 +564,9 @@ body{
 
 <script>
 
-/* =========================
+/* =====================================================
    FIREBASE
-========================= */
+===================================================== */
 
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
@@ -831,21 +575,42 @@ const PROJECT_ID =
 "crockcell-cd2e6";
 
 
-/* =========================
-   SESSION
-========================= */
+/* =====================================================
+   LOGIN SESSION
+===================================================== */
 
 let token =
 localStorage.getItem(
   "crockcell_idToken"
 );
 
-let uid =
+let currentUID =
 localStorage.getItem(
   "crockcell_uid"
 );
 
-if(!token || !uid){
+
+if(!token){
+
+  token =
+  sessionStorage.getItem(
+    "crockcell_idToken"
+  );
+
+}
+
+
+if(!currentUID){
+
+  currentUID =
+  sessionStorage.getItem(
+    "crockcell_uid"
+  );
+
+}
+
+
+if(!token || !currentUID){
 
   window.location.replace(
     "index.html"
@@ -854,647 +619,161 @@ if(!token || !uid){
 }
 
 
-/* =========================
-   STATE
-========================= */
+/* =====================================================
+   URL DATA
+===================================================== */
 
-let currentChatId=null;
-
-let currentUser=null;
-
-let searchedUser=null;
-
-let refreshTimer=null;
+const urlParams =
+new URLSearchParams(
+  window.location.search
+);
 
 
-/* =========================
-   FIRESTORE VALUE HELPERS
-========================= */
+const urlUID =
+urlParams.get("uid");
 
-function str(value){
+const urlUsername =
+urlParams.get("username");
+
+
+/* =====================================================
+   CURRENT CHAT
+===================================================== */
+
+let currentChatUser =
+null;
+
+let refreshTimer =
+null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const mainPage =
+document.getElementById(
+  "mainPage"
+);
+
+const chatWindow =
+document.getElementById(
+  "chatWindow"
+);
+
+const chatList =
+document.getElementById(
+  "chatList"
+);
+
+const searchResults =
+document.getElementById(
+  "searchResults"
+);
+
+const newChatInput =
+document.getElementById(
+  "newChatInput"
+);
+
+const newChatBtn =
+document.getElementById(
+  "newChatBtn"
+);
+
+const messagesArea =
+document.getElementById(
+  "messagesArea"
+);
+
+const messageInputBar =
+document.getElementById(
+  "messageInputBar"
+);
+
+const messageInput =
+document.getElementById(
+  "messageInput"
+);
+
+const sendBtn =
+document.getElementById(
+  "sendBtn"
+);
+
+
+/* =====================================================
+   FIRESTORE URL
+===================================================== */
+
+const documentsURL =
+"https://firestore.googleapis.com/v1/projects/" +
+PROJECT_ID +
+"/databases/(default)/documents";
+
+
+/* =====================================================
+   FIRESTORE FIELD HELPERS
+===================================================== */
+
+function stringField(value){
 
   return {
-    stringValue:String(value ?? "")
+    stringValue:String(value)
   };
 
 }
 
-function num(value){
+
+function timestampField(){
 
   return {
-    integerValue:String(value)
-  };
-
-}
-
-function bool(value){
-
-  return {
-    booleanValue:!!value
+    timestampValue:
+    new Date().toISOString()
   };
 
 }
 
 
-/* =========================
-   LOAD CURRENT USER
-========================= */
+/* =====================================================
+   LOAD USER PROFILE
+===================================================== */
 
-async function loadCurrentUser(){
+async function getUserProfile(uid){
 
   try{
 
-    const url=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/users/" +
-    uid;
-
-    const response=
-    await fetch(url,{
-
-      headers:{
-        Authorization:"Bearer "+token
-      }
-
-    });
-
-    if(!response.ok)return;
-
-    const data=
-    await response.json();
-
-    const f=data.fields || {};
-
-    currentUser={
-
-      uid,
-
-      name:
-      f.name?.stringValue || "User",
-
-      username:
-      f.username?.stringValue || "",
-
-      email:
-      f.email?.stringValue || "",
-
-      photoURL:
-      f.photoURL?.stringValue || ""
-
-    };
-
-  }catch(error){
-
-    console.error(error);
-
-  }
-
-}
-
-
-/* =========================
-   USERNAME SEARCH
-========================= */
-
-async function searchUser(){
-
-  const input=
-  document.getElementById(
-    "searchInput"
-  );
-
-  const username=
-  input.value.trim().toLowerCase();
-
-  if(!username)return;
-
-  const result=
-  document.getElementById(
-    "searchResult"
-  );
-
-  result.style.display="none";
-
-  try{
-
-    const url=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/usernameIndex/" +
-    encodeURIComponent(username);
-
-    const response=
+    const response =
     await fetch(
-      url + "?key=" + API_KEY
-    );
-
-    if(!response.ok){
-
-      alert("User nahi mila.");
-
-      return;
-
-    }
-
-    const data=
-    await response.json();
-
-    const f=data.fields || {};
-
-    const foundUID=
-    f.uid?.stringValue || "";
-
-    const foundUsername=
-    f.username?.stringValue || username;
-
-    const foundEmail=
-    f.email?.stringValue || "";
-
-
-    if(foundUID===uid){
-
-      alert("Ye tumhara khud ka account hai.");
-
-      return;
-
-    }
-
-
-    searchedUser={
-
-      uid:foundUID,
-
-      username:foundUsername,
-
-      email:foundEmail,
-
-      name:foundUsername,
-
-      photoURL:""
-
-    };
-
-
-    /* Load profile photo/name */
-
-    try{
-
-      const profileURL=
-      "https://firestore.googleapis.com/v1/projects/" +
-      PROJECT_ID +
-      "/databases/(default)/documents/users/" +
-      foundUID;
-
-      const profileResponse=
-      await fetch(profileURL,{
-
-        headers:{
-          Authorization:"Bearer "+token
-        }
-
-      });
-
-      if(profileResponse.ok){
-
-        const profile=
-        await profileResponse.json();
-
-        const pf=
-        profile.fields || {};
-
-        searchedUser.name=
-        pf.name?.stringValue ||
-        foundUsername;
-
-        searchedUser.photoURL=
-        pf.photoURL?.stringValue || "";
-
-      }
-
-    }catch(e){}
-
-
-    document.getElementById(
-      "resultName"
-    ).textContent=
-    searchedUser.name;
-
-
-    document.getElementById(
-      "resultUsername"
-    ).textContent=
-    "@"+searchedUser.username;
-
-
-    document.getElementById(
-      "resultPhoto"
-    ).src=
-    searchedUser.photoURL ||
-    "data:image/svg+xml,"+
-    "<svg xmlns='http://www.w3.org/2000/svg'"+
-    " width='100' height='100'>"+
-    "<rect width='100' height='100' fill='%23333'/>"+
-    "</svg>";
-
-
-    result.style.display="flex";
-
-
-  }catch(error){
-
-    console.error(error);
-
-    alert("Search failed.");
-
-  }
-
-}
-
-
-/* =========================
-   CHAT ID
-========================= */
-
-function makeChatId(uid1,uid2){
-
-  return [uid1,uid2]
-    .sort()
-    .join("_");
-
-}
-
-
-/* =========================
-   CREATE / UPDATE CHAT
-========================= */
-
-async function ensureChat(otherUser){
-
-  const chatId=
-  makeChatId(uid,otherUser.uid);
-
-  const url=
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents/chats/" +
-  chatId;
-
-
-  const body={
-
-    fields:{
-
-      participants:{
-        arrayValue:{
-          values:[
-            str(uid),
-            str(otherUser.uid)
-          ]
-        }
-      },
-
-      participantNames:{
-        mapValue:{
-          fields:{
-
-            [uid]:str(
-              currentUser?.username || "User"
-            ),
-
-            [otherUser.uid]:str(
-              otherUser.username
-            )
-
-          }
-        }
-      },
-
-      lastMessage:str(""),
-
-      lastMessageAt:num(
-        Date.now()
-      )
-
-    }
-
-  };
-
-
-  await fetch(
-    url + "?updateMask.fieldPaths=participants" +
-    "&updateMask.fieldPaths=participantNames" +
-    "&updateMask.fieldPaths=lastMessage" +
-    "&updateMask.fieldPaths=lastMessageAt",
-    {
-
-      method:"PATCH",
-
-      headers:{
-
-        Authorization:"Bearer "+token,
-
-        "Content-Type":
-        "application/json"
-
-      },
-
-      body:JSON.stringify(body)
-
-    }
-
-  );
-
-
-  return chatId;
-
-}
-
-
-/* =========================
-   OPEN SEARCHED CHAT
-========================= */
-
-async function openSearchedChat(){
-
-  if(!searchedUser)return;
-
-  const chatId=
-  await ensureChat(
-    searchedUser
-  );
-
-  openChat(
-    chatId,
-    searchedUser
-  );
-
-}
-
-
-/* =========================
-   LOAD CHATS
-========================= */
-
-async function loadChats(){
-
-  const list=
-  document.getElementById(
-    "chatList"
-  );
-
-  try{
-
-    const url=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents:runQuery";
-
-
-    const body={
-
-      structuredQuery:{
-
-        from:[
-          {
-            collectionId:"chats"
-          }
-        ],
-
-        where:{
-
-          fieldFilter:{
-
-            field:{
-              fieldPath:"participants"
-            },
-
-            op:"ARRAY_CONTAINS",
-
-            value:str(uid)
-
-          }
-
-        },
-
-        orderBy:[
-
-          {
-
-            field:{
-              fieldPath:"lastMessageAt"
-            },
-
-            direction:"DESCENDING"
-
-          }
-
-        ],
-
-        limit:50
-
-      }
-
-    };
-
-
-    const response=
-    await fetch(
-      url+"?key="+API_KEY,
+      documentsURL +
+      "/users/" +
+      encodeURIComponent(uid),
       {
-
-        method:"POST",
-
         headers:{
-
           Authorization:
-          "Bearer "+token,
-
-          "Content-Type":
-          "application/json"
-
-        },
-
-        body:JSON.stringify(body)
-
+          "Bearer " + token
+        }
       }
-
     );
 
 
     if(!response.ok){
 
-      throw new Error(
-        "Chat query failed"
-      );
+      return null;
 
     }
 
 
-    const rows=
+    const data =
     await response.json();
 
-
-    list.innerHTML="";
-
-
-    if(!rows.length){
-
-      list.innerHTML=
-      `<div class="empty">
-        Abhi koi chat nahi hai.<br>
-        Upar username search karke message bhejo.
-      </div>`;
-
-      return;
-
-    }
-
-
-    for(const row of rows){
-
-      if(!row.document)continue;
-
-      const f=
-      row.document.fields || {};
-
-      const participants=
-      f.participants?.arrayValue?.values
-      || [];
-
-      const otherUID=
-      participants
-      .map(x=>x.stringValue)
-      .find(x=>x!==uid);
-
-
-      if(!otherUID)continue;
-
-
-      const other=
-      await getUserByUID(otherUID);
-
-
-      if(!other)continue;
-
-
-      const lastMessage=
-      f.lastMessage?.stringValue || "";
-
-
-      const time=
-      Number(
-        f.lastMessageAt?.integerValue || 0
-      );
-
-
-      const item=
-      document.createElement("div");
-
-      item.className="chat-item";
-
-
-      item.innerHTML=`
-
-        <img
-          class="chat-avatar"
-          src="${escapeHTML(
-            other.photoURL ||
-            placeholderPhoto()
-          )}"
-        >
-
-        <div class="chat-info">
-
-          <div class="chat-name">
-            ${escapeHTML(
-              other.name ||
-              other.username
-            )}
-          </div>
-
-          <div class="chat-last">
-            ${escapeHTML(
-              lastMessage ||
-              "Start chatting"
-            )}
-          </div>
-
-        </div>
-
-        <div class="chat-time">
-          ${formatTime(time)}
-        </div>
-
-      `;
-
-
-      item.onclick=()=>{
-
-        openChat(
-          makeChatId(uid,otherUID),
-          other
-        );
-
-      };
-
-
-      list.appendChild(item);
-
-    }
-
-
-  }catch(error){
-
-    console.error(error);
-
-    list.innerHTML=
-    `<div class="empty">
-      Chats load nahi ho pa rahe.
-    </div>`;
-
-  }
-
-}
-
-
-/* =========================
-   GET USER
-========================= */
-
-async function getUserByUID(otherUID){
-
-  try{
-
-    const url=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/users/" +
-    otherUID;
-
-
-    const response=
-    await fetch(url,{
-
-      headers:{
-        Authorization:"Bearer "+token
-      }
-
-    });
-
-
-    if(!response.ok)return null;
-
-
-    const data=
-    await response.json();
-
-    const f=data.fields || {};
+    const f =
+    data.fields || {};
 
 
     return {
 
-      uid:otherUID,
+      uid:uid,
 
       name:
       f.name?.stringValue ||
@@ -1502,14 +781,21 @@ async function getUserByUID(otherUID){
       "User",
 
       username:
-      f.username?.stringValue || "",
+      f.username?.stringValue ||
+      "",
 
       photoURL:
-      f.photoURL?.stringValue || ""
+      f.photoURL?.stringValue ||
+      ""
 
     };
 
   }catch(error){
+
+    console.error(
+      "Profile error:",
+      error
+    );
 
     return null;
 
@@ -1518,187 +804,727 @@ async function getUserByUID(otherUID){
 }
 
 
-/* =========================
+/* =====================================================
    OPEN CHAT
-========================= */
+===================================================== */
 
-async function openChat(chatId,otherUser){
+async function openChat(user){
 
-  currentChatId=chatId;
+  if(!user || !user.uid){
 
-  document.getElementById(
-    "chatName"
-  ).textContent=
-  otherUser.name ||
-  otherUser.username;
-
-
-  document.getElementById(
-    "chatUsername"
-  ).textContent=
-  "@"+otherUser.username;
-
-
-  document.getElementById(
-    "chatPhoto"
-  ).src=
-  otherUser.photoURL ||
-  placeholderPhoto();
-
-
-  document.getElementById(
-    "chatScreen"
-  ).style.display="flex";
-
-
-  document.getElementById(
-    "messageInput"
-  ).focus();
-
-
-  await loadMessages();
-
-
-  if(refreshTimer){
-
-    clearInterval(refreshTimer);
+    return;
 
   }
 
 
-  refreshTimer=
+  currentChatUser =
+  user;
+
+
+  mainPage.style.display =
+  "none";
+
+
+  chatWindow.style.display =
+  "block";
+
+
+  messageInputBar.style.display =
+  "flex";
+
+
+  document.getElementById(
+    "chatHeaderName"
+  ).textContent =
+  user.name ||
+  user.username ||
+  "User";
+
+
+  document.getElementById(
+    "chatHeaderUsername"
+  ).textContent =
+  user.username
+  ? "@" + user.username
+  : "";
+
+
+  document.getElementById(
+    "chatHeaderAvatar"
+  ).src =
+  user.photoURL ||
+  placeholderPhoto();
+
+
+  messageInput.focus();
+
+
+  await loadConversation();
+
+
+  clearInterval(
+    refreshTimer
+  );
+
+
+  refreshTimer =
   setInterval(
-    loadMessages,
+    loadConversation,
     3000
   );
 
 }
 
 
-/* =========================
-   CLOSE CHAT
-========================= */
+/* =====================================================
+   LOAD CONVERSATION
+===================================================== */
 
-function closeChat(){
+async function loadConversation(){
 
-  if(refreshTimer){
+  if(!currentChatUser){
 
-    clearInterval(refreshTimer);
-
-    refreshTimer=null;
+    return;
 
   }
-
-  currentChatId=null;
-
-  document.getElementById(
-    "chatScreen"
-  ).style.display="none";
-
-
-  loadChats();
-
-}
-
-
-/* =========================
-   LOAD MESSAGES
-========================= */
-
-async function loadMessages(){
-
-  if(!currentChatId)return;
-
-
-  const box=
-  document.getElementById(
-    "messages"
-  );
 
 
   try{
 
-    const url=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents:runQuery";
+    /*
+      Firebase REST runQuery ek query me
+      sirf ek condition ke liye use hoga.
+
+      Isliye sender aur receiver dono
+      directions alag-alag query karenge.
+    */
 
 
-    const body={
+    const sent =
+    await getMessagesQuery(
+      "senderId",
+      currentUID,
+      currentChatUser.uid
+    );
 
-      structuredQuery:{
 
-        from:[
+    const received =
+    await getMessagesQuery(
+      "receiverId",
+      currentUID,
+      currentChatUser.uid
+    );
 
-          {
-            collectionId:"messages",
-            allDescendants:false
-          }
 
-        ],
+    /*
+      Dono arrays ko combine karke
+      current conversation filter karenge.
+    */
 
-        orderBy:[
+    const all = [];
 
-          {
-            field:{
-              fieldPath:"createdAt"
-            },
 
-            direction:"ASCENDING"
+    sent.forEach(item=>{
 
-          }
+      if(
+        item.senderId===currentUID &&
+        item.receiverId===
+        currentChatUser.uid
+      ){
 
-        ],
-
-        limit:100
+        all.push(item);
 
       }
 
-    };
+    });
+
+
+    received.forEach(item=>{
+
+      if(
+        item.senderId===
+        currentChatUser.uid &&
+        item.receiverId===
+        currentUID
+      ){
+
+        all.push(item);
+
+      }
+
+    });
 
 
     /*
-      Subcollection query ko direct
-      parent document ke andar karne
-      ke liye parent path use karenge.
+      Newest/oldest order.
     */
 
-    const parentURL=
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/chats/" +
-    currentChatId +
-    "/messages";
+    all.sort(
+      (a,b)=>
+      new Date(a.createdAt) -
+      new Date(b.createdAt)
+    );
 
 
-    const directURL=
-    parentURL+"?key="+API_KEY;
+    renderMessages(all);
 
 
-    const response=
-    await fetch(directURL);
+  }catch(error){
+
+    console.error(
+      "Conversation error:",
+      error
+    );
+
+    messagesArea.innerHTML =
+    `<div class="empty">
+      Messages load nahi ho paaye.
+    </div>`;
+
+  }
+
+}
 
 
-    /*
-      Agar direct list available nahi,
-      runQuery fallback.
-    */
+/* =====================================================
+   FIRESTORE MESSAGE QUERY
+===================================================== */
 
-    if(!response.ok){
+async function getMessagesQuery(
+  fieldName,
+  userUID,
+  otherUID
+){
 
-      box.innerHTML=
-      `<div class="empty">
-        Messages load nahi ho pa rahe.
-      </div>`;
+  const queryURL =
+  documentsURL +
+  ":runQuery?key=" +
+  API_KEY;
+
+
+  const body={
+
+    structuredQuery:{
+
+      from:[
+        {
+          collectionId:
+          "messages"
+        }
+      ],
+
+      where:{
+
+        fieldFilter:{
+
+          field:{
+            fieldPath:
+            fieldName
+          },
+
+          op:"EQUAL",
+
+          value:{
+            stringValue:
+            userUID
+          }
+
+        }
+
+      },
+
+      orderBy:[
+
+        {
+          field:{
+            fieldPath:
+            "createdAt"
+          },
+
+          direction:
+          "ASCENDING"
+
+        }
+
+      ],
+
+      limit:100
+
+    }
+
+  };
+
+
+  const response =
+  await fetch(
+    queryURL,
+    {
+
+      method:"POST",
+
+      headers:{
+
+        Authorization:
+        "Bearer " + token,
+
+        "Content-Type":
+        "application/json"
+
+      },
+
+      body:
+      JSON.stringify(body)
+
+    }
+  );
+
+
+  if(!response.ok){
+
+    return [];
+
+  }
+
+
+  const rows =
+  await response.json();
+
+
+  const messages=[];
+
+
+  rows.forEach(row=>{
+
+    if(!row.document){
 
       return;
 
     }
 
 
-    const data=
-    await response.json();
+    const f =
+    row.document.fields || {};
 
 
-    const docs=
-    
+    const senderId =
+    f.senderId?.stringValue ||
+    "";
+
+
+    const receiverId =
+    f.receiverId?.stringValue ||
+    "";
+
+
+    const text =
+    f.text?.stringValue ||
+    "";
+
+
+    const createdAt =
+    f.createdAt?.timestampValue ||
+    f.createdAt?.stringValue ||
+    "";
+
+
+    if(
+      text &&
+      (
+        (
+          senderId===userUID &&
+          receiverId===otherUID
+        )
+        ||
+        (
+          senderId===otherUID &&
+          receiverId===userUID
+        )
+      )
+    ){
+
+      messages.push({
+
+        id:
+        row.document.name,
+
+        senderId:
+        senderId,
+
+        receiverId:
+        receiverId,
+
+        text:
+        text,
+
+        createdAt:
+        createdAt
+
+      });
+
+    }
+
+  });
+
+
+  return messages;
+
+}
+
+
+/* =====================================================
+   SHOW MESSAGES
+===================================================== */
+
+function renderMessages(messages){
+
+  messagesArea.innerHTML="";
+
+
+  if(!messages.length){
+
+    messagesArea.innerHTML =
+    `<div class="empty">
+      Say hi 👋
+      <br>
+      Abhi koi message nahi hai.
+    </div>`;
+
+    return;
+
+  }
+
+
+  messages.forEach(message=>{
+
+    const row =
+    document.createElement(
+      "div"
+    );
+
+
+    row.className =
+    "message-row " +
+    (
+      message.senderId===currentUID
+      ? "mine"
+      : "theirs"
+    );
+
+
+    const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+    bubble.className =
+    "message-bubble";
+
+
+    const text =
+    document.createElement(
+      "div"
+    );
+
+
+    text.textContent =
+    message.text;
+
+
+    bubble.appendChild(
+      text
+    );
+
+
+    const time =
+    document.createElement(
+      "div"
+    );
+
+
+    time.className =
+    "message-time";
+
+
+    time.textContent =
+    formatTime(
+      message.createdAt
+    );
+
+
+    bubble.appendChild(
+      time
+    );
+
+
+    row.appendChild(
+      bubble
+    );
+
+
+    messagesArea.appendChild(
+      row
+    );
+
+  });
+
+
+  /*
+    Neeche scroll.
+  */
+
+  messagesArea.scrollTop =
+  messagesArea.scrollHeight;
+
+}
+
+
+/* =====================================================
+   SEND MESSAGE
+===================================================== */
+
+async function sendMessage(){
+
+  if(!currentChatUser){
+
+    return;
+
+  }
+
+
+  const text =
+  messageInput.value.trim();
+
+
+  if(!text){
+
+    return;
+
+  }
+
+
+  sendBtn.disabled =
+  true;
+
+
+  try{
+
+    const response =
+    await fetch(
+      documentsURL +
+      "/messages?key=" +
+      API_KEY,
+      {
+
+        method:"POST",
+
+        headers:{
+
+          Authorization:
+          "Bearer " + token,
+
+          "Content-Type":
+          "application/json"
+
+        },
+
+        body:
+        JSON.stringify({
+
+          fields:{
+
+            senderId:
+            stringField(
+              currentUID
+            ),
+
+            receiverId:
+            stringField(
+              currentChatUser.uid
+            ),
+
+            text:
+            stringField(
+              text
+            ),
+
+            createdAt:
+            timestampField()
+
+          }
+
+        })
+
+      }
+    );
+
+
+    if(!response.ok){
+
+      const errorText =
+      await response.text();
+
+      console.error(
+        errorText
+      );
+
+      alert(
+        "Message send nahi hua."
+      );
+
+      return;
+
+    }
+
+
+    messageInput.value =
+    "";
+
+
+    await loadConversation();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Message send nahi hua."
+    );
+
+  }finally{
+
+    sendBtn.disabled =
+    false;
+
+    messageInput.focus();
+
+  }
+
+}
+
+
+/* =====================================================
+   SEND BUTTON
+===================================================== */
+
+sendBtn.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+/* =====================================================
+   ENTER TO SEND
+===================================================== */
+
+messageInput.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.key==="Enter" &&
+      !e.shiftKey
+    ){
+
+      e.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BACK TO CHAT LIST
+===================================================== */
+
+document
+  .getElementById("backChat")
+  .addEventListener(
+    "click",
+    function(){
+
+      clearInterval(
+        refreshTimer
+      );
+
+      currentChatUser =
+      null;
+
+      chatWindow.style.display =
+      "none";
+
+      messageInputBar.style.display =
+      "none";
+
+      mainPage.style.display =
+      "block";
+
+      loadRecentChats();
+
+    }
+  );
+
+
+/* =====================================================
+   SEARCH USERS FOR NEW CHAT
+===================================================== */
+
+newChatInput.addEventListener(
+  "input",
+  function(){
+
+    clearTimeout(
+      window.chatSearchTimer
+    );
+
+
+    const text =
+    newChatInput.value
+      .trim()
+      .toLowerCase();
+
+
+    if(!text){
+
+      searchResults.style.display =
+      "none";
+
+      searchResults.innerHTML =
+      "";
+
+      return;
+
+    }
+
+
+    window.chatSearchTimer =
+    setTimeout(
+      function(){
+
+        searchPeople(text);
+
+      },
+      250
+    );
+
+  }
+);
+
+
+newChatBtn.addEventListener(
+  "click",
+  function(){
+
+    const text =
+    newChatInput.value
+      .trim()
+      .toLowerCase();
+
+
+    if(text){
+
+      searchPeople(te
