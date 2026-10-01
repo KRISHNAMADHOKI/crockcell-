@@ -2,1191 +2,1703 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Messages - CROCKCELL</title>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<title>CROCKCELL Messages</title>
 
 <style>
 
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif;
+  box-sizing:border-box;
 }
 
 body{
-    background:#f4f4f7;
-    padding-bottom:75px;
+
+  margin:0;
+
+  background:#000;
+
+  color:#fff;
+
+  font-family:
+  Arial,
+  Helvetica,
+  sans-serif;
+
+  min-height:100vh;
+
 }
 
-header{
-    background:white;
-    padding:18px;
-    text-align:center;
-    color:#4f46e5;
-    font-size:24px;
-    font-weight:bold;
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:10;
+
+  padding:18px 18px 12px;
+
+  background:
+  rgba(0,0,0,.92);
+
+  backdrop-filter:
+  blur(15px);
+
+  border-bottom:
+  1px solid #222;
+
 }
 
-.container{
-    max-width:500px;
-    margin:auto;
-    padding:15px 12px;
+.header h1{
+
+  margin:0;
+
+  font-size:27px;
+
 }
 
-.title{
-    margin-bottom:15px;
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+
+  display:flex;
+
+  gap:8px;
+
+  margin-top:15px;
+
+}
+
+.search-input{
+
+  flex:1;
+
+  height:48px;
+
+  border:0;
+
+  outline:none;
+
+  border-radius:18px;
+
+  padding:0 16px;
+
+  background:#191919;
+
+  color:#fff;
+
+  font-size:16px;
+
+}
+
+.search-btn{
+
+  width:52px;
+
+  border:0;
+
+  border-radius:18px;
+
+  background:#fff;
+
+  color:#000;
+
+  font-size:20px;
+
+}
+
+
+/* =========================
+   SEARCH RESULT
+========================= */
+
+.result{
+
+  display:none;
+
+  margin-top:12px;
+
+  padding:12px;
+
+  border-radius:18px;
+
+  background:#151515;
+
+  align-items:center;
+
+  gap:12px;
+
+}
+
+.result img{
+
+  width:48px;
+
+  height:48px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  background:#333;
+
+}
+
+.result-info{
+
+  flex:1;
+
+}
+
+.result-name{
+
+  font-weight:bold;
+
+  font-size:16px;
+
+}
+
+.result-username{
+
+  color:#888;
+
+  font-size:14px;
+
+  margin-top:3px;
+
+}
+
+.chat-btn{
+
+  border:0;
+
+  border-radius:14px;
+
+  padding:10px 14px;
+
+  background:#fff;
+
+  color:#000;
+
+  font-weight:bold;
+
+}
+
+
+/* =========================
+   CHAT LIST
+========================= */
+
+.section-title{
+
+  padding:18px 18px 8px;
+
+  color:#999;
+
+  font-size:14px;
+
+  font-weight:bold;
+
+  text-transform:uppercase;
+
 }
 
 .chat-list{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+
+  padding-bottom:90px;
+
 }
 
-.chat-user{
-    background:white;
-    padding:14px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    cursor:pointer;
+.chat-item{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:13px;
+
+  padding:14px 18px;
+
+  cursor:pointer;
+
 }
 
-.chat-user:active{
-    transform:scale(.98);
+.chat-item:active{
+
+  background:#111;
+
 }
 
-.chat-user img{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#ddd;
+.chat-avatar{
+
+  width:56px;
+
+  height:56px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  background:#222;
+
 }
 
-.avatar{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    background:#4f46e5;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    font-weight:bold;
+.chat-info{
+
+  flex:1;
+
+  min-width:0;
+
 }
 
-.user-info{
-    flex:1;
+.chat-name{
+
+  font-size:17px;
+
+  font-weight:bold;
+
 }
 
-.username{
-    font-weight:bold;
-    font-size:16px;
+.chat-last{
+
+  color:#888;
+
+  margin-top:5px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
 }
 
-.last-message{
-    color:#777;
-    font-size:13px;
-    margin-top:5px;
+.chat-time{
+
+  color:#666;
+
+  font-size:12px;
+
 }
 
-.call-icons{
-    display:flex;
-    gap:6px;
-}
 
-.call-icon{
-    width:40px;
-    height:40px;
-    border:none;
-    border-radius:50%;
-    background:#f0efff;
-    font-size:19px;
-    cursor:pointer;
-}
-
-.empty{
-    background:white;
-    padding:30px;
-    text-align:center;
-    border-radius:15px;
-    color:#777;
-}
-
-/* CHAT */
+/* =========================
+   CHAT SCREEN
+========================= */
 
 .chat-screen{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:#f4f4f7;
-    z-index:10;
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:50;
+
+  background:#000;
+
+  flex-direction:column;
+
 }
 
 .chat-header{
-    background:white;
-    padding:12px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    box-shadow:0 1px 5px rgba(0,0,0,.08);
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:15px;
+
+  border-bottom:1px solid #222;
+
+  background:#050505;
+
 }
 
-.back-button{
-    border:none;
-    background:none;
-    font-size:27px;
-    width:40px;
-    height:40px;
+.back-btn{
+
+  width:42px;
+
+  height:42px;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:#171717;
+
+  color:#fff;
+
+  font-size:22px;
+
 }
 
-.chat-title{
-    font-weight:bold;
-    font-size:17px;
-    flex:1;
+.chat-avatar-small{
+
+  width:43px;
+
+  height:43px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  background:#222;
+
 }
 
-.header-call-buttons{
-    display:flex;
-    gap:5px;
+.chat-header-info{
+
+  flex:1;
+
 }
 
-.header-call{
-    border:none;
-    background:#f0efff;
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    font-size:18px;
+.chat-header-name{
+
+  font-size:17px;
+
+  font-weight:bold;
+
 }
+
+.chat-header-username{
+
+  color:#777;
+
+  font-size:13px;
+
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
 
 .messages{
-    height:calc(100vh - 130px);
-    overflow-y:auto;
-    padding:15px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:18px 14px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
 }
 
-.message{
-    max-width:75%;
-    padding:10px 13px;
-    border-radius:15px;
-    font-size:15px;
-    word-wrap:break-word;
+.bubble{
+
+  max-width:78%;
+
+  padding:11px 14px;
+
+  border-radius:18px;
+
+  font-size:16px;
+
+  line-height:1.35;
+
+  word-wrap:break-word;
+
 }
 
-.sent{
-    align-self:flex-end;
-    background:#4f46e5;
-    color:white;
-    border-bottom-right-radius:4px;
+.mine{
+
+  align-self:flex-end;
+
+  background:#fff;
+
+  color:#000;
+
+  border-bottom-right-radius:5px;
+
 }
 
-.received{
-    align-self:flex-start;
-    background:white;
-    color:#222;
-    border-bottom-left-radius:4px;
+.theirs{
+
+  align-self:flex-start;
+
+  background:#202020;
+
+  color:#fff;
+
+  border-bottom-left-radius:5px;
+
 }
 
-.message-time{
-    font-size:10px;
-    opacity:.7;
-    margin-top:4px;
-    text-align:right;
+.msg-time{
+
+  display:block;
+
+  font-size:10px;
+
+  opacity:.5;
+
+  margin-top:4px;
+
 }
 
-.message-box{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    padding:10px;
-    display:flex;
-    gap:8px;
+
+/* =========================
+   SEND
+========================= */
+
+.send-area{
+
+  display:flex;
+
+  gap:8px;
+
+  padding:10px;
+
+  border-top:1px solid #222;
+
+  background:#050505;
+
 }
 
 .message-input{
-    flex:1;
-    border:1px solid #ddd;
-    border-radius:22px;
-    padding:11px 15px;
-    outline:none;
+
+  flex:1;
+
+  min-width:0;
+
+  height:48px;
+
+  border:0;
+
+  outline:none;
+
+  border-radius:20px;
+
+  background:#191919;
+
+  color:#fff;
+
+  padding:0 16px;
+
+  font-size:16px;
+
 }
 
-.send-button{
-    border:none;
-    background:#4f46e5;
-    color:white;
-    border-radius:22px;
-    padding:10px 17px;
-    font-weight:bold;
+.send-btn{
+
+  width:52px;
+
+  height:48px;
+
+  border:0;
+
+  border-radius:20px;
+
+  background:#fff;
+
+  color:#000;
+
+  font-size:20px;
+
+  font-weight:bold;
+
 }
 
-/* CALL SCREEN */
 
-.call-screen{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:50;
-    background:#111;
-    color:white;
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+  text-align:center;
+
+  color:#666;
+
+  padding:50px 20px;
+
+  font-size:15px;
+
 }
 
-.call-top{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    padding:20px;
-    text-align:center;
-    z-index:5;
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+
+  position:fixed;
+
+  left:12px;
+
+  right:12px;
+
+  bottom:12px;
+
+  z-index:20;
+
+  display:flex;
+
+  justify-content:space-around;
+
+  padding:8px;
+
+  border-radius:24px;
+
+  background:
+  rgba(25,25,25,.88);
+
+  backdrop-filter:
+  blur(18px);
+
+  border:1px solid #333;
+
 }
 
-.call-name{
-    font-size:20px;
-    font-weight:bold;
+.nav-item{
+
+  flex:1;
+
+  text-align:center;
+
+  padding:9px 5px;
+
+  border-radius:17px;
+
+  color:#999;
+
+  text-decoration:none;
+
+  font-size:12px;
+
 }
 
-.call-status{
-    margin-top:7px;
-    font-size:14px;
-    color:#ccc;
+.nav-item.active{
+
+  background:#fff;
+
+  color:#000;
+
 }
 
-.remote-video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    background:#222;
-}
+.nav-icon{
 
-.local-video{
-    position:absolute;
-    right:15px;
-    top:85px;
-    width:110px;
-    height:155px;
-    object-fit:cover;
-    background:#333;
-    border-radius:14px;
-    border:2px solid white;
-}
+  display:block;
 
-.audio-placeholder{
-    width:120px;
-    height:120px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    background:#4f46e5;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:50px;
-}
+  font-size:20px;
 
-.call-controls{
-    position:absolute;
-    bottom:30px;
-    left:0;
-    right:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    z-index:10;
-}
+  margin-bottom:3px;
 
-.call-control{
-    width:54px;
-    height:54px;
-    border:none;
-    border-radius:50%;
-    background:#333;
-    color:white;
-    font-size:22px;
-}
-
-.call-control.active{
-    background:#4f46e5;
-}
-
-.end-call{
-    width:62px;
-    height:62px;
-    border:none;
-    border-radius:50%;
-    background:#e53935;
-    color:white;
-    font-size:25px;
-}
-
-.permission-box{
-    position:absolute;
-    left:15px;
-    right:15px;
-    bottom:110px;
-    background:rgba(0,0,0,.75);
-    padding:12px;
-    border-radius:12px;
-    text-align:center;
-    font-size:13px;
-    z-index:20;
-}
-
-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:13px 5px;
-    box-shadow:0 -2px 10px rgba(0,0,0,.08);
-    z-index:5;
-}
-
-nav a{
-    text-decoration:none;
-    color:#555;
-    font-size:13px;
-    text-align:center;
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<header>
-CROCKCELL
-</header>
 
-<div class="container">
+<!-- =========================
+     MAIN MESSAGES
+========================= -->
 
-    <h3 class="title">
-        💬 Messages
-    </h3>
+<div id="mainPage">
 
-    <div id="chatList" class="chat-list"></div>
+  <div class="header">
 
-</div>
+    <h1>Messages</h1>
 
+    <div class="search-box">
 
-<!-- CHAT SCREEN -->
+      <input
+        id="searchInput"
+        class="search-input"
+        placeholder="Search username..."
+        autocomplete="off"
+      >
 
-<div id="chatScreen" class="chat-screen">
-
-    <div class="chat-header">
-
-        <button class="back-button" onclick="closeChat()">
-            ←
-        </button>
-
-        <div id="chatTitle" class="chat-title">
-            Chat
-        </div>
-
-        <div class="header-call-buttons">
-
-            <button
-                class="header-call"
-                onclick="startCall('audio')"
-                title="Voice Call">
-                📞
-            </button>
-
-            <button
-                class="header-call"
-                onclick="startCall('video')"
-                title="Video Call">
-                📹
-            </button>
-
-        </div>
+      <button
+        class="search-btn"
+        onclick="searchUser()"
+      >⌕</button>
 
     </div>
-
-
-    <div id="messages" class="messages"></div>
-
-
-    <div class="message-box">
-
-        <input
-            id="messageInput"
-            class="message-input"
-            type="text"
-            placeholder="Message..."
-            onkeydown="handleEnter(event)"
-        >
-
-        <button
-            class="send-button"
-            onclick="sendMessage()">
-            Send
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- CALL SCREEN -->
-
-<div id="callScreen" class="call-screen">
-
-    <div class="call-top">
-
-        <div id="callName" class="call-name">
-            @User
-        </div>
-
-        <div id="callStatus" class="call-status">
-            Calling...
-        </div>
-
-    </div>
-
 
     <div
-        id="audioPlaceholder"
-        class="audio-placeholder">
-        👤
-    </div>
+      id="searchResult"
+      class="result"
+    >
 
+      <img
+        id="resultPhoto"
+        src=""
+        alt=""
+      >
 
-    <video
-        id="remoteVideo"
-        class="remote-video"
-        autoplay
-        playsinline>
-    </video>
+      <div class="result-info">
 
+        <div
+          id="resultName"
+          class="result-name"
+        ></div>
 
-    <video
-        id="localVideo"
-        class="local-video"
-        autoplay
-        muted
-        playsinline>
-    </video>
+        <div
+          id="resultUsername"
+          class="result-username"
+        ></div>
 
+      </div>
 
-    <div class="permission-box" id="permissionBox">
-        Microphone/camera permission may be required.
-    </div>
-
-
-    <div class="call-controls">
-
-        <button
-            class="call-control"
-            id="muteButton"
-            onclick="toggleMute()">
-            🎤
-        </button>
-
-        <button
-            class="call-control"
-            id="cameraButton"
-            onclick="toggleCamera()">
-            📷
-        </button>
-
-        <button
-            class="call-control"
-            onclick="toggleSpeaker()">
-            🔊
-        </button>
-
-        <button
-            class="end-call"
-            onclick="endCall()">
-            📞
-        </button>
+      <button
+        class="chat-btn"
+        onclick="openSearchedChat()"
+      >
+        Message
+      </button>
 
     </div>
+
+  </div>
+
+
+  <div class="section-title">
+    Chats
+  </div>
+
+  <div
+    id="chatList"
+    class="chat-list"
+  >
+
+    <div class="empty">
+      Loading chats...
+    </div>
+
+  </div>
 
 </div>
 
 
-<nav>
+<!-- =========================
+     CHAT SCREEN
+========================= -->
 
-<a href="home.html">
-🏠<br>Home
-</a>
+<div
+  id="chatScreen"
+  class="chat-screen"
+>
 
-<a href="search.html">
-🔍<br>Search
-</a>
+  <div class="chat-header">
 
-<a href="create.html">
-➕<br>Create
-</a>
+    <button
+      class="back-btn"
+      onclick="closeChat()"
+    >
+      ‹
+    </button>
 
-<a href="activity.html">
-🔔<br>Activity
-</a>
+    <img
+      id="chatPhoto"
+      class="chat-avatar-small"
+      src=""
+      alt=""
+    >
 
-<a href="profile.html">
-👤<br>Profile
-</a>
+    <div class="chat-header-info">
 
-</nav>
+      <div
+        id="chatName"
+        class="chat-header-name"
+      ></div>
+
+      <div
+        id="chatUsername"
+        class="chat-header-username"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="messages"
+    class="messages"
+  ></div>
+
+
+  <div class="send-area">
+
+    <input
+      id="messageInput"
+      class="message-input"
+      placeholder="Message..."
+      autocomplete="off"
+    >
+
+    <button
+      class="send-btn"
+      onclick="sendMessage()"
+    >
+      ➤
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<div class="bottom-nav">
+
+  <a
+    class="nav-item"
+    href="home.html"
+  >
+    <span class="nav-icon">⌂</span>
+    Home
+  </a>
+
+  <a
+    class="nav-item"
+    href="search.html"
+  >
+    <span class="nav-icon">⌕</span>
+    Search
+  </a>
+
+  <a
+    class="nav-item"
+    href="reels.html"
+  >
+    <span class="nav-icon">▶</span>
+    Reels
+  </a>
+
+  <a
+    class="nav-item active"
+    href="messages.html"
+  >
+    <span class="nav-icon">♡</span>
+    Messages
+  </a>
+
+  <a
+    class="nav-item"
+    href="profile.html"
+  >
+    <span class="nav-icon">◯</span>
+    Profile
+  </a>
+
+</div>
 
 
 <script>
 
-let currentUser = null;
-let currentCallType = null;
-let localStream = null;
-let audioMuted = false;
-let cameraDisabled = false;
-let speakerEnabled = true;
+/* =========================
+   FIREBASE
+========================= */
+
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
+const PROJECT_ID =
+"crockcell-cd2e6";
 
 
-/* PROFILE */
+/* =========================
+   SESSION
+========================= */
 
-function getProfile(){
+let token =
+localStorage.getItem(
+  "crockcell_idToken"
+);
 
-    let data =
-        localStorage.getItem("crockcellProfile");
+let uid =
+localStorage.getItem(
+  "crockcell_uid"
+);
 
-    if(!data){
+if(!token || !uid){
 
-        return {
-            username:"krishna",
-            photo:""
-        };
-
-    }
-
-    try{
-
-        return JSON.parse(data);
-
-    }catch(error){
-
-        return {
-            username:"krishna",
-            photo:""
-        };
-
-    }
+  window.location.replace(
+    "index.html"
+  );
 
 }
 
 
-/* LOAD CHAT USERS */
+/* =========================
+   STATE
+========================= */
 
-function loadUsers(){
+let currentChatId=null;
 
-    const chatList =
-        document.getElementById("chatList");
+let currentUser=null;
 
-    let profile =
-        getProfile();
+let searchedUser=null;
 
-    let username =
-        profile.username || "krishna";
+let refreshTimer=null;
 
-    let photo =
-        profile.photo || "";
 
-    let avatarHTML =
-        photo
-        ? `<img src="${photo}" alt="Profile">`
-        : `<div class="avatar">
-            ${username.charAt(0).toUpperCase()}
-           </div>`;
+/* =========================
+   FIRESTORE VALUE HELPERS
+========================= */
 
-    let savedMessages =
-        getMessages(username);
+function str(value){
 
-    let lastMessage =
-        "Start a conversation";
+  return {
+    stringValue:String(value ?? "")
+  };
 
-    if(savedMessages.length > 0){
+}
 
-        lastMessage =
-            savedMessages[
-                savedMessages.length - 1
-            ].text;
+function num(value){
+
+  return {
+    integerValue:String(value)
+  };
+
+}
+
+function bool(value){
+
+  return {
+    booleanValue:!!value
+  };
+
+}
+
+
+/* =========================
+   LOAD CURRENT USER
+========================= */
+
+async function loadCurrentUser(){
+
+  try{
+
+    const url=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/users/" +
+    uid;
+
+    const response=
+    await fetch(url,{
+
+      headers:{
+        Authorization:"Bearer "+token
+      }
+
+    });
+
+    if(!response.ok)return;
+
+    const data=
+    await response.json();
+
+    const f=data.fields || {};
+
+    currentUser={
+
+      uid,
+
+      name:
+      f.name?.stringValue || "User",
+
+      username:
+      f.username?.stringValue || "",
+
+      email:
+      f.email?.stringValue || "",
+
+      photoURL:
+      f.photoURL?.stringValue || ""
+
+    };
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   USERNAME SEARCH
+========================= */
+
+async function searchUser(){
+
+  const input=
+  document.getElementById(
+    "searchInput"
+  );
+
+  const username=
+  input.value.trim().toLowerCase();
+
+  if(!username)return;
+
+  const result=
+  document.getElementById(
+    "searchResult"
+  );
+
+  result.style.display="none";
+
+  try{
+
+    const url=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/usernameIndex/" +
+    encodeURIComponent(username);
+
+    const response=
+    await fetch(
+      url + "?key=" + API_KEY
+    );
+
+    if(!response.ok){
+
+      alert("User nahi mila.");
+
+      return;
 
     }
 
-    chatList.innerHTML = `
+    const data=
+    await response.json();
 
-        <div class="chat-user">
+    const f=data.fields || {};
 
-            ${avatarHTML}
+    const foundUID=
+    f.uid?.stringValue || "";
 
-            <div
-                class="user-info"
-                onclick="openChat('${username}')">
+    const foundUsername=
+    f.username?.stringValue || username;
 
-                <div class="username">
-                    @${username}
-                </div>
+    const foundEmail=
+    f.email?.stringValue || "";
 
-                <div class="last-message">
-                    ${escapeHTML(lastMessage)}
-                </div>
 
-            </div>
+    if(foundUID===uid){
 
-            <div class="call-icons">
+      alert("Ye tumhara khud ka account hai.");
 
-                <button
-                    class="call-icon"
-                    onclick="quickCall(event,'${username}','audio')">
-                    📞
-                </button>
+      return;
 
-                <button
-                    class="call-icon"
-                    onclick="quickCall(event,'${username}','video')">
-                    📹
-                </button>
+    }
 
-            </div>
+
+    searchedUser={
+
+      uid:foundUID,
+
+      username:foundUsername,
+
+      email:foundEmail,
+
+      name:foundUsername,
+
+      photoURL:""
+
+    };
+
+
+    /* Load profile photo/name */
+
+    try{
+
+      const profileURL=
+      "https://firestore.googleapis.com/v1/projects/" +
+      PROJECT_ID +
+      "/databases/(default)/documents/users/" +
+      foundUID;
+
+      const profileResponse=
+      await fetch(profileURL,{
+
+        headers:{
+          Authorization:"Bearer "+token
+        }
+
+      });
+
+      if(profileResponse.ok){
+
+        const profile=
+        await profileResponse.json();
+
+        const pf=
+        profile.fields || {};
+
+        searchedUser.name=
+        pf.name?.stringValue ||
+        foundUsername;
+
+        searchedUser.photoURL=
+        pf.photoURL?.stringValue || "";
+
+      }
+
+    }catch(e){}
+
+
+    document.getElementById(
+      "resultName"
+    ).textContent=
+    searchedUser.name;
+
+
+    document.getElementById(
+      "resultUsername"
+    ).textContent=
+    "@"+searchedUser.username;
+
+
+    document.getElementById(
+      "resultPhoto"
+    ).src=
+    searchedUser.photoURL ||
+    "data:image/svg+xml,"+
+    "<svg xmlns='http://www.w3.org/2000/svg'"+
+    " width='100' height='100'>"+
+    "<rect width='100' height='100' fill='%23333'/>"+
+    "</svg>";
+
+
+    result.style.display="flex";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Search failed.");
+
+  }
+
+}
+
+
+/* =========================
+   CHAT ID
+========================= */
+
+function makeChatId(uid1,uid2){
+
+  return [uid1,uid2]
+    .sort()
+    .join("_");
+
+}
+
+
+/* =========================
+   CREATE / UPDATE CHAT
+========================= */
+
+async function ensureChat(otherUser){
+
+  const chatId=
+  makeChatId(uid,otherUser.uid);
+
+  const url=
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents/chats/" +
+  chatId;
+
+
+  const body={
+
+    fields:{
+
+      participants:{
+        arrayValue:{
+          values:[
+            str(uid),
+            str(otherUser.uid)
+          ]
+        }
+      },
+
+      participantNames:{
+        mapValue:{
+          fields:{
+
+            [uid]:str(
+              currentUser?.username || "User"
+            ),
+
+            [otherUser.uid]:str(
+              otherUser.username
+            )
+
+          }
+        }
+      },
+
+      lastMessage:str(""),
+
+      lastMessageAt:num(
+        Date.now()
+      )
+
+    }
+
+  };
+
+
+  await fetch(
+    url + "?updateMask.fieldPaths=participants" +
+    "&updateMask.fieldPaths=participantNames" +
+    "&updateMask.fieldPaths=lastMessage" +
+    "&updateMask.fieldPaths=lastMessageAt",
+    {
+
+      method:"PATCH",
+
+      headers:{
+
+        Authorization:"Bearer "+token,
+
+        "Content-Type":
+        "application/json"
+
+      },
+
+      body:JSON.stringify(body)
+
+    }
+
+  );
+
+
+  return chatId;
+
+}
+
+
+/* =========================
+   OPEN SEARCHED CHAT
+========================= */
+
+async function openSearchedChat(){
+
+  if(!searchedUser)return;
+
+  const chatId=
+  await ensureChat(
+    searchedUser
+  );
+
+  openChat(
+    chatId,
+    searchedUser
+  );
+
+}
+
+
+/* =========================
+   LOAD CHATS
+========================= */
+
+async function loadChats(){
+
+  const list=
+  document.getElementById(
+    "chatList"
+  );
+
+  try{
+
+    const url=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents:runQuery";
+
+
+    const body={
+
+      structuredQuery:{
+
+        from:[
+          {
+            collectionId:"chats"
+          }
+        ],
+
+        where:{
+
+          fieldFilter:{
+
+            field:{
+              fieldPath:"participants"
+            },
+
+            op:"ARRAY_CONTAINS",
+
+            value:str(uid)
+
+          }
+
+        },
+
+        orderBy:[
+
+          {
+
+            field:{
+              fieldPath:"lastMessageAt"
+            },
+
+            direction:"DESCENDING"
+
+          }
+
+        ],
+
+        limit:50
+
+      }
+
+    };
+
+
+    const response=
+    await fetch(
+      url+"?key="+API_KEY,
+      {
+
+        method:"POST",
+
+        headers:{
+
+          Authorization:
+          "Bearer "+token,
+
+          "Content-Type":
+          "application/json"
+
+        },
+
+        body:JSON.stringify(body)
+
+      }
+
+    );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Chat query failed"
+      );
+
+    }
+
+
+    const rows=
+    await response.json();
+
+
+    list.innerHTML="";
+
+
+    if(!rows.length){
+
+      list.innerHTML=
+      `<div class="empty">
+        Abhi koi chat nahi hai.<br>
+        Upar username search karke message bhejo.
+      </div>`;
+
+      return;
+
+    }
+
+
+    for(const row of rows){
+
+      if(!row.document)continue;
+
+      const f=
+      row.document.fields || {};
+
+      const participants=
+      f.participants?.arrayValue?.values
+      || [];
+
+      const otherUID=
+      participants
+      .map(x=>x.stringValue)
+      .find(x=>x!==uid);
+
+
+      if(!otherUID)continue;
+
+
+      const other=
+      await getUserByUID(otherUID);
+
+
+      if(!other)continue;
+
+
+      const lastMessage=
+      f.lastMessage?.stringValue || "";
+
+
+      const time=
+      Number(
+        f.lastMessageAt?.integerValue || 0
+      );
+
+
+      const item=
+      document.createElement("div");
+
+      item.className="chat-item";
+
+
+      item.innerHTML=`
+
+        <img
+          class="chat-avatar"
+          src="${escapeHTML(
+            other.photoURL ||
+            placeholderPhoto()
+          )}"
+        >
+
+        <div class="chat-info">
+
+          <div class="chat-name">
+            ${escapeHTML(
+              other.name ||
+              other.username
+            )}
+          </div>
+
+          <div class="chat-last">
+            ${escapeHTML(
+              lastMessage ||
+              "Start chatting"
+            )}
+          </div>
 
         </div>
 
-    `;
+        <div class="chat-time">
+          ${formatTime(time)}
+        </div>
 
-}
-
-
-/* ESCAPE HTML */
-
-function escapeHTML(text){
-
-    return String(text)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
+      `;
 
 
-/* MESSAGES */
+      item.onclick=()=>{
 
-function getMessages(username){
+        openChat(
+          makeChatId(uid,otherUID),
+          other
+        );
 
-    let key =
-        "crockcellMessages_" +
-        username;
+      };
 
-    let data =
-        localStorage.getItem(key);
 
-    if(!data){
-        return [];
-    }
-
-    try{
-
-        let messages =
-            JSON.parse(data);
-
-        if(Array.isArray(messages)){
-            return messages;
-        }
-
-    }catch(error){
-
-        console.log("Message error");
+      list.appendChild(item);
 
     }
 
-    return [];
+
+  }catch(error){
+
+    console.error(error);
+
+    list.innerHTML=
+    `<div class="empty">
+      Chats load nahi ho pa rahe.
+    </div>`;
+
+  }
 
 }
 
 
-function saveMessages(username,messages){
+/* =========================
+   GET USER
+========================= */
 
-    localStorage.setItem(
-        "crockcellMessages_" +
-        username,
-        JSON.stringify(messages)
-    );
+async function getUserByUID(otherUID){
+
+  try{
+
+    const url=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/users/" +
+    otherUID;
+
+
+    const response=
+    await fetch(url,{
+
+      headers:{
+        Authorization:"Bearer "+token
+      }
+
+    });
+
+
+    if(!response.ok)return null;
+
+
+    const data=
+    await response.json();
+
+    const f=data.fields || {};
+
+
+    return {
+
+      uid:otherUID,
+
+      name:
+      f.name?.stringValue ||
+      f.username?.stringValue ||
+      "User",
+
+      username:
+      f.username?.stringValue || "",
+
+      photoURL:
+      f.photoURL?.stringValue || ""
+
+    };
+
+  }catch(error){
+
+    return null;
+
+  }
 
 }
 
 
-/* OPEN CHAT */
+/* =========================
+   OPEN CHAT
+========================= */
 
-function openChat(username){
+async function openChat(chatId,otherUser){
 
-    currentUser =
-        username;
+  currentChatId=chatId;
 
-    document.getElementById(
-        "chatScreen"
-    ).style.display = "block";
+  document.getElementById(
+    "chatName"
+  ).textContent=
+  otherUser.name ||
+  otherUser.username;
 
-    document.getElementById(
-        "chatTitle"
-    ).innerText =
-        "@" + username;
 
-    loadMessages();
+  document.getElementById(
+    "chatUsername"
+  ).textContent=
+  "@"+otherUser.username;
 
-    setTimeout(function(){
 
-        document.getElementById(
-            "messageInput"
-        ).focus();
+  document.getElementById(
+    "chatPhoto"
+  ).src=
+  otherUser.photoURL ||
+  placeholderPhoto();
 
-    },100);
+
+  document.getElementById(
+    "chatScreen"
+  ).style.display="flex";
+
+
+  document.getElementById(
+    "messageInput"
+  ).focus();
+
+
+  await loadMessages();
+
+
+  if(refreshTimer){
+
+    clearInterval(refreshTimer);
+
+  }
+
+
+  refreshTimer=
+  setInterval(
+    loadMessages,
+    3000
+  );
 
 }
 
 
-/* CLOSE CHAT */
+/* =========================
+   CLOSE CHAT
+========================= */
 
 function closeChat(){
 
-    document.getElementById(
-        "chatScreen"
-    ).style.display = "none";
+  if(refreshTimer){
 
-    currentUser =
-        null;
+    clearInterval(refreshTimer);
 
-    loadUsers();
+    refreshTimer=null;
 
-}
+  }
+
+  currentChatId=null;
+
+  document.getElementById(
+    "chatScreen"
+  ).style.display="none";
 
 
-/* LOAD MESSAGES */
-
-function loadMessages(){
-
-    if(!currentUser){
-        return;
-    }
-
-    let messageContainer =
-        document.getElementById("messages");
-
-    let messages =
-        getMessages(currentUser);
-
-    if(messages.length === 0){
-
-        messageContainer.innerHTML = `
-
-            <div
-                style="
-                text-align:center;
-                color:#888;
-                margin-top:30px;
-                ">
-
-                👋<br><br>
-
-                Start chatting with
-                @${escapeHTML(currentUser)}
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-    let html = "";
-
-    messages.forEach(function(message){
-
-        let messageClass =
-            message.sender === "me"
-            ? "sent"
-            : "received";
-
-        html += `
-
-            <div class="message ${messageClass}">
-
-                ${escapeHTML(message.text)}
-
-                <div class="message-time">
-                    ${escapeHTML(message.time)}
-                </div>
-
-            </div>
-
-        `;
-
-    });
-
-    messageContainer.innerHTML =
-        html;
-
-    messageContainer.scrollTop =
-        messageContainer.scrollHeight;
+  loadChats();
 
 }
 
 
-/* SEND MESSAGE */
+/* =========================
+   LOAD MESSAGES
+========================= */
 
-function sendMessage(){
+async function loadMessages(){
 
-    if(!currentUser){
-        return;
-    }
-
-    let input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    let text =
-        input.value.trim();
-
-    if(text === ""){
-        return;
-    }
-
-    let messages =
-        getMessages(currentUser);
-
-    let now =
-        new Date();
-
-    let time =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
-    messages.push({
-
-        sender:"me",
-        text:text,
-        time:time
-
-    });
-
-    saveMessages(
-        currentUser,
-        messages
-    );
-
-    input.value = "";
-
-    loadMessages();
-    loadUsers();
-
-}
+  if(!currentChatId)return;
 
 
-/* ENTER */
-
-function handleEnter(event){
-
-    if(event.key === "Enter"){
-
-        sendMessage();
-
-    }
-
-}
+  const box=
+  document.getElementById(
+    "messages"
+  );
 
 
-/* QUICK CALL */
+  try{
 
-function quickCall(event,username,type){
-
-    event.stopPropagation();
-
-    openChat(username);
-
-    setTimeout(function(){
-
-        startCall(type);
-
-    },150);
-
-}
+    const url=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents:runQuery";
 
 
-/* START CALL */
+    const body={
 
-async function startCall(type){
+      structuredQuery:{
 
-    if(!currentUser){
+        from:[
 
-        alert("Pehle chat open karo.");
+          {
+            collectionId:"messages",
+            allDescendants:false
+          }
 
-        return;
+        ],
+
+        orderBy:[
+
+          {
+            field:{
+              fieldPath:"createdAt"
+            },
+
+            direction:"ASCENDING"
+
+          }
+
+        ],
+
+        limit:100
+
+      }
+
+    };
+
+
+    /*
+      Subcollection query ko direct
+      parent document ke andar karne
+      ke liye parent path use karenge.
+    */
+
+    const parentURL=
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/chats/" +
+    currentChatId +
+    "/messages";
+
+
+    const directURL=
+    parentURL+"?key="+API_KEY;
+
+
+    const response=
+    await fetch(directURL);
+
+
+    /*
+      Agar direct list available nahi,
+      runQuery fallback.
+    */
+
+    if(!response.ok){
+
+      box.innerHTML=
+      `<div class="empty">
+        Messages load nahi ho pa rahe.
+      </div>`;
+
+      return;
 
     }
 
-    currentCallType =
-        type;
 
-    document.getElementById(
-        "callScreen"
-    ).style.display =
-        "block";
+    const data=
+    await response.json();
 
-    document.getElementById(
-        "callName"
-    ).innerText =
-        "@" + currentUser;
 
-    document.getElementById(
-        "callStatus"
-    ).innerText =
-        type === "video"
-        ? "Starting video call..."
-        : "Starting voice call...";
-
-    const video =
-        document.getElementById("localVideo");
-
-    const remote =
-        document.getElementById("remoteVideo");
-
-    const placeholder =
-        document.getElementById(
-            "audioPlaceholder"
-        );
-
-    if(type === "video"){
-
-        video.style.display =
-            "block";
-
-        remote.style.display =
-            "block";
-
-        placeholder.style.display =
-            "none";
-
-    }else{
-
-        video.style.display =
-            "none";
-
-        remote.style.display =
-            "none";
-
-        placeholder.style.display =
-            "flex";
-
-    }
-
-    try{
-
-        if(type === "video"){
-
-            localStream =
-                await navigator.mediaDevices
-                .getUserMedia({
-                    audio:true,
-                    video:true
-                });
-
-        }else{
-
-            localStream =
-                await navigator.mediaDevices
-                .getUserMedia({
-                    audio:true,
-                    video:false
-                });
-
-        }
-
-        video.srcObject =
-            localStream;
-
-        document.getElementById(
-            "permissionBox"
-        ).innerText =
-            "Device permission mil gaya. Real user-to-user connection next WebRTC step mein connect hoga.";
-
-        document.getElementById(
-            "callStatus"
-        ).innerText =
-            "Calling @"+currentUser+"...";
-
-    }catch(error){
-
-        console.log(error);
-
-        document.getElementById(
-            "permissionBox"
-        ).innerText =
-            "Microphone/camera permission allow karo.";
-
-        document.getElementById(
-            "callStatus"
-        ).innerText =
-            "Permission required";
-
-    }
-
-}
-
-
-/* MUTE */
-
-function toggleMute(){
-
-    if(!localStream){
-        return;
-    }
-
-    let tracks =
-        localStream.getAudioTracks();
-
-    if(tracks.length === 0){
-        return;
-    }
-
-    audioMuted =
-        !audioMuted;
-
-    tracks.forEach(function(track){
-
-        track.enabled =
-            !audioMuted;
-
-    });
-
-    document.getElementById(
-        "muteButton"
-    ).innerText =
-        audioMuted
-        ? "🔇"
-        : "🎤";
-
-}
-
-
-/* CAMERA */
-
-function toggleCamera(){
-
-    if(!localStream){
-        return;
-    }
-
-    let tracks =
-        localStream.getVideoTracks();
-
-    if(tracks.length === 0){
-        return;
-    }
-
-    cameraDisabled =
-        !cameraDisabled;
-
-    tracks.forEach(function(track){
-
-        track.enabled =
-            !cameraDisabled;
-
-    });
-
-    document.getElementById(
-        "cameraButton"
-    ).innerText =
-        cameraDisabled
-        ? "🚫"
-        : "📷";
-
-}
-
-
-/* SPEAKER */
-
-function toggleSpeaker(){
-
-    speakerEnabled =
-        !speakerEnabled;
-
-    let remote =
-        document.getElementById(
-            "remoteVideo"
-        );
-
-    remote.muted =
-        !speakerEnabled;
-
-}
-
-
-/* END CALL */
-
-function endCall(){
-
-    if(localStream){
-
-        localStream.getTracks()
-        .forEach(function(track){
-
-            track.stop();
-
-        });
-
-        localStream =
-            null;
-
-    }
-
-    document.getElementById(
-        "callScreen"
-    ).style.display =
-        "none";
-
-    document.getElementById(
-        "callStatus"
-    ).innerText =
-        "Call ended";
-
-    currentCallType =
-        null;
-
-}
-
-
-/* START */
-
-loadUsers();
-
-</script>
-
-</body>
-</html>
+    const docs=
+    
