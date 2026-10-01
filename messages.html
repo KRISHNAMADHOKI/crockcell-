@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>CROCKCELL Messages</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -112,12 +107,6 @@ body{
   font-weight:bold;
 }
 
-.empty{
-  text-align:center;
-  color:#666;
-  padding:55px 15px;
-}
-
 
 /* CHAT */
 
@@ -202,6 +191,15 @@ body{
   border-bottom-left-radius:5px;
 }
 
+.time{
+  font-size:9px;
+  opacity:.5;
+  margin-top:4px;
+}
+
+
+/* INPUT */
+
 .inputBar{
   display:none;
   position:fixed;
@@ -276,24 +274,23 @@ body{
   margin-bottom:3px;
 }
 
+.empty{
+  text-align:center;
+  color:#666;
+  padding:50px 15px;
+}
 </style>
-
 </head>
 
 <body>
 
-
-<!-- =========================
-     SEARCH PAGE
-========================= -->
+<!-- SEARCH -->
 
 <div id="listPage">
 
   <div class="header">
 
-    <div class="title">
-      Messages
-    </div>
+    <div class="title">Messages</div>
 
     <div class="searchRow">
 
@@ -305,20 +302,13 @@ body{
         autocapitalize="none"
       >
 
-      <button
-        id="searchBtn"
-        type="button"
-      >
-        ⌕
-      </button>
+      <button id="searchBtn" type="button">⌕</button>
 
     </div>
 
   </div>
 
-
   <div id="status"></div>
-
 
   <div id="results">
 
@@ -332,9 +322,7 @@ body{
 </div>
 
 
-<!-- =========================
-     CHAT PAGE
-========================= -->
+<!-- CHAT -->
 
 <div id="chatPage">
 
@@ -344,10 +332,7 @@ body{
       id="backBtn"
       class="backBtn"
       type="button"
-    >
-      ‹
-    </button>
-
+    >‹</button>
 
     <img
       id="chatAvatar"
@@ -355,7 +340,6 @@ body{
       src=""
       alt=""
     >
-
 
     <div class="chatInfo">
 
@@ -373,26 +357,14 @@ body{
 
   </div>
 
-
-  <div id="messageList">
-
-    <div class="empty">
-      Loading chat...
-    </div>
-
-  </div>
+  <div id="messageList"></div>
 
 </div>
 
 
-<!-- =========================
-     MESSAGE INPUT
-========================= -->
+<!-- MESSAGE INPUT -->
 
-<div
-  id="inputBar"
-  class="inputBar"
->
+<div id="inputBar" class="inputBar">
 
   <input
     id="messageInput"
@@ -404,16 +376,12 @@ body{
   <button
     id="sendBtn"
     type="button"
-  >
-    ➤
-  </button>
+  >➤</button>
 
 </div>
 
 
-<!-- =========================
-     NAV
-========================= -->
+<!-- NAV -->
 
 <div class="nav">
 
@@ -432,10 +400,7 @@ body{
     Reels
   </a>
 
-  <a
-    href="messages.html"
-    class="active"
-  >
+  <a href="messages.html" class="active">
     <span class="icon">♡</span>
     Messages
   </a>
@@ -460,54 +425,6 @@ const API_KEY =
 const PROJECT_ID =
 "crockcell-cd2e6";
 
-
-/* =================================================
-   LOGIN SESSION
-================================================= */
-
-let token =
-localStorage.getItem(
-  "crockcell_idToken"
-);
-
-let currentUID =
-localStorage.getItem(
-  "crockcell_uid"
-);
-
-
-if(!token){
-
-  token =
-  sessionStorage.getItem(
-    "crockcell_idToken"
-  );
-
-}
-
-if(!currentUID){
-
-  currentUID =
-  sessionStorage.getItem(
-    "crockcell_uid"
-  );
-
-}
-
-
-if(!token || !currentUID){
-
-  location.replace(
-    "index.html"
-  );
-
-}
-
-
-/* =================================================
-   FIRESTORE BASE
-================================================= */
-
 const BASE =
 "https://firestore.googleapis.com/v1/projects/" +
 PROJECT_ID +
@@ -515,56 +432,78 @@ PROJECT_ID +
 
 
 /* =================================================
+   LOGIN
+================================================= */
+
+let token =
+localStorage.getItem("crockcell_idToken");
+
+let currentUID =
+localStorage.getItem("crockcell_uid");
+
+
+if(!token){
+
+  token =
+  sessionStorage.getItem("crockcell_idToken");
+
+}
+
+if(!currentUID){
+
+  currentUID =
+  sessionStorage.getItem("crockcell_uid");
+
+}
+
+
+if(!token || !currentUID){
+
+  location.replace("index.html");
+
+}
+
+
+/* =================================================
    ELEMENTS
 ================================================= */
 
 const searchInput =
-document.getElementById(
-  "searchInput"
-);
+document.getElementById("searchInput");
 
 const searchBtn =
-document.getElementById(
-  "searchBtn"
-);
+document.getElementById("searchBtn");
 
 const status =
-document.getElementById(
-  "status"
-);
+document.getElementById("status");
 
 const results =
-document.getElementById(
-  "results"
-);
+document.getElementById("results");
 
 const listPage =
-document.getElementById(
-  "listPage"
-);
+document.getElementById("listPage");
 
 const chatPage =
-document.getElementById(
-  "chatPage"
-);
+document.getElementById("chatPage");
 
 const inputBar =
-document.getElementById(
-  "inputBar"
-);
+document.getElementById("inputBar");
 
 const messageInput =
-document.getElementById(
-  "messageInput"
-);
+document.getElementById("messageInput");
+
+const sendBtn =
+document.getElementById("sendBtn");
 
 const messageList =
-document.getElementById(
-  "messageList"
-);
+document.getElementById("messageList");
 
-let selectedUser =
-null;
+
+let selectedUser = null;
+
+let messageTimer = null;
+
+let loadingMessages = false;
 
 
 /* =================================================
@@ -575,13 +514,13 @@ async function searchUsers(){
 
   const text =
   searchInput.value
-    .trim()
-    .toLowerCase();
+  .trim()
+  .toLowerCase();
 
 
   if(!text){
 
-    status.textContent="";
+    status.textContent = "";
 
     results.innerHTML =
     `<div class="empty">
@@ -609,196 +548,147 @@ async function searchUsers(){
     text + "\uf8ff";
 
 
-    const url =
-    BASE +
-    ":runQuery?key=" +
-    API_KEY;
-
-
-    const body={
-
-      structuredQuery:{
-
-        from:[
-          {
-            collectionId:
-            "users"
-          }
-        ],
-
-        where:{
-
-          compositeFilter:{
-
-            op:"AND",
-
-            filters:[
-
-              {
-                fieldFilter:{
-
-                  field:{
-                    fieldPath:
-                    "username"
-                  },
-
-                  op:
-                  "GREATER_THAN_OR_EQUAL",
-
-                  value:{
-                    stringValue:
-                    text
-                  }
-
-                }
-
-              },
-
-              {
-                fieldFilter:{
-
-                  field:{
-                    fieldPath:
-                    "username"
-                  },
-
-                  op:
-                  "LESS_THAN",
-
-                  value:{
-                    stringValue:
-                    endText
-                  }
-
-                }
-
-              }
-
-            ]
-
-          }
-
-        },
-
-        orderBy:[
-
-          {
-            field:{
-              fieldPath:
-              "username"
-            },
-
-            direction:
-            "ASCENDING"
-          }
-
-        ],
-
-        limit:30
-
-      }
-
-    };
-
-
     const response =
     await fetch(
-      url,
+      BASE + ":runQuery?key=" + API_KEY,
       {
 
         method:"POST",
 
         headers:{
-
           Authorization:
           "Bearer " + token,
 
           "Content-Type":
           "application/json"
-
         },
 
-        body:
-        JSON.stringify(body)
+        body:JSON.stringify({
+
+          structuredQuery:{
+
+            from:[
+              {
+                collectionId:"users"
+              }
+            ],
+
+            where:{
+
+              compositeFilter:{
+
+                op:"AND",
+
+                filters:[
+
+                  {
+                    fieldFilter:{
+
+                      field:{
+                        fieldPath:"username"
+                      },
+
+                      op:
+                      "GREATER_THAN_OR_EQUAL",
+
+                      value:{
+                        stringValue:text
+                      }
+
+                    }
+
+                  },
+
+                  {
+                    fieldFilter:{
+
+                      field:{
+                        fieldPath:"username"
+                      },
+
+                      op:"LESS_THAN",
+
+                      value:{
+                        stringValue:endText
+                      }
+
+                    }
+
+                  }
+
+                ]
+
+              }
+
+            },
+
+            orderBy:[
+
+              {
+                field:{
+                  fieldPath:"username"
+                },
+
+                direction:"ASCENDING"
+              }
+
+            ],
+
+            limit:30
+
+          }
+
+        })
 
       }
     );
 
 
-    const textResponse =
+    const raw =
     await response.text();
-
-
-    console.log(
-      "MESSAGES SEARCH:",
-      textResponse
-    );
 
 
     if(!response.ok){
 
-      throw new Error(
-        textResponse
-      );
+      throw new Error(raw);
 
     }
 
 
     const rows =
-    JSON.parse(
-      textResponse
-    );
-
+    JSON.parse(raw);
 
     const users=[];
 
 
     rows.forEach(row=>{
 
-      if(!row.document){
-
-        return;
-
-      }
+      if(!row.document) return;
 
 
       const f =
-      row.document.fields ||
-      {};
+      row.document.fields || {};
 
 
       const uid =
-      f.uid?.stringValue ||
-      "";
+      f.uid?.stringValue || "";
 
 
       const username =
-      f.username?.stringValue ||
-      "";
+      f.username?.stringValue || "";
 
 
-      if(
-        !uid ||
-        !username
-      ){
-
-        return;
-
-      }
+      if(!uid || !username) return;
 
 
-      if(uid===currentUID){
-
-        return;
-
-      }
+      if(uid===currentUID) return;
 
 
       users.push({
 
-        uid:uid,
+        uid,
 
-        username:username,
+        username,
 
         name:
         f.name?.stringValue ||
@@ -819,7 +709,7 @@ async function searchUsers(){
   }catch(error){
 
     console.error(
-      "MESSAGE SEARCH ERROR:",
+      "SEARCH ERROR:",
       error
     );
 
@@ -864,29 +754,21 @@ function showUsers(users){
 
 
   status.textContent =
-  users.length +
-  " users found";
+  users.length + " users found";
 
 
   users.forEach(user=>{
 
     const item =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-
-    item.className =
-    "user";
+    item.className="user";
 
 
     const img =
-    document.createElement(
-      "img"
-    );
+    document.createElement("img");
 
-    img.className =
-    "avatar";
+    img.className="avatar";
 
     img.src =
     user.photoURL ||
@@ -894,82 +776,54 @@ function showUsers(users){
 
 
     const info =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-    info.className =
-    "info";
+    info.className="info";
 
 
     const name =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-    name.className =
-    "name";
+    name.className="name";
 
     name.textContent =
     user.name;
 
 
     const username =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-    username.className =
-    "username";
+    username.className="username";
 
     username.textContent =
     "@" + user.username;
 
 
-    info.appendChild(
-      name
-    );
-
-    info.appendChild(
-      username
-    );
+    info.appendChild(name);
+    info.appendChild(username);
 
 
     const button =
-    document.createElement(
-      "button"
-    );
+    document.createElement("button");
 
-    button.className =
-    "messageBtn";
+    button.className="messageBtn";
 
-    button.textContent =
-    "Message";
+    button.textContent="Message";
 
 
-    button.onclick=function(){
+    button.onclick=()=>{
 
       openChat(user);
 
     };
 
 
-    item.appendChild(
-      img
-    );
-
-    item.appendChild(
-      info
-    );
-
-    item.appendChild(
-      button
-    );
+    item.appendChild(img);
+    item.appendChild(info);
+    item.appendChild(button);
 
 
-    results.appendChild(
-      item
-    );
+    results.appendChild(item);
 
   });
 
@@ -982,20 +836,14 @@ function showUsers(users){
 
 function openChat(user){
 
-  selectedUser =
-  user;
+  selectedUser=user;
 
 
-  listPage.style.display =
-  "none";
+  listPage.style.display="none";
 
+  chatPage.style.display="block";
 
-  chatPage.style.display =
-  "block";
-
-
-  inputBar.style.display =
-  "flex";
+  inputBar.style.display="flex";
 
 
   document.getElementById(
@@ -1017,11 +865,345 @@ function openChat(user){
   placeholder();
 
 
-  messageList.innerHTML =
-  `<div class="empty">
-    Abhi koi message nahi hai.<br>
-    Pehla message bhejo 👋
-  </div>`;
+  loadMessages();
+
+
+  clearInterval(messageTimer);
+
+
+  messageTimer =
+  setInterval(
+    loadMessages,
+    2500
+  );
+
+}
+
+
+/* =================================================
+   LOAD REAL MESSAGES
+================================================= */
+
+async function loadMessages(){
+
+  if(!selectedUser) return;
+
+  if(loadingMessages) return;
+
+  loadingMessages=true;
+
+
+  try{
+
+    /*
+      Query 1:
+      Current user -> selected user
+    */
+
+    const sent =
+    await queryMessages(
+      currentUID,
+      selectedUser.uid
+    );
+
+
+    /*
+      Query 2:
+      Selected user -> current user
+    */
+
+    const received =
+    await queryMessages(
+      selectedUser.uid,
+      currentUID
+    );
+
+
+    const all =
+    [...sent,...received];
+
+
+    /*
+      Time ke according sort
+    */
+
+    all.sort(
+      (a,b)=>
+      new Date(a.createdAt) -
+      new Date(b.createdAt)
+    );
+
+
+    renderMessages(all);
+
+
+  }catch(error){
+
+    console.error(
+      "LOAD MESSAGE ERROR:",
+      error
+    );
+
+  }finally{
+
+    loadingMessages=false;
+
+  }
+
+}
+
+
+/* =================================================
+   QUERY MESSAGES
+================================================= */
+
+async function queryMessages(
+  sender,
+  receiver
+){
+
+  const response =
+  await fetch(
+    BASE + ":runQuery?key=" + API_KEY,
+    {
+
+      method:"POST",
+
+      headers:{
+
+        Authorization:
+        "Bearer " + token,
+
+        "Content-Type":
+        "application/json"
+
+      },
+
+      body:JSON.stringify({
+
+        structuredQuery:{
+
+          from:[
+
+            {
+              collectionId:
+              "messages"
+            }
+
+          ],
+
+          where:{
+
+            compositeFilter:{
+
+              op:"AND",
+
+              filters:[
+
+                {
+                  fieldFilter:{
+
+                    field:{
+                      fieldPath:
+                      "senderId"
+                    },
+
+                    op:"EQUAL",
+
+                    value:{
+                      stringValue:
+                      sender
+                    }
+
+                  }
+
+                },
+
+                {
+                  fieldFilter:{
+
+                    field:{
+                      fieldPath:
+                      "receiverId"
+                    },
+
+                    op:"EQUAL",
+
+                    value:{
+                      stringValue:
+                      receiver
+                    }
+
+                  }
+
+                }
+
+              ]
+
+            }
+
+          },
+
+          orderBy:[
+
+            {
+              field:{
+                fieldPath:
+                "createdAt"
+              },
+
+              direction:
+              "ASCENDING"
+            }
+
+          ],
+
+          limit:100
+
+        }
+
+      })
+
+    }
+  );
+
+
+  const raw =
+  await response.text();
+
+
+  if(!response.ok){
+
+    throw new Error(raw);
+
+  }
+
+
+  const rows =
+  JSON.parse(raw);
+
+
+  const messages=[];
+
+
+  rows.forEach(row=>{
+
+    if(!row.document) return;
+
+
+    const f =
+    row.document.fields || {};
+
+
+    messages.push({
+
+      senderId:
+      f.senderId?.stringValue ||
+      "",
+
+      receiverId:
+      f.receiverId?.stringValue ||
+      "",
+
+      text:
+      f.text?.stringValue ||
+      "",
+
+      createdAt:
+      f.createdAt?.timestampValue ||
+      ""
+
+    });
+
+  });
+
+
+  return messages;
+
+}
+
+
+/* =================================================
+   RENDER MESSAGES
+================================================= */
+
+function renderMessages(messages){
+
+  messageList.innerHTML="";
+
+
+  if(!messages.length){
+
+    messageList.innerHTML =
+    `<div class="empty">
+      Abhi koi message nahi hai.<br>
+      Pehla message bhejo 👋
+    </div>`;
+
+    return;
+
+  }
+
+
+  messages.forEach(message=>{
+
+    const row =
+    document.createElement("div");
+
+
+    row.className =
+    "messageRow " +
+    (
+      message.senderId===currentUID
+      ? "mine"
+      : "theirs"
+    );
+
+
+    const bubble =
+    document.createElement("div");
+
+
+    bubble.className="bubble";
+
+
+    bubble.textContent =
+    message.text;
+
+
+    if(message.createdAt){
+
+      const time =
+      document.createElement("div");
+
+      time.className="time";
+
+      time.textContent =
+      formatTime(
+        message.createdAt
+      );
+
+
+      bubble.appendChild(time);
+
+    }
+
+
+    row.appendChild(bubble);
+
+    messageList.appendChild(row);
+
+  });
+
+
+  /*
+    Chat ke bottom par jao
+  */
+
+  window.scrollTo(
+    0,
+    document.body.scrollHeight
+  );
 
 }
 
@@ -1050,13 +1232,7 @@ async function sendMessage(){
   }
 
 
-  const button =
-  document.getElementById(
-    "sendBtn"
-  );
-
-
-  button.disabled=true;
+  sendBtn.disabled=true;
 
 
   try{
@@ -1080,8 +1256,7 @@ async function sendMessage(){
 
         },
 
-        body:
-        JSON.stringify({
+        body:JSON.stringify({
 
           fields:{
 
@@ -1102,8 +1277,7 @@ async function sendMessage(){
 
             createdAt:{
               timestampValue:
-              new Date()
-              .toISOString()
+              new Date().toISOString()
             }
 
           }
@@ -1114,23 +1288,19 @@ async function sendMessage(){
     );
 
 
-    const result =
+    const raw =
     await response.text();
 
 
     console.log(
-      "SEND MESSAGE:",
-      result
+      "SEND RESPONSE:",
+      raw
     );
 
 
     if(!response.ok){
 
-      alert(
-        "Message send nahi hua."
-      );
-
-      return;
+      throw new Error(raw);
 
     }
 
@@ -1138,15 +1308,16 @@ async function sendMessage(){
     messageInput.value="";
 
 
-    addMessage(
-      text,
-      true
-    );
+    await loadMessages();
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "SEND ERROR:",
+      error
+    );
+
 
     alert(
       "Message send nahi hua."
@@ -1154,82 +1325,9 @@ async function sendMessage(){
 
   }finally{
 
-    button.disabled=false;
+    sendBtn.disabled=false;
 
   }
-
-}
-
-
-/* =================================================
-   SHOW SENT MESSAGE
-================================================= */
-
-function addMessage(
-  text,
-  mine
-){
-
-  /*
-    First message ke time
-    empty text hatao.
-  */
-
-  const empty =
-  messageList.querySelector(
-    ".empty"
-  );
-
-  if(empty){
-
-    empty.remove();
-
-  }
-
-
-  const row =
-  document.createElement(
-    "div"
-  );
-
-
-  row.className =
-  "messageRow " +
-  (
-    mine
-    ? "mine"
-    : "theirs"
-  );
-
-
-  const bubble =
-  document.createElement(
-    "div"
-  );
-
-
-  bubble.className =
-  "bubble";
-
-
-  bubble.textContent =
-  text;
-
-
-  row.appendChild(
-    bubble
-  );
-
-
-  messageList.appendChild(
-    row
-  );
-
-
-  window.scrollTo(
-    0,
-    document.body.scrollHeight
-  );
 
 }
 
@@ -1239,24 +1337,24 @@ function addMessage(
 ================================================= */
 
 document
-  .getElementById(
-    "backBtn"
-  )
-  .onclick=function(){
+.getElementById("backBtn")
+.onclick=function(){
 
-    selectedUser =
-    null;
+  clearInterval(
+    messageTimer
+  );
 
-    chatPage.style.display =
-    "none";
 
-    inputBar.style.display =
-    "none";
+  selectedUser=null;
 
-    listPage.style.display =
-    "block";
 
-  };
+  chatPage.style.display="none";
+
+  inputBar.style.display="none";
+
+  listPage.style.display="block";
+
+};
 
 
 /* =================================================
@@ -1300,12 +1398,8 @@ searchInput.addEventListener(
 );
 
 
-document
-  .getElementById(
-    "sendBtn"
-  )
-  .onclick =
-  sendMessage;
+sendBtn.onclick =
+sendMessage;
 
 
 messageInput.addEventListener(
@@ -1325,7 +1419,7 @@ messageInput.addEventListener(
 
 
 /* =================================================
-   PROFILE → MESSAGE
+   PROFILE -> MESSAGE
 ================================================= */
 
 const params =
@@ -1342,46 +1436,89 @@ params.get("username");
 
 if(urlUID){
 
-  openChat({
+  loadProfileChat();
 
-    uid:urlUID,
+}
 
-    username:
-    urlUsername ||
-    "user",
 
-    name:
-    urlUsername ||
-    "User",
+async function loadProfileChat(){
 
-    photoURL:""
+  try{
 
-  });
+    const response =
+    await fetch(
+      BASE +
+      "/users/" +
+      encodeURIComponent(
+        urlUID
+      ),
+      {
+
+        headers:{
+          Authorization:
+          "Bearer " + token
+        }
+
+      }
+    );
+
+
+    if(response.ok){
+
+      const data =
+      await response.json();
+
+
+      const f =
+      data.fields || {};
+
+
+      openChat({
+
+        uid:urlUID,
+
+        username:
+        f.username?.stringValue ||
+        urlUsername ||
+        "user",
+
+        name:
+        f.name?.stringValue ||
+        f.username?.stringValue ||
+        urlUsername ||
+        "User",
+
+        photoURL:
+        f.photoURL?.stringValue ||
+        ""
+
+      });
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
 
 }
 
 
 /* =================================================
-   PLACEHOLDER
+   TIME
 ================================================= */
 
-function placeholder(){
+function formatTime(value){
 
-  return "data:image/svg+xml,"+
+  try{
 
-  "<svg xmlns='http://www.w3.org/2000/svg' " +
+    const date =
+    new Date(value);
 
-  "width='100' height='100'>" +
 
-  "<rect width='100' height='100' " +
-
-  "fill='%23333333'/>" +
-
-  "</svg>";
-
-}
-
-</script>
-
-</body>
-</html>
+    return date.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute
