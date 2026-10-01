@@ -21,9 +21,6 @@ body{
   min-height:100vh;
 }
 
-
-/* HEADER */
-
 .header{
   padding:20px 18px 15px;
   position:sticky;
@@ -67,18 +64,12 @@ body{
   font-size:22px;
 }
 
-
-/* MESSAGE */
-
 .message{
   min-height:25px;
   padding:12px 18px 0;
   color:#888;
   font-size:14px;
 }
-
-
-/* RESULTS */
 
 .results{
   padding:8px 15px 100px;
@@ -132,9 +123,6 @@ body{
   padding:55px 20px;
 }
 
-
-/* BOTTOM NAV */
-
 .bottom-nav{
   position:fixed;
   left:12px;
@@ -177,7 +165,6 @@ body{
 
 <body>
 
-
 <div class="header">
 
   <div class="title">
@@ -206,17 +193,9 @@ body{
 
 </div>
 
+<div id="message" class="message"></div>
 
-<div
-  id="message"
-  class="message"
-></div>
-
-
-<div
-  id="results"
-  class="results"
->
+<div id="results" class="results">
 
   <div class="empty">
     Username ya alphabet type karke search karo
@@ -225,46 +204,29 @@ body{
 </div>
 
 
-<!-- BOTTOM NAV -->
-
 <div class="bottom-nav">
 
-  <a
-    class="nav-item"
-    href="home.html"
-  >
+  <a class="nav-item" href="home.html">
     <span class="nav-icon">⌂</span>
     Home
   </a>
 
-  <a
-    class="nav-item active"
-    href="search.html"
-  >
+  <a class="nav-item active" href="search.html">
     <span class="nav-icon">⌕</span>
     Search
   </a>
 
-  <a
-    class="nav-item"
-    href="reels.html"
-  >
+  <a class="nav-item" href="reels.html">
     <span class="nav-icon">▶</span>
     Reels
   </a>
 
-  <a
-    class="nav-item"
-    href="messages.html"
-  >
+  <a class="nav-item" href="messages.html">
     <span class="nav-icon">♡</span>
     Messages
   </a>
 
-  <a
-    class="nav-item"
-    href="profile.html"
-  >
+  <a class="nav-item" href="profile.html">
     <span class="nav-icon">◯</span>
     Profile
   </a>
@@ -274,11 +236,6 @@ body{
 
 <script>
 
-
-/* =========================
-   FIREBASE
-========================= */
-
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
@@ -287,7 +244,7 @@ const PROJECT_ID =
 
 
 /* =========================
-   LOGIN SESSION
+   SESSION
 ========================= */
 
 let token =
@@ -349,10 +306,6 @@ document.getElementById(
 );
 
 
-/* =========================
-   SEARCH TIMER
-========================= */
-
 let searchTimer=null;
 
 
@@ -386,19 +339,9 @@ searchInput.addEventListener(
     }
 
 
-    /*
-      Thoda delay rakha hai taaki
-      har alphabet par Firebase ko
-      unnecessary request na jaye.
-    */
-
     searchTimer =
     setTimeout(
-      function(){
-
-        searchUsers();
-
-      },
+      searchUsers,
       250
     );
 
@@ -407,7 +350,7 @@ searchInput.addEventListener(
 
 
 /* =========================
-   SEARCH USERS
+   SEARCH
 ========================= */
 
 async function searchUsers(){
@@ -418,16 +361,7 @@ async function searchUsers(){
     .toLowerCase();
 
 
-  if(!text){
-
-    results.innerHTML =
-    `<div class="empty">
-      Search something
-    </div>`;
-
-    return;
-
-  }
+  if(!text)return;
 
 
   message.textContent =
@@ -442,28 +376,11 @@ async function searchUsers(){
 
   try{
 
-
-    /*
-      Firestore prefix search:
-
-      username >= typed text
-
-      username < typed text + high unicode
-
-      Example:
-
-      "kr"
-
-      kr...
-      krishna...
-      krish...
-    */
-
     const endText =
     text + "\uf8ff";
 
 
-    const queryURL =
+    const url =
     "https://firestore.googleapis.com/v1/projects/" +
     PROJECT_ID +
     "/databases/(default)/documents:runQuery" +
@@ -471,28 +388,25 @@ async function searchUsers(){
     API_KEY;
 
 
-    const queryBody = {
+    const body={
 
-      structuredQuery: {
+      structuredQuery:{
 
-        from: [
-
+        from:[
           {
             collectionId:"users"
           }
-
         ],
 
-        where: {
+        where:{
 
-          compositeFilter: {
+          compositeFilter:{
 
             op:"AND",
 
             filters:[
 
               {
-
                 fieldFilter:{
 
                   field:{
@@ -510,7 +424,6 @@ async function searchUsers(){
               },
 
               {
-
                 fieldFilter:{
 
                   field:{
@@ -536,13 +449,11 @@ async function searchUsers(){
         orderBy:[
 
           {
-
             field:{
               fieldPath:"username"
             },
 
             direction:"ASCENDING"
-
           }
 
         ],
@@ -556,7 +467,7 @@ async function searchUsers(){
 
     const response =
     await fetch(
-      queryURL,
+      url,
       {
 
         method:"POST",
@@ -572,23 +483,13 @@ async function searchUsers(){
         },
 
         body:
-        JSON.stringify(
-          queryBody
-        )
+        JSON.stringify(body)
 
       }
     );
 
 
     if(!response.ok){
-
-      const errorText =
-      await response.text();
-
-      console.error(
-        "Firestore search error:",
-        errorText
-      );
 
       throw new Error(
         "SEARCH_FAILED"
@@ -601,19 +502,12 @@ async function searchUsers(){
     await response.json();
 
 
-    /*
-      Firebase runQuery returns
-      rows containing documents.
-    */
-
     const users=[];
 
 
-    for(const row of rows){
+    rows.forEach(row=>{
 
-      if(!row.document){
-        continue;
-      }
+      if(!row.document)return;
 
 
       const f =
@@ -631,18 +525,14 @@ async function searchUsers(){
       if(!foundUID ||
          !foundUsername){
 
-        continue;
+        return;
 
       }
 
 
-      /*
-        Apna account list me nahi dikhana.
-      */
-
       if(foundUID===uid){
 
-        continue;
+        return;
 
       }
 
@@ -659,24 +549,19 @@ async function searchUsers(){
 
         photoURL:
         f.photoURL?.stringValue ||
-        "",
-
-        bio:
-        f.bio?.stringValue ||
         ""
 
       });
 
-    }
+    });
 
 
-    renderUsers(users,text);
+    renderUsers(users);
 
 
   }catch(error){
 
     console.error(error);
-
 
     message.textContent =
     "Search failed.";
@@ -692,10 +577,10 @@ async function searchUsers(){
 
 
 /* =========================
-   SHOW USERS
+   SHOW RESULTS
 ========================= */
 
-function renderUsers(users,text){
+function renderUsers(users){
 
   results.innerHTML="";
 
@@ -707,8 +592,7 @@ function renderUsers(users,text){
 
     results.innerHTML =
     `<div class="empty">
-      "${escapeHTML(text)}"
-      se koi user nahi mila.
+      Koi user nahi mila.
     </div>`;
 
     return;
@@ -717,22 +601,21 @@ function renderUsers(users,text){
 
 
   message.textContent =
-  users.length +
-  " users found";
+  users.length+" users found";
 
 
-  users.forEach(function(user){
+  users.forEach(user=>{
 
     const card =
     document.createElement(
       "div"
     );
 
-    card.className =
+    card.className=
     "user-card";
 
 
-    card.innerHTML = `
+    card.innerHTML=`
 
       <img
         class="avatar"
@@ -746,15 +629,11 @@ function renderUsers(users,text){
       <div class="user-info">
 
         <div class="name">
-          ${escapeHTML(
-            user.name
-          )}
+          ${escapeHTML(user.name)}
         </div>
 
         <div class="username">
-          @${escapeHTML(
-            user.username
-          )}
+          @${escapeHTML(user.username)}
         </div>
 
       </div>
@@ -770,21 +649,15 @@ function renderUsers(users,text){
 
 
     card
-      .querySelector(
-        ".open-btn"
-      )
+      .querySelector(".open-btn")
       .onclick=function(){
 
-        openProfile(
-          user
-        );
+        openProfile(user);
 
       };
 
 
-    results.appendChild(
-      card
-    );
+    results.appendChild(card);
 
   });
 
@@ -793,25 +666,27 @@ function renderUsers(users,text){
 
 /* =========================
    OPEN PROFILE
+   CACHE BUSTER ADDED
 ========================= */
 
 function openProfile(user){
 
-  window.location.href =
-    "profile.html?uid=" +
-    encodeURIComponent(
-      user.uid
-    ) +
+  const url =
+    "profile.html" +
+    "?uid=" +
+    encodeURIComponent(user.uid) +
     "&username=" +
-    encodeURIComponent(
-      user.username
-    );
+    encodeURIComponent(user.username) +
+    "&v=" +
+    Date.now();
+
+  window.location.assign(url);
 
 }
 
 
 /* =========================
-   ENTER KEY
+   ENTER
 ========================= */
 
 searchInput.addEventListener(
@@ -829,62 +704,39 @@ searchInput.addEventListener(
 
 
 /* =========================
-   HTML SAFETY
+   HELPERS
 ========================= */
 
 function escapeHTML(text){
 
   return String(text)
 
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-/* =========================
-   DEFAULT PHOTO
-========================= */
-
 function placeholderPhoto(){
 
-  return "data:image/svg+xml," +
+  return "data:image/svg+xml,"+
 
-    "<svg xmlns='http://www.w3.org/2000/svg' " +
+  "<svg xmlns='http://www.w3.org/2000/svg' " +
 
-    "width='100' height='100'>" +
+  "width='100' height='100'>" +
 
-    "<rect width='100' height='100' " +
+  "<rect width='100' height='100' " +
 
-    "fill='%23333333'/>" +
+  "fill='%23333333'/>" +
 
-    "</svg>";
+  "</svg>";
 
 }
 
 </script>
 
 </body>
-  </html>
+</html>
