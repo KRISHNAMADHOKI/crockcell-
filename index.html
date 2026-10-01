@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>CROCKCELL - Login</title>
 
+
   <style>
+
     *{
       box-sizing:border-box;
       margin:0;
@@ -127,232 +135,461 @@
     .signup a:hover{
       text-decoration:underline;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <div class="box">
 
-    <div class="logo">CROCKCELL</div>
+<div class="box">
 
-    <div class="tagline">
-      Connect. Share. Create.
+
+  <div class="logo">
+    CROCKCELL
+  </div>
+
+
+  <div class="tagline">
+    Connect. Share. Create.
+  </div>
+
+
+  <form id="loginForm">
+
+
+    <div class="input-box">
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+        autocomplete="username"
+        required
+      >
+
     </div>
 
-    <form id="loginForm">
 
-      <div class="input-box">
-        <input
-          type="text"
-          id="username"
-          placeholder="Username"
-          autocomplete="username"
-          required
-        >
-      </div>
+    <div class="input-box">
 
-      <div class="input-box">
 
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          autocomplete="current-password"
-          required
-        >
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        required
+      >
 
-        <button
-          type="button"
-          class="password-toggle"
-          id="togglePassword"
-        >
-          Show
-        </button>
-
-      </div>
 
       <button
-        type="submit"
-        class="login-btn"
-        id="loginBtn"
+        type="button"
+        class="password-toggle"
+        id="togglePassword"
       >
-        Login
+        Show
       </button>
 
-    </form>
 
-    <a class="forgot" href="forgot-password.html">
-      Forgot Password?
-    </a>
-
-    <div class="message" id="message"></div>
-
-    <div class="signup">
-      Don't have an account?
-      <a href="signup.html">Sign Up</a>
     </div>
+
+
+    <button
+      type="submit"
+      class="login-btn"
+      id="loginBtn"
+    >
+      Login
+    </button>
+
+
+  </form>
+
+
+  <a
+    class="forgot"
+    href="forgot-password.html"
+  >
+    Forgot Password?
+  </a>
+
+
+  <div
+    class="message"
+    id="message"
+  ></div>
+
+
+  <div class="signup">
+
+    Don't have an account?
+
+    <a href="signup.html">
+      Sign Up
+    </a>
 
   </div>
 
 
+</div>
+
+
+
 <script>
 
-const API_KEY = "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-const PROJECT_ID = "crockcell-cd2e6";
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
 
-
-const loginForm = document.getElementById("loginForm");
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const togglePassword = document.getElementById("togglePassword");
-const loginBtn = document.getElementById("loginBtn");
-const message = document.getElementById("message");
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
 
-/* SHOW / HIDE PASSWORD */
+const PROJECT_ID =
+"crockcell-cd2e6";
 
-togglePassword.addEventListener("click", function(){
 
-  if(passwordInput.type === "password"){
 
-    passwordInput.type = "text";
-    togglePassword.textContent = "Hide";
+/* =========================================
+   ELEMENTS
+========================================= */
 
-  }else{
+const loginForm =
+document.getElementById("loginForm");
 
-    passwordInput.type = "password";
-    togglePassword.textContent = "Show";
+
+const usernameInput =
+document.getElementById("username");
+
+
+const passwordInput =
+document.getElementById("password");
+
+
+const togglePassword =
+document.getElementById("togglePassword");
+
+
+const loginBtn =
+document.getElementById("loginBtn");
+
+
+const message =
+document.getElementById("message");
+
+
+
+/* =========================================
+   PASSWORD SHOW / HIDE
+========================================= */
+
+togglePassword.addEventListener(
+"click",
+function(){
+
+  if(
+    passwordInput.type ===
+    "password"
+  ){
+
+    passwordInput.type =
+    "text";
+
+    togglePassword.textContent =
+    "Hide";
+
+  }
+
+  else{
+
+    passwordInput.type =
+    "password";
+
+    togglePassword.textContent =
+    "Show";
 
   }
 
 });
 
 
-/* FIRESTORE USERNAME LOOKUP */
 
-async function findUserByUsername(username){
+/* =========================================
+   FIND USERNAME
+========================================= */
+
+async function findUserByUsername(
+username
+){
 
   const url =
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents:runQuery?key=" +
-    API_KEY;
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents/usernameIndex/" +
+  encodeURIComponent(username) +
+  "?key=" +
+  API_KEY;
 
 
-  const requestBody = {
-
-    structuredQuery:{
-
-      from:[
-        {
-          collectionId:"usernameIndex"
-        }
-      ],
-
-      where:{
-        fieldFilter:{
-          field:{
-            fieldPath:"username"
-          },
-
-          op:"EQUAL",
-
-          value:{
-            stringValue:username
-          }
-        }
-      },
-
-      limit:1
-
+  const response =
+  await fetch(
+    url,
+    {
+      method:"GET"
     }
-
-  };
-
-
-  const response = await fetch(url,{
-
-    method:"POST",
-
-    headers:{
-      "Content-Type":"application/json"
-    },
-
-    body:JSON.stringify(requestBody)
-
-  });
+  );
 
 
-  const data = await response.json();
+  if(
+    response.status ===
+    404
+  ){
+
+    return null;
+
+  }
+
+
+  const data =
+  await response.json();
 
 
   if(!response.ok){
 
+    console.error(
+      "Username lookup error:",
+      data
+    );
+
     throw new Error(
-      "Username search nahi ho pa rahi. Firestore settings check karo."
+      "Username lookup failed."
     );
 
   }
 
 
-  if(!data || !data.length){
-
-    return null;
-
-  }
-
-
-  const document = data[0].document;
-
-  if(!document){
-
-    return null;
-
-  }
-
-
-  const fields = document.fields || {};
+  const fields =
+  data.fields || {};
 
 
   return {
 
-    uid: fields.uid?.stringValue || "",
+    uid:
+    fields.uid?.stringValue || "",
 
-    email: fields.email?.stringValue || "",
+    email:
+    fields.email?.stringValue || "",
 
-    username: fields.username?.stringValue || username
+    username:
+    fields.username?.stringValue ||
+    username
 
   };
 
 }
 
 
-/* LOGIN */
 
-loginForm.addEventListener("submit", async function(e){
+/* =========================================
+   LOAD USER PROFILE
+========================================= */
+
+async function loadUserProfile(
+uid,
+idToken,
+basicUser
+){
+
+  const url =
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents/users/" +
+  encodeURIComponent(uid) +
+  "?key=" +
+  API_KEY;
+
+
+  const response =
+  await fetch(
+    url,
+    {
+      method:"GET",
+
+      headers:{
+        "Authorization":
+        "Bearer " + idToken
+      }
+    }
+  );
+
+
+  if(
+    response.ok
+  ){
+
+    const data =
+    await response.json();
+
+
+    const fields =
+    data.fields || {};
+
+
+    return {
+
+      uid:uid,
+
+      name:
+      fields.name?.stringValue ||
+      "",
+
+      username:
+      fields.username?.stringValue ||
+      basicUser.username,
+
+      email:
+      fields.email?.stringValue ||
+      basicUser.email,
+
+      photoURL:
+      fields.photoURL?.stringValue ||
+      "",
+
+      bio:
+      fields.bio?.stringValue ||
+      "",
+
+      phoneNumber:
+      fields.phoneNumber?.stringValue ||
+      "",
+
+      phoneVerified:
+      fields.phoneVerified?.booleanValue ||
+      false
+
+    };
+
+  }
+
+
+  /* If profile doesn't exist yet,
+     use basic account information. */
+
+  return {
+
+    uid:uid,
+
+    name:"",
+
+    username:
+    basicUser.username,
+
+    email:
+    basicUser.email,
+
+    photoURL:"",
+
+    bio:"",
+
+    phoneNumber:"",
+
+    phoneVerified:false
+
+  };
+
+}
+
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+loginForm.addEventListener(
+"submit",
+async function(e){
 
   e.preventDefault();
 
 
   const username =
-    usernameInput.value.trim().toLowerCase();
+  usernameInput.value
+  .trim()
+  .toLowerCase();
+
 
   const password =
-    passwordInput.value;
+  passwordInput.value;
 
 
-  message.textContent = "";
+  message.textContent =
+  "";
 
-  loginBtn.disabled = true;
 
-  loginBtn.textContent = "Logging in...";
+  loginBtn.disabled =
+  true;
+
+
+  loginBtn.textContent =
+  "Logging in...";
 
 
   try{
 
-    if(username.length < 3){
+
+    /* =====================================
+       IMPORTANT:
+       REMOVE OLD ACCOUNT DATA FIRST
+    ===================================== */
+
+    localStorage.removeItem(
+      "crockcell_idToken"
+    );
+
+    localStorage.removeItem(
+      "crockcell_refreshToken"
+    );
+
+    localStorage.removeItem(
+      "crockcell_uid"
+    );
+
+    localStorage.removeItem(
+      "crockcell_profile"
+    );
+
+
+    /* Remove old key versions too */
+
+    localStorage.removeItem(
+      "crockcellIdToken"
+    );
+
+    localStorage.removeItem(
+      "crockcellRefreshToken"
+    );
+
+    localStorage.removeItem(
+      "crockcellUid"
+    );
+
+    localStorage.removeItem(
+      "crockcellProfile"
+    );
+
+
+
+    /* =====================================
+       VALIDATE USERNAME
+    ===================================== */
+
+    if(
+      username.length < 3
+    ){
 
       throw new Error(
         "Username kam se kam 3 characters ka hona chahiye."
@@ -361,9 +598,22 @@ loginForm.addEventListener("submit", async function(e){
     }
 
 
-    /* FIND USERNAME */
 
-    const user = await findUserByUsername(username);
+    /* =====================================
+       FIND USERNAME
+    ===================================== */
+
+    message.style.color =
+    "#aaa";
+
+    message.textContent =
+    "Finding account...";
+
+
+    const user =
+    await findUserByUsername(
+      username
+    );
 
 
     if(!user){
@@ -375,23 +625,26 @@ loginForm.addEventListener("submit", async function(e){
     }
 
 
-    /*
-      UsernameIndex me email saved hai
-      to us email se Firebase login hoga.
-    */
-
     if(!user.email){
 
       throw new Error(
-        "Is account ka username login setup complete nahi hai. Pehle account ko update karna hoga."
+        "Is account ka email setup complete nahi hai."
       );
 
     }
 
 
-    /* FIREBASE AUTH LOGIN */
 
-    const response = await fetch(
+    /* =====================================
+       FIREBASE AUTH LOGIN
+    ===================================== */
+
+    message.textContent =
+    "Checking password...";
+
+
+    const authResponse =
+    await fetch(
 
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
       API_KEY,
@@ -401,16 +654,20 @@ loginForm.addEventListener("submit", async function(e){
         method:"POST",
 
         headers:{
-          "Content-Type":"application/json"
+          "Content-Type":
+          "application/json"
         },
 
         body:JSON.stringify({
 
-          email:user.email,
+          email:
+          user.email,
 
-          password:password,
+          password:
+          password,
 
-          returnSecureToken:true
+          returnSecureToken:
+          true
 
         })
 
@@ -419,14 +676,22 @@ loginForm.addEventListener("submit", async function(e){
     );
 
 
-    const data = await response.json();
+    const authData =
+    await authResponse.json();
 
 
-    if(!response.ok){
+    if(!authResponse.ok){
+
+      console.error(
+        "Login error:",
+        authData
+      );
+
 
       if(
-        data.error &&
-        data.error.message === "INVALID_LOGIN_CREDENTIALS"
+        authData.error &&
+        authData.error.message ===
+        "INVALID_LOGIN_CREDENTIALS"
       ){
 
         throw new Error(
@@ -437,8 +702,9 @@ loginForm.addEventListener("submit", async function(e){
 
 
       if(
-        data.error &&
-        data.error.message === "EMAIL_NOT_FOUND"
+        authData.error &&
+        authData.error.message ===
+        "EMAIL_NOT_FOUND"
       ){
 
         throw new Error(
@@ -449,8 +715,9 @@ loginForm.addEventListener("submit", async function(e){
 
 
       if(
-        data.error &&
-        data.error.message === "INVALID_PASSWORD"
+        authData.error &&
+        authData.error.message ===
+        "INVALID_PASSWORD"
       ){
 
         throw new Error(
@@ -461,80 +728,168 @@ loginForm.addEventListener("submit", async function(e){
 
 
       throw new Error(
-        data.error?.message || "Login failed."
+        authData.error?.message ||
+        "Login failed."
       );
 
     }
 
 
-    /* SAVE LOGIN INFORMATION */
 
-    localStorage.setItem(
-      "crockcellIdToken",
-      data.idToken
-    );
+    /* =====================================
+       IMPORTANT UID CHECK
+    ===================================== */
 
+    if(
+      authData.localId !==
+      user.uid
+    ){
 
-    localStorage.setItem(
-      "crockcellRefreshToken",
-      data.refreshToken
-    );
-
-
-    localStorage.setItem(
-      "crockcellUid",
-      data.localId
-    );
-
-
-    localStorage.setItem(
-
-      "crockcellProfile",
-
-      JSON.stringify({
-
-        email:data.email,
-
-        uid:data.localId,
-
-        username:user.username
-
-      })
-
-    );
+      console.error(
+        "UID mismatch",
+        {
+          usernameUID:user.uid,
+          loginUID:authData.localId
+        }
+      );
 
 
-    message.style.color = "#77ff99";
+      throw new Error(
+        "Account verification failed. Please try again."
+      );
+
+    }
+
+
+
+    /* =====================================
+       LOAD EXACT USER PROFILE
+    ===================================== */
 
     message.textContent =
-      "Login successful!";
+    "Loading your profile...";
 
 
-    setTimeout(function(){
+    const profile =
+    await loadUserProfile(
 
-      location.href = "home.html";
+      authData.localId,
 
-    },500);
+      authData.idToken,
+
+      user
+
+    );
 
 
-  }catch(error){
 
-    message.style.color = "#ff7777";
+    /* =====================================
+       SAVE ONLY CURRENT ACCOUNT
+    ===================================== */
+
+    localStorage.setItem(
+      "crockcell_idToken",
+      authData.idToken
+    );
+
+
+    localStorage.setItem(
+      "crockcell_refreshToken",
+      authData.refreshToken
+    );
+
+
+    localStorage.setItem(
+      "crockcell_uid",
+      authData.localId
+    );
+
+
+    localStorage.setItem(
+
+      "crockcell_profile",
+
+      JSON.stringify(
+        profile
+      )
+
+    );
+
+
+
+    /* =====================================
+       ALSO REMOVE OLD KEY VERSIONS
+       AFTER SUCCESS
+    ===================================== */
+
+    localStorage.removeItem(
+      "crockcellIdToken"
+    );
+
+    localStorage.removeItem(
+      "crockcellRefreshToken"
+    );
+
+    localStorage.removeItem(
+      "crockcellUid"
+    );
+
+    localStorage.removeItem(
+      "crockcellProfile"
+    );
+
+
+
+    /* =====================================
+       SUCCESS
+    ===================================== */
+
+    message.style.color =
+    "#77ff99";
 
     message.textContent =
-      error.message;
+    "Login successful!";
 
 
-    loginBtn.disabled = false;
+    setTimeout(
+      function(){
+
+        window.location.href =
+        "home.html";
+
+      },
+      500
+    );
+
+
+  }
+  catch(error){
+
+    console.error(
+      "Login error:",
+      error
+    );
+
+
+    message.style.color =
+    "#ff7777";
+
+    message.textContent =
+    error.message;
+
+
+    loginBtn.disabled =
+    false;
 
     loginBtn.textContent =
-      "Login";
+    "Login";
 
   }
 
 });
 
 </script>
+
 
 </body>
 </html>
