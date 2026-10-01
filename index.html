@@ -144,15 +144,16 @@
 
       <div class="input-box">
         <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          autocomplete="email"
+          type="text"
+          id="username"
+          placeholder="Username"
+          autocomplete="username"
           required
         >
       </div>
 
       <div class="input-box">
+
         <input
           type="password"
           id="password"
@@ -168,6 +169,7 @@
         >
           Show
         </button>
+
       </div>
 
       <button
@@ -193,12 +195,16 @@
 
   </div>
 
+
 <script>
 
 const API_KEY = "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
+const PROJECT_ID = "crockcell-cd2e6";
+
+
 const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
+const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
 const loginBtn = document.getElementById("loginBtn");
@@ -224,55 +230,240 @@ togglePassword.addEventListener("click", function(){
 });
 
 
+/* FIRESTORE USERNAME LOOKUP */
+
+async function findUserByUsername(username){
+
+  const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents:runQuery?key=" +
+    API_KEY;
+
+
+  const requestBody = {
+
+    structuredQuery:{
+
+      from:[
+        {
+          collectionId:"usernameIndex"
+        }
+      ],
+
+      where:{
+        fieldFilter:{
+          field:{
+            fieldPath:"username"
+          },
+
+          op:"EQUAL",
+
+          value:{
+            stringValue:username
+          }
+        }
+      },
+
+      limit:1
+
+    }
+
+  };
+
+
+  const response = await fetch(url,{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify(requestBody)
+
+  });
+
+
+  const data = await response.json();
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "Username search nahi ho pa rahi. Firestore settings check karo."
+    );
+
+  }
+
+
+  if(!data || !data.length){
+
+    return null;
+
+  }
+
+
+  const document = data[0].document;
+
+  if(!document){
+
+    return null;
+
+  }
+
+
+  const fields = document.fields || {};
+
+
+  return {
+
+    uid: fields.uid?.stringValue || "",
+
+    email: fields.email?.stringValue || "",
+
+    username: fields.username?.stringValue || username
+
+  };
+
+}
+
+
 /* LOGIN */
 
 loginForm.addEventListener("submit", async function(e){
 
   e.preventDefault();
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+
+  const username =
+    usernameInput.value.trim().toLowerCase();
+
+  const password =
+    passwordInput.value;
+
 
   message.textContent = "";
+
   loginBtn.disabled = true;
+
   loginBtn.textContent = "Logging in...";
+
 
   try{
 
+    if(username.length < 3){
+
+      throw new Error(
+        "Username kam se kam 3 characters ka hona chahiye."
+      );
+
+    }
+
+
+    /* FIND USERNAME */
+
+    const user = await findUserByUsername(username);
+
+
+    if(!user){
+
+      throw new Error(
+        "Ye username registered nahi hai."
+      );
+
+    }
+
+
+    /*
+      UsernameIndex me email saved hai
+      to us email se Firebase login hoga.
+    */
+
+    if(!user.email){
+
+      throw new Error(
+        "Is account ka username login setup complete nahi hai. Pehle account ko update karna hoga."
+      );
+
+    }
+
+
+    /* FIREBASE AUTH LOGIN */
+
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + API_KEY,
+
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
+      API_KEY,
+
       {
+
         method:"POST",
+
         headers:{
           "Content-Type":"application/json"
         },
+
         body:JSON.stringify({
-          email:email,
+
+          email:user.email,
+
           password:password,
+
           returnSecureToken:true
+
         })
+
       }
+
     );
+
 
     const data = await response.json();
 
+
     if(!response.ok){
 
-      if(data.error && data.error.message === "INVALID_LOGIN_CREDENTIALS"){
-        throw new Error("Email ya password galat hai.");
+      if(
+        data.error &&
+        data.error.message === "INVALID_LOGIN_CREDENTIALS"
+      ){
+
+        throw new Error(
+          "Username ya password galat hai."
+        );
+
       }
 
-      if(data.error && data.error.message === "EMAIL_NOT_FOUND"){
-        throw new Error("Ye email registered nahi hai.");
+
+      if(
+        data.error &&
+        data.error.message === "EMAIL_NOT_FOUND"
+      ){
+
+        throw new Error(
+          "Ye account registered nahi hai."
+        );
+
       }
 
-      if(data.error && data.error.message === "INVALID_PASSWORD"){
-        throw new Error("Password galat hai.");
+
+      if(
+        data.error &&
+        data.error.message === "INVALID_PASSWORD"
+      ){
+
+        throw new Error(
+          "Password galat hai."
+        );
+
       }
+
 
       throw new Error(
         data.error?.message || "Login failed."
       );
+
     }
 
 
@@ -283,40 +474,61 @@ loginForm.addEventListener("submit", async function(e){
       data.idToken
     );
 
+
     localStorage.setItem(
       "crockcellRefreshToken",
       data.refreshToken
     );
+
 
     localStorage.setItem(
       "crockcellUid",
       data.localId
     );
 
+
     localStorage.setItem(
+
       "crockcellProfile",
+
       JSON.stringify({
+
         email:data.email,
-        uid:data.localId
+
+        uid:data.localId,
+
+        username:user.username
+
       })
+
     );
 
 
     message.style.color = "#77ff99";
-    message.textContent = "Login successful!";
+
+    message.textContent =
+      "Login successful!";
+
 
     setTimeout(function(){
+
       location.href = "home.html";
+
     },500);
 
 
   }catch(error){
 
     message.style.color = "#ff7777";
-    message.textContent = error.message;
+
+    message.textContent =
+      error.message;
+
 
     loginBtn.disabled = false;
-    loginBtn.textContent = "Login";
+
+    loginBtn.textContent =
+      "Login";
 
   }
 
