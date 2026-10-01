@@ -6,36 +6,274 @@
 <title>CROCKCELL - Search</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#fafafa;font-family:Arial,sans-serif;color:#111}
-.top{height:60px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 15px}
-.logo{font-size:23px;font-weight:800}
-.searchbox{padding:12px;background:#fff;border-bottom:1px solid #ddd}
-input{width:100%;padding:12px 15px;border:1px solid #ccc;border-radius:12px;font-size:16px;outline:none}
-.results{padding:10px}
-.user{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid #eee;cursor:pointer}
-.photo{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#ddd;margin-right:13px}
-.info{flex:1}
-.name{font-weight:700;font-size:16px}
-.username{color:#777;font-size:14px;margin-top:3px}
-.empty{text-align:center;color:#777;padding:40px 10px;line-height:1.5}
-.error{color:#c00;word-break:break-word}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#fafafa;
+  font-family:Arial,sans-serif;
+  color:#111;
+  padding-bottom:82px;
+}
+
+/* TOP */
+.top{
+  height:60px;
+  background:#fff;
+  border-bottom:1px solid #e8e8e8;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+/* SEARCH */
+.searchbox{
+  padding:14px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+}
+
+.searchWrap{
+  position:relative;
+}
+
+.searchIcon{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
+  color:#777;
+  pointer-events:none;
+}
+
+input{
+  width:100%;
+  padding:13px 16px 13px 44px;
+  border:1px solid #ddd;
+  border-radius:15px;
+  font-size:16px;
+  outline:none;
+  background:#f5f5f5;
+  transition:.2s;
+}
+
+input:focus{
+  background:#fff;
+  border-color:#aaa;
+}
+
+/* RESULTS */
+.results{
+  padding:8px 12px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  padding:12px 8px;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.user:active{
+  background:#f2f2f2;
+  transform:scale(.99);
+}
+
+.photo{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+  margin-right:13px;
+}
+
+.info{
+  flex:1;
+  min-width:0;
+}
+
+.name{
+  font-weight:700;
+  font-size:16px;
+}
+
+.username{
+  color:#777;
+  font-size:14px;
+  margin-top:3px;
+}
+
+.bio{
+  color:#888;
+  font-size:13px;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:45px 10px;
+  line-height:1.5;
+}
+
+.error{
+  color:#c00;
+  word-break:break-word;
+}
+
+/* BOTTOM NAVIGATION */
+.bottomNav{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  height:64px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #e5e5e5;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  box-shadow:0 5px 25px rgba(0,0,0,.10);
+  z-index:1000;
+  backdrop-filter:blur(12px);
+}
+
+.navItem{
+  width:25%;
+  height:54px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#777;
+  font-size:11px;
+  font-weight:600;
+  border-radius:15px;
+  transition:.2s;
+  position:relative;
+}
+
+.navIcon{
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:2px;
+}
+
+.navItem.active{
+  color:#111;
+  background:#f0f0f0;
+}
+
+.navItem.active .navIcon{
+  transform:scale(1.08);
+}
+
+.navItem:active{
+  transform:scale(.92);
+}
+
+/* PROFILE PHOTO */
+.profileNavPhoto{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#ddd;
+  border:2px solid #eee;
+}
+
+@media(max-width:380px){
+  .bottomNav{
+    left:7px;
+    right:7px;
+  }
+
+  .navItem{
+    font-size:10px;
+  }
+}
 </style>
 </head>
 
 <body>
 
+<!-- TOP -->
 <div class="top">
   <div class="logo">CROCKCELL</div>
 </div>
 
+<!-- SEARCH -->
 <div class="searchbox">
-  <input id="search" type="text" placeholder="Search users...">
+  <div class="searchWrap">
+    <div class="searchIcon">⌕</div>
+    <input
+      id="search"
+      type="text"
+      placeholder="Search users..."
+      autocomplete="off"
+    >
+  </div>
 </div>
 
+<!-- RESULTS -->
 <div id="results" class="results">
-  <div class="empty">Search for a user</div>
+  <div class="empty">
+    Search for a user
+  </div>
 </div>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottomNav">
+
+  <a href="home.html" class="navItem">
+    <div class="navIcon">⌂</div>
+    <div>Home</div>
+  </a>
+
+  <a href="search.html" class="navItem active">
+    <div class="navIcon">⌕</div>
+    <div>Search</div>
+  </a>
+
+  <a href="reels.html" class="navItem">
+    <div class="navIcon">▶</div>
+    <div>Reels</div>
+  </a>
+
+  <a href="profile.html" class="navItem">
+    <div class="navIcon">
+      <img
+        id="navProfilePhoto"
+        class="profileNavPhoto"
+        src=""
+        alt="Profile"
+      >
+    </div>
+    <div>Profile</div>
+  </a>
+
+</nav>
 
 <script>
 
@@ -54,22 +292,116 @@ if(!token||!myUid){
   location.href="index.html";
 }
 
+/* -------------------------
+   PROFILE PHOTO
+------------------------- */
+
+function loadNavProfile(){
+
+  const img=document.getElementById("navProfilePhoto");
+
+  let saved=null;
+
+  try{
+    saved=JSON.parse(
+      localStorage.getItem("crockcellProfile")||"null"
+    );
+  }catch(e){}
+
+  if(saved && saved.photoURL){
+
+    img.src=saved.photoURL;
+
+  }else{
+
+    loadProfilePhoto(img);
+
+  }
+}
+
+async function loadProfilePhoto(img){
+
+  try{
+
+    const url=
+      BASE+
+      "/users/"+
+      encodeURIComponent(myUid)+
+      "?key="+
+      encodeURIComponent(API_KEY);
+
+    const r=await fetch(url,{
+      headers:{
+        "Authorization":"Bearer "+token
+      }
+    });
+
+    if(!r.ok)return;
+
+    const data=await r.json();
+    const f=data.fields||{};
+
+    const photo=
+      f.photoURL?.stringValue||"";
+
+    if(photo){
+
+      img.src=photo;
+
+      const old={
+        email:f.email?.stringValue||"",
+        uid:myUid,
+        photoURL:photo
+      };
+
+      localStorage.setItem(
+        "crockcellProfile",
+        JSON.stringify(old)
+      );
+    }
+
+  }catch(e){
+
+    console.log("Profile photo error:",e);
+
+  }
+}
+
+loadNavProfile();
+
+
+/* -------------------------
+   FIREBASE HELPERS
+------------------------- */
+
 function val(x){
+
   if(!x)return "";
-  if(x.stringValue!==undefined)return x.stringValue;
-  if(x.integerValue!==undefined)return x.integerValue;
-  if(x.doubleValue!==undefined)return x.doubleValue;
-  if(x.booleanValue!==undefined)return x.booleanValue;
+
+  if(x.stringValue!==undefined)
+    return x.stringValue;
+
+  if(x.integerValue!==undefined)
+    return x.integerValue;
+
+  if(x.doubleValue!==undefined)
+    return x.doubleValue;
+
+  if(x.booleanValue!==undefined)
+    return x.booleanValue;
+
   return "";
 }
 
 function esc(s){
+
   return String(s||"")
   .replace(/&/g,"&amp;")
   .replace(/</g,"&lt;")
   .replace(/>/g,"&gt;")
   .replace(/"/g,"&quot;")
   .replace(/'/g,"&#039;");
+
 }
 
 function makeUser(doc){
@@ -78,14 +410,31 @@ function makeUser(doc){
   const docId=doc.name.split("/").pop();
 
   return {
+
     docId:docId,
+
     uid:val(f.uid),
-    name:val(f.name)||"User",
-    username:val(f.username)||"",
-    photoURL:val(f.photoURL)||"",
-    bio:val(f.bio)||""
+
+    name:
+      val(f.name)||"User",
+
+    username:
+      val(f.username)||"",
+
+    photoURL:
+      val(f.photoURL)||"",
+
+    bio:
+      val(f.bio)||""
+
   };
+
 }
+
+
+/* -------------------------
+   GET USERS
+------------------------- */
 
 async function getAllUsers(){
 
@@ -93,10 +442,6 @@ async function getAllUsers(){
     BASE+
     "/users?pageSize=1000&key="+
     encodeURIComponent(API_KEY);
-
-  console.log("REQUEST:",url);
-  console.log("TOKEN EXISTS:",!!token);
-  console.log("MY UID:",myUid);
 
   const r=await fetch(url,{
     method:"GET",
@@ -107,15 +452,16 @@ async function getAllUsers(){
 
   const text=await r.text();
 
-  console.log("HTTP STATUS:",r.status);
-  console.log("RESPONSE:",text);
-
   let data={};
 
   try{
+
     data=JSON.parse(text);
+
   }catch(e){
+
     data={raw:text};
+
   }
 
   if(!r.ok){
@@ -127,71 +473,135 @@ async function getAllUsers(){
       " | "+
       (data.error?.message||text||"Unknown Firebase error")
     );
+
   }
 
   return data.documents||[];
+
 }
+
+
+/* -------------------------
+   SEARCH
+------------------------- */
 
 async function searchUsers(q){
 
-  const box=document.getElementById("results");
+  const box=
+    document.getElementById("results");
 
   q=q.trim().toLowerCase();
 
   if(!q){
-    box.innerHTML='<div class="empty">Search for a user</div>';
+
+    box.innerHTML=
+      '<div class="empty">'+
+      'Search for a user'+
+      '</div>';
+
     return;
+
   }
 
-  box.innerHTML='<div class="empty">Searching...</div>';
+  box.innerHTML=
+    '<div class="empty">'+
+    'Searching...'+
+    '</div>';
 
   try{
 
-    const documents=await getAllUsers();
+    const documents=
+      await getAllUsers();
 
     const users=[];
 
     documents.forEach(doc=>{
 
-      const u=makeUser(doc);
+      const u=
+        makeUser(doc);
 
       if(!u.uid)return;
+
       if(u.uid===myUid)return;
 
-      const name=u.name.toLowerCase();
-      const username=u.username.toLowerCase();
+      const name=
+        u.name.toLowerCase();
+
+      const username=
+        u.username.toLowerCase();
 
       if(
         name.includes(q) ||
         username.includes(q)
       ){
+
         users.push(u);
+
       }
 
     });
 
+
     if(!users.length){
-      box.innerHTML='<div class="empty">No users found</div>';
+
+      box.innerHTML=
+        '<div class="empty">'+
+        'No users found'+
+        '</div>';
+
       return;
+
     }
+
 
     box.innerHTML="";
 
+
     users.forEach(u=>{
 
-      const row=document.createElement("div");
+      const row=
+        document.createElement("div");
+
       row.className="user";
 
+
+      const photo=
+        u.photoURL||
+        "https://via.placeholder.com/100";
+
+
       row.innerHTML=`
-        <img class="photo"
-        src="${esc(u.photoURL)}"
-        onerror="this.style.visibility='hidden'">
+
+        <img
+          class="photo"
+          src="${esc(photo)}"
+          onerror="this.src='https://via.placeholder.com/100'"
+        >
 
         <div class="info">
-          <div class="name">${esc(u.name)}</div>
-          <div class="username">@${esc(u.username)}</div>
+
+          <div class="name">
+            ${esc(u.name)}
+          </div>
+
+          <div class="username">
+            @${esc(u.username)}
+          </div>
+
+          ${
+            u.bio
+            ?
+            `<div class="bio">
+              ${esc(u.bio)}
+            </div>`
+            :
+            ""
+          }
+
         </div>
+
       `;
+
 
       row.onclick=()=>{
 
@@ -205,38 +615,59 @@ async function searchUsers(q){
           encodeURIComponent(u.uid)+
           "&doc="+
           encodeURIComponent(u.docId);
+
       };
+
 
       box.appendChild(row);
 
     });
 
+
   }catch(e){
 
-    console.error("SEARCH ERROR:",e);
+    console.error(
+      "SEARCH ERROR:",
+      e
+    );
 
     box.innerHTML=
       '<div class="empty error">'+
-      '<b>Firebase Search Error</b><br><br>'+
+      '<b>Firebase Search Error</b>'+
+      '<br><br>'+
       esc(e.message)+
       '</div>';
+
   }
+
 }
+
+
+/* -------------------------
+   SEARCH INPUT
+------------------------- */
 
 let timer;
 
-document.getElementById("search")
-.addEventListener("input",function(){
+document
+.getElementById("search")
+.addEventListener(
+  "input",
+  function(){
 
-  clearTimeout(timer);
+    clearTimeout(timer);
 
-  const q=this.value;
+    const q=this.value;
 
-  timer=setTimeout(()=>{
-    searchUsers(q);
-  },300);
+    timer=setTimeout(
+      ()=>{
+        searchUsers(q);
+      },
+      300
+    );
 
-});
+  }
+);
 
 </script>
 
