@@ -130,6 +130,23 @@ body{
   padding:45px 20px;
 }
 
+.error-box{
+  text-align:center;
+  color:#777;
+  padding:45px 20px;
+  line-height:1.7;
+}
+
+.retry-btn{
+  margin-top:15px;
+  border:0;
+  border-radius:15px;
+  padding:11px 18px;
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+}
+
 .list-modal{
   position:fixed;
   inset:0;
@@ -184,6 +201,7 @@ body{
   gap:12px;
   padding:13px 5px;
   border-bottom:1px solid #222;
+  cursor:pointer;
 }
 
 .user-avatar{
@@ -400,7 +418,8 @@ params.get("name");
 
 
 const profileUID =
-requestedUID || currentUID;
+requestedUID ||
+currentUID;
 
 
 /* =========================
@@ -427,6 +446,21 @@ let currentProfile = null;
 
 
 /* =========================
+   FIRESTORE URL
+========================= */
+
+function firestoreBase(){
+
+  return (
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents"
+  );
+
+}
+
+
+/* =========================
    LOAD PROFILE
 ========================= */
 
@@ -434,47 +468,99 @@ async function loadProfile(){
 
   try{
 
-    const url =
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/users/" +
-    encodeURIComponent(profileUID) +
-    "?key=" +
-    API_KEY;
+    let userData = null;
 
 
-    const response =
-    await fetch(
-      url,
-      {
-        headers:{
-          Authorization:"Bearer " + token
+    /*
+      STEP 1:
+      Pehle document ID ko UID maan kar try.
+    */
+
+    try{
+
+      const directURL =
+        firestoreBase() +
+        "/users/" +
+        encodeURIComponent(profileUID) +
+        "?key=" +
+        API_KEY;
+
+
+      const directResponse =
+      await fetch(
+        directURL,
+        {
+          headers:{
+            Authorization:
+            "Bearer " + token
+          }
         }
+      );
+
+
+      if(directResponse.ok){
+
+        userData =
+        await directResponse.json();
+
       }
-    );
 
+    }
+    catch(error){
 
-    if(!response.ok){
-
-      throw new Error(
-        "PROFILE_NOT_FOUND_" +
-        response.status
+      console.log(
+        "Direct profile lookup failed"
       );
 
     }
 
 
-    const data =
-    await response.json();
+    /*
+      STEP 2:
+      Agar document ID se nahi mila,
+      users collection ke andar uid field se search.
+    */
+
+    if(!userData){
+
+      userData =
+      await findUserByUID(
+        profileUID
+      );
+
+    }
+
+
+    /*
+      STEP 3:
+      Agar phir bhi nahi mila.
+    */
+
+    if(!userData){
+
+      throw new Error(
+        "USER_NOT_FOUND"
+      );
+
+    }
 
 
     const f =
-    data.fields || {};
+    userData.fields || {};
+
+
+    /*
+      Actual UID document ke andar se.
+    */
+
+    const actualUID =
+      f.uid?.stringValue ||
+      profileUID;
 
 
     currentProfile = {
 
-      uid:profileUID,
+      uid:actualUID,
 
       name:
       f.name?.stringValue ||
@@ -499,16 +585,14 @@ async function loadProfile(){
 
 
     /*
-      IMPORTANT:
-      Profile ko turant render karo.
-      Koi follow request ka wait nahi.
+      PROFILE KO TURANT SHOW KARO.
     */
 
     renderProfile();
 
 
     /*
-      Ye sab background me chalega.
+      Baaki features background me.
     */
 
     loadFollowCounts();
@@ -530,15 +614,28 @@ async function loadProfile(){
 
     profileArea.innerHTML = `
 
-      <div class="status">
+      <div class="error-box">
 
         Profile load nahi ho paayi.
+
+        <br>
+
+        User database me nahi mila.
 
         <br><br>
 
         <small>
           UID: ${escapeHTML(profileUID)}
         </small>
+
+        <br>
+
+        <button
+          class="retry-btn"
+          onclick="location.reload()"
+        >
+          Retry
+        </button>
 
       </div>
 
@@ -550,17 +647,119 @@ async function loadProfile(){
 
 
 /* =========================
+   FIND USER BY UID FIELD
+========================= */
+
+async function findUserByUID(
+  targetUID
+){
+
+  const url =
+    firestoreBase() +
+    ":runQuery?key=" +
+    API_KEY;
+
+
+  const body = {
+
+    structuredQuery:{
+
+      from:[
+
+        {
+          collectionId:"users"
+        }
+
+      ],
+
+      where:{
+
+        fieldFilter:{
+
+          field:{
+            fieldPath:"uid"
+          },
+
+          op:"EQUAL",
+
+          value:{
+            stringValue:targetUID
+          }
+
+        }
+
+      },
+
+      limit:1
+
+    }
+
+  };
+
+
+  const response =
+  await fetch(
+    url,
+    {
+
+      method:"POST",
+
+      headers:{
+
+        Authorization:
+        "Bearer " + token,
+
+        "Content-Type":
+        "application/json"
+
+      },
+
+      body:
+      JSON.stringify(body)
+
+    }
+  );
+
+
+  if(!response.ok){
+
+    console.log(
+      "UID query failed:",
+      response.status
+    );
+
+    return null;
+
+  }
+
+
+  const rows =
+  await response.json();
+
+
+  for(
+    const row of rows
+  ){
+
+    if(row.document){
+
+      return row.document;
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================
    RENDER PROFILE
 ========================= */
 
 function renderProfile(){
-
-  if(!currentProfile){
-
-    return;
-
-  }
-
 
   const isOwn =
   currentProfile.uid === currentUID;
@@ -802,11 +1001,6 @@ async function updateFollowButton(){
     );
 
 
-    /*
-      Button already screen par hai.
-      Sirf text update karo.
-    */
-
     button.textContent =
     following
     ?
@@ -824,7 +1018,7 @@ async function updateFollowButton(){
   catch(error){
 
     console.log(
-      "Follow status unavailable"
+      "Follow status skipped"
     );
 
   }
@@ -833,7 +1027,7 @@ async function updateFollowButton(){
 
 
 /* =========================
-   FOLLOW COUNT
+   FOLLOW COUNTS
 ========================= */
 
 async function loadFollowCounts(){
@@ -915,12 +1109,11 @@ async function checkFollowing(
 
 
   const url =
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents/follows/" +
-  encodeURIComponent(id) +
-  "?key=" +
-  API_KEY;
+    firestoreBase() +
+    "/follows/" +
+    encodeURIComponent(id) +
+    "?key=" +
+    API_KEY;
 
 
   const response =
@@ -978,12 +1171,11 @@ async function toggleFollow(){
 
 
     const url =
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/follows/" +
-    encodeURIComponent(id) +
-    "?key=" +
-    API_KEY;
+      firestoreBase() +
+      "/follows/" +
+      encodeURIComponent(id) +
+      "?key=" +
+      API_KEY;
 
 
     if(alreadyFollowing){
@@ -993,7 +1185,6 @@ async function toggleFollow(){
         url,
         {
           method:"DELETE",
-
           headers:{
             Authorization:
             "Bearer " + token
@@ -1096,9 +1287,7 @@ async function toggleFollow(){
   }
   catch(error){
 
-    console.error(
-      error
-    );
+    console.error(error);
 
     alert(
       "Follow update nahi ho paaya."
@@ -1113,7 +1302,7 @@ async function toggleFollow(){
 
 
 /* =========================
-   CHANGE COUNT
+   CHANGE FOLLOWER COUNT
 ========================= */
 
 function changeFollowerCount(
@@ -1165,11 +1354,9 @@ async function getFollowDocuments(
 ){
 
   const url =
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents:runQuery" +
-  "?key=" +
-  API_KEY;
+    firestoreBase() +
+    ":runQuery?key=" +
+    API_KEY;
 
 
   const body = {
@@ -1177,11 +1364,9 @@ async function getFollowDocuments(
     structuredQuery:{
 
       from:[
-
         {
           collectionId:"follows"
         }
-
       ],
 
       where:{
@@ -1189,15 +1374,13 @@ async function getFollowDocuments(
         fieldFilter:{
 
           field:{
-            fieldPath:
-            fieldName
+            fieldPath:fieldName
           },
 
           op:"EQUAL",
 
           value:{
-            stringValue:
-            targetUID
+            stringValue:targetUID
           }
 
         }
@@ -1285,7 +1468,7 @@ async function getFollowDocuments(
 
 
 /* =========================
-   OPEN LIST
+   USER LIST
 ========================= */
 
 async function openUserList(
@@ -1327,15 +1510,12 @@ async function openUserList(
 
     const ids =
     documents.map(
-
       item =>
-
       type === "Followers"
       ?
       item.followerId
       :
       item.followingId
-
     );
 
 
@@ -1388,10 +1568,7 @@ async function openUserList(
   }
   catch(error){
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     listContent.innerHTML = `
 
@@ -1407,191 +1584,40 @@ async function openUserList(
 
 
 /* =========================
-   GET USER
+   GET USER BY UID
+   DIRECT + QUERY
 ========================= */
 
 async function getUserByUID(
   targetUID
 ){
 
-  const url =
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents/users/" +
-  encodeURIComponent(targetUID) +
-  "?key=" +
-  API_KEY;
+  /*
+    Pehle direct document ID.
+  */
+
+  try{
+
+    const directURL =
+      firestoreBase() +
+      "/users/" +
+      encodeURIComponent(targetUID) +
+      "?key=" +
+      API_KEY;
 
 
-  const response =
-  await fetch(
-    url,
-    {
-      headers:{
-        Authorization:
-        "Bearer " + token
+    const response =
+    await fetch(
+      directURL,
+      {
+        headers:{
+          Authorization:
+          "Bearer " + token
+        }
       }
-    }
-  );
+    );
 
 
-  if(!response.ok){
+    if(response.ok){
 
-    return null;
-
-  }
-
-
-  const data =
-  await response.json();
-
-
-  const f =
-  data.fields || {};
-
-
-  return {
-
-    uid:targetUID,
-
-    name:
-    f.name?.stringValue ||
-    f.username?.stringValue ||
-    "User",
-
-    username:
-    f.username?.stringValue ||
-    "user",
-
-    photoURL:
-    f.photoURL?.stringValue ||
-    ""
-
-  };
-
-}
-
-
-/* =========================
-   RENDER USER LIST
-========================= */
-
-function renderUserList(
-  users
-){
-
-  listContent.innerHTML = "";
-
-
-  if(!users.length){
-
-    listContent.innerHTML = `
-
-      <div class="list-empty">
-        User profile available nahi hai.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  users.forEach(
-    user => {
-
-      const row =
-      document.createElement(
-        "div"
-      );
-
-
-      row.className =
-      "user-row";
-
-
-      row.innerHTML = `
-
-        <img
-          class="user-avatar"
-          src="${
-            escapeAttribute(
-              user.photoURL ||
-              placeholderPhoto()
-            )
-          }"
-          alt=""
-        >
-
-        <div class="user-details">
-
-          <div class="user-name">
-            ${escapeHTML(
-              user.name
-            )}
-          </div>
-
-          <div class="user-username">
-            @${escapeHTML(
-              user.username
-            )}
-          </div>
-
-        </div>
-
-        <div class="user-arrow">
-          ›
-        </div>
-
-      `;
-
-
-      row.onclick =
-      function(){
-
-        window.location.assign(
-
-          "profile.html" +
-          "?uid=" +
-          encodeURIComponent(
-            user.uid
-          ) +
-          "&username=" +
-          encodeURIComponent(
-            user.username
-          ) +
-          "&name=" +
-          encodeURIComponent(
-            user.name
-          )
-
-        );
-
-      };
-
-
-      listContent.appendChild(
-        row
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-function openMessage(
-  profile
-){
-
-  const target = {
-
-    uid:profile.uid,
-
-    username:
- 
+      const da
