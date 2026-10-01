@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CROCKCELL - Search</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>CROCKCELL Search</title>
 
 <style>
 *{
@@ -12,662 +13,650 @@
 
 body{
   margin:0;
-  background:#fafafa;
-  font-family:Arial,sans-serif;
-  color:#111;
-  padding-bottom:82px;
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
 }
 
-/* TOP */
-.top{
-  height:60px;
-  background:#fff;
-  border-bottom:1px solid #e8e8e8;
+.header{
+  padding:20px 18px 15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(0,0,0,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #222;
+}
+
+.title{
+  font-size:28px;
+  font-weight:bold;
+  margin-bottom:16px;
+}
+
+.search-row{
   display:flex;
-  align-items:center;
-  padding:0 16px;
+  gap:8px;
 }
 
-.logo{
-  font-size:23px;
-  font-weight:800;
-  letter-spacing:-.5px;
-}
-
-/* SEARCH */
-.searchbox{
-  padding:14px;
-  background:#fff;
-  border-bottom:1px solid #eee;
-}
-
-.searchWrap{
-  position:relative;
-}
-
-.searchIcon{
-  position:absolute;
-  left:15px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:18px;
-  color:#777;
-  pointer-events:none;
-}
-
-input{
-  width:100%;
-  padding:13px 16px 13px 44px;
-  border:1px solid #ddd;
-  border-radius:15px;
-  font-size:16px;
+.search-input{
+  flex:1;
+  height:50px;
+  border:0;
   outline:none;
-  background:#f5f5f5;
-  transition:.2s;
+  border-radius:20px;
+  background:#191919;
+  color:#fff;
+  padding:0 17px;
+  font-size:16px;
 }
 
-input:focus{
+.search-btn{
+  width:55px;
+  height:50px;
+  border:0;
+  border-radius:20px;
   background:#fff;
-  border-color:#aaa;
+  color:#000;
+  font-size:22px;
+  font-weight:bold;
 }
 
-/* RESULTS */
+.message{
+  min-height:25px;
+  padding:12px 18px 0;
+  color:#888;
+  font-size:14px;
+}
+
 .results{
-  padding:8px 12px;
+  padding:8px 15px 100px;
 }
 
-.user{
+.user-card{
   display:flex;
   align-items:center;
-  padding:12px 8px;
-  border-bottom:1px solid #eee;
-  cursor:pointer;
-  transition:.15s;
+  gap:13px;
+  padding:14px 5px;
+  border-bottom:1px solid #181818;
 }
 
-.user:active{
-  background:#f2f2f2;
-  transform:scale(.99);
-}
-
-.photo{
-  width:52px;
-  height:52px;
+.avatar{
+  width:58px;
+  height:58px;
   border-radius:50%;
   object-fit:cover;
-  background:#ddd;
-  margin-right:13px;
+  background:#222;
+  flex-shrink:0;
 }
 
-.info{
+.user-info{
   flex:1;
   min-width:0;
 }
 
 .name{
-  font-weight:700;
-  font-size:16px;
+  font-size:17px;
+  font-weight:bold;
 }
 
 .username{
-  color:#777;
+  margin-top:4px;
+  color:#888;
   font-size:14px;
-  margin-top:3px;
 }
 
-.bio{
-  color:#888;
-  font-size:13px;
-  margin-top:4px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.open-btn{
+  border:0;
+  border-radius:15px;
+  background:#fff;
+  color:#000;
+  padding:10px 14px;
+  font-weight:bold;
 }
 
 .empty{
   text-align:center;
-  color:#777;
-  padding:45px 10px;
-  line-height:1.5;
+  color:#666;
+  padding:55px 20px;
 }
 
-.error{
-  color:#c00;
-  word-break:break-word;
-}
-
-/* BOTTOM NAVIGATION */
-.bottomNav{
+.bottom-nav{
   position:fixed;
-  left:10px;
-  right:10px;
-  bottom:10px;
-  height:64px;
-  background:rgba(255,255,255,.96);
-  border:1px solid #e5e5e5;
-  border-radius:20px;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  z-index:20;
   display:flex;
-  align-items:center;
   justify-content:space-around;
-  box-shadow:0 5px 25px rgba(0,0,0,.10);
-  z-index:1000;
-  backdrop-filter:blur(12px);
+  padding:8px;
+  border-radius:24px;
+  background:rgba(25,25,25,.9);
+  backdrop-filter:blur(18px);
+  border:1px solid #333;
 }
 
-.navItem{
-  width:25%;
-  height:54px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+.nav-item{
+  flex:1;
+  text-align:center;
+  padding:8px 4px;
+  border-radius:17px;
+  color:#999;
   text-decoration:none;
-  color:#777;
   font-size:11px;
-  font-weight:600;
-  border-radius:15px;
-  transition:.2s;
-  position:relative;
 }
 
-.navIcon{
-  width:30px;
-  height:30px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  margin-bottom:2px;
+.nav-item.active{
+  background:#fff;
+  color:#000;
 }
 
-.navItem.active{
-  color:#111;
-  background:#f0f0f0;
-}
-
-.navItem.active .navIcon{
-  transform:scale(1.08);
-}
-
-.navItem:active{
-  transform:scale(.92);
-}
-
-/* PROFILE PHOTO */
-.profileNavPhoto{
-  width:27px;
-  height:27px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#ddd;
-  border:2px solid #eee;
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
 }
 
 @media(max-width:380px){
-  .bottomNav{
-    left:7px;
-    right:7px;
+
+  .title{
+    font-size:25px;
   }
 
-  .navItem{
-    font-size:10px;
+  .search-input{
+    font-size:15px;
   }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- TOP -->
-<div class="top">
-  <div class="logo">CROCKCELL</div>
-</div>
+<div class="header">
 
-<!-- SEARCH -->
-<div class="searchbox">
-  <div class="searchWrap">
-    <div class="searchIcon">⌕</div>
+  <div class="title">
+    Search
+  </div>
+
+  <div class="search-row">
+
     <input
-      id="search"
+      id="searchInput"
+      class="search-input"
       type="text"
-      placeholder="Search users..."
+      placeholder="Search username..."
       autocomplete="off"
+      autocapitalize="none"
     >
+
+    <button
+      id="searchBtn"
+      class="search-btn"
+      type="button"
+      onclick="searchUser()"
+    >
+      ⌕
+    </button>
+
   </div>
+
 </div>
 
-<!-- RESULTS -->
-<div id="results" class="results">
+<div
+  id="message"
+  class="message"
+></div>
+
+<div
+  id="results"
+  class="results"
+>
   <div class="empty">
-    Search for a user
+    Search for a username
   </div>
 </div>
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="bottomNav">
 
-  <a href="home.html" class="navItem">
-    <div class="navIcon">⌂</div>
-    <div>Home</div>
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+  <a
+    class="nav-item"
+    href="home.html"
+  >
+    <span class="nav-icon">⌂</span>
+    Home
   </a>
 
-  <a href="search.html" class="navItem active">
-    <div class="navIcon">⌕</div>
-    <div>Search</div>
+  <a
+    class="nav-item active"
+    href="search.html"
+  >
+    <span class="nav-icon">⌕</span>
+    Search
   </a>
 
-  <a href="reels.html" class="navItem">
-    <div class="navIcon">▶</div>
-    <div>Reels</div>
+  <a
+    class="nav-item"
+    href="reels.html"
+  >
+    <span class="nav-icon">▶</span>
+    Reels
   </a>
 
-  <a href="profile.html" class="navItem">
-    <div class="navIcon">
-      <img
-        id="navProfilePhoto"
-        class="profileNavPhoto"
-        src=""
-        alt="Profile"
-      >
-    </div>
-    <div>Profile</div>
+  <a
+    class="nav-item"
+    href="messages.html"
+  >
+    <span class="nav-icon">♡</span>
+    Messages
   </a>
 
-</nav>
+  <a
+    class="nav-item"
+    href="profile.html"
+  >
+    <span class="nav-icon">◯</span>
+    Profile
+  </a>
+
+</div>
+
 
 <script>
 
-const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-const PROJECT_ID="crockcell-cd2e6";
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
-const BASE=
-"https://firestore.googleapis.com/v1/projects/"+
-PROJECT_ID+
-"/databases/(default)/documents";
-
-let token=localStorage.getItem("crockcellIdToken");
-const myUid=localStorage.getItem("crockcellUid");
-
-if(!token||!myUid){
-  location.href="index.html";
-}
-
-/* -------------------------
-   PROFILE PHOTO
-------------------------- */
-
-function loadNavProfile(){
-
-  const img=document.getElementById("navProfilePhoto");
-
-  let saved=null;
-
-  try{
-    saved=JSON.parse(
-      localStorage.getItem("crockcellProfile")||"null"
-    );
-  }catch(e){}
-
-  if(saved && saved.photoURL){
-
-    img.src=saved.photoURL;
-
-  }else{
-
-    loadProfilePhoto(img);
-
-  }
-}
-
-async function loadProfilePhoto(img){
-
-  try{
-
-    const url=
-      BASE+
-      "/users/"+
-      encodeURIComponent(myUid)+
-      "?key="+
-      encodeURIComponent(API_KEY);
-
-    const r=await fetch(url,{
-      headers:{
-        "Authorization":"Bearer "+token
-      }
-    });
-
-    if(!r.ok)return;
-
-    const data=await r.json();
-    const f=data.fields||{};
-
-    const photo=
-      f.photoURL?.stringValue||"";
-
-    if(photo){
-
-      img.src=photo;
-
-      const old={
-        email:f.email?.stringValue||"",
-        uid:myUid,
-        photoURL:photo
-      };
-
-      localStorage.setItem(
-        "crockcellProfile",
-        JSON.stringify(old)
-      );
-    }
-
-  }catch(e){
-
-    console.log("Profile photo error:",e);
-
-  }
-}
-
-loadNavProfile();
+const PROJECT_ID =
+"crockcell-cd2e6";
 
 
-/* -------------------------
-   FIREBASE HELPERS
-------------------------- */
+/* =========================
+   NEW SESSION KEYS
+========================= */
 
-function val(x){
+let token =
+localStorage.getItem(
+  "crockcell_idToken"
+);
 
-  if(!x)return "";
+let uid =
+localStorage.getItem(
+  "crockcell_uid"
+);
 
-  if(x.stringValue!==undefined)
-    return x.stringValue;
 
-  if(x.integerValue!==undefined)
-    return x.integerValue;
+/* SESSION STORAGE FALLBACK */
 
-  if(x.doubleValue!==undefined)
-    return x.doubleValue;
+if(!token){
 
-  if(x.booleanValue!==undefined)
-    return x.booleanValue;
-
-  return "";
-}
-
-function esc(s){
-
-  return String(s||"")
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+  token =
+  sessionStorage.getItem(
+    "crockcell_idToken"
+  );
 
 }
 
-function makeUser(doc){
+if(!uid){
 
-  const f=doc.fields||{};
-  const docId=doc.name.split("/").pop();
-
-  return {
-
-    docId:docId,
-
-    uid:val(f.uid),
-
-    name:
-      val(f.name)||"User",
-
-    username:
-      val(f.username)||"",
-
-    photoURL:
-      val(f.photoURL)||"",
-
-    bio:
-      val(f.bio)||""
-
-  };
+  uid =
+  sessionStorage.getItem(
+    "crockcell_uid"
+  );
 
 }
 
 
-/* -------------------------
-   GET USERS
-------------------------- */
+/* =========================
+   LOGIN CHECK
+========================= */
 
-async function getAllUsers(){
+if(!token || !uid){
 
-  const url=
-    BASE+
-    "/users?pageSize=1000&key="+
-    encodeURIComponent(API_KEY);
-
-  const r=await fetch(url,{
-    method:"GET",
-    headers:{
-      "Authorization":"Bearer "+token
-    }
-  });
-
-  const text=await r.text();
-
-  let data={};
-
-  try{
-
-    data=JSON.parse(text);
-
-  }catch(e){
-
-    data={raw:text};
-
-  }
-
-  if(!r.ok){
-
-    throw new Error(
-      "HTTP "+r.status+
-      " | "+
-      (data.error?.status||"UNKNOWN")+
-      " | "+
-      (data.error?.message||text||"Unknown Firebase error")
-    );
-
-  }
-
-  return data.documents||[];
+  window.location.replace(
+    "index.html"
+  );
 
 }
 
 
-/* -------------------------
+/* =========================
    SEARCH
-------------------------- */
+========================= */
 
-async function searchUsers(q){
+async function searchUser(){
 
-  const box=
-    document.getElementById("results");
+  const input =
+  document.getElementById(
+    "searchInput"
+  );
 
-  q=q.trim().toLowerCase();
+  const results =
+  document.getElementById(
+    "results"
+  );
 
-  if(!q){
+  const message =
+  document.getElementById(
+    "message"
+  );
 
-    box.innerHTML=
-      '<div class="empty">'+
-      'Search for a user'+
-      '</div>';
+  const username =
+  input.value
+    .trim()
+    .toLowerCase();
+
+
+  if(!username){
+
+    message.textContent =
+    "Username enter karo.";
+
+    results.innerHTML =
+    `<div class="empty">
+      Username search karo
+    </div>`;
 
     return;
 
   }
 
-  box.innerHTML=
-    '<div class="empty">'+
-    'Searching...'+
-    '</div>';
+
+  message.textContent =
+  "Searching...";
+
+
+  results.innerHTML =
+  `<div class="empty">
+    Searching...
+  </div>`;
+
 
   try{
 
-    const documents=
-      await getAllUsers();
-
-    const users=[];
-
-    documents.forEach(doc=>{
-
-      const u=
-        makeUser(doc);
-
-      if(!u.uid)return;
-
-      if(u.uid===myUid)return;
-
-      const name=
-        u.name.toLowerCase();
-
-      const username=
-        u.username.toLowerCase();
-
-      if(
-        name.includes(q) ||
-        username.includes(q)
-      ){
-
-        users.push(u);
-
-      }
-
-    });
+    const url =
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/usernameIndex/" +
+    encodeURIComponent(username) +
+    "?key=" +
+    API_KEY;
 
 
-    if(!users.length){
+    const response =
+    await fetch(url);
 
-      box.innerHTML=
-        '<div class="empty">'+
-        'No users found'+
-        '</div>';
+
+    if(response.status===404){
+
+      message.textContent =
+      "User nahi mila.";
+
+      results.innerHTML =
+      `<div class="empty">
+        No user found
+      </div>`;
 
       return;
 
     }
 
 
-    box.innerHTML="";
+    if(!response.ok){
+
+      throw new Error(
+        "Search failed"
+      );
+
+    }
 
 
-    users.forEach(u=>{
-
-      const row=
-        document.createElement("div");
-
-      row.className="user";
+    const data =
+    await response.json();
 
 
-      const photo=
-        u.photoURL||
-        "https://via.placeholder.com/100";
+    const f =
+    data.fields || {};
 
 
-      row.innerHTML=`
+    const foundUID =
+    f.uid?.stringValue || "";
 
-        <img
-          class="photo"
-          src="${esc(photo)}"
-          onerror="this.src='https://via.placeholder.com/100'"
-        >
 
-        <div class="info">
+    const foundUsername =
+    f.username?.stringValue ||
+    username;
 
-          <div class="name">
-            ${esc(u.name)}
-          </div>
 
-          <div class="username">
-            @${esc(u.username)}
-          </div>
+    if(!foundUID){
 
-          ${
-            u.bio
-            ?
-            `<div class="bio">
-              ${esc(u.bio)}
-            </div>`
-            :
-            ""
+      throw new Error(
+        "Invalid user data"
+      );
+
+    }
+
+
+    /* =========================
+       LOAD PROFILE
+    ========================= */
+
+    let name =
+    foundUsername;
+
+    let photoURL =
+    "";
+
+
+    try{
+
+      const profileURL =
+      "https://firestore.googleapis.com/v1/projects/" +
+      PROJECT_ID +
+      "/databases/(default)/documents/users/" +
+      encodeURIComponent(foundUID);
+
+
+      const profileResponse =
+      await fetch(
+        profileURL,
+        {
+          headers:{
+            Authorization:
+            "Bearer " + token
           }
+        }
+      );
 
+
+      if(profileResponse.ok){
+
+        const profile =
+        await profileResponse.json();
+
+        const pf =
+        profile.fields || {};
+
+
+        name =
+        pf.name?.stringValue ||
+        foundUsername;
+
+
+        photoURL =
+        pf.photoURL?.stringValue ||
+        "";
+
+      }
+
+    }catch(error){
+
+      console.log(
+        "Profile load skipped"
+      );
+
+    }
+
+
+    message.textContent =
+    "1 result";
+
+
+    results.innerHTML = "";
+
+
+    const card =
+    document.createElement(
+      "div"
+    );
+
+    card.className =
+    "user-card";
+
+
+    card.innerHTML = `
+
+      <img
+        class="avatar"
+        src="${photoURL || placeholderPhoto()}"
+        alt=""
+      >
+
+      <div class="user-info">
+
+        <div class="name">
+          ${escapeHTML(name)}
         </div>
 
-      `;
+        <div class="username">
+          @${escapeHTML(foundUsername)}
+        </div>
+
+      </div>
+
+      <button
+        class="open-btn"
+        type="button"
+      >
+        Open
+      </button>
+
+    `;
 
 
-      row.onclick=()=>{
+    card
+      .querySelector(".open-btn")
+      .onclick = function(){
 
-        localStorage.setItem(
-          "crockcellViewedUser",
-          u.uid
-        );
+        /*
+          Profile page ko UID aur username
+          ke saath open kar rahe hain.
+        */
 
-        location.href=
-          "profile.html?uid="+
-          encodeURIComponent(u.uid)+
-          "&doc="+
-          encodeURIComponent(u.docId);
+        window.location.href =
+        "profile.html?uid=" +
+        encodeURIComponent(foundUID) +
+        "&username=" +
+        encodeURIComponent(foundUsername);
 
       };
 
 
-      box.appendChild(row);
-
-    });
+    results.appendChild(card);
 
 
-  }catch(e){
+  }catch(error){
 
-    console.error(
-      "SEARCH ERROR:",
-      e
-    );
+    console.error(error);
 
-    box.innerHTML=
-      '<div class="empty error">'+
-      '<b>Firebase Search Error</b>'+
-      '<br><br>'+
-      esc(e.message)+
-      '</div>';
+    message.textContent =
+    "Search failed.";
+
+    results.innerHTML =
+    `<div class="empty">
+      Search nahi ho paayi.
+    </div>`;
 
   }
 
 }
 
 
-/* -------------------------
-   SEARCH INPUT
-------------------------- */
-
-let timer;
+/* =========================
+   ENTER SEARCH
+========================= */
 
 document
-.getElementById("search")
-.addEventListener(
-  "input",
-  function(){
+  .getElementById("searchInput")
+  .addEventListener(
+    "keydown",
+    function(e){
 
-    clearTimeout(timer);
+      if(e.key==="Enter"){
 
-    const q=this.value;
+        searchUser();
 
-    timer=setTimeout(
-      ()=>{
-        searchUsers(q);
-      },
-      300
+      }
+
+    }
+  );
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
     );
 
-  }
-);
+}
+
+
+function placeholderPhoto(){
+
+  return "data:image/svg+xml," +
+
+    "<svg xmlns='http://www.w3.org/2000/svg' " +
+
+    "width='100' height='100'>" +
+
+    "<rect width='100' height='100' " +
+
+    "fill='%23333333'/>" +
+
+    "</svg>";
+
+}
 
 </script>
 
