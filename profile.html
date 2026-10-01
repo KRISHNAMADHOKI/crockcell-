@@ -21,11 +21,6 @@ body{
   min-height:100vh;
 }
 
-
-/* =========================
-   HEADER
-========================= */
-
 .header{
   padding:22px 18px 15px;
   border-bottom:1px solid #222;
@@ -40,11 +35,6 @@ body{
   font-size:28px;
   font-weight:bold;
 }
-
-
-/* =========================
-   PROFILE
-========================= */
 
 .profile{
   padding:25px 18px 115px;
@@ -86,11 +76,6 @@ body{
   white-space:nowrap;
 }
 
-
-/* =========================
-   STATS
-========================= */
-
 .stats{
   display:flex;
   justify-content:space-around;
@@ -122,21 +107,11 @@ body{
   font-size:13px;
 }
 
-
-/* =========================
-   BIO
-========================= */
-
 .bio{
   margin-top:20px;
   color:#ccc;
   line-height:1.5;
 }
-
-
-/* =========================
-   ACTION BUTTONS
-========================= */
 
 .actions{
   display:flex;
@@ -160,30 +135,17 @@ body{
   transform:scale(.98);
 }
 
-
-/* FOLLOWING BUTTON */
-
 .following-btn{
   background:#222;
   color:#fff;
   border:1px solid #444;
 }
 
-
-/* =========================
-   STATUS
-========================= */
-
 .status{
   text-align:center;
   color:#777;
   padding:45px 20px;
 }
-
-
-/* =========================
-   LIST MODAL
-========================= */
 
 .list-modal{
   position:fixed;
@@ -264,18 +226,12 @@ body{
 .user-name{
   font-size:16px;
   font-weight:bold;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
 
 .user-username{
   color:#888;
   font-size:13px;
   margin-top:4px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
 
 .user-arrow{
@@ -288,11 +244,6 @@ body{
   color:#777;
   padding:45px 20px;
 }
-
-
-/* =========================
-   BOTTOM NAV
-========================= */
 
 .bottom-nav{
   position:fixed;
@@ -335,23 +286,10 @@ body{
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
 <div class="header">
-
-  <div class="title">
-    Profile
-  </div>
-
+  <div class="title">Profile</div>
 </div>
 
-
-<!-- =========================
-     PROFILE AREA
-========================= -->
 
 <div id="profileArea" class="profile">
 
@@ -362,23 +300,13 @@ body{
 </div>
 
 
-<!-- =========================
-     FOLLOWERS / FOLLOWING MODAL
-========================= -->
-
-<div
-  id="listModal"
-  class="list-modal"
->
+<div id="listModal" class="list-modal">
 
   <div class="list-box">
 
     <div class="list-header">
 
-      <div
-        id="listTitle"
-        class="list-title"
-      >
+      <div id="listTitle" class="list-title">
         Followers
       </div>
 
@@ -391,7 +319,6 @@ body{
       </button>
 
     </div>
-
 
     <div
       id="listContent"
@@ -409,48 +336,29 @@ body{
 </div>
 
 
-<!-- =========================
-     BOTTOM NAV
-========================= -->
-
 <div class="bottom-nav">
 
-  <a
-    class="nav-item"
-    href="home.html"
-  >
+  <a class="nav-item" href="home.html">
     <span class="nav-icon">⌂</span>
     Home
   </a>
 
-  <a
-    class="nav-item"
-    href="search.html"
-  >
+  <a class="nav-item" href="search.html">
     <span class="nav-icon">⌕</span>
     Search
   </a>
 
-  <a
-    class="nav-item"
-    href="reels.html"
-  >
+  <a class="nav-item" href="reels.html">
     <span class="nav-icon">▶</span>
     Reels
   </a>
 
-  <a
-    class="nav-item"
-    href="messages.html"
-  >
+  <a class="nav-item" href="messages.html">
     <span class="nav-icon">♡</span>
     Messages
   </a>
 
-  <a
-    class="nav-item active"
-    href="profile.html"
-  >
+  <a class="nav-item active" href="profile.html">
     <span class="nav-icon">◯</span>
     Profile
   </a>
@@ -459,11 +367,6 @@ body{
 
 
 <script>
-
-
-/* =========================
-   FIREBASE REST CONFIG
-========================= */
 
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
@@ -486,7 +389,6 @@ localStorage.getItem(
   "crockcell_uid"
 );
 
-
 if(!token){
 
   token =
@@ -496,7 +398,6 @@ if(!token){
 
 }
 
-
 if(!currentUID){
 
   currentUID =
@@ -505,7 +406,6 @@ if(!currentUID){
   );
 
 }
-
 
 if(!token || !currentUID){
 
@@ -525,14 +425,11 @@ new URLSearchParams(
   window.location.search
 );
 
-
 const requestedUID =
 params.get("uid");
 
-
 const requestedUsername =
 params.get("username");
-
 
 const profileUID =
 requestedUID ||
@@ -569,10 +466,6 @@ document.getElementById(
 );
 
 
-/* =========================
-   PROFILE DATA
-========================= */
-
 let currentProfile = null;
 
 let followersUsers = [];
@@ -603,14 +496,10 @@ async function loadProfile(){
     await fetch(
       url,
       {
-
         headers:{
-
           Authorization:
           "Bearer " + token
-
         }
-
       }
     );
 
@@ -658,13 +547,25 @@ async function loadProfile(){
     };
 
 
+    /*
+      PROFILE KO TURANT SHOW KARO
+    */
+
     await renderProfile();
+
+
+    /*
+      FOLLOW DATA BAAD ME LOAD HOGA
+    */
+
+    loadFollowData();
 
 
   }
   catch(error){
 
     console.error(
+      "Profile error:",
       error
     );
 
@@ -700,29 +601,49 @@ async function renderProfile(){
 
 
   /*
-    Followers / following count
+    Default counts.
+    Profile in numbers ke saath
+    immediately show hogi.
   */
 
-  const counts =
-  await getFollowCounts(
-    currentProfile.uid
-  );
+  let followersCount = 0;
 
-
-  /*
-    Follow status
-  */
+  let followingCount = 0;
 
   let isFollowing = false;
 
 
+  /*
+    Follow status ko profile block
+    hone se bachane ke liye
+    safe timeout ke saath load karenge.
+  */
+
   if(!isOwn){
 
-    isFollowing =
-    await checkFollowing(
-      currentUID,
-      currentProfile.uid
-    );
+    try{
+
+      isFollowing =
+      await Promise.race([
+
+        checkFollowing(
+          currentUID,
+          currentProfile.uid
+        ),
+
+        timeoutPromise(
+          3000,
+          false
+        )
+
+      ]);
+
+    }
+    catch(error){
+
+      isFollowing = false;
+
+    }
 
   }
 
@@ -743,7 +664,6 @@ async function renderProfile(){
         alt=""
       >
 
-
       <div class="info">
 
         <div class="name">
@@ -763,8 +683,6 @@ async function renderProfile(){
     </div>
 
 
-    <!-- STATS -->
-
     <div class="stats">
 
       <div
@@ -776,7 +694,7 @@ async function renderProfile(){
           id="followersCount"
           class="stat-number"
         >
-          ${counts.followers}
+          0
         </div>
 
         <div class="stat-label">
@@ -795,7 +713,7 @@ async function renderProfile(){
           id="followingCount"
           class="stat-number"
         >
-          ${counts.following}
+          0
         </div>
 
         <div class="stat-label">
@@ -808,8 +726,8 @@ async function renderProfile(){
       <div class="stat">
 
         <div
-          class="stat-number"
           id="postsCount"
+          class="stat-number"
         >
           0
         </div>
@@ -823,8 +741,6 @@ async function renderProfile(){
     </div>
 
 
-    <!-- BIO -->
-
     <div class="bio">
 
       ${escapeHTML(
@@ -835,8 +751,6 @@ async function renderProfile(){
     </div>
 
 
-    <!-- ACTIONS -->
-
     ${
       isOwn
 
@@ -846,9 +760,9 @@ async function renderProfile(){
         <div class="actions">
 
           <button
+            id="editProfileButton"
             class="action-btn"
             type="button"
-            id="editProfileButton"
           >
             Edit Profile
           </button>
@@ -863,16 +777,13 @@ async function renderProfile(){
 
           <button
             id="followButton"
-            class="
-              action-btn
-              ${
-                isFollowing
-                ?
-                "following-btn"
-                :
-                ""
-              }
-            "
+            class="action-btn ${
+              isFollowing
+              ?
+              "following-btn"
+              :
+              ""
+            }"
             type="button"
           >
             ${
@@ -901,10 +812,6 @@ async function renderProfile(){
   `;
 
 
-  /* =========================
-     FOLLOWERS CLICK
-  ========================= */
-
   document
     .getElementById(
       "followersStat"
@@ -921,10 +828,6 @@ async function renderProfile(){
     );
 
 
-  /* =========================
-     FOLLOWING CLICK
-  ========================= */
-
   document
     .getElementById(
       "followingStat"
@@ -940,10 +843,6 @@ async function renderProfile(){
       }
     );
 
-
-  /* =========================
-     OWN PROFILE
-  ========================= */
 
   if(isOwn){
 
@@ -963,45 +862,118 @@ async function renderProfile(){
       );
 
   }
+  else{
+
+    document
+      .getElementById(
+        "followButton"
+      )
+      .addEventListener(
+        "click",
+        toggleFollow
+      );
 
 
-  /* =========================
-     OTHER USER
-  ========================= */
+    document
+      .getElementById(
+        "messageButton"
+      )
+      .addEventListener(
+        "click",
+        function(){
 
-  if(!isOwn){
+          openMessage(
+            currentProfile
+          );
 
-    const followButton =
+        }
+      );
+
+  }
+
+}
+
+
+/* =========================
+   LOAD FOLLOW DATA
+========================= */
+
+async function loadFollowData(){
+
+  if(!currentProfile){
+
+    return;
+
+  }
+
+
+  try{
+
+    const followers =
+    await Promise.race([
+
+      getFollowDocuments(
+        "followingId",
+        currentProfile.uid
+      ),
+
+      timeoutPromise(
+        5000,
+        []
+      )
+
+    ]);
+
+
+    const following =
+    await Promise.race([
+
+      getFollowDocuments(
+        "followerId",
+        currentProfile.uid
+      ),
+
+      timeoutPromise(
+        5000,
+        []
+      )
+
+    ]);
+
+
+    const followersCount =
     document.getElementById(
-      "followButton"
+      "followersCount"
     );
 
-
-    followButton.addEventListener(
-      "click",
-      function(){
-
-        toggleFollow();
-
-      }
-    );
-
-
-    const messageButton =
+    const followingCount =
     document.getElementById(
-      "messageButton"
+      "followingCount"
     );
 
 
-    messageButton.addEventListener(
-      "click",
-      function(){
+    if(followersCount){
 
-        openMessage(
-          currentProfile
-        );
+      followersCount.textContent =
+      followers.length;
 
-      }
+    }
+
+
+    if(followingCount){
+
+      followingCount.textContent =
+      following.length;
+
+    }
+
+
+  }
+  catch(error){
+
+    console.error(
+      "Follow data error:",
+      error
     );
 
   }
@@ -1036,71 +1008,48 @@ async function checkFollowing(
   followingID
 ){
 
-  try{
-
-    const documentID =
-    followDocumentID(
-      followerID,
-      followingID
-    );
+  const documentID =
+  followDocumentID(
+    followerID,
+    followingID
+  );
 
 
-    const url =
-    "https://firestore.googleapis.com/v1/projects/" +
-    PROJECT_ID +
-    "/databases/(default)/documents/follows/" +
-    encodeURIComponent(
-      documentID
-    ) +
-    "?key=" +
-    API_KEY;
+  const url =
+  "https://firestore.googleapis.com/v1/projects/" +
+  PROJECT_ID +
+  "/databases/(default)/documents/follows/" +
+  encodeURIComponent(
+    documentID
+  ) +
+  "?key=" +
+  API_KEY;
 
 
-    const response =
-    await fetch(
-      url,
-      {
-
-        headers:{
-
-          Authorization:
-          "Bearer " + token
-
-        }
-
+  const response =
+  await fetch(
+    url,
+    {
+      headers:{
+        Authorization:
+        "Bearer " + token
       }
-    );
+    }
+  );
 
 
-    return response.ok;
-
-  }
-  catch(error){
-
-    return false;
-
-  }
+  return response.ok;
 
 }
 
 
 /* =========================
-   TOGGLE FOLLOW
+   FOLLOW / UNFOLLOW
 ========================= */
 
 async function toggleFollow(){
 
   if(!currentProfile){
-
-    return;
-
-  }
-
-
-  if(
-    currentProfile.uid ===
-    currentUID
-  ){
 
     return;
 
@@ -1113,17 +1062,24 @@ async function toggleFollow(){
   );
 
 
+  if(!button){
+
+    return;
+
+  }
+
+
   button.disabled = true;
 
 
-  const currentlyFollowing =
-  await checkFollowing(
-    currentUID,
-    currentProfile.uid
-  );
-
-
   try{
+
+    const following =
+    await checkFollowing(
+      currentUID,
+      currentProfile.uid
+    );
+
 
     const documentID =
     followDocumentID(
@@ -1143,26 +1099,18 @@ async function toggleFollow(){
     API_KEY;
 
 
-    if(currentlyFollowing){
-
-      /*
-        UNFOLLOW
-      */
+    if(following){
 
       const response =
       await fetch(
         url,
         {
-
           method:"DELETE",
 
           headers:{
-
             Authorization:
             "Bearer " + token
-
           }
-
         }
       );
 
@@ -1178,33 +1126,23 @@ async function toggleFollow(){
     }
     else{
 
-      /*
-        FOLLOW
-      */
-
       const body = {
 
         fields:{
 
           followerId:{
-
             stringValue:
             currentUID
-
           },
 
           followingId:{
-
             stringValue:
             currentProfile.uid
-
           },
 
           createdAt:{
-
             timestampValue:
             new Date().toISOString()
-
           }
 
         }
@@ -1248,16 +1186,71 @@ async function toggleFollow(){
 
 
     /*
-      Profile refresh
+      Button ko directly update karo.
+      Puri profile reload nahi hogi.
     */
 
-    await renderProfile();
+    const nowFollowing =
+    !following;
 
+
+    button.textContent =
+    nowFollowing
+    ?
+    "Following"
+    :
+    "Follow";
+
+
+    button.classList.toggle(
+      "following-btn",
+      nowFollowing
+    );
+
+
+    /*
+      Count update
+    */
+
+    const count =
+    document.getElementById(
+      "followersCount"
+    );
+
+
+    if(count){
+
+      let number =
+      parseInt(
+        count.textContent
+      ) || 0;
+
+
+      number +=
+      nowFollowing
+      ?
+      1
+      :
+      -1;
+
+
+      if(number < 0){
+
+        number = 0;
+
+      }
+
+
+      count.textContent =
+      number;
+
+    }
 
   }
   catch(error){
 
     console.error(
+      "Follow error:",
       error
     );
 
@@ -1270,61 +1263,6 @@ async function toggleFollow(){
 
 
   button.disabled = false;
-
-}
-
-
-/* =========================
-   FOLLOW COUNTS
-========================= */
-
-async function getFollowCounts(
-  targetUID
-){
-
-  try{
-
-    const followers =
-    await getFollowDocuments(
-      "followingId",
-      targetUID
-    );
-
-
-    const following =
-    await getFollowDocuments(
-      "followerId",
-      targetUID
-    );
-
-
-    return {
-
-      followers:
-      followers.length,
-
-      following:
-      following.length
-
-    };
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    return {
-
-      followers:0,
-
-      following:0
-
-    };
-
-  }
 
 }
 
@@ -1364,20 +1302,16 @@ async function getFollowDocuments(
         fieldFilter:{
 
           field:{
-
             fieldPath:
             fieldName
-
           },
 
           op:
           "EQUAL",
 
           value:{
-
             stringValue:
             targetUID
-
           }
 
         }
@@ -1465,7 +1399,7 @@ async function getFollowDocuments(
 
 
 /* =========================
-   OPEN USER LIST
+   USER LIST
 ========================= */
 
 async function openUserList(
@@ -1483,7 +1417,7 @@ async function openUserList(
   listContent.innerHTML = `
 
     <div class="list-empty">
-      Loading ${type.toLowerCase()}...
+      Loading...
     </div>
 
   `;
@@ -1491,54 +1425,57 @@ async function openUserList(
 
   try{
 
-    let followDocuments;
+    const documents =
+    await Promise.race([
 
+      getFollowDocuments(
 
-    if(type === "Followers"){
-
-      followDocuments =
-      await getFollowDocuments(
-        "followingId",
-        currentProfile.uid
-      );
-
-    }
-    else{
-
-      followDocuments =
-      await getFollowDocuments(
+        type === "Followers"
+        ?
+        "followingId"
+        :
         "followerId",
+
         currentProfile.uid
-      );
 
-    }
+      ),
+
+      timeoutPromise(
+        6000,
+        []
+      )
+
+    ]);
 
 
-    const userIDs =
-    followDocuments.map(
-      item => {
+    const ids =
+    documents.map(
+      item =>
 
-        if(type === "Followers"){
+      type === "Followers"
+      ?
+      item.followerId
+      :
+      item.followingId
 
-          return item.followerId;
-
-        }
-
-        return item.followingId;
-
-      }
     );
 
 
-    if(!userIDs.length){
+    if(!ids.length){
 
       listContent.innerHTML = `
 
         <div class="list-empty">
-          ${type === "Followers"
-            ? "Abhi koi followers nahi hain."
-            : "Abhi kisi ko follow nahi kiya."
+
+          ${
+            type === "Followers"
+            ?
+            "Abhi koi followers nahi hain."
+            :
+            "Abhi kisi ko follow nahi kiya."
+
           }
+
         </div>
 
       `;
@@ -1551,12 +1488,8 @@ async function openUserList(
     const users=[];
 
 
-    /*
-      Har UID ka profile load
-    */
-
     for(
-      const id of userIDs
+      const id of ids
     ){
 
       if(!id){
@@ -1619,4 +1552,68 @@ async function getUserByUID(
   const url =
   "https://firestore.googleapis.com/v1/projects/" +
   PROJECT_ID +
-  "/database
+  "/databases/(default)/documents/users/" +
+  encodeURIComponent(
+    targetUID
+  ) +
+  "?key=" +
+  API_KEY;
+
+
+  const response =
+  await fetch(
+    url,
+    {
+      headers:{
+        Authorization:
+        "Bearer " + token
+      }
+    }
+  );
+
+
+  if(!response.ok){
+
+    return null;
+
+  }
+
+
+  const data =
+  await response.json();
+
+
+  const f =
+  data.fields || {};
+
+
+  return {
+
+    uid:
+    targetUID,
+
+    name:
+    f.name?.stringValue ||
+    f.username?.stringValue ||
+    "User",
+
+    username:
+    f.username?.stringValue ||
+    "user",
+
+    photoURL:
+    f.photoURL?.stringValue ||
+    "",
+
+    bio:
+    f.bio?.stringValue ||
+    ""
+
+  };
+
+}
+
+
+/* =========================
+   RENDER USER LIST
+=======
