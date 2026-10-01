@@ -21,6 +21,7 @@ html,body{
   overflow:hidden;
 }
 
+/* REELS */
 #reelsContainer{
   width:100%;
   height:100vh;
@@ -44,30 +45,63 @@ html,body{
   display:block;
 }
 
+/* TOP */
 .topBar{
   position:absolute;
   top:0;
   left:0;
   right:0;
   height:70px;
-  padding:12px;
+  padding:14px 16px;
   z-index:20;
+  display:flex;
+  align-items:center;
 }
 
-.backBtn{
-  width:42px;
-  height:42px;
+.reelsTitle{
+  font-size:23px;
+  font-weight:800;
+  text-shadow:0 1px 5px #000;
+}
+
+/* SOUND */
+.soundBtn{
+  position:absolute;
+  top:75px;
+  right:15px;
+  width:44px;
+  height:44px;
   border:0;
   border-radius:50%;
-  background:rgba(0,0,0,.5);
+  background:rgba(0,0,0,.55);
   color:#fff;
-  font-size:28px;
+  font-size:20px;
+  z-index:25;
+  display:none;
 }
 
+/* PAUSE */
+.pauseIcon{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  z-index:15;
+}
+
+/* ACTIONS */
 .actions{
   position:absolute;
   right:12px;
-  bottom:100px;
+  bottom:105px;
   z-index:20;
   display:flex;
   flex-direction:column;
@@ -86,51 +120,25 @@ html,body{
   height:48px;
   border:0;
   border-radius:50%;
-  background:rgba(0,0,0,.5);
+  background:rgba(0,0,0,.55);
   color:#fff;
   font-size:25px;
+}
+
+.actionBtn:active{
+  transform:scale(.9);
 }
 
 .actionCount{
   font-size:13px;
 }
 
-.soundBtn{
-  position:absolute;
-  top:75px;
-  right:15px;
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:50%;
-  background:rgba(0,0,0,.55);
-  color:#fff;
-  font-size:20px;
-  z-index:25;
-  display:none;
-}
-
-.pauseIcon{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  background:rgba(0,0,0,.5);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  z-index:15;
-}
-
+/* REEL INFO */
 .reelInfo{
   position:absolute;
   left:15px;
   right:80px;
-  bottom:22px;
+  bottom:90px;
   z-index:20;
   text-shadow:0 1px 5px #000;
 }
@@ -145,13 +153,84 @@ html,body{
   font-size:15px;
 }
 
-/* COMMENTS */
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottomNav{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  height:64px;
+  background:rgba(20,20,20,.88);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  box-shadow:0 5px 25px rgba(0,0,0,.35);
+  backdrop-filter:blur(12px);
+  z-index:1000;
+}
+
+.navItem{
+  width:25%;
+  height:54px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#aaa;
+  font-size:11px;
+  font-weight:600;
+  border-radius:15px;
+  transition:.2s;
+}
+
+.navIcon{
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:2px;
+}
+
+.navItem.active{
+  color:#fff;
+  background:rgba(255,255,255,.14);
+}
+
+.navItem.active .navIcon{
+  transform:scale(1.08);
+}
+
+.navItem:active{
+  transform:scale(.92);
+}
+
+/* PROFILE PHOTO */
+.profileNavPhoto{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#555;
+  border:2px solid rgba(255,255,255,.7);
+}
+
+/* =========================
+   COMMENTS
+========================= */
 
 #commentsOverlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.55);
-  z-index:100;
+  z-index:2000;
   display:none;
 }
 
@@ -272,6 +351,19 @@ html,body{
   color:#000;
   font-size:18px;
 }
+
+@media(max-width:380px){
+
+  .bottomNav{
+    left:7px;
+    right:7px;
+  }
+
+  .navItem{
+    font-size:10px;
+  }
+
+}
 </style>
 </head>
 
@@ -288,28 +380,36 @@ loop
 playsinline
 preload="auto"></video>
 
-<button class="soundBtn" onclick="toggleSound(this,event)">🔊</button>
+<button
+class="soundBtn"
+onclick="toggleSound(this,event)">🔊</button>
 
 <div class="pauseIcon">▶</div>
 
 <div class="topBar">
-<button class="backBtn" onclick="goBack()">‹</button>
+  <div class="reelsTitle">CROCKCELL Reels</div>
 </div>
 
 <div class="actions">
 
 <div class="actionBox">
-<button class="actionBtn likeBtn" onclick="likeReel(this,event)">♡</button>
+<button
+class="actionBtn likeBtn"
+onclick="likeReel(this,event)">♡</button>
 <span class="actionCount likeCount">0</span>
 </div>
 
 <div class="actionBox">
-<button class="actionBtn" onclick="openComments(this,event)">💬</button>
+<button
+class="actionBtn"
+onclick="openComments(this,event)">💬</button>
 <span class="actionCount commentCount">0</span>
 </div>
 
 <div class="actionBox">
-<button class="actionBtn" onclick="shareReel(this,event)">↗</button>
+<button
+class="actionBtn"
+onclick="shareReel(this,event)">↗</button>
 <span class="actionCount">Share</span>
 </div>
 
@@ -332,28 +432,36 @@ loop
 playsinline
 preload="auto"></video>
 
-<button class="soundBtn" onclick="toggleSound(this,event)">🔊</button>
+<button
+class="soundBtn"
+onclick="toggleSound(this,event)">🔊</button>
 
 <div class="pauseIcon">▶</div>
 
 <div class="topBar">
-<button class="backBtn" onclick="goBack()">‹</button>
+  <div class="reelsTitle">CROCKCELL Reels</div>
 </div>
 
 <div class="actions">
 
 <div class="actionBox">
-<button class="actionBtn likeBtn" onclick="likeReel(this,event)">♡</button>
+<button
+class="actionBtn likeBtn"
+onclick="likeReel(this,event)">♡</button>
 <span class="actionCount likeCount">0</span>
 </div>
 
 <div class="actionBox">
-<button class="actionBtn" onclick="openComments(this,event)">💬</button>
+<button
+class="actionBtn"
+onclick="openComments(this,event)">💬</button>
 <span class="actionCount commentCount">0</span>
 </div>
 
 <div class="actionBox">
-<button class="actionBtn" onclick="shareReel(this,event)">↗</button>
+<button
+class="actionBtn"
+onclick="shareReel(this,event)">↗</button>
 <span class="actionCount">Share</span>
 </div>
 
@@ -369,22 +477,67 @@ preload="auto"></video>
 </div>
 
 
-<!-- COMMENTS PANEL -->
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bottomNav">
+
+<a href="home.html" class="navItem">
+<div class="navIcon">⌂</div>
+<div>Home</div>
+</a>
+
+<a href="search.html" class="navItem">
+<div class="navIcon">⌕</div>
+<div>Search</div>
+</a>
+
+<a href="reels.html" class="navItem active">
+<div class="navIcon">▶</div>
+<div>Reels</div>
+</a>
+
+<a href="profile.html" class="navItem">
+<div class="navIcon">
+<img
+id="navProfilePhoto"
+class="profileNavPhoto"
+src=""
+alt="Profile">
+</div>
+<div>Profile</div>
+</a>
+
+</nav>
+
+
+<!-- COMMENTS -->
 
 <div id="commentsOverlay">
 
 <div class="commentsPanel">
 
 <div class="commentsHeader">
+
 <div class="commentsTitle">
 Comments <span id="commentsNumber">(0)</span>
 </div>
 
-<button class="closeBtn" onclick="closeComments()">×</button>
+<button
+class="closeBtn"
+onclick="closeComments()">×</button>
+
 </div>
 
-<div id="commentsList" class="commentsList">
-<div class="noComments">Loading...</div>
+<div
+id="commentsList"
+class="commentsList">
+
+<div class="noComments">
+Loading...
+</div>
+
 </div>
 
 <div class="commentInputArea">
@@ -408,7 +561,9 @@ onclick="sendComment()">➤</button>
 
 <script>
 
-/* FIREBASE */
+/* =========================
+   FIREBASE
+========================= */
 
 const PROJECT_ID = "crockcell-cd2e6";
 
@@ -421,6 +576,104 @@ localStorage.getItem("crockcellUid");
 if(!token || !uid){
   window.location.href="index.html";
 }
+
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
+function readProfileValue(field){
+
+if(!field) return "";
+
+if(field.stringValue !== undefined)
+return field.stringValue;
+
+return "";
+}
+
+
+async function loadNavProfile(){
+
+const img =
+document.getElementById("navProfilePhoto");
+
+try{
+
+let saved=null;
+
+try{
+
+saved=JSON.parse(
+localStorage.getItem("crockcellProfile") || "null"
+);
+
+}catch(e){}
+
+
+if(saved && saved.photoURL){
+
+img.src=saved.photoURL;
+
+return;
+
+}
+
+
+const url=
+"https://firestore.googleapis.com/v1/projects/"
++PROJECT_ID
++"/databases/(default)/documents/users/"
++encodeURIComponent(uid);
+
+const response=
+await fetch(url,{
+headers:{
+"Authorization":"Bearer "+token
+}
+});
+
+
+if(!response.ok)return;
+
+
+const data=
+await response.json();
+
+const photo=
+readProfileValue(
+data.fields?.photoURL
+);
+
+
+if(photo){
+
+img.src=photo;
+
+let profile=saved || {};
+
+profile.photoURL=photo;
+profile.uid=uid;
+
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify(profile)
+);
+
+}
+
+}catch(error){
+
+console.log(
+"PROFILE PHOTO ERROR",
+error
+);
+
+}
+
+}
+
+loadNavProfile();
 
 
 /* CURRENT REEL */
@@ -477,20 +730,9 @@ return String(text || "")
 }
 
 
-/* BACK */
-
-function goBack(){
-
-if(history.length > 1){
-history.back();
-}else{
-window.location.href="home.html";
-}
-
-}
-
-
-/* VIDEO SYSTEM */
+/* =========================
+   VIDEO SYSTEM
+========================= */
 
 const reels =
 document.querySelectorAll(".reel");
@@ -608,7 +850,9 @@ observer.observe(reel);
 });
 
 
-/* LIKE */
+/* =========================
+   LIKE
+========================= */
 
 async function likeReel(button,event){
 
@@ -657,13 +901,24 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
+
 fields:{
-reelId:{stringValue:reelId},
-userId:{stringValue:uid},
+
+reelId:{
+stringValue:reelId
+},
+
+userId:{
+stringValue:uid
+},
+
 createdAt:{
-timestampValue:new Date().toISOString()
+timestampValue:
+new Date().toISOString()
 }
+
 }
+
 })
 });
 
@@ -671,11 +926,17 @@ button.innerText="♥";
 
 }
 
-await loadLikeCount(reelId,reel);
+await loadLikeCount(
+reelId,
+reel
+);
 
 }catch(error){
 
-console.log("LIKE ERROR",error);
+console.log(
+"LIKE ERROR",
+error
+);
 
 }
 
@@ -684,7 +945,10 @@ console.log("LIKE ERROR",error);
 
 /* LIKE COUNT */
 
-async function loadLikeCount(reelId,reel){
+async function loadLikeCount(
+reelId,
+reel
+){
 
 try{
 
@@ -702,7 +966,8 @@ await response.json();
 
 let count=0;
 
-(data.documents || []).forEach(function(doc){
+(data.documents || [])
+.forEach(function(doc){
 
 const fields =
 doc.fields || {};
@@ -717,11 +982,16 @@ count++;
 
 });
 
-reel.querySelector(".likeCount").innerText=count;
+reel.querySelector(
+".likeCount"
+).innerText=count;
 
 }catch(error){
 
-console.log("LIKE COUNT ERROR",error);
+console.log(
+"LIKE COUNT ERROR",
+error
+);
 
 }
 
@@ -752,7 +1022,9 @@ headers:{
 
 if(response.ok){
 
-reel.querySelector(".likeBtn").innerText="♥";
+reel.querySelector(
+".likeBtn"
+).innerText="♥";
 
 }
 
@@ -765,9 +1037,14 @@ console.log(error);
 }
 
 
-/* COMMENTS OPEN */
+/* =========================
+   COMMENTS
+========================= */
 
-async function openComments(button,event){
+async function openComments(
+button,
+event
+){
 
 event.stopPropagation();
 
@@ -795,8 +1072,6 @@ document.getElementById(
 }
 
 
-/* CLOSE COMMENTS */
-
 function closeComments(){
 
 document.getElementById(
@@ -807,8 +1082,6 @@ currentReelId="";
 
 }
 
-
-/* LOAD COMMENTS */
 
 async function loadComments(){
 
@@ -827,12 +1100,17 @@ const data =
 await response.json();
 
 if(!response.ok){
-throw new Error("Comments load failed");
+
+throw new Error(
+"Comments load failed"
+);
+
 }
 
 let comments=[];
 
-(data.documents || []).forEach(function(doc){
+(data.documents || [])
+.forEach(function(doc){
 
 const fields =
 doc.fields || {};
@@ -846,13 +1124,17 @@ comments.push({
 
 id:doc.name.split("/").pop(),
 
-userId:readValue(fields.userId),
+userId:
+readValue(fields.userId),
 
-username:readValue(fields.username),
+username:
+readValue(fields.username),
 
-text:readValue(fields.text),
+text:
+readValue(fields.text),
 
-createdAt:readValue(fields.createdAt)
+createdAt:
+readValue(fields.createdAt)
 
 });
 
@@ -875,20 +1157,26 @@ renderComments(comments);
 
 const reel =
 document.querySelector(
-'.reel[data-reel-id="'+currentReelId+'"]'
+'.reel[data-reel-id="'+
+currentReelId+
+'"]'
 );
 
 if(reel){
 
 reel.querySelector(
 ".commentCount"
-).innerText=comments.length;
+).innerText=
+comments.length;
 
 }
 
 }catch(error){
 
-console.log("COMMENTS ERROR",error);
+console.log(
+"COMMENTS ERROR",
+error
+);
 
 document.getElementById(
 "commentsList"
@@ -905,7 +1193,9 @@ document.getElementById(
 function renderComments(comments){
 
 const list =
-document.getElementById("commentsList");
+document.getElementById(
+"commentsList"
+);
 
 document.getElementById(
 "commentsNumber"
@@ -916,7 +1206,10 @@ document.getElementById(
 if(comments.length===0){
 
 list.innerHTML=
-'<div class="noComments">Abhi koi comment nahi hai.<br>Pehla comment karo!</div>';
+'<div class="noComments">'+
+'Abhi koi comment nahi hai.'+
+'<br>Pehla comment karo!'+
+'</div>';
 
 return;
 
@@ -986,7 +1279,9 @@ list.innerHTML=html;
 async function sendComment(){
 
 const input =
-document.getElementById("commentInput");
+document.getElementById(
+"commentInput"
+);
 
 const text =
 input.value.trim();
@@ -996,7 +1291,9 @@ return;
 
 
 const button =
-document.getElementById("sendComment");
+document.getElementById(
+"sendComment"
+);
 
 button.disabled=true;
 
@@ -1024,9 +1321,13 @@ const profile =
 await profileResponse.json();
 
 username =
-readValue(profile.fields?.username)
+readValue(
+profile.fields?.username
+)
 ||
-readValue(profile.fields?.name)
+readValue(
+profile.fields?.name
+)
 ||
 "User";
 
@@ -1065,7 +1366,8 @@ stringValue:text
 },
 
 createdAt:{
-timestampValue:new Date().toISOString()
+timestampValue:
+new Date().toISOString()
 }
 
 }
@@ -1111,10 +1413,14 @@ button.disabled=false;
 
 /* DELETE COMMENT */
 
-async function deleteComment(commentId){
+async function deleteComment(
+commentId
+){
 
 if(
-!confirm("Kya ye comment delete karna hai?")
+!confirm(
+"Kya ye comment delete karna hai?"
+)
 )
 return;
 
@@ -1159,12 +1465,12 @@ alert(
 
 /* SHARE */
 
-function shareReel(button,event){
+function shareReel(
+button,
+event
+){
 
 event.stopPropagation();
-
-const reel =
-button.closest(".reel");
 
 const url =
 window.location.href;
@@ -1217,7 +1523,8 @@ sendComment();
 
 /* LOAD DATA */
 
-reels.forEach(async function(reel){
+reels.forEach(
+async function(reel){
 
 await checkLike(reel);
 
@@ -1227,7 +1534,6 @@ reel
 );
 
 });
-
 
 </script>
 
