@@ -60,6 +60,13 @@ input:focus{
   border-color:#555;
 }
 
+.usernameNote{
+  color:#777;
+  font-size:12px;
+  margin-top:-7px;
+  margin-bottom:12px;
+}
+
 .passwordBox{
   position:relative;
   margin-bottom:12px;
@@ -163,43 +170,59 @@ input:focus{
 <div class="box">
 
 <h1>CROCKCELL</h1>
-<div class="sub">Create your account</div>
+
+<div class="sub">
+Create your account
+</div>
+
 
 <input
   id="name"
   type="text"
+  maxlength="50"
   placeholder="Full Name"
 >
+
 
 <input
   id="username"
   type="text"
+  maxlength="30"
+  autocomplete="username"
   placeholder="Username"
 >
+
+<div class="usernameNote">
+Username me sirf a-z, 0-9 aur _ use karo.
+</div>
+
 
 <input
   id="email"
   type="email"
+  autocomplete="email"
   placeholder="Email"
 >
+
 
 <div class="passwordBox">
 
 <input
   id="password"
   type="password"
+  autocomplete="new-password"
   placeholder="Password"
 >
 
 <button
   type="button"
   class="showBtn"
-  id="showPassword"
->
+  id="showPassword">
 Show
 </button>
 
 </div>
+
 
 <div class="phoneRow">
 
@@ -213,8 +236,7 @@ Show
 <button
   type="button"
   class="otpBtn"
-  id="sendOtp"
->
+  id="sendOtp">
 Send OTP
 </button>
 
@@ -224,7 +246,9 @@ Send OTP
 India number enter karo, jaise 9876543210
 </div>
 
+
 <div id="recaptcha-container"></div>
+
 
 <input
   id="otp"
@@ -234,31 +258,32 @@ India number enter karo, jaise 9876543210
   placeholder="6 digit OTP"
 >
 
+
 <button
   type="button"
   class="verifyBtn"
-  id="verifyOtp"
->
+  id="verifyOtp">
 Verify Mobile
 </button>
 
+
 <div
   id="status"
-  class="status"
-></div>
+  class="status">
+</div>
+
 
 <button
   type="button"
   class="createBtn"
-  id="createAccount"
->
+  id="createAccount">
 Create Account
 </button>
 
+
 <a
   class="back"
-  href="index.html"
->
+  href="index.html">
 Already have an account? Login
 </a>
 
@@ -272,20 +297,42 @@ Already have an account? Login
 ========================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk",
-  authDomain: "crockcell-cd2e6.firebaseapp.com",
-  projectId: "crockcell-cd2e6",
-  storageBucket: "crockcell-cd2e6.firebasestorage.app",
-  messagingSenderId: "272223260943",
-  appId: "1:272223260943:web:14db9eda3a5ba4b137ae7a",
-  measurementId: "G-GG36JYC0DX"
+
+  apiKey:
+    "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk",
+
+  authDomain:
+    "crockcell-cd2e6.firebaseapp.com",
+
+  projectId:
+    "crockcell-cd2e6",
+
+  storageBucket:
+    "crockcell-cd2e6.firebasestorage.app",
+
+  messagingSenderId:
+    "272223260943",
+
+  appId:
+    "1:272223260943:web:14db9eda3a5ba4b137ae7a",
+
+  measurementId:
+    "G-GG36JYC0DX"
+
 };
 
-firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
+firebase.initializeApp(
+  firebaseConfig
+);
 
-const API_KEY = firebaseConfig.apiKey;
+
+const auth =
+  firebase.auth();
+
+
+const API_KEY =
+  firebaseConfig.apiKey;
 
 
 /* =========================
@@ -293,6 +340,7 @@ const API_KEY = firebaseConfig.apiKey;
 ========================= */
 
 let confirmationResult = null;
+
 let verifiedPhone = false;
 
 
@@ -342,15 +390,21 @@ showPasswordButton.addEventListener(
   "click",
   function(){
 
-    if(passwordInput.type === "password"){
+    if(
+      passwordInput.type === "password"
+    ){
 
       passwordInput.type = "text";
-      showPasswordButton.textContent = "Hide";
+
+      showPasswordButton.textContent =
+        "Hide";
 
     }else{
 
       passwordInput.type = "password";
-      showPasswordButton.textContent = "Show";
+
+      showPasswordButton.textContent =
+        "Show";
 
     }
 
@@ -362,12 +416,49 @@ showPasswordButton.addEventListener(
    STATUS
 ========================= */
 
-function showStatus(message,type=""){
+function showStatus(
+  message,
+  type=""
+){
 
-  statusBox.textContent = message;
+  statusBox.textContent =
+    message;
 
   statusBox.className =
     "status " + type;
+
+}
+
+
+/* =========================
+   USERNAME
+========================= */
+
+function getUsername(){
+
+  let username =
+    usernameInput.value
+      .trim()
+      .toLowerCase();
+
+  /*
+    Username rules:
+
+    3-30 characters
+    a-z
+    0-9
+    underscore
+  */
+
+  if(
+    !/^[a-z0-9_]{3,30}$/.test(username)
+  ){
+
+    return null;
+
+  }
+
+  return username;
 
 }
 
@@ -384,24 +475,182 @@ function getPhone(){
   phone =
     phone.replace(/\s+/g,"");
 
+
   if(phone.startsWith("+91")){
+
     phone =
       phone.substring(3);
+
   }
+
 
   if(
     phone.startsWith("91") &&
     phone.length === 12
   ){
+
     phone =
       phone.substring(2);
+
   }
 
-  if(!/^[6-9][0-9]{9}$/.test(phone)){
+
+  if(
+    !/^[6-9][0-9]{9}$/.test(phone)
+  ){
+
     return null;
+
   }
+
 
   return "+91" + phone;
+
+}
+
+
+/* =========================
+   FIRESTORE COLLECTION URL
+========================= */
+
+function firestoreCollection(
+  collection
+){
+
+  return (
+    "https://firestore.googleapis.com/v1/projects/"
+    +
+    firebaseConfig.projectId
+    +
+    "/databases/(default)/documents/"
+    +
+    collection
+  );
+
+}
+
+
+/* =========================
+   CHECK USERNAME
+========================= */
+
+async function checkUsernameExists(
+  username,
+  idToken
+){
+
+  /*
+    usernameIndex document ID itself
+    username hai.
+
+    Example:
+
+    usernameIndex/krishna123
+  */
+
+  const url =
+    firestoreCollection(
+      "usernameIndex"
+    )
+    +
+    "/"
+    +
+    encodeURIComponent(username);
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        headers:{
+          "Authorization":
+            "Bearer " + idToken
+        }
+      }
+    );
+
+
+  return response.ok;
+
+}
+
+
+/* =========================
+   CREATE USERNAME INDEX
+========================= */
+
+async function createUsernameIndex(
+  username,
+  uid,
+  idToken
+){
+
+  const url =
+    firestoreCollection(
+      "usernameIndex"
+    )
+    +
+    "/"
+    +
+    encodeURIComponent(username);
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        method:"PATCH",
+
+        headers:{
+          "Authorization":
+            "Bearer " + idToken,
+
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+
+          fields:{
+
+            username:{
+              stringValue:
+                username
+            },
+
+            uid:{
+              stringValue:
+                uid
+            },
+
+            createdAt:{
+              timestampValue:
+                new Date().toISOString()
+            }
+
+          }
+
+        })
+      }
+    );
+
+
+  if(!response.ok){
+
+    const error =
+      await response.text();
+
+    console.error(
+      "USERNAME INDEX ERROR",
+      error
+    );
+
+    throw new Error(
+      "Username save nahi hua."
+    );
+
+  }
+
 }
 
 
@@ -412,12 +661,19 @@ function getPhone(){
 function createRecaptcha(){
 
   return new firebase.auth.RecaptchaVerifier(
+
     "recaptcha-container",
+
     {
+
       size:"normal",
 
       callback:function(){
-        console.log("reCAPTCHA completed");
+
+        console.log(
+          "reCAPTCHA completed"
+        );
+
       },
 
       "expired-callback":function(){
@@ -428,9 +684,13 @@ function createRecaptcha(){
         );
 
       }
+
     },
+
     auth
+
   );
+
 }
 
 
@@ -445,6 +705,7 @@ sendOtpButton.addEventListener(
     const phone =
       getPhone();
 
+
     if(!phone){
 
       showStatus(
@@ -453,24 +714,32 @@ sendOtpButton.addEventListener(
       );
 
       return;
+
     }
+
 
     try{
 
-      sendOtpButton.disabled = true;
+      sendOtpButton.disabled =
+        true;
+
 
       showStatus(
         "reCAPTCHA load ho raha hai..."
       );
 
+
       const verifier =
         createRecaptcha();
 
+
       await verifier.render();
+
 
       showStatus(
         "OTP bheja ja raha hai..."
       );
+
 
       confirmationResult =
         await auth.signInWithPhoneNumber(
@@ -478,17 +747,25 @@ sendOtpButton.addEventListener(
           verifier
         );
 
+
       showStatus(
         "OTP tumhare mobile par bhej diya gaya hai."
       );
+
 
     }catch(error){
 
       console.error(error);
 
-      sendOtpButton.disabled = false;
 
-      if(error.code === "auth/invalid-api-key"){
+      sendOtpButton.disabled =
+        false;
+
+
+      if(
+        error.code ===
+        "auth/invalid-api-key"
+      ){
 
         showStatus(
           "Firebase API key Phone Auth ke liye accept nahi ho rahi.",
@@ -496,7 +773,10 @@ sendOtpButton.addEventListener(
         );
 
       }
-      else if(error.code === "auth/unauthorized-domain"){
+      else if(
+        error.code ===
+        "auth/unauthorized-domain"
+      ){
 
         showStatus(
           "Website domain Firebase me authorized nahi hai.",
@@ -504,7 +784,10 @@ sendOtpButton.addEventListener(
         );
 
       }
-      else if(error.code === "auth/operation-not-allowed"){
+      else if(
+        error.code ===
+        "auth/operation-not-allowed"
+      ){
 
         showStatus(
           "Firebase Phone Authentication enabled nahi hai.",
@@ -512,7 +795,10 @@ sendOtpButton.addEventListener(
         );
 
       }
-      else if(error.code === "auth/invalid-phone-number"){
+      else if(
+        error.code ===
+        "auth/invalid-phone-number"
+      ){
 
         showStatus(
           "Mobile number galat hai.",
@@ -520,7 +806,10 @@ sendOtpButton.addEventListener(
         );
 
       }
-      else if(error.code === "auth/quota-exceeded"){
+      else if(
+        error.code ===
+        "auth/quota-exceeded"
+      ){
 
         showStatus(
           "SMS quota exceed ho gaya.",
@@ -531,7 +820,8 @@ sendOtpButton.addEventListener(
       else{
 
         showStatus(
-          "OTP error: " + error.message,
+          "OTP error: " +
+          error.message,
           "error"
         );
 
@@ -559,12 +849,17 @@ verifyOtpButton.addEventListener(
       );
 
       return;
+
     }
+
 
     const code =
       otpInput.value.trim();
 
-    if(!/^[0-9]{6}$/.test(code)){
+
+    if(
+      !/^[0-9]{6}$/.test(code)
+    ){
 
       showStatus(
         "6 digit OTP enter karo.",
@@ -572,7 +867,9 @@ verifyOtpButton.addEventListener(
       );
 
       return;
+
     }
+
 
     try{
 
@@ -580,8 +877,12 @@ verifyOtpButton.addEventListener(
         "OTP verify ho raha hai..."
       );
 
+
       const result =
-        await confirmationResult.confirm(code);
+        await confirmationResult.confirm(
+          code
+        );
+
 
       if(!result.user){
 
@@ -591,21 +892,34 @@ verifyOtpButton.addEventListener(
 
       }
 
-      verifiedPhone = true;
 
-      phoneInput.disabled = true;
-      otpInput.disabled = true;
-      sendOtpButton.disabled = true;
-      verifyOtpButton.disabled = true;
+      verifiedPhone =
+        true;
+
+
+      phoneInput.disabled =
+        true;
+
+      otpInput.disabled =
+        true;
+
+      sendOtpButton.disabled =
+        true;
+
+      verifyOtpButton.disabled =
+        true;
+
 
       showStatus(
         "Mobile number verified ✓",
         "ok"
       );
 
+
     }catch(error){
 
       console.error(error);
+
 
       if(
         error.code ===
@@ -632,7 +946,8 @@ verifyOtpButton.addEventListener(
       else{
 
         showStatus(
-          "OTP verification failed: " +
+          "OTP verification failed: "
+          +
           error.message,
           "error"
         );
@@ -656,20 +971,26 @@ createAccountButton.addEventListener(
     const name =
       nameInput.value.trim();
 
+
     const username =
-      usernameInput.value.trim();
+      getUsername();
+
 
     const email =
       emailInput.value.trim();
 
+
     const password =
       passwordInput.value;
+
 
     const phone =
       getPhone();
 
 
-    /* BASIC CHECKS */
+    /* =========================
+       BASIC CHECKS
+    ========================= */
 
     if(!name){
 
@@ -679,17 +1000,21 @@ createAccountButton.addEventListener(
       );
 
       return;
+
     }
+
 
     if(!username){
 
       showStatus(
-        "Username enter karo.",
+        "Username 3-30 characters ka hona chahiye. Sirf a-z, 0-9 aur _ use karo.",
         "error"
       );
 
       return;
+
     }
+
 
     if(!email){
 
@@ -699,7 +1024,9 @@ createAccountButton.addEventListener(
       );
 
       return;
+
     }
+
 
     if(password.length < 6){
 
@@ -709,7 +1036,9 @@ createAccountButton.addEventListener(
       );
 
       return;
+
     }
+
 
     if(!phone){
 
@@ -719,7 +1048,9 @@ createAccountButton.addEventListener(
       );
 
       return;
+
     }
+
 
     if(!verifiedPhone){
 
@@ -729,29 +1060,28 @@ createAccountButton.addEventListener(
       );
 
       return;
+
     }
 
 
     try{
 
-      createAccountButton.disabled = true;
+      createAccountButton.disabled =
+        true;
+
 
       showStatus(
-        "Account create ho raha hai..."
+        "Username check ho raha hai..."
       );
 
 
-      /*
-       IMPORTANT:
-       OTP verify karne ke baad Firebase me
-       current user phone account hai.
-
-       Ab usi user ke saath email/password
-       link kar rahe hain.
-      */
+      /* =========================
+         CURRENT PHONE USER
+      ========================= */
 
       const currentUser =
         auth.currentUser;
+
 
       if(!currentUser){
 
@@ -762,7 +1092,51 @@ createAccountButton.addEventListener(
       }
 
 
-      /* EMAIL + PASSWORD LINK */
+      /* =========================
+         TEMP TOKEN
+      ========================= */
+
+      const tempToken =
+        await currentUser.getIdToken(
+          true
+        );
+
+
+      /* =========================
+         USERNAME CHECK
+      ========================= */
+
+      const usernameExists =
+        await checkUsernameExists(
+          username,
+          tempToken
+        );
+
+
+      if(usernameExists){
+
+        createAccountButton.disabled =
+          false;
+
+
+        showStatus(
+          "Ye username already taken hai. Dusra username choose karo.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      /* =========================
+         EMAIL + PASSWORD LINK
+      ========================= */
+
+      showStatus(
+        "Account details save ho rahi hain..."
+      );
+
 
       const credential =
         firebase.auth.EmailAuthProvider.credential(
@@ -770,46 +1144,52 @@ createAccountButton.addEventListener(
           password
         );
 
+
       const linked =
         await currentUser.linkWithCredential(
           credential
         );
 
 
-      /* TOKEN */
-
       const user =
         linked.user;
 
+
       const idToken =
-        await user.getIdToken(true);
+        await user.getIdToken(
+          true
+        );
+
 
       const refreshToken =
         user.refreshToken;
+
 
       const uid =
         user.uid;
 
 
-      /* =========================
-         FIRESTORE PROFILE
-      ========================= */
-
       const now =
         new Date().toISOString();
 
-      const firestoreURL =
-        "https://firestore.googleapis.com/v1/projects/" +
-        firebaseConfig.projectId +
-        "/databases/(default)/documents/users/" +
-        uid +
-        "?key=" +
-        API_KEY;
+
+      /* =========================
+         SAVE USER PROFILE
+      ========================= */
+
+      const userURL =
+        firestoreCollection(
+          "users"
+        )
+        +
+        "/"
+        +
+        encodeURIComponent(uid);
 
 
       const firestoreResponse =
         await fetch(
-          firestoreURL,
+          userURL,
           {
             method:"PATCH",
 
@@ -826,48 +1206,59 @@ createAccountButton.addEventListener(
               fields:{
 
                 uid:{
-                  stringValue:uid
+                  stringValue:
+                    uid
                 },
 
                 name:{
-                  stringValue:name
+                  stringValue:
+                    name
                 },
 
                 username:{
-                  stringValue:username
+                  stringValue:
+                    username
                 },
 
                 email:{
-                  stringValue:email
+                  stringValue:
+                    email
                 },
 
                 phoneNumber:{
-                  stringValue:phone
+                  stringValue:
+                    phone
                 },
 
                 phoneVerified:{
-                  booleanValue:true
+                  booleanValue:
+                    true
                 },
 
                 photoURL:{
-                  stringValue:""
+                  stringValue:
+                    ""
                 },
 
                 bio:{
-                  stringValue:""
+                  stringValue:
+                    ""
                 },
 
                 createdAt:{
-                  stringValue:now
+                  stringValue:
+                    now
                 },
 
                 updatedAt:{
-                  stringValue:now
+                  stringValue:
+                    now
                 }
 
               }
 
             })
+
           }
         );
 
@@ -877,16 +1268,29 @@ createAccountButton.addEventListener(
         const firestoreError =
           await firestoreResponse.text();
 
+
         console.error(
           "Firestore error:",
           firestoreError
         );
+
 
         throw new Error(
           "Account ban gaya, lekin profile save nahi hui."
         );
 
       }
+
+
+      /* =========================
+         SAVE USERNAME INDEX
+      ========================= */
+
+      await createUsernameIndex(
+        username,
+        uid,
+        idToken
+      );
 
 
       /* =========================
@@ -898,35 +1302,48 @@ createAccountButton.addEventListener(
         idToken
       );
 
+
       localStorage.setItem(
         "crockcellRefreshToken",
         refreshToken
       );
+
 
       localStorage.setItem(
         "crockcellUid",
         uid
       );
 
+
       localStorage.setItem(
         "crockcellProfile",
         JSON.stringify({
 
-          email:email,
+          email:
+            email,
 
-          uid:uid,
+          uid:
+            uid,
 
-          name:name,
+          name:
+            name,
 
-          username:username,
+          username:
+            username,
 
-          phoneNumber:phone,
+          phoneNumber:
+            phone,
 
-          phoneVerified:true
+          phoneVerified:
+            true
 
         })
       );
 
+
+      /* =========================
+         SUCCESS
+      ========================= */
 
       showStatus(
         "CROCKCELL account successfully create ho gaya ✓",
@@ -949,7 +1366,9 @@ createAccountButton.addEventListener(
 
       console.error(error);
 
-      createAccountButton.disabled = false;
+
+      createAccountButton.disabled =
+        false;
 
 
       if(
@@ -988,7 +1407,8 @@ createAccountButton.addEventListener(
       else{
 
         showStatus(
-          "Signup error: " +
+          "Signup error: "
+          +
           error.message,
           "error"
         );
