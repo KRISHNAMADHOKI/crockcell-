@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>CROCKCELL Search</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -19,12 +21,15 @@ body{
   min-height:100vh;
 }
 
+
+/* HEADER */
+
 .header{
   padding:20px 18px 15px;
   position:sticky;
   top:0;
   z-index:10;
-  background:rgba(0,0,0,.94);
+  background:rgba(0,0,0,.95);
   backdrop-filter:blur(15px);
   border-bottom:1px solid #222;
 }
@@ -32,7 +37,7 @@ body{
 .title{
   font-size:28px;
   font-weight:bold;
-  margin-bottom:16px;
+  margin-bottom:15px;
 }
 
 .search-row{
@@ -60,8 +65,10 @@ body{
   background:#fff;
   color:#000;
   font-size:22px;
-  font-weight:bold;
 }
+
+
+/* MESSAGE */
 
 .message{
   min-height:25px;
@@ -69,6 +76,9 @@ body{
   color:#888;
   font-size:14px;
 }
+
+
+/* RESULTS */
 
 .results{
   padding:8px 15px 100px;
@@ -83,8 +93,8 @@ body{
 }
 
 .avatar{
-  width:58px;
-  height:58px;
+  width:55px;
+  height:55px;
   border-radius:50%;
   object-fit:cover;
   background:#222;
@@ -112,7 +122,7 @@ body{
   border-radius:15px;
   background:#fff;
   color:#000;
-  padding:10px 14px;
+  padding:9px 14px;
   font-weight:bold;
 }
 
@@ -121,6 +131,9 @@ body{
   color:#666;
   padding:55px 20px;
 }
+
+
+/* BOTTOM NAV */
 
 .bottom-nav{
   position:fixed;
@@ -158,21 +171,12 @@ body{
   margin-bottom:3px;
 }
 
-@media(max-width:380px){
-
-  .title{
-    font-size:25px;
-  }
-
-  .search-input{
-    font-size:15px;
-  }
-
-}
 </style>
+
 </head>
 
 <body>
+
 
 <div class="header">
 
@@ -186,16 +190,14 @@ body{
       id="searchInput"
       class="search-input"
       type="text"
-      placeholder="Search username..."
+      placeholder="Search people..."
       autocomplete="off"
       autocapitalize="none"
     >
 
     <button
-      id="searchBtn"
       class="search-btn"
-      type="button"
-      onclick="searchUser()"
+      onclick="searchUsers()"
     >
       ⌕
     </button>
@@ -204,18 +206,22 @@ body{
 
 </div>
 
+
 <div
   id="message"
   class="message"
 ></div>
 
+
 <div
   id="results"
   class="results"
 >
+
   <div class="empty">
-    Search for a username
+    Username ya alphabet type karke search karo
   </div>
+
 </div>
 
 
@@ -268,6 +274,11 @@ body{
 
 <script>
 
+
+/* =========================
+   FIREBASE
+========================= */
+
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
@@ -276,7 +287,7 @@ const PROJECT_ID =
 
 
 /* =========================
-   NEW SESSION KEYS
+   LOGIN SESSION
 ========================= */
 
 let token =
@@ -289,8 +300,6 @@ localStorage.getItem(
   "crockcell_uid"
 );
 
-
-/* SESSION STORAGE FALLBACK */
 
 if(!token){
 
@@ -311,10 +320,6 @@ if(!uid){
 }
 
 
-/* =========================
-   LOGIN CHECK
-========================= */
-
 if(!token || !uid){
 
   window.location.replace(
@@ -325,40 +330,99 @@ if(!token || !uid){
 
 
 /* =========================
-   SEARCH
+   ELEMENTS
 ========================= */
 
-async function searchUser(){
+const searchInput =
+document.getElementById(
+  "searchInput"
+);
 
-  const input =
-  document.getElementById(
-    "searchInput"
-  );
+const results =
+document.getElementById(
+  "results"
+);
 
-  const results =
-  document.getElementById(
-    "results"
-  );
+const message =
+document.getElementById(
+  "message"
+);
 
-  const message =
-  document.getElementById(
-    "message"
-  );
 
-  const username =
-  input.value
+/* =========================
+   SEARCH TIMER
+========================= */
+
+let searchTimer=null;
+
+
+/* =========================
+   LIVE SEARCH
+========================= */
+
+searchInput.addEventListener(
+  "input",
+  function(){
+
+    clearTimeout(searchTimer);
+
+    const text =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+    if(!text){
+
+      results.innerHTML =
+      `<div class="empty">
+        Username ya alphabet type karo
+      </div>`;
+
+      message.textContent="";
+
+      return;
+
+    }
+
+
+    /*
+      Thoda delay rakha hai taaki
+      har alphabet par Firebase ko
+      unnecessary request na jaye.
+    */
+
+    searchTimer =
+    setTimeout(
+      function(){
+
+        searchUsers();
+
+      },
+      250
+    );
+
+  }
+);
+
+
+/* =========================
+   SEARCH USERS
+========================= */
+
+async function searchUsers(){
+
+  const text =
+  searchInput.value
     .trim()
     .toLowerCase();
 
 
-  if(!username){
-
-    message.textContent =
-    "Username enter karo.";
+  if(!text){
 
     results.innerHTML =
     `<div class="empty">
-      Username search karo
+      Search something
     </div>`;
 
     return;
@@ -378,200 +442,241 @@ async function searchUser(){
 
   try{
 
-    const url =
+
+    /*
+      Firestore prefix search:
+
+      username >= typed text
+
+      username < typed text + high unicode
+
+      Example:
+
+      "kr"
+
+      kr...
+      krishna...
+      krish...
+    */
+
+    const endText =
+    text + "\uf8ff";
+
+
+    const queryURL =
     "https://firestore.googleapis.com/v1/projects/" +
     PROJECT_ID +
-    "/databases/(default)/documents/usernameIndex/" +
-    encodeURIComponent(username) +
+    "/databases/(default)/documents:runQuery" +
     "?key=" +
     API_KEY;
 
 
+    const queryBody = {
+
+      structuredQuery: {
+
+        from: [
+
+          {
+            collectionId:"users"
+          }
+
+        ],
+
+        where: {
+
+          compositeFilter: {
+
+            op:"AND",
+
+            filters:[
+
+              {
+
+                fieldFilter:{
+
+                  field:{
+                    fieldPath:"username"
+                  },
+
+                  op:"GREATER_THAN_OR_EQUAL",
+
+                  value:{
+                    stringValue:text
+                  }
+
+                }
+
+              },
+
+              {
+
+                fieldFilter:{
+
+                  field:{
+                    fieldPath:"username"
+                  },
+
+                  op:"LESS_THAN",
+
+                  value:{
+                    stringValue:endText
+                  }
+
+                }
+
+              }
+
+            ]
+
+          }
+
+        },
+
+        orderBy:[
+
+          {
+
+            field:{
+              fieldPath:"username"
+            },
+
+            direction:"ASCENDING"
+
+          }
+
+        ],
+
+        limit:30
+
+      }
+
+    };
+
+
     const response =
-    await fetch(url);
+    await fetch(
+      queryURL,
+      {
 
+        method:"POST",
 
-    if(response.status===404){
+        headers:{
 
-      message.textContent =
-      "User nahi mila.";
+          Authorization:
+          "Bearer "+token,
 
-      results.innerHTML =
-      `<div class="empty">
-        No user found
-      </div>`;
+          "Content-Type":
+          "application/json"
 
-      return;
+        },
 
-    }
+        body:
+        JSON.stringify(
+          queryBody
+        )
+
+      }
+    );
 
 
     if(!response.ok){
 
+      const errorText =
+      await response.text();
+
+      console.error(
+        "Firestore search error:",
+        errorText
+      );
+
       throw new Error(
-        "Search failed"
+        "SEARCH_FAILED"
       );
 
     }
 
 
-    const data =
+    const rows =
     await response.json();
 
 
-    const f =
-    data.fields || {};
+    /*
+      Firebase runQuery returns
+      rows containing documents.
+    */
+
+    const users=[];
 
 
-    const foundUID =
-    f.uid?.stringValue || "";
+    for(const row of rows){
+
+      if(!row.document){
+        continue;
+      }
 
 
-    const foundUsername =
-    f.username?.stringValue ||
-    username;
+      const f =
+      row.document.fields || {};
 
 
-    if(!foundUID){
-
-      throw new Error(
-        "Invalid user data"
-      );
-
-    }
+      const foundUID =
+      f.uid?.stringValue || "";
 
 
-    /* =========================
-       LOAD PROFILE
-    ========================= */
-
-    let name =
-    foundUsername;
-
-    let photoURL =
-    "";
+      const foundUsername =
+      f.username?.stringValue || "";
 
 
-    try{
+      if(!foundUID ||
+         !foundUsername){
 
-      const profileURL =
-      "https://firestore.googleapis.com/v1/projects/" +
-      PROJECT_ID +
-      "/databases/(default)/documents/users/" +
-      encodeURIComponent(foundUID);
-
-
-      const profileResponse =
-      await fetch(
-        profileURL,
-        {
-          headers:{
-            Authorization:
-            "Bearer " + token
-          }
-        }
-      );
-
-
-      if(profileResponse.ok){
-
-        const profile =
-        await profileResponse.json();
-
-        const pf =
-        profile.fields || {};
-
-
-        name =
-        pf.name?.stringValue ||
-        foundUsername;
-
-
-        photoURL =
-        pf.photoURL?.stringValue ||
-        "";
+        continue;
 
       }
 
-    }catch(error){
 
-      console.log(
-        "Profile load skipped"
-      );
+      /*
+        Apna account list me nahi dikhana.
+      */
+
+      if(foundUID===uid){
+
+        continue;
+
+      }
+
+
+      users.push({
+
+        uid:foundUID,
+
+        username:foundUsername,
+
+        name:
+        f.name?.stringValue ||
+        foundUsername,
+
+        photoURL:
+        f.photoURL?.stringValue ||
+        "",
+
+        bio:
+        f.bio?.stringValue ||
+        ""
+
+      });
 
     }
 
 
-    message.textContent =
-    "1 result";
-
-
-    results.innerHTML = "";
-
-
-    const card =
-    document.createElement(
-      "div"
-    );
-
-    card.className =
-    "user-card";
-
-
-    card.innerHTML = `
-
-      <img
-        class="avatar"
-        src="${photoURL || placeholderPhoto()}"
-        alt=""
-      >
-
-      <div class="user-info">
-
-        <div class="name">
-          ${escapeHTML(name)}
-        </div>
-
-        <div class="username">
-          @${escapeHTML(foundUsername)}
-        </div>
-
-      </div>
-
-      <button
-        class="open-btn"
-        type="button"
-      >
-        Open
-      </button>
-
-    `;
-
-
-    card
-      .querySelector(".open-btn")
-      .onclick = function(){
-
-        /*
-          Profile page ko UID aur username
-          ke saath open kar rahe hain.
-        */
-
-        window.location.href =
-        "profile.html?uid=" +
-        encodeURIComponent(foundUID) +
-        "&username=" +
-        encodeURIComponent(foundUsername);
-
-      };
-
-
-    results.appendChild(card);
+    renderUsers(users,text);
 
 
   }catch(error){
 
     console.error(error);
+
 
     message.textContent =
     "Search failed.";
@@ -587,27 +692,144 @@ async function searchUser(){
 
 
 /* =========================
-   ENTER SEARCH
+   SHOW USERS
 ========================= */
 
-document
-  .getElementById("searchInput")
-  .addEventListener(
-    "keydown",
-    function(e){
+function renderUsers(users,text){
 
-      if(e.key==="Enter"){
+  results.innerHTML="";
 
-        searchUser();
 
-      }
+  if(!users.length){
 
-    }
-  );
+    message.textContent =
+    "No users found.";
+
+    results.innerHTML =
+    `<div class="empty">
+      "${escapeHTML(text)}"
+      se koi user nahi mila.
+    </div>`;
+
+    return;
+
+  }
+
+
+  message.textContent =
+  users.length +
+  " users found";
+
+
+  users.forEach(function(user){
+
+    const card =
+    document.createElement(
+      "div"
+    );
+
+    card.className =
+    "user-card";
+
+
+    card.innerHTML = `
+
+      <img
+        class="avatar"
+        src="${
+          user.photoURL ||
+          placeholderPhoto()
+        }"
+        alt=""
+      >
+
+      <div class="user-info">
+
+        <div class="name">
+          ${escapeHTML(
+            user.name
+          )}
+        </div>
+
+        <div class="username">
+          @${escapeHTML(
+            user.username
+          )}
+        </div>
+
+      </div>
+
+      <button
+        class="open-btn"
+        type="button"
+      >
+        Open
+      </button>
+
+    `;
+
+
+    card
+      .querySelector(
+        ".open-btn"
+      )
+      .onclick=function(){
+
+        openProfile(
+          user
+        );
+
+      };
+
+
+    results.appendChild(
+      card
+    );
+
+  });
+
+}
 
 
 /* =========================
-   HELPERS
+   OPEN PROFILE
+========================= */
+
+function openProfile(user){
+
+  window.location.href =
+    "profile.html?uid=" +
+    encodeURIComponent(
+      user.uid
+    ) +
+    "&username=" +
+    encodeURIComponent(
+      user.username
+    );
+
+}
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+searchInput.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key==="Enter"){
+
+      searchUsers();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   HTML SAFETY
 ========================= */
 
 function escapeHTML(text){
@@ -642,6 +864,10 @@ function escapeHTML(text){
 }
 
 
+/* =========================
+   DEFAULT PHOTO
+========================= */
+
 function placeholderPhoto(){
 
   return "data:image/svg+xml," +
@@ -661,4 +887,4 @@ function placeholderPhoto(){
 </script>
 
 </body>
-</html>
+  </html>
