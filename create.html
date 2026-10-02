@@ -2,193 +2,237 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>CROCKCELL - Create Post</title>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif;
+box-sizing:border-box;
 }
 
 body{
-    background:#f5f5f5;
-    color:#111;
-    padding-bottom:80px;
+margin:0;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+padding-bottom:90px;
 }
 
 .header{
-    height:60px;
-    background:white;
-    border-bottom:1px solid #ddd;
-    display:flex;
-    align-items:center;
-    padding:0 16px;
+height:64px;
+background:#000;
+border-bottom:1px solid #222;
+display:flex;
+align-items:center;
+padding:0 16px;
+position:sticky;
+top:0;
+z-index:5;
 }
 
 .header h2{
-    font-size:20px;
+font-size:21px;
+margin:0;
 }
 
 .container{
-    max-width:500px;
-    margin:20px auto;
-    padding:0 14px;
+max-width:520px;
+margin:20px auto;
+padding:0 14px;
 }
 
 .card{
-    background:white;
-    padding:18px;
-    border-radius:14px;
+background:#111;
+border:1px solid #292929;
+padding:18px;
+border-radius:18px;
 }
 
 input,
 textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:9px;
-    margin-bottom:12px;
-    outline:none;
+width:100%;
+padding:13px;
+border:1px solid #333;
+border-radius:11px;
+margin-bottom:12px;
+outline:none;
+background:#191919;
+color:#fff;
+font-size:15px;
 }
 
 textarea{
-    min-height:100px;
-    resize:none;
+min-height:110px;
+resize:none;
 }
 
 .preview{
-    width:100%;
-    max-height:450px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-bottom:12px;
-    display:none;
+width:100%;
+max-height:470px;
+object-fit:contain;
+border-radius:12px;
+margin-bottom:12px;
+display:none;
+background:#050505;
 }
 
-button{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:9px;
-    background:#111;
-    color:white;
-    font-size:16px;
+button.post{
+width:100%;
+padding:14px;
+border:0;
+border-radius:12px;
+background:#fff;
+color:#000;
+font-size:16px;
+font-weight:700;
 }
 
 button:disabled{
-    opacity:.6;
+opacity:.55;
 }
 
 .message{
-    text-align:center;
-    margin-top:12px;
-    font-size:14px;
+text-align:center;
+min-height:22px;
+margin-top:12px;
+font-size:14px;
+color:#aaa;
+}
+
+.note{
+color:#777;
+font-size:12px;
+line-height:1.45;
+margin-top:12px;
 }
 
 .bottomNav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:65px;
-    background:white;
-    border-top:1px solid #ddd;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
+position:fixed;
+bottom:12px;
+left:12px;
+right:12px;
+height:65px;
+background:rgba(25,25,25,.94);
+border:1px solid #333;
+border-radius:24px;
+display:flex;
+align-items:center;
+justify-content:space-around;
+z-index:20;
 }
 
 .bottomNav a{
-    text-decoration:none;
-    color:#111;
-    text-align:center;
-    font-size:12px;
+text-decoration:none;
+color:#999;
+text-align:center;
+font-size:10px;
+flex:1;
+padding:8px 2px;
+border-radius:17px;
+}
+
+.bottomNav a.active{
+background:#fff;
+color:#000;
 }
 
 .bottomNav div{
-    font-size:21px;
-    margin-bottom:3px;
+font-size:20px;
+margin-bottom:3px;
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <h2>Create Post</h2>
+<h2>Create Post</h2>
 </div>
+
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-        >
+<input
+type="file"
+id="imageInput"
+accept="image/*"
+>
 
-        <img
-            id="preview"
-            class="preview"
-        >
+<img
+id="preview"
+class="preview"
+alt="Preview"
+>
 
-        <textarea
-            id="caption"
-            placeholder="Write a caption..."
-        ></textarea>
 
-        <button
-            id="postButton"
-            onclick="createPost()">
-            Post
-        </button>
+<textarea
+id="caption"
+maxlength="2200"
+placeholder="Write a caption..."
+></textarea>
 
-        <div
-            class="message"
-            id="message">
-        </div>
 
-    </div>
+<button
+id="postButton"
+class="post"
+type="button"
+>
+Post
+</button>
+
+
+<div
+id="message"
+class="message"
+></div>
+
+
+<div class="note">
+Photo automatically compress hoke save hogi.
+</div>
+
+</div>
 
 </div>
 
 
 <div class="bottomNav">
 
-    <a href="home.html">
-        <div>⌂</div>
-        Home
-    </a>
+<a href="home.html">
+<div>⌂</div>
+Home
+</a>
 
-    <a href="search.html">
-        <div>⌕</div>
-        Search
-    </a>
+<a href="search.html">
+<div>⌕</div>
+Search
+</a>
 
-    <a href="create.html">
-        <div>＋</div>
-        Create
-    </a>
+<a
+href="create.html"
+class="active"
+>
+<div>＋</div>
+Create
+</a>
 
-    <a href="activity.html">
-        <div>♡</div>
-        Activity
-    </a>
+<a href="activity.html">
+<div>♡</div>
+Activity
+</a>
 
-    <a href="profile.html">
-        <div>●</div>
-        Profile
-    </a>
+<a href="profile.html">
+<div>●</div>
+Profile
+</a>
 
 </div>
 
-
-<script src="core.js"></script>
 
 <script>
 
@@ -198,440 +242,482 @@ const API_KEY =
 const PROJECT_ID =
 "crockcell-cd2e6";
 
-const token =
-localStorage.getItem("crockcell_idToken");
 
-const uid =
-localStorage.getItem("crockcell_uid");
+function getStored(a,b){
 
-
-/* LOGIN CHECK */
-
-if(!token || !uid){
-
-    window.location.replace(
-        "index.html"
-    );
+return localStorage.getItem(a)
+|| sessionStorage.getItem(a)
+|| localStorage.getItem(b)
+|| sessionStorage.getItem(b);
 
 }
 
 
-/* PROFILE */
+let token =
+getStored(
+"crockcell_idToken",
+"crockcellIdToken"
+);
 
-let profile = {};
-
-try{
-
-    profile =
-        JSON.parse(
-            localStorage.getItem(
-                "crockcell_profile"
-            ) || "{}"
-        );
-
-}catch(e){
-
-    profile={};
-
-}
-
-
-/* IMAGE PREVIEW */
-
-document
-.getElementById("imageInput")
-.addEventListener(
-    "change",
-    function(){
-
-        const file =
-            this.files[0];
-
-        if(!file){
-            return;
-        }
-
-        const reader =
-            new FileReader();
-
-        reader.onload =
-            function(e){
-
-                const preview =
-                    document.getElementById(
-                        "preview"
-                    );
-
-                preview.src =
-                    e.target.result;
-
-                preview.style.display =
-                    "block";
-
-            };
-
-        reader.readAsDataURL(file);
-
-    }
+let uid =
+getStored(
+"crockcell_uid",
+"crockcellUid"
 );
 
 
-/* CREATE POST */
+if(!token || !uid){
+
+location.replace("index.html");
+
+}
+
+
+const imageInput =
+document.getElementById("imageInput");
+
+const preview =
+document.getElementById("preview");
+
+const caption =
+document.getElementById("caption");
+
+const button =
+document.getElementById("postButton");
+
+const message =
+document.getElementById("message");
+
+
+function profile(){
+
+for(
+const k of
+[
+"crockcell_profile",
+"crockcellProfile"
+]
+){
+
+let x =
+localStorage.getItem(k)
+||
+sessionStorage.getItem(k);
+
+
+if(x){
+
+try{
+
+return JSON.parse(x);
+
+}catch(e){}
+
+}
+
+}
+
+return {};
+
+}
+
+
+let p =
+profile();
+
+
+imageInput.onchange =
+() => {
+
+let f =
+imageInput.files[0];
+
+
+if(!f){
+
+preview.style.display =
+"none";
+
+return;
+
+}
+
+
+if(
+f.size >
+10 * 1024 * 1024
+){
+
+message.textContent =
+"Image 10 MB se chhoti rakho.";
+
+imageInput.value = "";
+
+return;
+
+}
+
+
+let r =
+new FileReader();
+
+
+r.onload =
+e => {
+
+preview.src =
+e.target.result;
+
+preview.style.display =
+"block";
+
+};
+
+
+r.readAsDataURL(f);
+
+};
+
+
+function compress(file){
+
+return new Promise(
+(resolve,reject) => {
+
+let r =
+new FileReader();
+
+
+r.onload =
+e => {
+
+let im =
+new Image();
+
+
+im.onload =
+() => {
+
+let max = 700;
+
+let w =
+im.width;
+
+let h =
+im.height;
+
+
+if(w > max){
+
+h =
+Math.round(
+h * max / w
+);
+
+w = max;
+
+}
+
+
+if(h > max){
+
+w =
+Math.round(
+w * max / h
+);
+
+h = max;
+
+}
+
+
+let c =
+document.createElement(
+"canvas"
+);
+
+
+c.width = w;
+
+c.height = h;
+
+
+c.getContext("2d")
+.drawImage(
+im,
+0,
+0,
+w,
+h
+);
+
+
+resolve(
+c.toDataURL(
+"image/jpeg",
+0.65
+)
+);
+
+};
+
+
+im.onerror =
+() =>
+reject(
+Error("Image load failed.")
+);
+
+
+im.src =
+e.target.result;
+
+};
+
+
+r.onerror =
+() =>
+reject(
+Error("Image read failed.")
+);
+
+
+r.readAsDataURL(file);
+
+});
+
+}
+
 
 async function createPost(){
 
-    const imageInput =
-        document.getElementById(
-            "imageInput"
-        );
+let f =
+imageInput.files[0];
 
-    const caption =
-        document.getElementById(
-            "caption"
-        ).value.trim();
 
-    const button =
-        document.getElementById(
-            "postButton"
-        );
+if(!f){
 
-    const message =
-        document.getElementById(
-            "message"
-        );
+message.textContent =
+"Please select an image.";
 
-
-    message.innerText="";
-
-
-    if(!imageInput.files[0]){
-
-        message.innerText =
-            "Please select an image.";
-
-        return;
-
-    }
-
-
-    button.disabled=true;
-
-    message.innerText =
-        "Creating post...";
-
-
-    try{
-
-        const file =
-            imageInput.files[0];
-
-
-        /* COMPRESS IMAGE */
-
-        const compressedImage =
-            await compressImage(file);
-
-
-        const postId =
-            Date.now().toString();
-
-
-        const username =
-            profile.username ||
-            "user";
-
-
-        const email =
-            profile.email ||
-            "";
-
-
-        const postData = {
-
-            userId:uid,
-
-            username:username,
-
-            email:email,
-
-            caption:caption,
-
-            image:compressedImage,
-
-            likes:0,
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        /* SAVE POST IN FIRESTORE */
-
-        const response =
-            await fetch(
-
-                "https://firestore.googleapis.com/v1/projects/"
-                + PROJECT_ID
-                + "/databases/(default)/documents/posts/"
-                + postId,
-
-                {
-
-                    method:"PATCH",
-
-                    headers:{
-
-                        "Content-Type":
-                        "application/json",
-
-                        "Authorization":
-                        "Bearer " + token
-
-                    },
-
-                    body:JSON.stringify({
-
-                        fields:{
-
-                            userId:{
-                                stringValue:uid
-                            },
-
-                            username:{
-                                stringValue:username
-                            },
-
-                            email:{
-                                stringValue:email
-                            },
-
-                            caption:{
-                                stringValue:caption
-                            },
-
-                            image:{
-                                stringValue:compressedImage
-                            },
-
-                            likes:{
-                                integerValue:"0"
-                            },
-
-                            createdAt:{
-                                stringValue:
-                                postData.createdAt
-                            }
-
-                        }
-
-                    })
-
-                }
-
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            console.log(data);
-
-            throw new Error(
-                data.error?.message ||
-                "Post could not be saved."
-            );
-
-        }
-
-
-        /* ALSO SAVE LOCALLY */
-
-        let posts=[];
-
-        try{
-
-            posts =
-                JSON.parse(
-                    localStorage.getItem(
-                        "crockcellPosts"
-                    ) || "[]"
-                );
-
-        }catch(e){
-
-            posts=[];
-
-        }
-
-
-        posts.push({
-
-            id:postId,
-
-            userId:uid,
-
-            username:username,
-
-            email:email,
-
-            caption:caption,
-
-            image:compressedImage,
-
-            likes:0,
-
-            createdAt:
-                postData.createdAt
-
-        });
-
-
-        localStorage.setItem(
-
-            "crockcellPosts",
-
-            JSON.stringify(posts)
-
-        );
-
-
-        message.innerText =
-            "Post created successfully!";
-
-
-        setTimeout(
-            function(){
-
-                window.location.replace(
-                    "home.html"
-                );
-
-            },
-            700
-        );
-
-
-    }catch(error){
-
-        console.log(error);
-
-        message.innerText =
-            error.message ||
-            "Something went wrong.";
-
-        button.disabled=false;
-
-    }
+return;
 
 }
 
 
-/* IMAGE COMPRESSION */
+button.disabled = true;
 
-function compressImage(file){
-
-    return new Promise(
-        function(resolve,reject){
-
-            const reader =
-                new FileReader();
+message.textContent =
+"Creating post...";
 
 
-            reader.onload =
-                function(event){
+try{
 
-                    const img =
-                        new Image();
-
-
-                    img.onload =
-                        function(){
-
-                            const canvas =
-                                document.createElement(
-                                    "canvas"
-                                );
-
-                            const maxWidth =
-                                900;
+let img =
+await compress(f);
 
 
-                            let width =
-                                img.width;
-
-                            let height =
-                                img.height;
-
-
-                            if(width > maxWidth){
-
-                                height =
-                                    height *
-                                    maxWidth /
-                                    width;
-
-                                width =
-                                    maxWidth;
-
-                            }
+let id =
+uid +
+"_" +
+Date.now() +
+"_" +
+Math.random()
+.toString(36)
+.slice(2,8);
 
 
-                            canvas.width =
-                                width;
-
-                            canvas.height =
-                                height;
+let time =
+new Date().toISOString();
 
 
-                            const ctx =
-                                canvas.getContext(
-                                    "2d"
-                                );
+let username =
+p.username ||
+"user";
 
 
-                            ctx.drawImage(
-                                img,
-                                0,
-                                0,
-                                width,
-                                height
-                            );
+let name =
+p.name ||
+username;
 
 
-                            const result =
-                                canvas.toDataURL(
-                                    "image/jpeg",
-                                    0.75
-                                );
+let url =
+"https://firestore.googleapis.com/v1/projects/"
++
+PROJECT_ID
++
+"/databases/(default)/documents/posts/"
++
+encodeURIComponent(id)
++
+"?key="
++
+API_KEY;
 
 
-                            resolve(result);
+let r =
+await fetch(
+url,
+{
+method:"PATCH",
 
-                        };
+headers:{
+"Content-Type":
+"application/json",
 
+Authorization:
+"Bearer "+token
+},
 
-                    img.onerror =
-                        reject;
+body:JSON.stringify({
 
-                    img.src =
-                        event.target.result;
+fields:{
 
-                };
+userId:{
+stringValue:uid
+},
 
+username:{
+stringValue:username
+},
 
-            reader.onerror =
-                reject;
+name:{
+stringValue:name
+},
 
-            reader.readAsDataURL(file);
+caption:{
+stringValue:
+caption.value.trim()
+},
 
-        }
-    );
+image:{
+stringValue:img
+},
+
+likes:{
+integerValue:"0"
+},
+
+createdAt:{
+timestampValue:time
+}
 
 }
+
+})
+}
+);
+
+
+let d =
+await r.json()
+.catch(
+() => ({})
+);
+
+
+if(!r.ok){
+
+throw Error(
+d.error?.message ||
+"Post save failed."
+);
+
+}
+
+
+/*
+IMPORTANT:
+Old posts ko replace nahi karega.
+Array me new post PUSH karega.
+*/
+
+let posts = [];
+
+
+try{
+
+posts =
+JSON.parse(
+localStorage.getItem(
+"crockcellPosts"
+) || "[]"
+);
+
+
+if(
+!Array.isArray(posts)
+){
+
+posts = [];
+
+}
+
+}catch(e){
+
+posts = [];
+
+}
+
+
+posts.push({
+
+id:id,
+
+userId:uid,
+
+username:username,
+
+name:name,
+
+caption:
+caption.value.trim(),
+
+image:img,
+
+likes:0,
+
+createdAt:time
+
+});
+
+
+localStorage.setItem(
+"crockcellPosts",
+JSON.stringify(posts)
+);
+
+
+message.textContent =
+"Post created successfully!";
+
+
+setTimeout(
+() =>
+location.replace(
+"home.html"
+),
+600
+);
+
+
+}catch(e){
+
+console.error(e);
+
+message.textContent =
+e.message ||
+"Something went wrong.";
+
+button.disabled = false;
+
+}
+
+}
+
+
+button.onclick =
+createPost;
 
 </script>
 
