@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Create Account - CROCKCELL</title>
 
 <style>
@@ -16,37 +15,37 @@
 
 body{
   min-height:100vh;
-  background:linear-gradient(135deg,#111827,#312e81,#581c87);
+  background:linear-gradient(135deg,#080808,#171717,#301b52);
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:20px;
-  color:white;
+  padding:18px;
+  color:#fff;
 }
 
 .container{
   width:100%;
   max-width:430px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
   backdrop-filter:blur(18px);
   border-radius:28px;
   padding:28px 22px;
-  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
 }
 
 .logo{
   text-align:center;
   font-size:34px;
-  font-weight:800;
-  margin-bottom:5px;
+  font-weight:900;
+  letter-spacing:1px;
 }
 
 .subtitle{
   text-align:center;
-  color:#d1d5db;
+  color:#bbb;
+  margin:6px 0 25px;
   font-size:14px;
-  margin-bottom:25px;
 }
 
 .field{
@@ -57,27 +56,27 @@ label{
   display:block;
   margin-bottom:7px;
   font-size:13px;
-  color:#e5e7eb;
+  color:#ddd;
 }
 
 input{
   width:100%;
   padding:14px 15px;
-  border:1px solid rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.16);
   border-radius:15px;
-  background:rgba(0,0,0,.22);
-  color:white;
-  outline:none;
+  background:rgba(0,0,0,.28);
+  color:#fff;
+  outline:0;
   font-size:15px;
 }
 
 input::placeholder{
-  color:#9ca3af;
+  color:#888;
 }
 
 input:focus{
-  border-color:#8b5cf6;
-  box-shadow:0 0 0 3px rgba(139,92,246,.18);
+  border-color:#a78bfa;
+  box-shadow:0 0 0 3px rgba(167,139,250,.14);
 }
 
 .password-box{
@@ -85,7 +84,7 @@ input:focus{
 }
 
 .password-box input{
-  padding-right:75px;
+  padding-right:72px;
 }
 
 .show-btn{
@@ -93,66 +92,65 @@ input:focus{
   right:10px;
   top:50%;
   transform:translateY(-50%);
-  border:none;
-  background:transparent;
-  color:#a78bfa;
-  font-weight:bold;
-  cursor:pointer;
+  border:0;
+  background:none;
+  color:#c4b5fd;
+  font-weight:700;
+  padding:8px;
 }
 
 .hint{
   margin-top:5px;
   font-size:11px;
-  color:#9ca3af;
+  color:#999;
 }
 
 .create-btn{
   width:100%;
-  border:none;
+  border:0;
   border-radius:16px;
   padding:15px;
-  margin-top:8px;
+  margin-top:7px;
   background:linear-gradient(135deg,#7c3aed,#ec4899);
-  color:white;
+  color:#fff;
   font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+  font-weight:800;
 }
 
 .create-btn:disabled{
   opacity:.6;
-  cursor:not-allowed;
 }
 
 .message{
-  min-height:20px;
+  min-height:22px;
   text-align:center;
-  margin:14px 0 5px;
+  margin:14px 0 4px;
   font-size:13px;
+  line-height:1.4;
 }
 
 .login{
   text-align:center;
   margin-top:18px;
-  color:#d1d5db;
+  color:#bbb;
   font-size:14px;
 }
 
 .login a{
   color:#c4b5fd;
   text-decoration:none;
-  font-weight:bold;
+  font-weight:700;
 }
 
-.security-note{
-  margin-top:18px;
-  padding:12px;
+.note{
+  margin-top:17px;
+  padding:11px;
   border-radius:14px;
-  background:rgba(255,255,255,.06);
-  color:#cbd5e1;
+  background:rgba(255,255,255,.05);
+  color:#aaa;
   font-size:11px;
-  line-height:1.5;
   text-align:center;
+  line-height:1.45;
 }
 </style>
 </head>
@@ -161,116 +159,121 @@ input:focus{
 
 <div class="container">
 
-  <div class="logo">CROCKCELL</div>
+<div class="logo">CROCKCELL</div>
 
-  <div class="subtitle">
-    Create your account
-  </div>
+<div class="subtitle">
+Create your account
+</div>
 
-  <div class="field">
-    <label>Full Name</label>
+<div class="field">
+<label>Full Name</label>
 
-    <input
-      id="name"
-      type="text"
-      placeholder="Enter your full name"
-      autocomplete="name"
-    >
-  </div>
-
-
-  <div class="field">
-    <label>Username</label>
-
-    <input
-      id="username"
-      type="text"
-      placeholder="e.g. krishna_007"
-      autocomplete="username"
-      maxlength="30"
-    >
-
-    <div class="hint">
-      3-30 characters: lowercase letters, numbers and _
-    </div>
-  </div>
+<input
+id="name"
+type="text"
+placeholder="Enter your full name"
+autocomplete="name">
+</div>
 
 
-  <div class="field">
-    <label>Email</label>
+<div class="field">
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Enter your email"
-      autocomplete="email"
-    >
-  </div>
+<label>Username</label>
 
+<input
+id="username"
+type="text"
+placeholder="e.g. krishna_007"
+maxlength="30"
+autocomplete="username"
+autocapitalize="none">
 
-  <div class="field">
-    <label>Password</label>
-
-    <div class="password-box">
-
-      <input
-        id="password"
-        type="password"
-        placeholder="Create a password"
-        autocomplete="new-password"
-      >
-
-      <button
-        type="button"
-        class="show-btn"
-        id="showPassword"
-      >
-        Show
-      </button>
-
-    </div>
-
-    <div class="hint">
-      Password must contain at least 6 characters.
-    </div>
-  </div>
-
-
-  <button
-    type="button"
-    class="create-btn"
-    id="createAccount"
-  >
-    Create Account
-  </button>
-
-
-  <div
-    class="message"
-    id="message"
-  ></div>
-
-
-  <div class="login">
-    Already have an account?
-    <a href="index.html">Login</a>
-  </div>
-
-
-  <div class="security-note">
-    Phone verification will be added later.
-  </div>
+<div class="hint">
+3-30 characters: lowercase letters, numbers and _
+</div>
 
 </div>
 
 
-<script src="core.js"></script>
+<div class="field">
+
+<label>Email</label>
+
+<input
+id="email"
+type="email"
+placeholder="Enter your email"
+autocomplete="email">
+
+</div>
+
+
+<div class="field">
+
+<label>Password</label>
+
+<div class="password-box">
+
+<input
+id="password"
+type="password"
+placeholder="Create a password"
+autocomplete="new-password">
+
+<button
+id="showPassword"
+class="show-btn"
+type="button">
+Show
+</button>
+
+</div>
+
+<div class="hint">
+Password must contain at least 6 characters.
+</div>
+
+</div>
+
+
+<button
+id="createAccount"
+class="create-btn"
+type="button">
+
+Create Account
+
+</button>
+
+
+<div
+id="message"
+class="message">
+</div>
+
+
+<div class="login">
+
+Already have an account?
+
+<a href="index.html">
+Login
+</a>
+
+</div>
+
+
+<div class="note">
+
+Phone verification is not required right now.
+Email + password is used for signup.
+
+</div>
+
+</div>
+
 
 <script>
-
-/* =========================================
-   FIREBASE CONFIG
-========================================= */
 
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
@@ -278,10 +281,6 @@ const API_KEY =
 const PROJECT_ID =
 "crockcell-cd2e6";
 
-
-/* =========================================
-   ELEMENTS
-========================================= */
 
 const nameInput =
 document.getElementById("name");
@@ -301,692 +300,529 @@ document.getElementById("createAccount");
 const messageBox =
 document.getElementById("message");
 
-const showPasswordBtn =
-document.getElementById("showPassword");
 
+function showMessage(text,type="normal"){
 
-/* =========================================
-   SHOW / HIDE PASSWORD
-========================================= */
+messageBox.textContent=text;
 
-showPasswordBtn.addEventListener(
-"click",
-()=>{
-
-  if(passwordInput.type==="password"){
-
-    passwordInput.type="text";
-
-    showPasswordBtn.textContent="Hide";
-
-  }else{
-
-    passwordInput.type="password";
-
-    showPasswordBtn.textContent="Show";
-
-  }
-
-});
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-function showMessage(
-text,
-type="normal"
-){
-
-  messageBox.textContent=text;
-
-  if(type==="error"){
-
-    messageBox.style.color="#fca5a5";
-
-  }
-  else if(type==="success"){
-
-    messageBox.style.color="#86efac";
-
-  }
-  else{
-
-    messageBox.style.color="#d1d5db";
-
-  }
+messageBox.style.color =
+type==="error"
+?
+"#fca5a5"
+:
+type==="success"
+?
+"#86efac"
+:
+"#ddd";
 
 }
 
 
-/* =========================================
-   FIRESTORE SAVE
-========================================= */
+document.getElementById("showPassword").onclick=()=>{
 
-async function saveFirestoreDocument(
+passwordInput.type =
+passwordInput.type==="password"
+?
+"text"
+:
+"password";
+
+document.getElementById("showPassword").textContent =
+passwordInput.type==="password"
+?
+"Show"
+:
+"Hide";
+
+};
+
+
+function firestoreUrl(collection,id=""){
+
+return `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/${collection}${id?"/"+encodeURIComponent(id):""}?key=${API_KEY}`;
+
+}
+
+
+async function firestoreGet(collection,id,token){
+
+return fetch(
+firestoreUrl(collection,id),
+{
+headers:{
+Authorization:"Bearer "+token
+}
+}
+);
+
+}
+
+
+async function firestorePatch(
 collection,
-documentId,
+id,
 fields,
-idToken
+token
 ){
 
-  const url =
-  `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/${collection}/${encodeURIComponent(documentId)}?key=${API_KEY}`;
+const response =
+await fetch(
+firestoreUrl(collection,id),
+{
+method:"PATCH",
 
+headers:{
+"Content-Type":
+"application/json",
 
-  const response =
-  await fetch(
-    url,
-    {
+Authorization:
+"Bearer "+token
+},
 
-      method:"PATCH",
+body:JSON.stringify({
+fields:fields
+})
+}
+);
 
-      headers:{
-        "Content-Type":
-        "application/json",
+const data =
+await response.json();
 
-        "Authorization":
-        `Bearer ${idToken}`
-      },
+if(!response.ok){
 
-      body:JSON.stringify({
-        fields:fields
-      })
+const error =
+new Error(
+data.error?.message ||
+"Firestore save failed"
+);
 
-    }
-  );
+error.data=data;
 
+throw error;
 
-  const data =
-  await response.json();
+}
 
-
-  if(!response.ok){
-
-    console.error(
-      "Firestore error:",
-      data
-    );
-
-    const error =
-    new Error(
-      "Firestore save failed"
-    );
-
-    error.firebaseData=data;
-
-    throw error;
-
-  }
-
-
-  return data;
+return data;
 
 }
 
 
-/* =========================================
-   DELETE NEW AUTH ACCOUNT
-========================================= */
+async function deleteAuthAccount(idToken){
 
-async function deleteFirebaseAccount(
-idToken
-){
+try{
 
-  try{
+await fetch(
+`https://identitytoolkit.googleapis.com/v1/accounts:delete?key=${API_KEY}`,
+{
+method:"POST",
 
-    const url =
-    `https://identitytoolkit.googleapis.com/v1/accounts:delete?key=${API_KEY}`;
+headers:{
+"Content-Type":
+"application/json"
+},
 
+body:JSON.stringify({
+idToken:idToken
+})
+}
+);
 
-    await fetch(
-      url,
-      {
+}
+catch(error){
 
-        method:"POST",
+console.log(error);
 
-        headers:{
-          "Content-Type":
-          "application/json"
-        },
-
-        body:JSON.stringify({
-
-          idToken:idToken
-
-        })
-
-      }
-    );
-
-  }catch(error){
-
-    console.error(
-      "Account cleanup error:",
-      error
-    );
-
-  }
+}
 
 }
 
 
-/* =========================================
-   CREATE ACCOUNT
-========================================= */
+function fieldString(value){
 
-createBtn.addEventListener(
-"click",
+return {
+stringValue:
+String(value ?? "")
+};
+
+}
+
+
+createBtn.onclick =
 async()=>{
 
-  const name =
-  nameInput.value.trim();
+const name =
+nameInput.value.trim();
 
-  const username =
-  usernameInput.value
-  .trim()
-  .toLowerCase();
+const username =
+usernameInput.value
+.trim()
+.toLowerCase();
 
-  const email =
-  emailInput.value
-  .trim()
-  .toLowerCase();
+const email =
+emailInput.value
+.trim()
+.toLowerCase();
 
-  const password =
-  passwordInput.value;
+const password =
+passwordInput.value;
 
 
-  /* ===============================
-     VALIDATION
-  =============================== */
+if(!name){
 
-  if(!name){
+showMessage(
+"Please enter your full name.",
+"error"
+);
 
-    showMessage(
-      "Please enter your full name.",
-      "error"
-    );
+return;
 
-    return;
+}
 
-  }
 
+if(
+!/^[a-z0-9_]{3,30}$/.test(
+username
+)
+){
 
-  if(
-    !/^[a-z0-9_]{3,30}$/.test(
-      username
-    )
-  ){
+showMessage(
+"Username must be 3-30 characters and use only lowercase letters, numbers and _.",
+"error"
+);
 
-    showMessage(
-      "Username must be 3-30 characters and use only lowercase letters, numbers and _.",
-      "error"
-    );
+return;
 
-    return;
+}
 
-  }
 
+if(
+!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+email
+)
+){
 
-  if(!email){
+showMessage(
+"Please enter a valid email.",
+"error"
+);
 
-    showMessage(
-      "Please enter your email.",
-      "error"
-    );
+return;
 
-    return;
+}
 
-  }
 
+if(password.length<6){
 
-  if(
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      email
-    )
-  ){
+showMessage(
+"Password must contain at least 6 characters.",
+"error"
+);
 
-    showMessage(
-      "Please enter a valid email.",
-      "error"
-    );
+return;
 
-    return;
+}
 
-  }
 
+createBtn.disabled=true;
 
-  if(password.length<6){
 
-    showMessage(
-      "Password must contain at least 6 characters.",
-      "error"
-    );
+try{
 
-    return;
+/* CHECK USERNAME */
 
-  }
+showMessage(
+"Checking username..."
+);
 
 
-  createBtn.disabled=true;
+const existing =
+await firestoreGet(
+"usernameIndex",
+username,
+null
+);
 
 
-  try{
+if(existing.ok){
 
-    /* ===============================
-       STEP 1
-       CREATE FIREBASE AUTH ACCOUNT
-    =============================== */
+showMessage(
+"This username is already taken. Please choose another.",
+"error"
+);
 
-    showMessage(
-      "Creating your account..."
-    );
+createBtn.disabled=false;
 
+return;
 
-    const signupUrl =
-    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+}
 
 
-    const signupResponse =
-    await fetch(
-      signupUrl,
-      {
+/* CREATE AUTH */
 
-        method:"POST",
+showMessage(
+"Creating your account..."
+);
 
-        headers:{
-          "Content-Type":
-          "application/json"
-        },
 
-        body:JSON.stringify({
+const authResponse =
+await fetch(
+`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+{
+method:"POST",
 
-          email:email,
+headers:{
+"Content-Type":
+"application/json"
+},
 
-          password:password,
+body:JSON.stringify({
 
-          returnSecureToken:true
+email:email,
 
-        })
+password:password,
 
-      }
-    );
+returnSecureToken:true
 
+})
+}
+);
 
-    const signupData =
-    await signupResponse.json();
 
+const auth =
+await authResponse.json();
 
-    if(!signupResponse.ok){
 
-      console.error(
-        "Auth error:",
-        signupData
-      );
+if(!authResponse.ok){
 
+const code =
+auth.error?.message ||
+"Account creation failed.";
 
-      let errorMessage =
-      "Account creation failed.";
+let message=code;
 
 
-      if(
-        signupData.error &&
-        signupData.error.message
-      ){
+if(code==="EMAIL_EXISTS"){
 
-        const firebaseError =
-        signupData.error.message;
+message=
+"This email is already registered.";
 
+}
 
-        if(
-          firebaseError===
-          "EMAIL_EXISTS"
-        ){
+else if(
+code.includes("WEAK_PASSWORD")
+){
 
-          errorMessage=
-          "This email is already registered.";
+message=
+"Password is too weak.";
 
-        }
+}
 
-        else if(
-          firebaseError===
-          "INVALID_EMAIL"
-        ){
+showMessage(
+message,
+"error"
+);
 
-          errorMessage=
-          "Invalid email address.";
+createBtn.disabled=false;
 
-        }
+return;
 
-        else if(
-          firebaseError
-          .includes(
-            "WEAK_PASSWORD"
-          )
-        ){
+}
 
-          errorMessage=
-          "Password is too weak.";
 
-        }
+const uid =
+auth.localId;
 
-        else{
+const idToken =
+auth.idToken;
 
-          errorMessage=
-          firebaseError;
+const refreshToken =
+auth.refreshToken;
 
-        }
+const now =
+new Date().toISOString();
 
-      }
 
+try{
 
-      showMessage(
-        errorMessage,
-        "error"
-      );
+/* USERNAME INDEX */
 
-      createBtn.disabled=false;
+await firestorePatch(
+"usernameIndex",
+username,
+{
 
-      return;
+username:
+fieldString(username),
 
-    }
+uid:
+fieldString(uid),
 
+email:
+fieldString(email),
 
-    /* ===============================
-       AUTH DATA
-    =============================== */
+createdAt:
+fieldString(now)
 
-    const uid =
-    signupData.localId;
+},
+idToken
+);
 
-    const idToken =
-    signupData.idToken;
 
-    const refreshToken =
-    signupData.refreshToken;
+/* USER PROFILE */
 
-    const now =
-    new Date().toISOString();
+await firestorePatch(
+"users",
+uid,
+{
 
+uid:
+fieldString(uid),
 
-    /* ===============================
-       STEP 2
-       SAVE USERNAME
-    =============================== */
+name:
+fieldString(name),
 
-    showMessage(
-      "Saving your username..."
-    );
+username:
+fieldString(username),
 
+email:
+fieldString(email),
 
-    try{
+photoURL:
+fieldString(""),
 
-      await saveFirestoreDocument(
+bio:
+fieldString(""),
 
-        "usernameIndex",
+phoneNumber:
+fieldString(""),
 
-        username,
+phoneVerified:
+{
+booleanValue:false
+},
 
-        {
+createdAt:
+fieldString(now),
 
-          username:{
-            stringValue:
-            username
-          },
+updatedAt:
+fieldString(now)
 
-          uid:{
-            stringValue:
-            uid
-          },
+},
+idToken
+);
 
-          email:{
-            stringValue:
-            email
-          },
+}
+catch(error){
 
-          createdAt:{
-            stringValue:
-            now
-          }
+await deleteAuthAccount(
+idToken
+);
 
-        },
+throw error;
 
-        idToken
+}
 
-      );
 
-    }
-    catch(usernameError){
+/* PROFILE */
 
-      console.error(
-        "Username save failed:",
-        usernameError
-      );
+const profile={
 
+uid:uid,
 
-      /*
-        Remove the newly-created
-        Firebase account if username
-        could not be saved.
-      */
+name:name,
 
-      await deleteFirebaseAccount(
-        idToken
-      );
+username:username,
 
+email:email,
 
-      let message =
-      "This username is already taken or cannot be used. Please choose another username.";
+photoURL:"",
 
+bio:"",
 
-      if(
-        usernameError.firebaseData &&
-        usernameError.firebaseData.error &&
-        usernameError.firebaseData.error.message
-      ){
+phoneNumber:"",
 
-        console.error(
-          usernameError.firebaseData.error.message
-        );
+phoneVerified:false
 
-      }
+};
 
 
-      showMessage(
-        message,
-        "error"
-      );
+/* CURRENT KEYS */
 
-      createBtn.disabled=false;
+localStorage.setItem(
+"crockcell_idToken",
+idToken
+);
 
-      return;
+localStorage.setItem(
+"crockcell_refreshToken",
+refreshToken
+);
 
-    }
+localStorage.setItem(
+"crockcell_uid",
+uid
+);
 
+localStorage.setItem(
+"crockcell_profile",
+JSON.stringify(profile)
+);
 
-    /* ===============================
-       STEP 3
-       SAVE USER PROFILE
-    =============================== */
 
-    showMessage(
-      "Creating your profile..."
-    );
+/* OLD KEYS */
 
+localStorage.setItem(
+"crockcellIdToken",
+idToken
+);
 
-    try{
+localStorage.setItem(
+"crockcellRefreshToken",
+refreshToken
+);
 
-      await saveFirestoreDocument(
+localStorage.setItem(
+"crockcellUid",
+uid
+);
 
-        "users",
+localStorage.setItem(
+"crockcellProfile",
+JSON.stringify(profile)
+);
 
-        uid,
 
-        {
+showMessage(
+"Account created successfully! Opening CROCKCELL...",
+"success"
+);
 
-          uid:{
-            stringValue:
-            uid
-          },
 
-          name:{
-            stringValue:
-            name
-          },
+setTimeout(
+()=>{
+location.href="home.html";
+},
+900
+);
 
-          username:{
-            stringValue:
-            username
-          },
 
-          email:{
-            stringValue:
-            email
-          },
+}
+catch(error){
 
-          photoURL:{
-            stringValue:""
-          },
+console.error(error);
 
-          bio:{
-            stringValue:""
-          },
+showMessage(
+error.message ||
+"Something went wrong. Please try again.",
+"error"
+);
 
-          phoneNumber:{
-            stringValue:""
-          },
+createBtn.disabled=false;
 
-          phoneVerified:{
-            booleanValue:false
-          },
+}
 
-          createdAt:{
-            stringValue:
-            now
-          },
-
-          updatedAt:{
-            stringValue:
-            now
-          }
-
-        },
-
-        idToken
-
-      );
-
-    }
-    catch(profileError){
-
-      console.error(
-        "Profile save failed:",
-        profileError
-      );
-
-
-      showMessage(
-        "Account created, but profile could not be saved. Please try again.",
-        "error"
-      );
-
-      createBtn.disabled=false;
-
-      return;
-
-    }
-
-
-    /* ===============================
-       STEP 4
-       LOCAL STORAGE
-    =============================== */
-
-    localStorage.setItem(
-      "crockcell_idToken",
-      idToken
-    );
-
-    localStorage.setItem(
-      "crockcell_refreshToken",
-      refreshToken
-    );
-
-    localStorage.setItem(
-      "crockcell_uid",
-      uid
-    );
-
-
-    localStorage.setItem(
-
-      "crockcell_profile",
-
-      JSON.stringify({
-
-        uid:uid,
-
-        name:name,
-
-        username:username,
-
-        email:email,
-
-        photoURL:"",
-
-        bio:"",
-
-        phoneNumber:"",
-
-        phoneVerified:false
-
-      })
-
-    );
-
-
-    /* ===============================
-       SUCCESS
-    =============================== */
-
-    showMessage(
-      "Account created successfully! Opening CROCKCELL...",
-      "success"
-    );
-
-
-    setTimeout(
-      ()=>{
-
-        window.location.href=
-        "home.html";
-
-      },
-      1200
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "Signup error:",
-      error
-    );
-
-
-    showMessage(
-      error.message ||
-      "Something went wrong. Please try again.",
-      "error"
-    );
-
-
-    createBtn.disabled=false;
-
-  }
-
-});
+};
 
 </script>
 
