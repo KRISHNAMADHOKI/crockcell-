@@ -822,10 +822,10 @@ const PROJECT_ID =
 "crockcell-cd2e6";
 
 const token =
-localStorage.getItem("crockcellIdToken");
+localStorage.getItem("crockcell_idToken");
 
 const uid =
-localStorage.getItem("crockcellUid");
+localStorage.getItem("crockcell_uid");
 
 
 if(!token || !uid){
@@ -867,7 +867,7 @@ try{
 
 saved=JSON.parse(
 localStorage.getItem(
-"crockcellProfile"
+"crockcell_profile"
 )||"null"
 );
 
@@ -927,7 +927,7 @@ profile.uid=uid;
 
 
 localStorage.setItem(
-"crockcellProfile",
+"crockcell_profile",
 JSON.stringify(profile)
 );
 

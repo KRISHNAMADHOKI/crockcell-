@@ -148,13 +148,13 @@ const BASE=
 "/databases/(default)/documents";
 
 let token=
-localStorage.getItem("crockcellIdToken");
+localStorage.getItem("crockcell_idToken");
 
 let uid=
-localStorage.getItem("crockcellUid");
+localStorage.getItem("crockcell_uid");
 
 let refreshToken=
-localStorage.getItem("crockcellRefreshToken");
+localStorage.getItem("crockcell_refreshToken");
 
 let newPhoto="";
 
@@ -221,12 +221,12 @@ refreshToken=
 d.refresh_token || refreshToken;
 
 localStorage.setItem(
-"crockcellIdToken",
+"crockcell_idToken",
 token
 );
 
 localStorage.setItem(
-"crockcellRefreshToken",
+"crockcell_refreshToken",
 refreshToken
 );
 
@@ -643,7 +643,7 @@ try{
 oldLocal=
 JSON.parse(
 localStorage.getItem(
-"crockcellProfile"
+"crockcell_profile"
 )||"{}"
 );
 
@@ -651,7 +651,7 @@ localStorage.getItem(
 
 
 localStorage.setItem(
-"crockcellProfile",
+"crockcell_profile",
 JSON.stringify({
 
 ...oldLocal,
