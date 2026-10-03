@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Privacy - CROCKCELL</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;min-height:100vh}.header{position:sticky;top:0;z-index:10;background:rgba(0,0,0,.95);border-bottom:1px solid #222;padding:14px 16px;display:flex;align-items:center;gap:12px}.back{width:42px;height:42px;border:1px solid #333;border-radius:14px;background:#171717;color:#fff;font-size:22px}.title{font-size:23px;font-weight:700}.wrap{padding:20px 16px 105px}.intro{color:#999;line-height:1.5;margin:0 2px 18px}.section{font-size:12px;color:#777;text-transform:uppercase;letter-spacing:1px;margin:22px 4px 9px}.group{background:#111;border:1px solid #292929;border-radius:20px;overflow:hidden}.item{width:100%;min-height:72px;padding:13px 15px;display:flex;align-items:center;gap:12px;background:transparent;color:#fff;border:0;border-bottom:1px solid #252525;text-align:left}.item:last-child{border-bottom:0}.icon{width:38px;height:38px;border-radius:12px;background:#202020;display:grid;place-items:center;font-size:19px;flex:none}.txt{flex:1;min-width:0}.label{font-size:15px;font-weight:700}.desc{font-size:12px;color:#888;margin-top:5px;line-height:1.35}.switch{position:relative;width:48px;height:28px;flex:none}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:30px;background:#333;border:1px solid #444;transition:.2s}.slider:before{content:"";position:absolute;width:22px;height:22px;left:2px;top:2px;border-radius:50%;background:#aaa;transition:.2s}.switch input:checked+.slider{background:#fff}.switch input:checked+.slider:before{transform:translateX(20px);background:#000}.note{margin-top:12px;padding:13px 14px;border:1px solid #2c2c2c;border-radius:15px;color:#888;font-size:12px;line-height:1.45}.danger{color:#ff7777}.toast{position:fixed;left:18px;right:18px;bottom:85px;background:#222;border:1px solid #444;border-radius:15px;padding:13px;text-align:center;color:#fff;display:none;z-index:30}.nav{position:fixed;left:12px;right:12px;bottom:12px;z-index:20;display:flex;padding:8px;border-radius:24px;background:rgba(25,25,25,.94);border:1px solid #333}.nav a{flex:1;text-align:center;padding:8px 4px;border-radius:17px;color:#999;text-decoration:none;font-size:11px}.nav a.active{background:#fff;color:#000}.navicon{font-size:19px;margin-bottom:3px}.navphoto{width:21px;height:21px;border-radius:50%;object-fit:cover;background:#333}
+</style>
+</head>
+<body>
+<header class="header"><button class="back" id="back">‹</button><div class="title">Privacy</div></header>
+<main class="wrap">
+<p class="intro">Control who can find your profile and how your account is shown on CROCKCELL.</p>
+<div class="section">Account privacy</div>
+<div class="group">
+<label class="item"><div class="icon">🔒</div><div class="txt"><div class="label">Private Account</div><div class="desc">Only approved followers will be able to see private content.</div></div><div class="switch"><input id="privateAccount" type="checkbox"><span class="slider"></span></div></label>
+<label class="item"><div class="icon">🔍</div><div class="txt"><div class="label">Searchable Profile</div><div class="desc">Allow people to find your profile in CROCKCELL search.</div></div><div class="switch"><input id="searchable" type="checkbox" checked><span class="slider"></span></div></label>
+</div>
+<div class="note">Private Account is stored with your account settings. The feed/profile access rules will be enforced when the private-follow approval system is connected.</div>
+<div class="section">Profile visibility</div>
+<div class="group">
+<button class="item" id="profileVisibility" type="button"><div class="icon">👤</div><div class="txt"><div class="label">Profile Visibility</div><div class="desc" id="visibilityText">Loading...</div></div><div>›</div></button>
+</div>
+<div class="section">Safety</div>
+<div class="group">
+<button class="item" id="blocked" type="button"><div class="icon">🚫</div><div class="txt"><div class="label">Blocked Accounts</div><div class="desc">Manage accounts you have blocked.</div></div><div>›</div></button>
+</div>
+<div class="note danger">Do not share passwords, OTP codes, or recovery information with anyone.</div>
+</main>
+<nav class="nav"><a href="home.html"><div class="navicon">⌂</div><div>Home</div></a><a href="search.html"><div class="navicon">⌕</div><div>Search</div></a><a href="reels.html"><div class="navicon">▶</div><div>Reels</div></a><a href="messages.html"><div class="navicon">✉</div><div>Messages</div></a><a class="active" href="profile.html"><div class="navicon">◯</div><div>Profile</div></a></nav>
+<div id="toast" class="toast"></div>
+<script>
+const PROJECT_ID='crockcell-cd2e6';
+const token=localStorage.getItem('crockcellIdToken')||localStorage.getItem('crockcell_idToken')||sessionStorage.getItem('crockcellIdToken')||sessionStorage.getItem('crockcell_idToken')||'';
+const uid=localStorage.getItem('crockcellUid')||localStorage.getItem('crockcell_uid')||sessionStorage.getItem('crockcellUid')||sessionStorage.getItem('crockcell_uid')||'';
+const BASE='https://firestore.googleapis.com/v1/projects/'+PROJECT_ID+'/databases/(default)/documents';
+if(!token||!uid) location.replace('index.html');
+const $=id=>document.getElementById(id);
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';clearTimeout(window.__t);window.__t=setTimeout(()=>$('toast').style.display='none',1800)}
+function boolField(f,n,def=false){return f&&f[n]&&f[n].booleanValue!==undefined?f[n].booleanValue:def}
+async function load(){
+ try{
+  const r=await fetch(BASE+'/users/'+encodeURIComponent(uid)+'?key='+encodeURIComponent('AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk'),{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  if(r.ok){const d=await r.json(),f=d.fields||{};const privateValue=boolField(f,'privateAccount',false);const searchableValue=boolField(f,'searchable',true);$('privateAccount').checked=privateValue;$('searchable').checked=searchableValue;$('visibilityText').textContent=privateValue?'Private account':'Public account';return}
+ }catch(e){}
+ $('privateAccount').checked=localStorage.getItem('crockcell_setting_privateAccount')==='true';
+ const s=localStorage.getItem('crockcell_setting_searchable');$('searchable').checked=s===null?true:s==='true';$('visibilityText').textContent=$('privateAccount').checked?'Private account':'Public account';
+}
+async function saveSetting(name,value){
+ localStorage.setItem('crockcell_setting_'+name,String(value));
+ try{
+  const r=await fetch(BASE+'/users/'+encodeURIComponent(uid)+'?key=AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk&updateMask.fieldPaths='+encodeURIComponent(name),{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({fields:{[name]:{booleanValue:value}}})});
+  if(!r.ok) throw new Error();
+ }catch(e){}
+}
+$('privateAccount').addEventListener('change',async()=>{const v=$('privateAccount').checked;$('visibilityText').textContent=v?'Private account':'Public account';await saveSetting('privateAccount',v);toast(v?'Private Account enabled':'Private Account disabled')});
+$('searchable').addEventListener('change',async()=>{const v=$('searchable').checked;await saveSetting('searchable',v);toast(v?'Search enabled':'Search disabled')});
+$('back').onclick=()=>location.href='settings.html';
+$('profileVisibility').onclick=()=>toast($('privateAccount').checked?'Your account is private':'Your account is public');
+$('blocked').onclick=()=>toast('Blocked Accounts page will be connected next');
+load();
+</script>
+</body>
+</html>
