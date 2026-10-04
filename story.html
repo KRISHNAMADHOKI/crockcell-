@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stories - CROCKCELL</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;min-height:100vh;padding-bottom:78px}.top{position:sticky;top:0;z-index:5;background:#000;border-bottom:1px solid #222;padding:16px 18px}.top h1{margin:0;font-size:22px}.top p{margin:5px 0 0;color:#999;font-size:13px}.wrap{max-width:650px;margin:auto;padding:18px}.add{width:100%;border:1px solid #292929;background:#111;color:#fff;border-radius:18px;padding:18px;text-align:left}.add strong{display:block;font-size:17px;margin-bottom:5px}.add span{color:#999;font-size:13px}.card{margin-top:16px;background:#101010;border:1px solid #222;border-radius:18px;overflow:hidden}.cardhead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}.user{display:flex;gap:10px;align-items:center}.avatar{width:38px;height:38px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.meta b{display:block;font-size:14px}.meta small{color:#888}.media{width:100%;max-height:72vh;background:#050505;display:block;object-fit:contain}.actions{padding:10px 12px;display:flex;gap:8px}.actions button,.delete{border:0;background:#1b1b1b;color:#fff;border-radius:12px;padding:9px 12px}.empty{text-align:center;color:#777;padding:55px 10px}.bottom{position:fixed;left:0;right:0;bottom:0;height:64px;background:#080808;border-top:1px solid #252525;display:flex;z-index:20}.bottom a{flex:1;color:#aaa;text-decoration:none;text-align:center;padding-top:9px;font-size:11px}.bottom a span{display:block;font-size:21px;margin-bottom:3px}.bottom a.active{color:#fff}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;align-items:flex-end}.sheet{width:100%;max-width:650px;margin:auto;background:#111;border:1px solid #292929;border-radius:22px 22px 0 0;padding:18px}.sheet h2{margin:0 0 14px;font-size:19px}.field{margin-bottom:13px}.field label{display:block;color:#aaa;font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;background:#080808;color:#fff;border:1px solid #303030;border-radius:12px;padding:12px;font-size:14px}.preview{width:100%;max-height:280px;object-fit:contain;border-radius:14px;background:#050505;display:none;margin:10px 0}.row{display:flex;gap:10px}.row button{flex:1}.primary{background:#fff!important;color:#000!important}.danger{background:#301010!important;color:#ff8b8b!important}.note{font-size:11px;color:#777;line-height:1.4;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="top"><h1>Stories</h1><p>Photo ya video share karo — 24 hours ke liye.</p></div>
+<main class="wrap">
+<button class="add" id="addStory"><strong>＋ Add Story</strong><span>Photo/video upload karke apni story banao.</span></button>
+<div id="stories"></div>
+</main>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h2>Create Story</h2>
+    <div class="field"><label>Photo / Video</label><input id="file" type="file" accept="image/*,video/*"></div>
+    <img id="previewImg" class="preview" alt="Story preview">
+    <video id="previewVideo" class="preview" controls playsinline></video>
+    <div class="field"><label>Privacy</label><select id="privacy"><option>Everyone</option><option>Followers</option><option>Close Friends</option></select></div>
+    <div class="note">Maximum file size: 10 MB. Story automatically expires after 24 hours.</div>
+    <div class="row" style="margin-top:15px"><button id="cancel">Cancel</button><button class="primary" id="publish">Publish Story</button></div>
+  </div>
+</div>
+
+<nav class="bottom">
+<a href="home.html"><span>⌂</span>Home</a>
+<a href="search.html"><span>⌕</span>Search</a>
+<a class="active" href="story.html"><span>◉</span>Story</a>
+<a href="messages.html"><span>✉</span>Messages</a>
+<a href="profile.html"><span>◎</span>Profile</a>
+</nav>
+
+<script>
+const KEY='crockcellStories';
+const MAX=10*1024*1024;
+let selectedFile=null;
+const $=id=>document.getElementById(id);
+function getStories(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+function saveStories(x){localStorage.setItem(KEY,JSON.stringify(x))}
+function currentUser(){return localStorage.getItem('crockcell_username')||localStorage.getItem('crockcellUsername')||localStorage.getItem('crockcell_name')||'Krishna'}
+function initials(n){return (n||'K').trim().charAt(0).toUpperCase()}
+function cleanExpired(){const now=Date.now();const x=getStories().filter(s=>s.expiresAt>now);saveStories(x);return x}
+function esc(s){return String(s||'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function render(){
+ const list=cleanExpired();const box=$('stories');
+ if(!list.length){box.innerHTML='<div class="empty">Abhi koi active story nahi hai.<br><br>Apni first story add karo 👆</div>';return}
+ box.innerHTML=list.slice().reverse().map(s=>{
+   const media=s.type==='video'?`<video class="media" src="${s.data}" controls playsinline></video>`:`<img class="media" src="${s.data}" alt="Story">`;
+   return `<article class="card"><div class="cardhead"><div class="user"><div class="avatar">${initials(s.username)}</div><div class="meta"><b>${esc(s.username)}</b><small>${esc(s.privacy)} · expires soon</small></div></div><button class="delete" data-id="${s.id}">Delete</button></div>${media}<div class="actions"><button>${s.type==='video'?'🎬 Video':'🖼️ Photo'}</button></div></article>`
+ }).join('');
+ document.querySelectorAll('.delete').forEach(b=>b.onclick=()=>{saveStories(getStories().filter(s=>s.id!==b.dataset.id));render()});
+}
+$('addStory').onclick=()=>{$('modal').style.display='flex'};
+$('cancel').onclick=()=>{closeModal()};
+$('modal').onclick=e=>{if(e.target===$('modal'))closeModal()};
+function closeModal(){ $('modal').style.display='none'; $('file').value=''; selectedFile=null; $('previewImg').style.display='none'; $('previewVideo').style.display='none'; $('previewImg').removeAttribute('src');$('previewVideo').removeAttribute('src') }
+$('file').onchange=()=>{
+ const f=$('file').files[0];selectedFile=f||null;if(!f)return;
+ if(f.size>MAX){alert('File 10 MB se chhoti honi chahiye.');$('file').value='';selectedFile=null;return}
+ const url=URL.createObjectURL(f);const video=f.type.startsWith('video/');
+ if(video){$('previewImg').style.display='none';$('previewVideo').style.display='block';$('previewVideo').src=url}else{$('previewVideo').style.display='none';$('previewImg').style.display='block';$('previewImg').src=url}
+};
+$('publish').onclick=()=>{
+ if(!selectedFile){alert('Pehle photo ya video select karo.');return}
+ const reader=new FileReader();reader.onload=()=>{
+   const item={id:'story_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),username:currentUser(),type:selectedFile.type.startsWith('video/')?'video':'image',data:reader.result,privacy:$('privacy').value,createdAt:Date.now(),expiresAt:Date.now()+24*60*60*1000};
+   const all=getStories();all.push(item);saveStories(all);closeModal();render();alert('Story publish ho gayi ✅');
+ };reader.readAsDataURL(selectedFile);
+};
+render();setInterval(render,60000);
+</script>
+</body>
+</html>
