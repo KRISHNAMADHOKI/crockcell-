@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home - CROCKCELL</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+
+header{
+    height:58px;
+    border-bottom:1px solid #222;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    position:sticky;
+    top:0;
+    background:rgba(0,0,0,.92);
+    backdrop-filter:blur(15px);
+    z-index:10;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.header-btn{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    font-size:21px;
+    border-radius:50%;
+    transition:.2s;
+}
+
+.header-btn:active{
+    background:#222;
+    transform:scale(.92);
+}
+
+/* PROFILE */
+
+#profile{
+    padding:14px 16px;
+    border-bottom:1px solid #222;
+    color:#aaa;
+}
+
+#profile b{
+    color:#fff;
+    font-size:18px;
+}
+
+/* FEED */
+
+#feed{
+    max-width:600px;
+    margin:auto;
+    padding-bottom:20px;
+}
+
+.post{
+    border-bottom:1px solid #222;
+    padding-bottom:15px;
+    margin-bottom:8px;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#222;
+    object-fit:cover;
+    border:1px solid #333;
+}
+
+.name{
+    font-weight:bold;
+}
+
+.photo{
+    width:100%;
+    max-height:650px;
+    object-fit:cover;
+    display:block;
+}
+
+.actions{
+    display:flex;
+    gap:18px;
+    padding:10px 14px 5px;
+    font-size:23px;
+}
+
+.actions button{
+    border:0;
+    background:none;
+    color:#fff;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.actions button:active{
+    transform:scale(.82);
+}
+
+.info{
+    padding:0 14px;
+}
+
+.caption{
+    margin-top:7px;
+}
+
+.comments{
+    padding:8px 14px;
+}
+
+.comment{
+    font-size:14px;
+    margin:7px 0;
+    color:#ddd;
+}
+
+.comment b{
+    color:#fff;
+}
+
+.comment button{
+    color:#888;
+    margin-left:6px;
+    background:none;
+    border:0;
+}
+
+.form{
+    display:flex;
+    gap:7px;
+    padding:0 14px;
+}
+
+.form input{
+    flex:1;
+    background:#111;
+    border:1px solid #333;
+    border-radius:20px;
+    padding:10px;
+    color:#fff;
+    outline:none;
+}
+
+.form input:focus{
+    border-color:#666;
+}
+
+.form button{
+    background:#fff;
+    color:#000;
+    border:0;
+    border-radius:20px;
+    padding:0 14px;
+}
+
+.del{
+    color:#f66;
+    font-size:12px;
+    background:none;
+    border:0;
+    margin-top:8px;
+}
+
+.loading{
+    text-align:center;
+    padding:35px;
+    color:#aaa;
+}
+
+.error{
+    text-align:center;
+    padding:25px;
+    color:#f66;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    height:68px;
+
+    background:rgba(20,20,20,.88);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid #333;
+    border-radius:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    z-index:20;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.nav-item{
+    width:25%;
+    height:56px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    text-decoration:none;
+    color:#777;
+
+    border-radius:17px;
+    transition:.2s;
+
+    position:relative;
+}
+
+.nav-icon{
+    width:40px;
+    height:32px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:21px;
+    border-radius:12px;
+
+    transition:.2s;
+}
+
+.nav-label{
+    font-size:9px;
+    margin-top:2px;
+    color:#777;
+}
+
+.nav-item.active{
+    color:#fff;
+}
+
+.nav-item.active .nav-icon{
+    background:#fff;
+    color:#000;
+    transform:translateY(-1px);
+}
+
+.nav-item.active .nav-label{
+    color:#fff;
+    font-weight:bold;
+}
+
+.nav-item:active{
+    transform:scale(.90);
+}
+
+/* PROFILE PHOTO */
+
+.nav-profile-photo{
+    width:31px;
+    height:31px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #777;
+}
+
+.nav-item.active .nav-profile-photo{
+    border-color:#fff;
+}
+
+/* MENU */
+
+.profile-menu{
+    display:none;
+
+    position:fixed;
+    right:14px;
+    bottom:88px;
+
+    width:205px;
+
+    background:rgba(22,22,22,.96);
+    backdrop-filter:blur(18px);
+
+    border:1px solid #333;
+    border-radius:18px;
+
+    overflow:hidden;
+
+    z-index:35;
+
+    box-shadow:0 8px 35px rgba(0,0,0,.7);
+}
+
+.profile-menu a,
+.profile-menu button{
+    width:100%;
+    display:block;
+
+    padding:15px;
+
+    color:#fff;
+    text-decoration:none;
+
+    background:none;
+    border:0;
+    border-bottom:1px solid #292929;
+
+    text-align:left;
+    font-size:14px;
+}
+
+.profile-menu a:active,
+.profile-menu button:active{
+    background:#292929;
+}
+
+.profile-menu .logout{
+    color:#ff6262;
+    border-bottom:0;
+}
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:30;
+}
+
+@media(max-width:380px){
+
+    .bottom-nav{
+        left:7px;
+        right:7px;
+        bottom:7px;
+    }
+
+    .nav-label{
+        font-size:8px;
+    }
+
+}
+
+/* CROCKCELL CLOUD STORIES + NOTES */
+.cloud-strip{max-width:600px;margin:0 auto;padding:12px 14px;border-bottom:1px solid #222}
+.cloud-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cloud-title b{font-size:16px}.cloud-title a{color:#aaa;text-decoration:none;font-size:12px}
+.cloud-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:3px}.cloud-row::-webkit-scrollbar{display:none}
+.cloud-card{min-width:112px;background:#111;border:1px solid #292929;border-radius:16px;padding:9px;box-sizing:border-box}
+.story-thumb{width:94px;height:94px;border-radius:13px;object-fit:cover;background:#222;display:block}
+.note-mini{width:94px;height:94px;border-radius:13px;background:#181818;border:1px solid #303030;padding:9px;font-size:12px;line-height:1.35;color:#ddd;overflow:hidden;box-sizing:border-box}
+.cloud-user{margin-top:7px;font-size:11px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cloud-empty{color:#666;font-size:12px;padding:8px 0}
+.cloud-add{display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;font-size:26px;font-weight:700}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+CROCKCELL
+</div>
+
+<div class="header-actions">
+
+<a
+href="activity.html"
+class="header-btn">
+🔔
+</a>
+
+<a
+href="messages.html"
+class="header-btn">
+💬
+</a>
+
+</div>
+
+</header>
+
+
+<section id="profile">
+Loading profile...
+</section>
+
+
+
+<section id="cloudStories" class="cloud-strip"><div class="cloud-title"><b>Stories</b><a href="story_cloud.html">See all</a></div><div id="storyRow" class="cloud-row"><div class="cloud-empty">Loading Stories...</div></div></section>
+<section id="cloudNotes" class="cloud-strip"><div class="cloud-title"><b>Notes</b><a href="notes_cloud.html">See all</a></div><div id="noteRow" class="cloud-row"><div class="cloud-empty">Loading Notes...</div></div></section>
+<main id="feed">
+
+<div class="loading">
+Loading posts...
+</div>
+
+</main>
+
+
+<div
+id="menuOverlay"
+class="overlay"
+onclick="closeProfileMenu()">
+</div>
+
+
+<div
+id="profileMenu"
+class="profile-menu">
+
+<a href="profile.html">
+👤 My Profile
+</a>
+
+<a href="create.html">
+➕ Create Post
+</a>
+
+<a href="edit-profile.html">
+✏️ Edit Profile
+</a>
+
+<button
+class="logout"
+onclick="logout()">
+🚪 Logout
+</button>
+
+</div>
+
+
+<nav class="bottom-nav">
+
+<a
+href="home.html"
+class="nav-item active">
+
+<div class="nav-icon">
+⌂
+</div>
+
+<span class="nav-label">
+Home
+</span>
+
+</a>
+
+
+<a
+href="search.html"
+class="nav-item">
+
+<div class="nav-icon">
+⌕
+</div>
+
+<span class="nav-label">
+Search
+</span>
+
+</a>
+
+
+<a
+href="reels.html"
+class="nav-item">
+
+<div class="nav-icon">
+▶
+</div>
+
+<span class="nav-label">
+Reels
+</span>
+
+</a>
+
+
+<a
+href="javascript:void(0)"
+class="nav-item"
+onclick="toggleProfileMenu()">
+
+<div class="nav-icon">
+
+<img
+id="navProfilePhoto"
+class="nav-profile-photo"
+src="https://via.placeholder.com/80"
+alt="Profile">
+
+</div>
+
+<span class="nav-label">
+Profile
+</span>
+
+</a>
+
+</nav>
+
+
+<script>
+
+/* =========================================
+   FIREBASE SETTINGS
+========================================= */
+
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
+const PROJECT_ID =
+"crockcell-cd2e6";
+
+
+const BASE =
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+
+/* =========================================
+   CURRENT ACCOUNT KEYS
+========================================= */
+
+let token =
+localStorage.getItem("crockcell_idToken");
+
+let uid =
+localStorage.getItem("crockcell_uid");
+
+let refreshToken =
+localStorage.getItem("crockcell_refreshToken");
+
+
+/* =========================================
+   FIRESTORE VALUE HELPER
+========================================= */
+
+function val(f){
+
+if(!f)
+return "";
+
+return (
+f.stringValue ??
+f.integerValue ??
+f.timestampValue ??
+f.booleanValue ??
+""
+);
+
+}
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function esc(s){
+
+return String(s ?? "")
+.replace(/[&<>"']/g,function(m){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+
+}[m];
+
+});
+
+}
+
+
+/* =========================================
+   REFRESH FIREBASE TOKEN
+========================================= */
+
+async function refresh(){
+
+if(!refreshToken)
+return false;
+
+try{
+
+const r =
+await fetch(
+`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+
+body:
+`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+}
+);
+
+
+const d =
+await r.json();
+
+
+if(!r.ok || !d.id_token){
+
+console.log(
+"Token refresh failed:",
+d
+);
+
+return false;
+
+}
+
+
+token =
+d.id_token;
+
+uid =
+d.user_id || uid;
+
+refreshToken =
+d.refresh_token || refreshToken;
+
+
+/* SAVE NEW KEYS */
+
+localStorage.setItem(
+"crockcell_idToken",
+token
+);
+
+localStorage.setItem(
+"crockcell_refreshToken",
+refreshToken
+);
+
+localStorage.setItem(
+"crockcell_uid",
+uid
+);
+
+
+return true;
+
+
+}catch(error){
+
+console.error(
+"Refresh error:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+/* =========================================
+   FIRESTORE API
+========================================= */
+
+async function api(
+path,
+opt={},
+retry=true
+){
+
+if(!token)
+return null;
+
+
+const options = {
+
+...opt,
+
+headers:{
+
+...(opt.headers || {}),
+
+Authorization:
+`Bearer ${token}`
+
+}
+
+};
+
+
+let r =
+await fetch(
+BASE + path,
+options
+);
+
+
+/* TOKEN EXPIRED */
+
+if(
+(r.status===401 || r.status===403) &&
+retry
+){
+
+const refreshed =
+await refresh();
+
+
+if(refreshed){
+
+return api(
+path,
+opt,
+false
+);
+
+}
+
+}
+
+
+return r;
+
+}
+
+
+/* =========================================
+   LOAD PROFILE
+========================================= */
+
+async function profile(){
+
+if(!uid){
+
+location.href="index.html";
+
+return;
+
+}
+
+
+let r =
+await api(
+`/users/${encodeURIComponent(uid)}`
+);
+
+
+if(!r || !r.ok){
+
+document.getElementById(
+"profile"
+).innerHTML =
+"<b>Profile unavailable</b>";
+
+return;
+
+}
+
+
+let d =
+await r.json();
+
+let f =
+d.fields || {};
+
+
+let username =
+val(f.username) ||
+" user";
+
+
+let name =
+val(f.name) ||
+username;
+
+
+let photo =
+val(f.photoURL) ||
+val(f.photo) ||
+val(f.profilePhoto) ||
+"";
+
+
+document.getElementById(
+"profile"
+).innerHTML =
+
+`<b>${esc(name)}</b>
+<br>
+@${esc(username)}`;
+
+
+/* SAVE PROFILE USING NEW KEY */
+
+let oldProfile={};
+
+try{
+
+oldProfile =
+JSON.parse(
+localStorage.getItem(
+"crockcell_profile"
+) || "{}"
+);
+
+}catch(error){
+
+oldProfile={};
+
+}
+
+
+localStorage.setItem(
+"crockcell_profile",
+JSON.stringify({
+
+...oldProfile,
+
+uid:uid,
+
+username:username,
+
+name:name,
+
+photoURL:photo,
+
+email:
+val(f.email) || ""
+
+})
+);
+
+
+/* PROFILE PHOTO */
+
+if(photo){
+
+document.getElementById(
+"navProfilePhoto"
+).src=photo;
+
+}
+
+}
+
+
+/* =========================================
+   POSTS
+========================================= */
+
+async function posts(){
+
+let box =
+document.getElementById("feed");
+
+
+let r =
+await api(
+"/posts?pageSize=50"
+);
+
+
+if(!r || !r.ok){
+
+box.innerHTML =
+`
+<div class="error">
+Posts load nahi hui.<br>
+Please refresh the page.
+</div>
+`;
+
+return;
+
+}
+
+
+let d =
+await r.json();
+
+
+let arr =
+(d.documents || [])
+.sort(function(a,b){
+
+return String(
+val(b.fields?.createdAt)
+)
+.localeCompare(
+String(
+val(a.fields?.createdAt)
+)
+);
+
+});
+
+
+box.innerHTML="";
+
+
+if(!arr.length){
+
+box.innerHTML =
+`
+<div class="loading">
+Abhi koi post nahi hai.
+</div>
+`;
+
+return;
+
+}
+
+
+arr.forEach(renderPost);
+
+}
+
+
+/* =========================================
+   RENDER POST
+========================================= */
+
+function renderPost(doc){
+
+let f =
+doc.fields || {};
+
+
+let id =
+val(f.postId) ||
+doc.name.split("/").pop();
+
+
+let image =
+val(f.image);
+
+
+let username =
+val(f.username) ||
+"user";
+
+
+let caption =
+val(f.caption);
+
+
+let likes =
+Number(
+val(f.likes) || 0
+);
+
+
+let postPhoto =
+val(f.photoURL) ||
+val(f.photo) ||
+val(f.profilePhoto) ||
+"";
+
+
+let el =
+document.createElement("article");
+
+
+el.className="post";
+
+el.id=
+"post_"+id;
+
+
+el.innerHTML=`
+
+<div class="top">
+
+${
+postPhoto
+
+?
+
+`<img
+class="avatar"
+src="${esc(postPhoto)}"
+alt="Profile">`
+
+:
+
+`<div class="avatar"></div>`
+
+}
+
+<div class="name">
+${esc(username)}
+</div>
+
+</div>
+
+
+${
+image
+
+?
+
+`<img
+class="photo"
+src="${esc(image)}"
+alt="post">`
+
+:
+
+""
+
+}
+
+
+<div class="actions">
+
+<button
+id="like_${esc(id)}"
+onclick="likePost('${esc(id)}')">
+♡
+</button>
+
+<button
+onclick="focusComment('${esc(id)}')">
+💬
+</button>
+
+<button
+onclick="sharePost('${esc(id)}')">
+↗
+</button>
+
+</div>
+
+
+<div class="info">
+
+<b id="count_${esc(id)}">
+${likes} likes
+</b>
+
+
+${
+caption
+
+?
+
+`<div class="caption">
+<b>${esc(username)}</b>
+${esc(caption)}
+</div>`
+
+:
+
+""
+}
+
+
+${
+String(
+val(f.userId)
+) === String(uid)
+
+?
+
+`<button
+class="del"
+onclick="deletePost('${esc(id)}')">
+Delete post
+</button>`
+
+:
+
+""
+}
+
+</div>
+
+
+<div
+class="comments"
+id="comments_${esc(id)}">
+
+<div style="color:#777">
+Loading comments...
+</div>
+
+</div>
+
+
+<div class="form">
+
+<input
+id="input_${esc(id)}"
+placeholder="Add a comment...">
+
+<button
+onclick="sendComment('${esc(id)}')">
+Post
+</button>
+
+</div>
+
+`;
+
+
+document
+.getElementById("feed")
+.appendChild(el);
+
+
+checkLike(id);
+
+loadComments(id);
+
+}
+
+
+/* =========================================
+   CHECK LIKE
+========================================= */
+
+async function checkLike(id){
+
+let r =
+await api(
+`/likes/${encodeURIComponent(id+"_"+uid)}`
+);
+
+
+let b =
+document.getElementById(
+"like_"+id
+);
+
+
+if(
+r &&
+r.ok &&
+b
+){
+
+b.textContent="♥";
+
+}
+
+}
+
+
+/* =========================================
+   LIKE
+========================================= */
+
+async function likePost(id){
+
+let likeId =
+id+"_"+uid;
+
+
+let r =
+await api(
+`/likes/${encodeURIComponent(likeId)}`
+);
+
+
+if(!r)
+return;
+
+
+if(r.ok){
+
+await api(
+`/likes/${encodeURIComponent(likeId)}`,
+{
+method:"DELETE"
+}
+);
+
+
+await changeLikeCount(
+id,
+-1
+);
+
+
+let b =
+document.getElementById(
+"like_"+id
+);
+
+
+if(b)
+b.textContent="♡";
+
+
+}else{
+
+await api(
+`/likes/${encodeURIComponent(likeId)}`,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+fields:{
+
+postId:{
+stringValue:id
+},
+
+userId:{
+stringValue:uid
+},
+
+createdAt:{
+timestampValue:
+new Date().toISOString()
+}
+
+}
+
+})
+
+}
+);
+
+
+await changeLikeCount(
+id,
+1
+);
+
+
+let b =
+document.getElementById(
+"like_"+id
+);
+
+
+if(b)
+b.textContent="♥";
+
+}
+
+}
+
+
+/* =========================================
+   LIKE COUNT
+========================================= */
+
+async function changeLikeCount(id,n){
+
+let r =
+await api(
+`/posts/${encodeURIComponent(id)}`
+);
+
+
+if(!r || !r.ok)
+return;
+
+
+let d =
+await r.json();
+
+
+let f =
+d.fields || {};
+
+
+let count =
+Number(
+val(f.likes) || 0
+) + n;
+
+
+if(count<0)
+count=0;
+
+
+await api(
+`/posts/${encodeURIComponent(id)}?updateMask.fieldPaths=likes`,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+fields:{
+
+likes:{
+integerValue:String(count)
+}
+
+}
+
+})
+
+}
+);
+
+
+let c =
+document.getElementById(
+"count_"+id
+);
+
+
+if(c)
+c.textContent =
+count+" likes";
+
+}
+
+
+/* =========================================
+   COMMENTS
+========================================= */
+
+async function loadComments(id){
+
+let box =
+document.getElementById(
+"comments_"+id
+);
+
+
+let r =
+await api(
+"/comments?pageSize=300"
+);
+
+
+if(!r || !r.ok){
+
+box.innerHTML="";
+
+return;
+
+}
+
+
+let d =
+await r.json();
+
+
+let list =
+(d.documents || [])
+.filter(function(x){
+
+return val(
+x.fields?.postId
+) === id;
+
+})
+.sort(function(a,b){
+
+return String(
+val(a.fields?.createdAt)
+)
+.localeCompare(
+String(
+val(b.fields?.createdAt)
+)
+);
+
+});
+
+
+if(!list.length){
+
+box.innerHTML =
+`
+<div style="color:#777">
+No comments yet.
+</div>
+`;
+
+return;
+
+}
+
+
+box.innerHTML =
+list.map(function(x){
+
+let f =
+x.fields || {};
+
+let cid =
+x.name.split("/").pop();
+
+
+return `
+
+<div class="comment">
+
+<b>
+${esc(
+val(f.username) || "user"
+)}
+</b>
+
+${esc(
+val(f.text)
+)}
+
+${
+val(f.userId) === uid
+
+?
+
+`<button
+onclick="deleteComment(
+'${cid}',
+'${esc(id)}'
+)">
+Delete
+</button>`
+
+:
+
+""
+}
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================================
+   SEND COMMENT
+========================================= */
+
+async function sendComment(id){
+
+let input =
+document.getElementById(
+"input_"+id
+);
+
+
+let text =
+input.value.trim();
+
+
+if(!text)
+return;
+
+
+let p={};
+
+
+try{
+
+p =
+JSON.parse(
+localStorage.getItem(
+"crockcell_profile"
+) || "{}"
+);
+
+}catch(error){
+
+p={};
+
+}
+
+
+await api(
+"/comments",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+fields:{
+
+postId:{
+stringValue:id
+},
+
+userId:{
+stringValue:uid
+},
+
+username:{
+stringValue:
+p.username ||
+p.name ||
+"user"
+},
+
+text:{
+stringValue:text
+},
+
+createdAt:{
+timestampValue:
+new Date().toISOString()
+}
+
+}
+
+})
+
+}
+);
+
+
+input.value="";
+
+loadComments(id);
+
+}
+
+
+/* =========================================
+   DELETE COMMENT
+========================================= */
+
+async function deleteComment(cid,id){
+
+let r =
+await api(
+`/comments/${encodeURIComponent(cid)}`
+);
+
+
+if(!r || !r.ok)
+return;
+
+
+let d =
+await r.json();
+
+
+if(
+val(d.fields?.userId) !== uid
+)
+return;
+
+
+await api(
+`/comments/${encodeURIComponent(cid)}`,
+{
+method:"DELETE"
+}
+);
+
+
+loadComments(id);
+
+}
+
+
+/* =========================================
+   DELETE POST
+========================================= */
+
+async function deletePost(id){
+
+if(
+!confirm("Delete this post?")
+)
+return;
+
+
+let r =
+await api(
+`/posts/${encodeURIComponent(id)}`
+);
+
+
+if(!r || !r.ok)
+return;
+
+
+let d =
+await r.json();
+
+
+if(
+val(d.fields?.userId) !== uid
+){
+
+alert(
+"You can delete only your own post."
+);
+
+return;
+
+}
+
+
+for(
+let collection of
+["likes","comments"]
+){
+
+let q =
+await api(
+`/${collection}?pageSize=300`
+);
+
+
+if(!q || !q.ok)
+continue;
+
+
+let data =
+await q.json();
+
+
+for(
+let x of
+data.documents || []
+){
+
+let f =
+x.fields || {};
+
+
+if(
+val(f.postId) === id ||
+val(f.reelId) === id
+){
+
+let cid =
+x.name.split("/").pop();
+
+
+await api(
+`/${collection}/${encodeURIComponent(cid)}`,
+{
+method:"DELETE"
+}
+);
+
+}
+
+}
+
+}
+
+
+await api(
+`/posts/${encodeURIComponent(id)}`,
+{
+method:"DELETE"
+}
+);
+
+
+document
+.getElementById(
+"post_"+id
+)
+?.remove();
+
+}
+
+
+/* =========================================
+   COMMENT FOCUS
+========================================= */
+
+function focusComment(id){
+
+document
+.getElementById(
+"input_"+id
+)
+?.focus();
+
+}
+
+
+/* =========================================
+   SHARE
+========================================= */
+
+async function sharePost(id){
+
+let url =
+location.origin +
+location.pathname +
+"?post=" +
+encodeURIComponent(id);
+
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+
+title:"CROCKCELL",
+
+url:url
+
+});
+
+}else{
+
+await navigator.clipboard
+.writeText(url);
+
+alert(
+"Post link copied"
+);
+
+}
+
+}catch(error){}
+
+}
+
+
+/* =========================================
+   PROFILE MENU
+========================================= */
+
+function toggleProfileMenu(){
+
+let menu =
+document.getElementById(
+"profileMenu"
+);
+
+let overlay =
+document.getElementById(
+"menuOverlay"
+);
+
+
+let open =
+menu.style.display === "block";
+
+
+if(open){
+
+closeProfileMenu();
+
+}else{
+
+menu.style.display="block";
+
+overlay.style.display="block";
+
+}
+
+}
+
+
+function closeProfileMenu(){
+
+document.getElementById(
+"profileMenu"
+).style.display="none";
+
+
+document.getElementById(
+"menuOverlay"
+).style.display="none";
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logout(){
+
+/* CURRENT KEYS */
+
+localStorage.removeItem(
+"crockcell_idToken"
+);
+
+localStorage.removeItem(
+"crockcell_refreshToken"
+);
+
+localStorage.removeItem(
+"crockcell_uid"
+);
+
+localStorage.removeItem(
+"crockcell_profile"
+);
+
+
+/* OLD KEYS ALSO CLEAR */
+
+localStorage.removeItem(
+"crockcellIdToken"
+);
+
+localStorage.removeItem(
+"crockcellRefreshToken"
+);
+
+localStorage.removeItem(
+"crockcellUid"
+);
+
+localStorage.removeItem(
+"crockcellProfile"
+);
+
+
+location.href =
+"index.html";
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+async function start(){
+
+console.log(
+"CROCKCELL HOME START"
+);
+
+console.log(
+"UID:",
+uid
+);
+
+console.log(
+"Token exists:",
+!!token
+);
+
+
+/* NO LOGIN DATA */
+
+if(!token || !uid){
+
+location.href =
+"index.html";
+
+return;
+
+}
+
+
+/* TRY TOKEN REFRESH */
+
+if(refreshToken){
+
+const refreshed =
+await refresh();
+
+console.log(
+"Token refresh:",
+refreshed
+);
+
+}
+
+
+/* LOAD CURRENT USER */
+
+await profile();
+
+
+/* LOAD FEED */
+
+await posts();
+
+}
+
+
+/* START APP */
+
+start();
+
+</script>
+
+
+<script>
+/* CROCKCELL HOME CLOUD STRIPS */
+(function(){
+  const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk", PROJECT_ID="crockcell-cd2e6";
+  const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+  let token=localStorage.getItem("crockcell_idToken")||localStorage.getItem("crockcellIdToken");
+  let uid=localStorage.getItem("crockcell_uid")||localStorage.getItem("crockcellUid");
+  let refreshToken=localStorage.getItem("crockcell_refreshToken")||localStorage.getItem("crockcellRefreshToken");
+  const $=id=>document.getElementById(id);
+  const val=f=>f?(f.stringValue??f.integerValue??f.booleanValue??f.timestampValue??""):"";
+  const esc=s=>String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));
+  async function refresh(){
+    if(!refreshToken)return false;
+    try{const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`});const d=await r.json();if(!r.ok||!d.id_token)return false;token=d.id_token;uid=d.user_id||uid;refreshToken=d.refresh_token||refreshToken;localStorage.setItem("crockcell_idToken",token);localStorage.setItem("crockcell_uid",uid);localStorage.setItem("crockcell_refreshToken",refreshToken);return true}catch(e){return false}
+  }
+  async function api(path){
+    if(!token)return null;
+    let r=await fetch(BASE+path,{headers:{Authorization:`Bearer ${token}`}});
+    if((r.status===401||r.status===403)&&await refresh())r=await fetch(BASE+path,{headers:{Authorization:`Bearer ${token}`}});
+    return r;
+  }
+  async function load(){
+    const sr=$("storyRow"),nr=$("noteRow"); if(!sr||!nr)return;
+    if(!token||!uid){sr.innerHTML=nr.innerHTML='<div class="cloud-empty">Login karke cloud content dekho.</div>';return}
+    const [rs,rn]=await Promise.all([api("/stories?pageSize=100"),api("/notes?pageSize=100")]);
+    if(rs&&rs.ok){
+      const d=await rs.json(),now=Date.now(), a=(d.documents||[]).map(x=>{const f=x.fields||{};return{u:val(f.uid),n:val(f.username)||"user",t:val(f.type),data:val(f.data),e:Number(val(f.expiresAt))||0,c:Number(val(f.createdAt))||0}}).filter(x=>x.u===uid&&x.e>now).sort((a,b)=>b.c-a.c).slice(0,8);
+      let out='<a class="cloud-card cloud-add" href="story_cloud.html"><div>＋<div class="cloud-user">Add Story</div></div></a>';
+      a.forEach(s=>out+=`<a class="cloud-card" href="story_cloud.html" style="text-decoration:none;color:#fff">${s.t==="video"?`<video class="story-thumb" src="${esc(s.data)}" muted playsinline></video>`:`<img class="story-thumb" src="${esc(s.data)}" alt="Story">`}<div class="cloud-user">${esc(s.n)}</div></a>`);
+      sr.innerHTML=out;
+    } else sr.innerHTML='<div class="cloud-empty">Stories load nahi hui.</div>';
+    if(rn&&rn.ok){
+      const d=await rn.json(),a=(d.documents||[]).map(x=>{const f=x.fields||{};return{u:val(f.uid),n:val(f.username)||"you",t:val(f.text),p:val(f.privacy)||"Everyone",c:Number(val(f.createdAt))||0}}).filter(x=>x.u===uid).sort((a,b)=>b.c-a.c).slice(0,8);
+      let out='<a class="cloud-card cloud-add" href="notes_cloud.html"><div>＋<div class="cloud-user">Add Note</div></div></a>';
+      a.forEach(n=>out+=`<a class="cloud-card" href="notes_cloud.html" style="text-decoration:none;color:#fff"><div class="note-mini">${esc(n.t)}</div><div class="cloud-user">${esc(n.n)} · ${esc(n.p)}</div></a>`);
+      nr.innerHTML=out;
+    } else nr.innerHTML='<div class="cloud-empty">Notes load nahi hui.</div>';
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>{refresh().then(load)}, {once:true}); else refresh().then(load);
+})();
+</script>
+</body>
+    </html>
