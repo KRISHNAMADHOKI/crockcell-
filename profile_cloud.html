@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>CROCKCELL Profile</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+
+.header{
+  padding:22px 18px 15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(0,0,0,.95);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #222;
+}
+
+.title{
+  font-size:28px;
+  font-weight:bold;
+}
+
+.profile{
+  padding:25px 18px 115px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.photo{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#222;
+  flex-shrink:0;
+}
+
+.info{
+  flex:1;
+  min-width:0;
+}
+
+.name{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.username{
+  margin-top:5px;
+  color:#888;
+}
+
+.bio{
+  margin-top:20px;
+  color:#ccc;
+  line-height:1.5;
+}
+
+.stats{
+  display:flex;
+  margin-top:25px;
+  padding:16px 0;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+}
+
+.stat{
+  flex:1;
+  text-align:center;
+  cursor:pointer;
+}
+
+.stat-number{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.stat-label{
+  margin-top:5px;
+  color:#888;
+  font-size:13px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:22px;
+}
+
+.action-btn{
+  flex:1;
+  height:48px;
+  border:0;
+  border-radius:17px;
+  background:#fff;
+  color:#000;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.following-btn{
+  background:#222;
+  color:#fff;
+  border:1px solid #444;
+}
+
+.action-btn:disabled{
+  opacity:.6;
+}
+
+.status{
+  text-align:center;
+  color:#777;
+  padding:45px 20px;
+}
+
+.error-box{
+  text-align:center;
+  color:#777;
+  padding:45px 20px;
+  line-height:1.7;
+}
+
+.retry-btn{
+  margin-top:15px;
+  border:0;
+  border-radius:15px;
+  padding:11px 18px;
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+}
+
+.list-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+}
+
+.list-box{
+  width:100%;
+  max-height:78vh;
+  background:#111;
+  border-radius:25px 25px 0 0;
+  border:1px solid #333;
+  overflow:hidden;
+}
+
+.list-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px;
+  border-bottom:1px solid #292929;
+}
+
+.list-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.close-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:50%;
+  background:#222;
+  color:#fff;
+  font-size:22px;
+}
+
+.list-content{
+  max-height:65vh;
+  overflow-y:auto;
+  padding:8px 15px 25px;
+}
+
+.user-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 5px;
+  border-bottom:1px solid #222;
+  cursor:pointer;
+}
+
+.user-row:active{
+  background:#1b1b1b;
+}
+
+.user-avatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#222;
+}
+
+.user-details{
+  flex:1;
+  min-width:0;
+}
+
+.user-name{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.user-username{
+  color:#888;
+  font-size:13px;
+  margin-top:4px;
+}
+
+.user-arrow{
+  color:#777;
+  font-size:24px;
+}
+
+.list-empty{
+  text-align:center;
+  color:#777;
+  padding:45px 20px;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  z-index:20;
+  display:flex;
+  padding:8px;
+  border-radius:24px;
+  background:rgba(25,25,25,.92);
+  backdrop-filter:blur(18px);
+  border:1px solid #333;
+}
+
+.nav-item{
+  flex:1;
+  text-align:center;
+  padding:8px 4px;
+  border-radius:17px;
+  color:#999;
+  text-decoration:none;
+  font-size:11px;
+}
+
+.nav-item.active{
+  background:#fff;
+  color:#000;
+}
+
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+
+.brand-head{display:flex;align-items:center;gap:9px}.brand-head .brand-mark{width:44px;height:44px}.brand-head .brand-name{font-size:21px;font-weight:900;letter-spacing:1px}.brand-head .brand-tag{display:none}
+
+.cloud-section{margin-top:24px;padding:16px 0;border-top:1px solid #222}
+.cloud-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cloud-head b{font-size:17px}
+.cloud-head a{color:#888;text-decoration:none;font-size:12px}
+.cloud-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.cloud-row::-webkit-scrollbar{display:none}
+.cloud-card{flex:0 0 112px;padding:9px;background:#111;border:1px solid #292929;border-radius:16px;color:#fff;text-decoration:none}
+.cloud-thumb{width:94px;height:94px;border-radius:13px;object-fit:cover;display:block;background:#222}
+.cloud-note{width:94px;height:94px;padding:9px;border-radius:13px;background:#181818;border:1px solid #303030;color:#ddd;font-size:12px;line-height:1.35;overflow:hidden;word-break:break-word}
+.cloud-label{margin-top:7px;color:#aaa;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-empty{color:#666;font-size:12px;padding:10px 0}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+  <div class="brand-head"><svg class="brand-mark" viewBox="0 0 72 72" aria-hidden="true"><defs><linearGradient id="ccg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".48" stop-color="#315cff"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient></defs><rect x="3" y="3" width="66" height="66" rx="18" fill="#080b18" stroke="url(#ccg)" stroke-width="5"/><path d="M48 20c-4-5-10-8-17-8-12 0-21 10-21 24s9 24 21 24c7 0 13-3 17-8l-7-8c-3 3-6 5-10 5-7 0-12-6-12-13s5-13 12-13c4 0 7 2 10 5z" fill="url(#ccg)"/><path d="M29 26l20 10-20 10z" fill="url(#ccg)"/></svg><div class="brand-name">CROCKCELL</div></div>
+
+</div>
+
+
+<div id="profileArea" class="profile">
+
+  <div class="status">
+    Loading profile...
+  </div>
+
+</div>
+
+
+<!-- FOLLOWERS / FOLLOWING MODAL -->
+
+<div
+  id="listModal"
+  class="list-modal"
+>
+
+  <div class="list-box">
+
+    <div class="list-header">
+
+      <div
+        id="listTitle"
+        class="list-title"
+      >
+        Followers
+      </div>
+
+      <button
+        id="closeList"
+        class="close-btn"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="listContent"
+      class="list-content"
+    >
+
+      <div class="list-empty">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+  <a
+    class="nav-item"
+    href="home.html"
+  >
+    <span class="nav-icon">⌂</span>
+    Home
+  </a>
+
+  <a
+    class="nav-item"
+    href="search.html"
+  >
+    <span class="nav-icon">⌕</span>
+    Search
+  </a>
+
+  <a
+    class="nav-item"
+    href="reels.html"
+  >
+    <span class="nav-icon">▶</span>
+    Reels
+  </a>
+
+  <a
+    class="nav-item"
+    href="messages.html"
+  >
+    <span class="nav-icon">♡</span>
+    Messages
+  </a>
+
+  <a
+    class="nav-item active"
+    href="profile.html"
+  >
+    <span class="nav-icon">◯</span>
+    Profile
+  </a>
+
+</div>
+
+
+<script>
+
+
+/* =========================================
+   FIREBASE
+========================================= */
+
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
+const PROJECT_ID =
+"crockcell-cd2e6";
+
+
+/* =========================================
+   SESSION
+========================================= */
+
+let token =
+localStorage.getItem(
+  "crockcell_idToken"
+);
+
+let currentUID =
+localStorage.getItem(
+  "crockcell_uid"
+);
+
+
+if(!token){
+
+  token =
+  sessionStorage.getItem(
+    "crockcell_idToken"
+  );
+
+}
+
+if(!currentUID){
+
+  currentUID =
+  sessionStorage.getItem(
+    "crockcell_uid"
+  );
+
+}
+
+
+if(!token || !currentUID){
+
+  window.location.replace(
+    "index.html"
+  );
+
+}
+
+
+/* =========================================
+   URL
+========================================= */
+
+const params =
+new URLSearchParams(
+  window.location.search
+);
+
+const requestedUID =
+params.get("uid");
+
+const requestedUsername =
+params.get("username");
+
+const requestedName =
+params.get("name");
+
+const requestedPhoto =
+params.get("photo");
+
+
+/* =========================================
+   SESSION PROFILE FROM SEARCH
+========================================= */
+
+let savedTarget = null;
+
+
+try{
+
+  const saved =
+  sessionStorage.getItem(
+    "crockcell_profile_target"
+  );
+
+  if(saved){
+
+    savedTarget =
+    JSON.parse(saved);
+
+  }
+
+}
+catch(error){
+
+  console.log(
+    "Saved profile unavailable"
+  );
+
+}
+
+
+/* =========================================
+   PROFILE UID
+========================================= */
+
+const profileUID =
+requestedUID ||
+(savedTarget?.uid) ||
+currentUID;
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const profileArea =
+document.getElementById(
+  "profileArea"
+);
+
+const listModal =
+document.getElementById(
+  "listModal"
+);
+
+const listTitle =
+document.getElementById(
+  "listTitle"
+);
+
+const listContent =
+document.getElementById(
+  "listContent"
+);
+
+const closeList =
+document.getElementById(
+  "closeList"
+);
+
+
+/* =========================================
+   CURRENT PROFILE
+========================================= */
+
+let currentProfile = null;
+
+
+/* =========================================
+   FIRESTORE BASE
+========================================= */
+
+function firestoreBase(){
+
+  return (
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents"
+  );
+
+}
+
+
+/* =========================================
+   LOAD PROFILE
+========================================= */
+
+async function loadProfile(){
+
+  try{
+
+    /*
+      IMPORTANT:
+
+      Search se profile open hone par
+      savedTarget me already user data hota hai.
+
+      Isliye Firebase ka wait nahi.
+    */
+
+    if(
+      savedTarget &&
+      savedTarget.uid === profileUID
+    ){
+
+      currentProfile = {
+
+        uid:
+        savedTarget.uid,
+
+        username:
+        savedTarget.username ||
+        requestedUsername ||
+        "user",
+
+        name:
+        savedTarget.name ||
+        requestedName ||
+        savedTarget.username ||
+        "User",
+
+        photoURL:
+        savedTarget.photoURL ||
+        requestedPhoto ||
+        "",
+
+        bio:""
+
+      };
+
+
+      renderProfile();
+
+
+      /*
+        Firebase se bio/counts background me.
+      */
+
+      loadExtraProfileData();
+
+      return;
+
+    }
+
+
+    /*
+      URL se profile data available ho
+      to bhi turant show.
+    */
+
+    if(
+      requestedUID &&
+      (
+        requestedUsername ||
+        requestedName ||
+        requestedPhoto
+      )
+    ){
+
+      currentProfile = {
+
+        uid:
+        requestedUID,
+
+        username:
+        requestedUsername ||
+        "user",
+
+        name:
+        requestedName ||
+        requestedUsername ||
+        "User",
+
+        photoURL:
+        requestedPhoto ||
+        "",
+
+        bio:""
+
+      };
+
+
+      renderProfile();
+
+      loadExtraProfileData();
+
+      return;
+
+    }
+
+
+    /*
+      Apni profile ho to Firebase se load.
+    */
+
+    const user =
+    await getUserByUID(
+      profileUID
+    );
+
+
+    if(!user){
+
+      throw new Error(
+        "USER_NOT_FOUND"
+      );
+
+    }
+
+
+    currentProfile =
+    user;
+
+
+    renderProfile();
+    loadProfileCloud();
+
+    loadExtraProfileData();
+
+  }
+  catch(error){
+
+    console.error(
+      "PROFILE ERROR:",
+      error
+    );
+
+
+    profileArea.innerHTML = `
+
+      <div class="error-box">
+
+        Profile load nahi ho paayi.
+
+        <br><br>
+
+        <button
+          class="retry-btn"
+          onclick="location.reload()"
+        >
+          Retry
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================
+   EXTRA PROFILE DATA
+========================================= */
+
+async function loadExtraProfileData(){
+
+  /*
+    Firebase se actual profile data
+    background me lene ki koshish.
+  */
+
+  try{
+
+    const user =
+    await getUserByUID(
+      profileUID
+    );
+
+
+    if(user){
+
+      currentProfile.name =
+      user.name ||
+      currentProfile.name;
+
+      currentProfile.username =
+      user.username ||
+      currentProfile.username;
+
+      currentProfile.photoURL =
+      user.photoURL ||
+      currentProfile.photoURL;
+
+      currentProfile.bio =
+      user.bio ||
+      "";
+
+
+      updateProfileDisplay();
+      loadProfileCloud();
+
+    }
+
+  }
+  catch(error){
+
+    console.log(
+      "Extra profile data skipped"
+    );
+
+  }
+
+
+  /*
+    Follow information.
+  */
+
+  loadFollowCounts();
+
+
+  if(
+    currentProfile.uid !==
+    currentUID
+  ){
+
+    updateFollowButton();
+
+  }
+
+}
+
+
+/* =========================================
+   UPDATE PROFILE DISPLAY
+========================================= */
+
+function updateProfileDisplay(){
+
+  const nameElement =
+  document.getElementById(
+    "profileName"
+  );
+
+  const usernameElement =
+  document.getElementById(
+    "profileUsername"
+  );
+
+  const bioElement =
+  document.getElementById(
+    "profileBio"
+  );
+
+  const photoElement =
+  document.getElementById(
+    "profilePhoto"
+  );
+
+
+  if(nameElement){
+
+    nameElement.textContent =
+    currentProfile.name ||
+    "User";
+
+  }
+
+
+  if(usernameElement){
+
+    usernameElement.textContent =
+    "@" +
+    (
+      currentProfile.username ||
+      "user"
+    );
+
+  }
+
+
+  if(bioElement){
+
+    bioElement.textContent =
+    currentProfile.bio ||
+    "No bio yet.";
+
+  }
+
+
+  if(photoElement){
+
+    photoElement.src =
+    currentProfile.photoURL ||
+    placeholderPhoto();
+
+  }
+
+}
+
+
+/* =========================================
+   RENDER PROFILE
+========================================= */
+
+function renderProfile(){
+
+  const isOwn =
+  currentProfile.uid ===
+  currentUID;
+
+
+  profileArea.innerHTML = `
+
+    <div class="top">
+
+      <img
+        id="profilePhoto"
+        class="photo"
+        src="${
+          escapeAttribute(
+            currentProfile.photoURL ||
+            placeholderPhoto()
+          )
+        }"
+        alt=""
+      >
+
+      <div class="info">
+
+        <div
+          id="profileName"
+          class="name"
+        >
+          ${escapeHTML(
+            currentProfile.name ||
+            "User"
+          )}
+        </div>
+
+        <div
+          id="profileUsername"
+          class="username"
+        >
+          @${escapeHTML(
+            currentProfile.username ||
+            "user"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div
+        id="followersStat"
+        class="stat"
+      >
+
+        <div
+          id="followersCount"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Followers
+        </div>
+
+      </div>
+
+
+      <div
+        id="followingStat"
+        class="stat"
+      >
+
+        <div
+          id="followingCount"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Following
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          id="postsCount"
+          class="stat-number"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Posts
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- BIO -->
+
+    <div
+      id="profileBio"
+      class="bio"
+    >
+      ${escapeHTML(
+        currentProfile.bio ||
+        "No bio yet."
+      )}
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    ${
+      isOwn
+
+      ?
+
+      `
+      <div class="actions">
+
+        <button
+          id="editButton"
+          class="action-btn"
+          type="button"
+        >
+          Edit Profile
+        </button>
+
+      </div>
+      `
+
+      :
+
+      `
+      <div class="actions">
+
+        <button
+          id="followButton"
+          class="action-btn"
+          type="button"
+        >
+          Follow
+        </button>
+
+        <button
+          id="messageButton"
+          class="action-btn"
+          type="button"
+        >
+          Message
+        </button>
+
+      </div>
+      `
+
+    }
+
+
+    <section class="cloud-section">
+
+      <div class="cloud-head">
+        <b>Stories</b>
+        <a href="story_cloud.html">See all</a>
+      </div>
+
+      <div id="profileStories" class="cloud-row">
+        <div class="cloud-empty">Loading Stories...</div>
+      </div>
+
+    </section>
+
+
+    <section class="cloud-section">
+
+      <div class="cloud-head">
+        <b>Notes</b>
+        <a href="notes_cloud.html">See all</a>
+      </div>
+
+      <div id="profileNotes" class="cloud-row">
+        <div class="cloud-empty">Loading Notes...</div>
+      </div>
+
+    </section>
+
+  `;
+
+
+  /*
+    FOLLOWERS
+  */
+
+  document
+  .getElementById(
+    "followersStat"
+  )
+  .onclick =
+  function(){
+
+    openUserList(
+      "Followers"
+    );
+
+  };
+
+
+  /*
+    FOLLOWING
+  */
+
+  document
+  .getElementById(
+    "followingStat"
+  )
+  .onclick =
+  function(){
+
+    openUserList(
+      "Following"
+    );
+
+  };
+
+
+  /*
+    OWN PROFILE
+  */
+
+  if(isOwn){
+
+    document
+    .getElementById(
+      "editButton"
+    )
+    .onclick =
+    function(){
+
+      window.location.assign(
+        "edit-profile.html"
+      );
+
+    };
+
+  }
+  else{
+
+    /*
+      FOLLOW
+    */
+
+    document
+    .getElementById(
+      "followButton"
+    )
+    .onclick =
+    toggleFollow;
+
+
+    /*
+      MESSAGE
+    */
+
+    document
+    .getElementById(
+      "messageButton"
+    )
+    .onclick =
+    function(){
+
+      openMessage(
+        currentProfile
+      );
+
+    };
+
+  }
+
+}
+
+
+\n\n/* =========================================\n   CLOUD STORIES + NOTES\n========================================= */\n\nfunction cloudString(fields,name){\n  return fields?.[name]?.stringValue || "";\n}\n\nfunction cloudTime(fields,name){\n  const f=fields?.[name];\n  if(!f) return 0;\n  if(f.integerValue!==undefined) return Number(f.integerValue)||0;\n  if(f.doubleValue!==undefined) return Number(f.doubleValue)||0;\n  if(f.timestampValue){\n    const n=Date.parse(f.timestampValue);\n    return Number.isNaN(n)?0:n;\n  }\n  return 0;\n}\n\nasync function canViewCloudItem(uid,privacy){\n  if(uid===currentUID) return true;\n  if(privacy==="Everyone" || privacy==="everyone" || !privacy) return true;\n  if(privacy==="Followers" || privacy==="followers"){\n    return await checkFollowing(currentUID,uid);\n  }\n  return false;\n}\n\nasync function loadProfileStories(){\n  const box=document.getElementById("profileStories");\n  if(!box || !currentProfile) return;\n  try{\n    const r=await fetch(`${firestoreBase()}/stories?pageSize=100&key=${API_KEY}`,{\n      headers:{Authorization:"Bearer "+token},cache:"no-store"\n    });\n    if(!r.ok) throw new Error("stories");\n    const d=await r.json();\n    const now=Date.now();\n    const raw=(d.documents||[]).map(doc=>{\n      const f=doc.fields||{};\n      return {\n        id:cloudString(f,"storyId")||doc.name.split("/").pop(),\n        uid:cloudString(f,"uid"),\n        username:cloudString(f,"username")||currentProfile.username||"user",\n        type:cloudString(f,"type")||"image",\n        data:cloudString(f,"data"),\n        privacy:cloudString(f,"privacy")||"Everyone",\n        createdAt:cloudTime(f,"createdAt"),\n        expiresAt:cloudTime(f,"expiresAt")\n      };\n    }).filter(x=>x.uid===currentProfile.uid && x.data && x.expiresAt>now)\n      .sort((a,b)=>b.createdAt-a.createdAt).slice(0,8);\n    const list=[];\n    for(const item of raw){\n      if(await canViewCloudItem(item.uid,item.privacy)) list.push(item);\n    }\n    if(!list.length){box.innerHTML='<div class="cloud-empty">No active Stories.</div>';return;}\n    box.innerHTML=list.map(x=>{\n      const media=x.type==="video"\n        ? `<video class="cloud-thumb" src="${escapeAttribute(x.data)}" muted playsinline preload="metadata"></video>`\n        : `<img class="cloud-thumb" src="${escapeAttribute(x.data)}" alt="Story">`;\n      return `<a class="cloud-card" href="story_cloud.html">${media}<div class="cloud-label">${escapeHTML(x.username)}</div></a>`;\n    }).join("");\n  }catch(e){\n    console.error("PROFILE STORIES ERROR:",e);\n    box.innerHTML='<div class="cloud-empty">Stories load nahi hui.</div>';\n  }\n}\n\nasync function loadProfileNotes(){\n  const box=document.getElementById("profileNotes");\n  if(!box || !currentProfile) return;\n  try{\n    const r=await fetch(`${firestoreBase()}/notes?pageSize=100&key=${API_KEY}`,{\n      headers:{Authorization:"Bearer "+token},cache:"no-store"\n    });\n    if(!r.ok) throw new Error("notes");\n    const d=await r.json();\n    const raw=(d.documents||[]).map(doc=>{\n      const f=doc.fields||{};\n      return {\n        id:cloudString(f,"noteId")||doc.name.split("/").pop(),\n        uid:cloudString(f,"uid"),\n        username:cloudString(f,"username")||currentProfile.username||"user",\n        text:cloudString(f,"text"),\n        privacy:cloudString(f,"privacy")||"Everyone",\n        createdAt:cloudTime(f,"createdAt")\n      };\n    }).filter(x=>x.uid===currentProfile.uid && x.text)\n      .sort((a,b)=>b.createdAt-a.createdAt).slice(0,8);\n    const list=[];\n    for(const item of raw){\n      if(await canViewCloudItem(item.uid,item.privacy)) list.push(item);\n    }\n    if(!list.length){box.innerHTML='<div class="cloud-empty">No Notes yet.</div>';return;}\n    box.innerHTML=list.map(x=>`<a class="cloud-card" href="notes_cloud.html"><div class="cloud-note">${escapeHTML(x.text)}</div><div class="cloud-label">${escapeHTML(x.username)} · ${escapeHTML(x.privacy)}</div></a>`).join("");\n  }catch(e){\n    console.error("PROFILE NOTES ERROR:",e);\n    box.innerHTML='<div class="cloud-empty">Notes load nahi hui.</div>';\n  }\n}\n\nasync function loadProfileCloud(){\n  await Promise.all([loadProfileStories(),loadProfileNotes()]);\n}\n
+
+/* =========================================
+   GET USER BY UID
+========================================= */
+
+async function getUserByUID(
+  targetUID
+){
+
+  /*
+    METHOD 1:
+    Document ID = UID
+  */
+
+  try{
+
+    const url =
+    firestoreBase() +
+    "/users/" +
+    encodeURIComponent(
+      targetUID
+    ) +
+    "?key=" +
+    API_KEY;
+
+
+    const response =
+    await fetch(
+      url,
+      {
+
+        headers:{
+          Authorization:
+          "Bearer " + token
+        }
+
+      }
+    );
+
+
+    if(response.ok){
+
+      const data =
+      await response.json();
+
+
+      return convertUser(
+        targetUID,
+        data.fields || {}
+      );
+
+    }
+
+  }
+  catch(error){
+
+    console.log(
+      "Direct user lookup failed"
+    );
+
+  }
+
+
+  /*
+    METHOD 2:
+    Search users where uid == targetUID
+  */
+
+  try{
+
+    const url =
+    firestoreBase() +
+    ":runQuery?key=" +
+    API_KEY;
+
+
+    const body = {
+
+      structuredQuery:{
+
+        from:[
+          {
+            collectionId:"users"
+          }
+        ],
+
+        where:{
+
+          fieldFilter:{
+
+            field:{
+              fieldPath:"uid"
+            },
+
+            op:"EQUAL",
+
+            value:{
+              stringValue:
+              targetUID
+            }
+
+          }
+
+        },
+
+        limit:1
+
+      }
+
+    };
+
+
+    const response =
+    await fetch(
+      url,
+      {
+
+        method:"POST",
+
+        headers:{
+
+          Authorization:
+          "Bearer " + token,
+
+          "Content-Type":
+          "application/json"
+
+        },
+
+        body:
+        JSON.stringify(body)
+
+      }
+    );
+
+
+    if(response.ok){
+
+      const rows =
+      await response.json();
+
+
+      for(
+        const row of rows
+      ){
+
+        if(row.document){
+
+          return convertUser(
+            targetUID,
+            row.document.fields || {}
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+  catch(error){
+
+    console.log(
+      "UID field search failed"
+    );
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================
+   CONVERT USER
+========================================= */
+
+function convertUser(
+  uid,
+  f
+){
+
+  return {
+
+    uid:
+    f.uid?.stringValue ||
+    uid,
+
+    name:
+    f.name?.stringValue ||
+    f.username?.stringValue ||
+    "User",
+
+    username:
+    f.username?.stringValue ||
+    "user",
+
+    photoURL:
+    f.photoURL?.stringValue ||
+    "",
+
+    bio:
+    f.bio?.stringValue ||
+    ""
+
+  };
+
+}
+
+
+/* =========================================
+   FOLLOW STATUS
+========================================= */
+
+async function updateFollowButton(){
+
+  const button =
+  document.getElementById(
+    "followButton"
+  );
+
+
+  if(!button)return;
+
+
+  try{
+
+    const following =
+    await checkFollowing(
+      currentUID,
+      currentProfile.uid
+    );
+
+
+    button.textContent =
+    following
+    ?
+    "Following"
+    :
+    "Follow";
+
+
+    button.classList.toggle(
+      "following-btn",
+      following
+    );
+
+  }
+  catch(error){
+
+    console.log(
+      "Follow status unavailable"
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   CHECK FOLLOWING
+========================================= */
+
+async function checkFollowing(
+  followerID,
+  followingID
+){
+
+  const id =
+  followerID +
+  "_" +
+  followingID;
+
+
+  const url =
+  firestoreBase() +
+  "/follows/" +
+  encodeURIComponent(id) +
+  "?key=" +
+  API_KEY;
+
+
+  const response =
+  await fetch(
+    url,
+    {
+
+      headers:{
+        Authorization:
+        "Bearer " + token
+      }
+
+    }
+  );
+
+
+  return response.ok;
+
+}
+
+
+/* =========================================
+   FOLLOW / UNFOLLOW
+========================================= */
+
+async function toggleFollow(){
+
+  const button =
+  document.getElementById(
+    "followButton"
+  );
+
+
+  if(!button)return;
+
+
+  button.disabled = true;
+
+
+  try{
+
+    const alreadyFollowing =
+    await checkFollowing(
+      currentUID,
+      currentProfile.uid
+    );
+
+
+    const id =
+    currentUID +
+    "_" +
+    currentProfile.uid;
+
+
+    const url =
+    firestoreBase() +
+    "/follows/" +
+    encodeURIComponent(id) +
+    "?key=" +
+    API_KEY;
+
+
+    if(alreadyFollowing){
+
+      const response =
+      await fetch(
+        url,
+        {
+          method:"DELETE",
+          headers:{
+            Authorization:
+            "Bearer " + token
+          }
+        }
+      );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "UNFOLLOW_FAILED"
+        );
+
+      }
+
+
+      button.textContent =
+      "Follow";
+
+
+      button.classList.remove(
+        "following-btn"
+      );
+
+
+      changeFollowerCount(
+        -1
+      );
+
+    }
+    else{
+
+      const body = {
+
+        fields:{
+
+          followerId:{
+            stringValue:
+            currentUID
+          },
+
+          followingId:{
+            stringValue:
+            currentProfile.uid
+          },
+
+          createdAt:{
+            timestampValue:
+            new Date().toISOString()
+          }
+
+        }
+
+      };
+
+
+      const response =
+      await fetch(
+        url,
+        {
+
+          method:"PATCH",
+
+          headers:{
+
+            Authorization:
+            "Bearer " + token,
+
+            "Content-Type":
+            "application/json"
+
+          },
+
+          body:
+          JSON.stringify(body)
+
+        }
+      );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "FOLLOW_FAILED"
+        )
