@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Notes - CROCKCELL</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;min-height:100vh;padding-bottom:78px}.wrap{max-width:560px;margin:auto;padding:18px 14px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{font-size:25px;font-weight:800;letter-spacing:.5px}.sub{color:#999;font-size:13px;margin-top:3px}.add{border:0;border-radius:14px;background:#fff;color:#000;font-weight:800;padding:11px 15px}.composer{display:none;background:#111;border:1px solid #292929;border-radius:20px;padding:16px;margin-bottom:16px}.composer.show{display:block}.composer h2{margin:0 0 12px;font-size:19px}.note-input{width:100%;min-height:110px;resize:vertical;background:#080808;border:1px solid #333;border-radius:14px;color:#fff;padding:13px;font-size:16px;outline:none}.row{display:flex;gap:9px;align-items:center;margin-top:12px}.select{flex:1;background:#080808;border:1px solid #333;color:#fff;border-radius:12px;padding:11px}.counter{font-size:12px;color:#888}.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700}.save{background:#fff;color:#000}.cancel{background:#222;color:#fff}.empty{text-align:center;color:#777;padding:60px 20px}.note{background:#111;border:1px solid #252525;border-radius:20px;padding:16px;margin-bottom:13px}.note-text{font-size:16px;line-height:1.45;white-space:pre-wrap;word-break:break-word}.meta{display:flex;justify-content:space-between;align-items:center;color:#888;font-size:12px;margin-top:13px}.actions{display:flex;gap:8px}.small{background:#222;color:#fff;border:0;border-radius:9px;padding:7px 10px}.nav{position:fixed;bottom:0;left:0;right:0;background:#080808;border-top:1px solid #222;height:64px;display:flex;justify-content:center;z-index:10}.navin{width:100%;max-width:560px;display:flex;justify-content:space-around;align-items:center}.nav a{color:#aaa;text-decoration:none;font-size:11px;text-align:center}.nav a span{display:block;font-size:21px;margin-bottom:2px}.nav a.active{color:#fff}.hint{font-size:12px;color:#777;margin:8px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div><div class="brand">CROCKCELL</div><div class="sub">Notes</div></div><button class="add" id="addBtn">+ New Note</button></div>
+  <div class="composer" id="composer">
+    <h2 id="formTitle">Create Note</h2>
+    <textarea id="noteInput" class="note-input" maxlength="180" placeholder="Write something..."></textarea>
+    <div class="row"><select id="privacy" class="select"><option>Everyone</option><option>Followers</option><option>Close Friends</option></select><span class="counter" id="counter">0/180</span></div>
+    <div class="row"><button class="btn cancel" id="cancelBtn">Cancel</button><button class="btn save" id="saveBtn">Publish</button></div>
+    <div class="hint">Notes are saved on this device in this version.</div>
+  </div>
+  <div id="notes"></div>
+</div>
+<nav class="nav"><div class="navin">
+<a href="home.html"><span>⌂</span>Home</a><a href="search.html"><span>⌕</span>Search</a><a href="reels.html"><span>▶</span>Reels</a><a href="messages.html"><span>✉</span>Messages</a><a href="profile.html" class="active"><span>◎</span>Profile</a>
+</div></nav>
+
+<script>
+const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+const PROJECT_ID="crockcell-cd2e6";
+const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+let token=localStorage.getItem("crockcell_idToken")||localStorage.getItem("crockcellIdToken");
+let uid=localStorage.getItem("crockcell_uid")||localStorage.getItem("crockcellUid");
+let refreshToken=localStorage.getItem("crockcell_refreshToken")||localStorage.getItem("crockcellRefreshToken");
+let editingId=null;
+
+const $=id=>document.getElementById(id);
+function val(f){return f?(f.stringValue??f.integerValue??f.booleanValue??f.timestampValue??""):""}
+function fv(v){return typeof v==="number"?{integerValue:String(v)}:{stringValue:String(v??"")}}
+function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]))}
+
+async function refresh(){
+ if(!refreshToken)return false;
+ try{
+  const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{
+   method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+   body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+  });
+  const d=await r.json();
+  if(!r.ok||!d.id_token)return false;
+  token=d.id_token;uid=d.user_id||uid;refreshToken=d.refresh_token||refreshToken;
+  localStorage.setItem("crockcell_idToken",token);
+  localStorage.setItem("crockcell_uid",uid);
+  localStorage.setItem("crockcell_refreshToken",refreshToken);
+  return true;
+ }catch(e){return false}
+}
+async function api(path,opt={},retry=true){
+ if(!token)return null;
+ const r=await fetch(BASE+path,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${token}`,"Content-Type":opt.headers?.["Content-Type"]||"application/json"}});
+ if((r.status===401||r.status===403)&&retry&&await refresh())return api(path,opt,false);
+ return r;
+}
+
+function openForm(n){
+ editingId=n?.id||null;
+ $("formTitle").textContent=editingId?"Edit Note":"Create Note";
+ $("saveBtn").textContent=editingId?"Update":"Publish";
+ $("noteInput").value=n?.text||"";
+ $("privacy").value=n?.privacy||"Everyone";
+ $("composer").classList.add("show");updateCount();$("noteInput").focus();
+}
+function closeForm(){
+ editingId=null;$("composer").classList.remove("show");
+ $("noteInput").value="";$("privacy").value="Everyone";updateCount();
+}
+function updateCount(){$("counter").textContent=$("noteInput").value.length+"/180"}
+
+function render(list){
+ const box=$("notes");
+ if(!list.length){box.innerHTML='<div class="empty">📝<br><br>No notes yet.<br>Create your first note.</div>';return}
+ box.innerHTML=list.slice().sort((a,b)=>b.updatedAt-a.updatedAt).map(n=>`
+ <article class="note">
+  <div class="note-text">${esc(n.text)}</div>
+  <div class="meta">
+   <span>${esc(n.privacy)} • ${new Date(n.updatedAt).toLocaleString()}</span>
+   <span class="actions"><button class="small" data-edit="${esc(n.id)}">Edit</button><button class="small" data-del="${esc(n.id)}">Delete</button></span>
+  </div>
+ </article>`).join("");
+}
+
+async function loadNotes(){
+ if(!token||!uid){render([]);return}
+ const r=await api(`/notes?pageSize=100`);
+ if(!r||!r.ok){render([]);return}
+ const d=await r.json();
+ const list=(d.documents||[]).map(doc=>{
+  const f=doc.fields||{};
+  return {
+   id:val(f.noteId)||doc.name.split("/").pop(),
+   uid:val(f.uid),text:val(f.text),privacy:val(f.privacy)||"Everyone",
+   createdAt:Number(val(f.createdAt))||Date.now(),
+   updatedAt:Number(val(f.updatedAt))||Number(val(f.createdAt))||Date.now()
+  };
+ }).filter(n=>n.uid===uid);
+ render(list);
+}
+
+async function saveNote(note){
+ const r=await api(`/notes/${encodeURIComponent(note.id)}`,{
+  method:"PATCH",
+  body:JSON.stringify({fields:{
+   noteId:fv(note.id),uid:fv(note.uid),text:fv(note.text),
+   privacy:fv(note.privacy),createdAt:fv(note.createdAt),updatedAt:fv(note.updatedAt)
+  }})
+ });
+ return !!(r&&r.ok);
+}
+async function deleteNote(id){
+ const r=await api(`/notes/${encodeURIComponent(id)}`,{method:"DELETE"});
+ return !!(r&&r.ok);
+}
+
+$("addBtn").onclick=()=>openForm();
+$("cancelBtn").onclick=closeForm;
+$("noteInput").addEventListener("input",updateCount);
+
+$("saveBtn").onclick=async()=>{
+ if(!uid||!token){alert("Please login first.");return}
+ const text=$("noteInput").value.trim();
+ if(!text){alert("Please write a note first.");return}
+ const now=Date.now();
+ const list=[];
+ if(editingId){
+  const r=await api(`/notes/${encodeURIComponent(editingId)}`);
+  let old={createdAt:now};
+  if(r&&r.ok){const d=await r.json(),f=d.fields||{};old.createdAt=Number(val(f.createdAt))||now}
+  list.push({id:editingId,uid,text,privacy:$("privacy").value,createdAt:old.createdAt,updatedAt:now});
+ }else{
+  list.push({id:`note_${uid}_${now}_${Math.random().toString(36).slice(2,7)}`,uid,text,privacy:$("privacy").value,createdAt:now,updatedAt:now});
+ }
+ if(await saveNote(list[0])){closeForm();await loadNotes()}
+ else alert("Note save nahi hui. Internet ya login check karo.");
+};
+
+$("notes").addEventListener("click",async e=>{
+ const edit=e.target.closest("[data-edit]"),del=e.target.closest("[data-del]");
+ if(edit){
+  const r=await api(`/notes/${encodeURIComponent(edit.dataset.edit)}`);
+  if(r&&r.ok){const d=await r.json(),f=d.fields||{};openForm({
+   id:edit.dataset.edit,text:val(f.text),privacy:val(f.privacy)||"Everyone",
+   createdAt:Number(val(f.createdAt))||Date.now(),updatedAt:Number(val(f.updatedAt))||Date.now()
+  })}
+ }
+ if(del&&confirm("Delete this note?")){
+  if(await deleteNote(del.dataset.del))await loadNotes();else alert("Note delete nahi hui.");
+ }
+});
+
+(async()=>{if(refreshToken)await refresh();await loadNotes()})();
+</script>
+
+</body>
+</html>
