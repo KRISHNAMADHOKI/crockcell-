@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Stories - CROCKCELL</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;min-height:100vh;padding-bottom:78px}.top{position:sticky;top:0;z-index:5;background:#000;border-bottom:1px solid #222;padding:16px 18px}.top h1{margin:0;font-size:22px}.top p{margin:5px 0 0;color:#999;font-size:13px}.wrap{max-width:650px;margin:auto;padding:18px}.add{width:100%;border:1px solid #292929;background:#111;color:#fff;border-radius:18px;padding:18px;text-align:left}.add strong{display:block;font-size:17px;margin-bottom:5px}.add span{color:#999;font-size:13px}.card{margin-top:16px;background:#101010;border:1px solid #222;border-radius:18px;overflow:hidden}.cardhead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}.user{display:flex;gap:10px;align-items:center}.avatar{width:38px;height:38px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.meta b{display:block;font-size:14px}.meta small{color:#888}.media{width:100%;max-height:72vh;background:#050505;display:block;object-fit:contain}.actions{padding:10px 12px;display:flex;gap:8px}.actions button,.delete{border:0;background:#1b1b1b;color:#fff;border-radius:12px;padding:9px 12px}.empty{text-align:center;color:#777;padding:55px 10px}.bottom{position:fixed;left:0;right:0;bottom:0;height:64px;background:#080808;border-top:1px solid #252525;display:flex;z-index:20}.bottom a{flex:1;color:#aaa;text-decoration:none;text-align:center;padding-top:9px;font-size:11px}.bottom a span{display:block;font-size:21px;margin-bottom:3px}.bottom a.active{color:#fff}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;align-items:flex-end}.sheet{width:100%;max-width:650px;margin:auto;background:#111;border:1px solid #292929;border-radius:22px 22px 0 0;padding:18px}.sheet h2{margin:0 0 14px;font-size:19px}.field{margin-bottom:13px}.field label{display:block;color:#aaa;font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;background:#080808;color:#fff;border:1px solid #303030;border-radius:12px;padding:12px;font-size:14px}.preview{width:100%;max-height:280px;object-fit:contain;border-radius:14px;background:#050505;display:none;margin:10px 0}.row{display:flex;gap:10px}.row button{flex:1}.primary{background:#fff!important;color:#000!important}.danger{background:#301010!important;color:#ff8b8b!important}.note{font-size:11px;color:#777;line-height:1.4;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="top"><h1>Stories</h1><p>Photo ya video share karo — 24 hours ke liye.</p></div>
+<main class="wrap">
+<button class="add" id="addStory"><strong>＋ Add Story</strong><span>Photo/video upload karke apni story banao.</span></button>
+<div id="stories"></div>
+</main>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h2>Create Story</h2>
+    <div class="field"><label>Photo / Video</label><input id="file" type="file" accept="image/*,video/*"></div>
+    <img id="previewImg" class="preview" alt="Story preview">
+    <video id="previewVideo" class="preview" controls playsinline></video>
+    <div class="field"><label>Privacy</label><select id="privacy"><option>Everyone</option><option>Followers</option><option>Close Friends</option></select></div>
+    <div class="note">Maximum file size: 10 MB. Story automatically expires after 24 hours.</div>
+    <div class="row" style="margin-top:15px"><button id="cancel">Cancel</button><button class="primary" id="publish">Publish Story</button></div>
+  </div>
+</div>
+
+<nav class="bottom">
+<a href="home.html"><span>⌂</span>Home</a>
+<a href="search.html"><span>⌕</span>Search</a>
+<a class="active" href="story.html"><span>◉</span>Story</a>
+<a href="messages.html"><span>✉</span>Messages</a>
+<a href="profile.html"><span>◎</span>Profile</a>
+</nav>
+
+
+<script>
+const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+const PROJECT_ID="crockcell-cd2e6";
+const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+const MAX=10*1024*1024;
+let token=localStorage.getItem("crockcell_idToken")||localStorage.getItem("crockcellIdToken");
+let uid=localStorage.getItem("crockcell_uid")||localStorage.getItem("crockcellUid");
+let refreshToken=localStorage.getItem("crockcell_refreshToken")||localStorage.getItem("crockcellRefreshToken");
+let selectedFile=null;
+
+const $=id=>document.getElementById(id);
+function val(f){return f?(f.stringValue??f.integerValue??f.booleanValue??f.timestampValue??""):""}
+function fv(v){return typeof v==="number"?{integerValue:String(v)}:{stringValue:String(v??"")}}
+function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]))}
+
+async function refresh(){
+ if(!refreshToken)return false;
+ try{
+  const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{
+   method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+   body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+  });
+  const d=await r.json();
+  if(!r.ok||!d.id_token)return false;
+  token=d.id_token;uid=d.user_id||uid;refreshToken=d.refresh_token||refreshToken;
+  localStorage.setItem("crockcell_idToken",token);
+  localStorage.setItem("crockcell_uid",uid);
+  localStorage.setItem("crockcell_refreshToken",refreshToken);
+  return true;
+ }catch(e){return false}
+}
+async function api(path,opt={},retry=true){
+ if(!token)return null;
+ const r=await fetch(BASE+path,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${token}`,"Content-Type":opt.headers?.["Content-Type"]||"application/json"}});
+ if((r.status===401||r.status===403)&&retry&&await refresh())return api(path,opt,false);
+ return r;
+}
+
+function currentUsername(){
+ try{
+  const p=JSON.parse(localStorage.getItem("crockcell_profile")||"{}");
+  return p.username||p.name||"Krishna";
+ }catch(e){return "Krishna"}
+}
+
+function closeModal(){
+ $("modal").style.display="none";
+ $("file").value="";selectedFile=null;
+ $("previewImg").style.display="none";$("previewVideo").style.display="none";
+ $("previewImg").removeAttribute("src");$("previewVideo").removeAttribute("src");
+}
+
+async function loadStories(){
+ const box=$("stories");
+ if(!token||!uid){
+  box.innerHTML='<div class="empty">Login karke Stories use karo.</div>';return;
+ }
+ const r=await api("/stories?pageSize=100");
+ if(!r||!r.ok){
+  box.innerHTML='<div class="empty">Stories load nahi hui.<br><br>Refresh karke try karo.</div>';return;
+ }
+ const d=await r.json(),now=Date.now();
+ const list=(d.documents||[]).map(doc=>{
+  const f=doc.fields||{};
+  return {
+   id:val(f.storyId)||doc.name.split("/").pop(),
+   uid:val(f.uid),username:val(f.username)||"user",
+   type:val(f.type)||"image",data:val(f.data),
+   privacy:val(f.privacy)||"Everyone",
+   createdAt:Number(val(f.createdAt))||now,
+   expiresAt:Number(val(f.expiresAt))||now
+  };
+ }).filter(s=>s.uid===uid&&s.expiresAt>now);
+
+ box.innerHTML=list.length?list.sort((a,b)=>b.createdAt-a.createdAt).map(s=>{
+  const media=s.type==="video"
+   ?`<video class="media" src="${s.data}" controls playsinline></video>`
+   :`<img class="media" src="${s.data}" alt="Story">`;
+  return `<article class="card">
+   <div class="cardhead">
+    <div class="user"><div class="avatar">${esc((s.username||"K").charAt(0).toUpperCase())}</div>
+    <div class="meta"><b>${esc(s.username)}</b><small>${esc(s.privacy)} · 24h story</small></div></div>
+    <button class="delete" data-id="${esc(s.id)}">Delete</button>
+   </div>${media}
+   <div class="actions"><button>${s.type==="video"?"🎬 Video":"🖼️ Photo"}</button></div>
+  </article>`;
+ }).join(""):'<div class="empty">Abhi koi active story nahi hai.<br><br>Apni first story add karo 👆</div>';
+}
+
+async function deleteStory(id){
+ const r=await api(`/stories/${encodeURIComponent(id)}`,{method:"DELETE"});
+ return !!(r&&r.ok);
+}
+
+$("addStory").onclick=()=>{$("modal").style.display="flex"};
+$("cancel").onclick=closeModal;
+$("modal").onclick=e=>{if(e.target===$("modal"))closeModal()};
+
+$("file").onchange=()=>{
+ const f=$("file").files[0];selectedFile=f||null;
+ if(!f)return;
+ if(f.size>MAX){alert("File 10 MB se chhoti honi chahiye.");$("file").value="";selectedFile=null;return}
+ const url=URL.createObjectURL(f);
+ if(f.type.startsWith("video/")){
+  $("previewImg").style.display="none";$("previewVideo").style.display="block";$("previewVideo").src=url;
+ }else{
+  $("previewVideo").style.display="none";$("previewImg").style.display="block";$("previewImg").src=url;
+ }
+};
+
+$("publish").onclick=async()=>{
+ if(!uid||!token){alert("Please login first.");return}
+ if(!selectedFile){alert("Pehle photo ya video select karo.");return}
+
+ const reader=new FileReader();
+ reader.onload=async()=>{
+  const now=Date.now();
+  const id=`story_${uid}_${now}_${Math.random().toString(36).slice(2,7)}`;
+  const item={
+   id,uid,username:currentUsername(),
+   type:selectedFile.type.startsWith("video/")?"video":"image",
+   data:reader.result,privacy:$("privacy").value,
+   createdAt:now,expiresAt:now+24*60*60*1000
+  };
+  const r=await api(`/stories/${encodeURIComponent(id)}`,{
+   method:"PATCH",
+   body:JSON.stringify({fields:{
+    storyId:fv(item.id),uid:fv(item.uid),username:fv(item.username),
+    type:fv(item.type),data:fv(item.data),privacy:fv(item.privacy),
+    createdAt:fv(item.createdAt),expiresAt:fv(item.expiresAt)
+   }})
+  });
+  if(!r||!r.ok){alert("Story upload nahi hui. Internet/login check karo.");return}
+  closeModal();await loadStories();alert("Story publish ho gayi ✅");
+ };
+ reader.readAsDataURL(selectedFile);
+};
+
+$("stories").addEventListener("click",async e=>{
+ const b=e.target.closest("[data-id]");
+ if(!b)return;
+ if(confirm("Story delete karni hai?")){
+  if(await deleteStory(b.dataset.id))await loadStories();
+  else alert("Story delete nahi hui.");
+ }
+});
+
+(async()=>{if(refreshToken)await refresh();await loadStories()})();
+setInterval(loadStories,60000);
+</script>
+
+</body>
+</html>
