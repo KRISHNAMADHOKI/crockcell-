@@ -27,10 +27,35 @@ body{
   text-align:center;
 }
 
-.logo{
-  font-size:42px;
-  font-weight:bold;
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:10px;
+  text-align:left;
+}
+
+.brand-mark{
+  width:70px;
+  height:70px;
+  display:block;
+  flex:0 0 auto;
+}
+
+.brand-name{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:31px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+.brand-tag{
+  font-family:Arial,Helvetica,sans-serif;
+  color:#9ca3af;
+  font-size:9px;
   letter-spacing:2px;
+  margin-top:5px;
   white-space:nowrap;
 }
 
@@ -38,7 +63,7 @@ body{
   font-size:20px;
   font-weight:bold;
   color:#999;
-  margin-top:8px;
+  margin-top:4px;
   margin-bottom:55px;
 }
 
@@ -54,6 +79,10 @@ body{
   color:#222;
   outline:none;
   margin-bottom:15px;
+}
+
+.input-box:focus{
+  box-shadow:0 0 0 2px #555;
 }
 
 .password-wrap{
@@ -75,6 +104,7 @@ body{
   font-size:17px;
   font-weight:bold;
   font-family:Georgia,"Times New Roman",serif;
+  cursor:pointer;
 }
 
 .login-btn{
@@ -88,10 +118,12 @@ body{
   font-weight:bold;
   font-family:Georgia,"Times New Roman",serif;
   margin-top:12px;
+  cursor:pointer;
 }
 
 .login-btn:disabled{
   opacity:.6;
+  cursor:not-allowed;
 }
 
 .message{
@@ -129,8 +161,13 @@ body{
     padding-right:18px;
   }
 
-  .logo{
-    font-size:36px;
+  .brand-name{
+    font-size:27px;
+  }
+
+  .brand-mark{
+    width:62px;
+    height:62px;
   }
 
   .tagline{
@@ -148,8 +185,6 @@ body{
     font-size:19px;
   }
 }
-
-.brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;text-align:left}.brand-mark{width:70px;height:70px;display:block;flex:0 0 auto}.brand-name{font-family:Arial,Helvetica,sans-serif;font-size:31px;font-weight:900;letter-spacing:1.5px}.brand-tag{font-family:Arial,Helvetica,sans-serif;color:#9ca3af;font-size:9px;letter-spacing:2px;margin-top:5px;white-space:nowrap}.brand + .tagline{margin-top:4px}
 </style>
 </head>
 
@@ -157,7 +192,57 @@ body{
 
 <div class="container">
 
-  <div class="brand"><svg class="brand-mark" viewBox="0 0 72 72" aria-hidden="true"><defs><linearGradient id="ccg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".48" stop-color="#315cff"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient></defs><rect x="3" y="3" width="66" height="66" rx="18" fill="#080b18" stroke="url(#ccg)" stroke-width="5"/><path d="M48 20c-4-5-10-8-17-8-12 0-21 10-21 24s9 24 21 24c7 0 13-3 17-8l-7-8c-3 3-6 5-10 5-7 0-12-6-12-13s5-13 12-13c4 0 7 2 10 5z" fill="url(#ccg)"/><path d="M29 26l20 10-20 10z" fill="url(#ccg)"/></svg><div><div class="brand-name">CROCKCELL</div><div class="brand-tag">CONNECT • CREATE • SHARE</div></div></div>
+  <div class="brand">
+
+    <svg
+      class="brand-mark"
+      viewBox="0 0 72 72"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient
+          id="ccg"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="1"
+        >
+          <stop offset="0" stop-color="#22d3ee"/>
+          <stop offset=".48" stop-color="#315cff"/>
+          <stop offset="1" stop-color="#ff2bd6"/>
+        </linearGradient>
+      </defs>
+
+      <rect
+        x="3"
+        y="3"
+        width="66"
+        height="66"
+        rx="18"
+        fill="#080b18"
+        stroke="url(#ccg)"
+        stroke-width="5"
+      />
+
+      <path
+        d="M48 20c-4-5-10-8-17-8-12 0-21 10-21 24s9 24 21 24c7 0 13-3 17-8l-7-8c-3 3-6 5-10 5-7 0-12-6-12-13s5-13 12-13c4 0 7 2 10 5z"
+        fill="url(#ccg)"
+      />
+
+      <path
+        d="M29 26l20 10-20 10z"
+        fill="url(#ccg)"
+      />
+    </svg>
+
+    <div>
+      <div class="brand-name">CROCKCELL</div>
+      <div class="brand-tag">
+        CONNECT • CREATE • SHARE
+      </div>
+    </div>
+
+  </div>
 
   <div class="tagline">
     Connect. Share. Create.
@@ -170,6 +255,7 @@ body{
     placeholder="Username"
     autocomplete="username"
     autocapitalize="none"
+    spellcheck="false"
   >
 
   <div class="password-wrap">
@@ -184,41 +270,60 @@ body{
 
     <button
       type="button"
+      id="showBtn"
       class="show-btn"
-      onclick="togglePassword()"
-    >Show</button>
+    >
+      Show
+    </button>
 
   </div>
 
   <button
     id="loginBtn"
     class="login-btn"
-    onclick="login()"
+    type="button"
   >
     Login
   </button>
 
-  <div id="message" class="message"></div>
+  <div
+    id="message"
+    class="message"
+    aria-live="polite"
+  ></div>
 
-  <a class="forgot" href="forgot-password.html">
+  <a
+    class="forgot"
+    href="forgot-password.html"
+  >
     Forgot Password?
   </a>
 
   <div class="signup">
     Don't have an account?
-    <a href="signup.html">Sign Up</a>
+    <a href="signup.html">
+      Sign Up
+    </a>
   </div>
 
 </div>
 
 
+<!-- CROCKCELL CORE -->
+
+<script src="core.js"></script>
+
+
 <script>
+
+"use strict";
 
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
 const PROJECT_ID =
 "crockcell-cd2e6";
+
 
 const usernameInput =
 document.getElementById("username");
@@ -229,52 +334,73 @@ document.getElementById("password");
 const loginBtn =
 document.getElementById("loginBtn");
 
+const showBtn =
+document.getElementById("showBtn");
+
 const message =
 document.getElementById("message");
 
 
-function showMessage(text,color="#fff"){
+let loginInProgress = false;
 
-  message.textContent=text;
-  message.style.color=color;
+
+// ----------------------------------------
+// MESSAGE
+// ----------------------------------------
+
+function showMessage(text, color="#fff"){
+
+  message.textContent = text;
+  message.style.color = color;
 
 }
 
 
+// ----------------------------------------
+// PASSWORD SHOW / HIDE
+// ----------------------------------------
+
 function togglePassword(){
 
-  if(passwordInput.type==="password"){
+  if(passwordInput.type === "password"){
 
-    passwordInput.type="text";
-
-    document.querySelector(".show-btn").textContent="Hide";
+    passwordInput.type = "text";
+    showBtn.textContent = "Hide";
 
   }else{
 
-    passwordInput.type="password";
-
-    document.querySelector(".show-btn").textContent="Show";
+    passwordInput.type = "password";
+    showBtn.textContent = "Show";
 
   }
 
 }
 
+showBtn.addEventListener(
+  "click",
+  togglePassword
+);
+
+
+// ----------------------------------------
+// FIND USERNAME
+// ----------------------------------------
 
 async function findUser(username){
 
   const url =
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents/usernameIndex/" +
-  encodeURIComponent(username) +
-  "?key=" + API_KEY;
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/usernameIndex/" +
+    encodeURIComponent(username) +
+    "?key=" +
+    encodeURIComponent(API_KEY);
 
-  const response =
-  await fetch(url);
+  const response = await fetch(url);
 
   if(!response.ok){
 
-    if(response.status===404){
+    if(response.status === 404){
       throw new Error("USERNAME_NOT_FOUND");
     }
 
@@ -282,97 +408,153 @@ async function findUser(username){
 
   }
 
-  const data =
-  await response.json();
+  const data = await response.json();
 
-  const f=data.fields;
+  if(!data.fields){
+    throw new Error("USERNAME_LOOKUP_FAILED");
+  }
+
+  const f = data.fields;
+
+  const email =
+    f.email?.stringValue || "";
+
+  const uid =
+    f.uid?.stringValue || "";
+
+  if(!email || !uid){
+    throw new Error("INVALID_USER_DATA");
+  }
 
   return {
 
-    username:f.username?.stringValue || username,
+    username:
+      f.username?.stringValue || username,
 
-    email:f.email?.stringValue || "",
-
-    uid:f.uid?.stringValue || ""
+    email,
+    uid
 
   };
 
 }
 
 
-async function loadProfile(uid,idToken,user){
+// ----------------------------------------
+// LOAD PROFILE
+// ----------------------------------------
+
+async function loadProfile(
+  uid,
+  idToken,
+  user
+){
 
   const url =
-  "https://firestore.googleapis.com/v1/projects/" +
-  PROJECT_ID +
-  "/databases/(default)/documents/users/" +
-  encodeURIComponent(uid);
+    "https://firestore.googleapis.com/v1/projects/" +
+    PROJECT_ID +
+    "/databases/(default)/documents/users/" +
+    encodeURIComponent(uid) +
+    "?key=" +
+    encodeURIComponent(API_KEY);
+
 
   const response =
-  await fetch(url,{
-    headers:{
-      Authorization:"Bearer "+idToken
-    }
-  });
+    await fetch(url,{
+
+      headers:{
+        Authorization:
+          "Bearer " + idToken
+      }
+
+    });
+
 
   if(!response.ok){
 
     return {
+
       uid,
+
       username:user.username,
+
       name:user.username,
+
       email:user.email,
+
       photoURL:"",
+
       bio:""
+
     };
 
   }
 
+
   const data =
-  await response.json();
+    await response.json();
+
 
   if(!data.fields){
 
     return {
+
       uid,
+
       username:user.username,
+
       name:user.username,
+
       email:user.email,
+
       photoURL:"",
+
       bio:""
+
     };
 
   }
 
-  const f=data.fields;
+
+  const f =
+    data.fields;
+
 
   return {
 
     uid,
 
     username:
-    f.username?.stringValue || user.username,
+      f.username?.stringValue ||
+      user.username,
 
     name:
-    f.name?.stringValue || user.username,
+      f.name?.stringValue ||
+      user.username,
 
     email:
-    f.email?.stringValue || user.email,
+      f.email?.stringValue ||
+      user.email,
 
     photoURL:
-    f.photoURL?.stringValue || "",
+      f.photoURL?.stringValue ||
+      "",
 
     bio:
-    f.bio?.stringValue || ""
+      f.bio?.stringValue ||
+      ""
 
   };
 
 }
 
 
+// ----------------------------------------
+// CLEAR OLD SESSION
+// ----------------------------------------
+
 function clearSession(){
 
-  const keys=[
+  const keys = [
 
     "crockcell_idToken",
     "crockcell_refreshToken",
@@ -386,62 +568,96 @@ function clearSession(){
 
   ];
 
-  keys.forEach(k=>{
-    localStorage.removeItem(k);
-    sessionStorage.removeItem(k);
+
+  keys.forEach(key => {
+
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+
   });
 
 }
 
 
-function saveSession(idToken,refreshToken,uid,profile){
+// ----------------------------------------
+// SAVE SESSION
+// ----------------------------------------
 
-  const profileText=
-  JSON.stringify(profile);
+function saveSession(
+  idToken,
+  refreshToken,
+  uid,
+  profile
+){
+
+  const profileText =
+    JSON.stringify(profile);
+
 
   localStorage.setItem(
-    "crockcell_idToken",idToken
+    "crockcell_idToken",
+    idToken
   );
 
   localStorage.setItem(
-    "crockcell_refreshToken",refreshToken
+    "crockcell_refreshToken",
+    refreshToken
   );
 
   localStorage.setItem(
-    "crockcell_uid",uid
+    "crockcell_uid",
+    uid
   );
 
   localStorage.setItem(
-    "crockcell_profile",profileText
+    "crockcell_profile",
+    profileText
   );
 
 
   sessionStorage.setItem(
-    "crockcell_idToken",idToken
+    "crockcell_idToken",
+    idToken
   );
 
   sessionStorage.setItem(
-    "crockcell_refreshToken",refreshToken
+    "crockcell_refreshToken",
+    refreshToken
   );
 
   sessionStorage.setItem(
-    "crockcell_uid",uid
+    "crockcell_uid",
+    uid
   );
 
   sessionStorage.setItem(
-    "crockcell_profile",profileText
+    "crockcell_profile",
+    profileText
   );
 
 }
 
 
+// ----------------------------------------
+// LOGIN
+// ----------------------------------------
+
 async function login(){
 
-  const username=
-  usernameInput.value.trim().toLowerCase();
+  if(loginInProgress){
+    return;
+  }
 
-  const password=
-  passwordInput.value;
+
+  const username =
+    usernameInput.value
+      .trim()
+      .toLowerCase();
+
+
+  const password =
+    passwordInput.value;
+
 
   if(!username){
 
@@ -450,9 +666,12 @@ async function login(){
       "#ff6666"
     );
 
+    usernameInput.focus();
+
     return;
 
   }
+
 
   if(!password){
 
@@ -461,65 +680,115 @@ async function login(){
       "#ff6666"
     );
 
+    passwordInput.focus();
+
     return;
 
   }
 
 
-  loginBtn.disabled=true;
-  loginBtn.textContent="Logging in...";
+  loginInProgress = true;
 
-  showMessage("Please wait...","#aaa");
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging in...";
+
+  showMessage(
+    "Please wait...",
+    "#aaa"
+  );
 
 
   try{
 
-    const user=
-    await findUser(username);
+    // STEP 1: Username check
+
+    const user =
+      await findUser(username);
 
 
-    const loginURL=
-    "https://identitytoolkit.googleapis.com/v1/" +
-    "accounts:signInWithPassword?key="+API_KEY;
+    // STEP 2: Firebase Authentication
+
+    const loginURL =
+      "https://identitytoolkit.googleapis.com/v1/" +
+      "accounts:signInWithPassword?key=" +
+      encodeURIComponent(API_KEY);
 
 
-    const authResponse=
-    await fetch(loginURL,{
+    const authResponse =
+      await fetch(
+        loginURL,
+        {
 
-      method:"POST",
+          method:"POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-      body:JSON.stringify({
+          body:JSON.stringify({
 
-        email:user.email,
+            email:user.email,
 
-        password:password,
+            password:password,
 
-        returnSecureToken:true
+            returnSecureToken:true
 
-      })
+          })
 
-    });
+        }
+      );
 
 
-    const authData=
-    await authResponse.json();
+    const authData =
+      await authResponse
+        .json()
+        .catch(() => ({}));
 
 
     if(!authResponse.ok){
 
+      const firebaseError =
+        authData.error?.message || "";
+
+
+      if(
+        firebaseError ===
+          "INVALID_PASSWORD" ||
+        firebaseError ===
+          "INVALID_LOGIN_CREDENTIALS"
+      ){
+
+        throw new Error(
+          "INVALID_PASSWORD"
+        );
+
+      }
+
+
+      if(
+        firebaseError ===
+          "USER_DISABLED"
+      ){
+
+        throw new Error(
+          "USER_DISABLED"
+        );
+
+      }
+
+
       throw new Error(
-        authData.error?.message ||
+        firebaseError ||
         "LOGIN_FAILED"
       );
 
     }
 
 
-    if(authData.localId!==user.uid){
+    // STEP 3: UID verification
+
+    if(authData.localId !== user.uid){
 
       throw new Error(
         "ACCOUNT_MISMATCH"
@@ -528,13 +797,17 @@ async function login(){
     }
 
 
-    const profile=
-    await loadProfile(
-      user.uid,
-      authData.idToken,
-      user
-    );
+    // STEP 4: Load profile
 
+    const profile =
+      await loadProfile(
+        user.uid,
+        authData.idToken,
+        user
+      );
+
+
+    // STEP 5: Replace old session
 
     clearSession();
 
@@ -552,74 +825,151 @@ async function login(){
     );
 
 
+    // STEP 6: Success
+
     showMessage(
       "Login successful...",
       "#66ff88"
     );
 
 
-    loginBtn.textContent="Opening...";
+    loginBtn.textContent =
+      "Opening...";
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
       window.location.replace(
         "./home.html"
       );
 
-    },400);
+    }, 500);
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "CROCKCELL LOGIN ERROR:",
+      error
+    );
 
-    let text="Login failed.";
 
-    if(error.message==="USERNAME_NOT_FOUND"){
-      text="Username nahi mila.";
+    let text =
+      "Login failed.";
+
+
+    if(
+      error.message ===
+      "USERNAME_NOT_FOUND"
+    ){
+
+      text =
+        "Username nahi mila.";
+
     }
     else if(
-      error.message==="INVALID_PASSWORD"
+      error.message ===
+      "INVALID_PASSWORD"
     ){
-      text="Password galat hai.";
+
+      text =
+        "Password galat hai.";
+
     }
     else if(
-      error.message==="ACCOUNT_MISMATCH"
+      error.message ===
+      "USER_DISABLED"
     ){
-      text="Account verification failed.";
+
+      text =
+        "Ye account disabled hai.";
+
+    }
+    else if(
+      error.message ===
+      "ACCOUNT_MISMATCH"
+    ){
+
+      text =
+        "Account verification failed.";
+
+    }
+    else if(
+      error.message ===
+      "INVALID_USER_DATA"
+    ){
+
+      text =
+        "Username data incomplete hai.";
+
     }
     else{
-      text=error.message || "Login failed.";
+
+      text =
+        error.message ||
+        "Login failed.";
+
     }
 
-    showMessage(text,"#ff6666");
 
-    loginBtn.disabled=false;
-    loginBtn.textContent="Login";
+    showMessage(
+      text,
+      "#ff6666"
+    );
+
+
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
+
+    loginInProgress = false;
 
   }
 
 }
 
 
+// ----------------------------------------
+// ENTER KEY
+// ----------------------------------------
+
 usernameInput.addEventListener(
   "keydown",
-  e=>{
-    if(e.key==="Enter"){
+  function(event){
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
       passwordInput.focus();
+
     }
+
   }
 );
 
 
 passwordInput.addEventListener(
   "keydown",
-  e=>{
-    if(e.key==="Enter"){
+  function(event){
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
       login();
+
     }
+
   }
+);
+
+
+// ----------------------------------------
+// STARTUP
+// ----------------------------------------
+
+console.log(
+  "CROCKCELL Login loaded."
 );
 
 </script>
