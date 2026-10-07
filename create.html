@@ -63,6 +63,10 @@ color:#fff;
 font-size:15px;
 }
 
+input[type="file"]{
+padding:10px;
+}
+
 textarea{
 min-height:110px;
 resize:none;
@@ -87,10 +91,12 @@ background:#fff;
 color:#000;
 font-size:16px;
 font-weight:700;
+cursor:pointer;
 }
 
 button:disabled{
 opacity:.55;
+cursor:not-allowed;
 }
 
 .message{
@@ -169,13 +175,11 @@ class="preview"
 alt="Preview"
 >
 
-
 <textarea
 id="caption"
 maxlength="2200"
 placeholder="Write a caption..."
 ></textarea>
-
 
 <button
 id="postButton"
@@ -185,12 +189,10 @@ type="button"
 Post
 </button>
 
-
 <div
 id="message"
-class="message"
-></div>
-
+class="message">
+</div>
 
 <div class="note">
 Photo automatically compress hoke save hogi.
@@ -236,42 +238,23 @@ Profile
 
 <script>
 
+/* =========================================
+   FIREBASE SETTINGS
+========================================= */
+
 const API_KEY =
 "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
 
 const PROJECT_ID =
 "crockcell-cd2e6";
 
-
-function getStored(a,b){
-
-return localStorage.getItem(a)
-|| sessionStorage.getItem(a)
-|| localStorage.getItem(b)
-|| sessionStorage.getItem(b);
-
-}
+const BASE =
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 
-let token =
-getStored(
-"crockcell_idToken",
-"crockcellIdToken"
-);
-
-let uid =
-getStored(
-"crockcell_uid",
-"crockcellUid"
-);
-
-
-if(!token || !uid){
-
-location.replace("index.html");
-
-}
-
+/* =========================================
+   ELEMENTS
+========================================= */
 
 const imageInput =
 document.getElementById("imageInput");
@@ -289,81 +272,138 @@ const message =
 document.getElementById("message");
 
 
-function profile(){
+/* =========================================
+   ACCOUNT
+========================================= */
 
-for(
-const k of
-[
-"crockcell_profile",
-"crockcellProfile"
-]
-){
+let token =
+localStorage.getItem("crockcell_idToken") ||
+"";
 
-let x =
-localStorage.getItem(k)
-||
-sessionStorage.getItem(k);
+let uid =
+localStorage.getItem("crockcell_uid") ||
+"";
 
 
-if(x){
+/* =========================================
+   PROFILE
+========================================= */
+
+function getProfile(){
+
+let data = {};
 
 try{
 
-return JSON.parse(x);
+data =
+JSON.parse(
+localStorage.getItem(
+"crockcell_profile"
+) || "{}"
+);
 
-}catch(e){}
+}catch(error){
+
+data={};
 
 }
 
-}
-
-return {};
+return data;
 
 }
 
 
-let p =
-profile();
+/* =========================================
+   CHECK LOGIN
+========================================= */
+
+async function checkLogin(){
+
+if(window.CrockCell){
+
+token =
+window.CrockCell.getToken() ||
+token;
+
+uid =
+window.CrockCell.getUID() ||
+uid;
+
+}
 
 
-imageInput.onchange =
-() => {
+if(!token || !uid){
 
-let f =
+location.replace("index.html");
+
+return false;
+
+}
+
+return true;
+
+}
+
+
+/* =========================================
+   IMAGE PREVIEW
+========================================= */
+
+imageInput.addEventListener(
+"change",
+function(){
+
+const file =
 imageInput.files[0];
 
 
-if(!f){
+if(!file){
 
-preview.style.display =
-"none";
+preview.style.display="none";
 
 return;
 
 }
 
 
-if(
-f.size >
-10 * 1024 * 1024
-){
+if(!file.type.startsWith("image/")){
+
+message.textContent =
+"Please select an image.";
+
+imageInput.value="";
+
+preview.style.display="none";
+
+return;
+
+}
+
+
+if(file.size >
+10 * 1024 * 1024){
 
 message.textContent =
 "Image 10 MB se chhoti rakho.";
 
-imageInput.value = "";
+imageInput.value="";
+
+preview.style.display="none";
 
 return;
 
 }
 
 
-let r =
+message.textContent="";
+
+
+const reader =
 new FileReader();
 
 
-r.onload =
-e => {
+reader.onload =
+function(e){
 
 preview.src =
 e.target.result;
@@ -374,128 +414,182 @@ preview.style.display =
 };
 
 
-r.readAsDataURL(f);
+reader.onerror =
+function(){
+
+message.textContent =
+"Image preview load nahi hui.";
 
 };
 
 
-function compress(file){
+reader.readAsDataURL(file);
+
+});
+
+
+/* =========================================
+   COMPRESS IMAGE
+========================================= */
+
+function compressImage(file){
 
 return new Promise(
-(resolve,reject) => {
+function(resolve,reject){
 
-let r =
+const reader =
 new FileReader();
 
 
-r.onload =
-e => {
+reader.onload =
+function(e){
 
-let im =
+const image =
 new Image();
 
 
-im.onload =
-() => {
+image.onload =
+function(){
 
-let max = 700;
+const maxWidth=900;
+const maxHeight=900;
 
-let w =
-im.width;
+let width =
+image.width;
 
-let h =
-im.height;
+let height =
+image.height;
 
 
-if(w > max){
+if(width > maxWidth){
 
-h =
+height =
 Math.round(
-h * max / w
+height *
+maxWidth /
+width
 );
 
-w = max;
+width=maxWidth;
 
 }
 
 
-if(h > max){
+if(height > maxHeight){
 
-w =
+width =
 Math.round(
-w * max / h
+width *
+maxHeight /
+height
 );
 
-h = max;
+height=maxHeight;
 
 }
 
 
-let c =
+const canvas =
 document.createElement(
 "canvas"
 );
 
 
-c.width = w;
+canvas.width=width;
+canvas.height=height;
 
-c.height = h;
+
+const ctx =
+canvas.getContext("2d");
 
 
-c.getContext("2d")
-.drawImage(
-im,
+ctx.drawImage(
+image,
 0,
 0,
-w,
-h
+width,
+height
 );
 
 
-resolve(
-c.toDataURL(
+const result =
+canvas.toDataURL(
 "image/jpeg",
-0.65
+0.72
+);
+
+
+resolve(result);
+
+};
+
+
+image.onerror =
+function(){
+
+reject(
+new Error(
+"Image load failed."
 )
 );
 
 };
 
 
-im.onerror =
-() =>
-reject(
-Error("Image load failed.")
-);
-
-
-im.src =
-e.target.result;
+image.src=e.target.result;
 
 };
 
 
-r.onerror =
-() =>
+reader.onerror =
+function(){
+
 reject(
-Error("Image read failed.")
+new Error(
+"Image read failed."
+)
 );
 
+};
 
-r.readAsDataURL(file);
+
+reader.readAsDataURL(file);
 
 });
 
 }
 
 
+/* =========================================
+   CREATE UNIQUE POST ID
+========================================= */
+
+function createPostId(){
+
+return (
+uid +
+"_" +
+Date.now() +
+"_" +
+Math.random()
+.toString(36)
+.substring(2,10)
+);
+
+}
+
+
+/* =========================================
+   CREATE POST
+========================================= */
+
 async function createPost(){
 
-let f =
+const file =
 imageInput.files[0];
 
 
-if(!f){
+if(!file){
 
 message.textContent =
 "Please select an image.";
@@ -505,73 +599,80 @@ return;
 }
 
 
-button.disabled = true;
+const loggedIn =
+await checkLogin();
+
+
+if(!loggedIn)
+return;
+
+
+const text =
+caption.value.trim();
+
+
+button.disabled=true;
 
 message.textContent =
-"Creating post...";
+"Photo compress ho rahi hai...";
 
 
 try{
 
-let img =
-await compress(f);
+const image =
+await compressImage(file);
 
 
-let id =
-uid +
-"_" +
-Date.now() +
-"_" +
-Math.random()
-.toString(36)
-.slice(2,8);
+message.textContent =
+"Post save ho rahi hai...";
 
 
-let time =
-new Date().toISOString();
+const profile =
+getProfile();
 
 
-let username =
-p.username ||
+const username =
+profile.username ||
 "user";
 
 
-let name =
-p.name ||
+const name =
+profile.name ||
 username;
 
 
-let url =
-"https://firestore.googleapis.com/v1/projects/"
-+
-PROJECT_ID
-+
-"/databases/(default)/documents/posts/"
-+
-encodeURIComponent(id)
-+
-"?key="
-+
-API_KEY;
+const photoURL =
+profile.photoURL ||
+profile.photo ||
+profile.profilePhoto ||
+"";
 
 
-let r =
-await fetch(
-url,
-{
-method:"PATCH",
+const postId =
+createPostId();
 
-headers:{
-"Content-Type":
-"application/json",
 
-Authorization:
-"Bearer "+token
+const createdAt =
+new Date().toISOString();
+
+
+/*
+IMPORTANT:
+
+POST ID UNIQUE HAI.
+
+Isliye har new post ka
+alag Firestore document banega.
+
+Purani post overwrite nahi hogi.
+*/
+
+
+const fields={
+
+postId:{
+stringValue:postId
 },
-
-body:JSON.stringify({
-
-fields:{
 
 userId:{
 stringValue:uid
@@ -586,12 +687,15 @@ stringValue:name
 },
 
 caption:{
-stringValue:
-caption.value.trim()
+stringValue:text
 },
 
 image:{
-stringValue:img
+stringValue:image
+},
+
+photoURL:{
+stringValue:photoURL
 },
 
 likes:{
@@ -599,45 +703,126 @@ integerValue:"0"
 },
 
 createdAt:{
-timestampValue:time
+timestampValue:createdAt
 }
 
-}
+};
 
+
+const response =
+await fetch(
+`${BASE}/posts/${encodeURIComponent(postId)}`,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json",
+
+Authorization:
+"Bearer "+token
+},
+
+body:JSON.stringify({
+fields:fields
 })
+
 }
 );
 
 
-let d =
-await r.json()
-.catch(
-() => ({})
+/* TOKEN EXPIRED */
+
+if(
+(response.status===401 ||
+response.status===403) &&
+window.CrockCell
+){
+
+const refreshed =
+await window.CrockCell.refreshToken();
+
+
+if(refreshed){
+
+token =
+window.CrockCell.getToken();
+
+uid =
+window.CrockCell.getUID();
+
+
+const retry =
+await fetch(
+`${BASE}/posts/${encodeURIComponent(postId)}`,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json",
+
+Authorization:
+"Bearer "+token
+},
+
+body:JSON.stringify({
+fields:fields
+})
+
+}
 );
 
 
-if(!r.ok){
+if(!retry.ok){
 
-throw Error(
-d.error?.message ||
+const errorData =
+await retry.json()
+.catch(
+()=>({})
+);
+
+throw new Error(
+errorData.error?.message ||
+"Post save failed."
+);
+
+}
+
+}else{
+
+throw new Error(
+"Login session expire ho gaya. Please login again."
+);
+
+}
+
+}else if(!response.ok){
+
+const data =
+await response.json()
+.catch(
+()=>({})
+);
+
+throw new Error(
+data.error?.message ||
 "Post save failed."
 );
 
 }
 
 
-/*
-IMPORTANT:
-Old posts ko replace nahi karega.
-Array me new post PUSH karega.
-*/
+/* =========================================
+   LOCAL COPY
 
-let posts = [];
-
+   Ye sirf backup/cache hai.
+   Main post Firestore mein save ho chuki hai.
+========================================= */
 
 try{
 
-posts =
+let localPosts =
 JSON.parse(
 localStorage.getItem(
 "crockcellPosts"
@@ -645,24 +830,15 @@ localStorage.getItem(
 );
 
 
-if(
-!Array.isArray(posts)
-){
-
-posts = [];
-
-}
-
-}catch(e){
-
-posts = [];
-
-}
+if(!Array.isArray(localPosts))
+localPosts=[];
 
 
-posts.push({
+localPosts.push({
 
-id:id,
+id:postId,
+
+postId:postId,
 
 userId:uid,
 
@@ -670,54 +846,110 @@ username:username,
 
 name:name,
 
-caption:
-caption.value.trim(),
+caption:text,
 
-image:img,
+image:image,
+
+photoURL:photoURL,
 
 likes:0,
 
-createdAt:time
+createdAt:createdAt
 
 });
 
 
-localStorage.setItem(
-"crockcellPosts",
-JSON.stringify(posts)
+/*
+Latest 100 local posts rakhenge.
+*/
+
+if(localPosts.length > 100){
+
+localPosts =
+localPosts.slice(
+localPosts.length-100
 );
 
+}
+
+
+localStorage.setItem(
+"crockcellPosts",
+JSON.stringify(
+localPosts
+)
+);
+
+}catch(error){
+
+console.log(
+"Local cache error:",
+error
+);
+
+}
+
+
+/* =========================================
+   SUCCESS
+========================================= */
 
 message.textContent =
 "Post created successfully!";
 
 
+imageInput.value="";
+caption.value="";
+
+preview.src="";
+preview.style.display="none";
+
+
 setTimeout(
-() =>
+function(){
+
 location.replace(
 "home.html"
-),
-600
+);
+
+},
+700
 );
 
 
-}catch(e){
+}catch(error){
 
-console.error(e);
+console.error(
+"Create post error:",
+error
+);
 
 message.textContent =
-e.message ||
+error.message ||
 "Something went wrong.";
 
-button.disabled = false;
+button.disabled=false;
 
 }
 
 }
 
 
-button.onclick =
-createPost;
+/* =========================================
+   BUTTON
+========================================= */
+
+button.addEventListener(
+"click",
+createPost
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+checkLogin();
 
 </script>
 
