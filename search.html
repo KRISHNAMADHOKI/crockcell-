@@ -1,7 +1,832 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Search - CROCKCELL</title><link rel="stylesheet" href="style.css"></head><body><main class="app">
-<header class="topbar"><div class="brand">Search</div></header><section class="card stack"><input id="q" class="input" placeholder="Search username..."><button id="go" class="btn primary">Search</button><div id="results"></div></section></main>
-<nav class="nav"><div class="navinner"><a href="home.html"><span>⌂</span>Home</a><a class="active" href="search.html"><span>⌕</span>Search</a><a href="create.html"><span>＋</span>Create</a><a href="messages.html"><span>✉</span>Messages</a><a href="profile.html"><span>●</span>Profile</a></div></nav>
-<script src="core.js"></script><script>
-const $=id=>document.getElementById(id),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-$("go").onclick=async()=>{const q=$("q").value.trim().toLowerCase();if(!q)return;$("results").textContent="Searching...";const r=await CrockCell.request("users?pageSize=100");const d=await r.json().catch(()=>({}));const rows=(d.documents||[]).filter(x=>(x.fields?.username?.stringValue||"").toLowerCase().includes(q));$("results").innerHTML=rows.length?rows.map(x=>{const f=x.fields||{},id=x.name.split("/").pop();return `<a class="card row" style="display:flex;margin-top:10px" href="profile.html?uid=${encodeURIComponent(id)}"><img class="avatar" src="${f.profilePhoto?.stringValue||"https://via.placeholder.com/80"}"><b>${esc(f.username?.stringValue||"User")}</b></a>`}).join(""):"<div class='empty'>User nahi mila.</div>"};
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CROCKCELL Search</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  padding:20px 16px 15px;
+  background:rgba(0,0,0,.94);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid #202020;
+}
+
+.title{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.search-row{
+  display:flex;
+  gap:8px;
+}
+
+.search-input{
+  flex:1;
+  height:50px;
+  border:1px solid #292929;
+  outline:none;
+  border-radius:18px;
+  background:#151515;
+  color:#fff;
+  padding:0 16px;
+  font-size:16px;
+}
+
+.search-input:focus{
+  border-color:#666;
+}
+
+.search-btn{
+  width:55px;
+  height:50px;
+  border:0;
+  border-radius:18px;
+  background:#fff;
+  color:#000;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.message{
+  min-height:25px;
+  padding:12px 18px 0;
+  color:#888;
+  font-size:14px;
+}
+
+.results{
+  padding:8px 15px 100px;
+}
+
+.user-card{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px 5px;
+  border-bottom:1px solid #181818;
+  cursor:pointer;
+  border-radius:12px;
+}
+
+.user-card:active{
+  background:#111;
+}
+
+.avatar{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#222;
+  flex-shrink:0;
+}
+
+.user-info{
+  flex:1;
+  min-width:0;
+}
+
+.name{
+  font-size:17px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.username{
+  margin-top:4px;
+  color:#888;
+  font-size:14px;
+}
+
+.profile-arrow{
+  color:#777;
+  font-size:25px;
+}
+
+.empty{
+  text-align:center;
+  color:#666;
+  padding:55px 20px;
+}
+
+.loading{
+  text-align:center;
+  color:#888;
+  padding:45px 20px;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  z-index:20;
+
+  display:flex;
+  justify-content:space-around;
+
+  padding:8px;
+
+  border-radius:24px;
+
+  background:rgba(25,25,25,.92);
+  backdrop-filter:blur(18px);
+
+  border:1px solid #333;
+}
+
+.nav-item{
+  flex:1;
+  text-align:center;
+  padding:8px 4px;
+  border-radius:17px;
+
+  color:#999;
+  text-decoration:none;
+
+  font-size:11px;
+}
+
+.nav-item.active{
+  background:#fff;
+  color:#000;
+}
+
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+  <div class="title">
+    Search
+  </div>
+
+  <div class="search-row">
+
+    <input
+      id="searchInput"
+      class="search-input"
+      type="text"
+      placeholder="Search username or name..."
+      autocomplete="off"
+      autocapitalize="none"
+    >
+
+    <button
+      id="searchButton"
+      class="search-btn"
+      type="button"
+    >
+      🔍
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  id="message"
+  class="message"
+></div>
+
+
+<div
+  id="results"
+  class="results"
+>
+
+  <div class="empty">
+    Username ya name search karo
+  </div>
+
+</div>
+
+
+<div class="bottom-nav">
+
+  <a
+    class="nav-item"
+    href="home.html"
+  >
+    <span class="nav-icon">⌂</span>
+    Home
+  </a>
+
+  <a
+    class="nav-item active"
+    href="search.html"
+  >
+    <span class="nav-icon">⌕</span>
+    Search
+  </a>
+
+  <a
+    class="nav-item"
+    href="create.html"
+  >
+    <span class="nav-icon">＋</span>
+    Create
+  </a>
+
+  <a
+    class="nav-item"
+    href="messages.html"
+  >
+    <span class="nav-icon">✉</span>
+    Messages
+  </a>
+
+  <a
+    class="nav-item"
+    href="profile.html"
+  >
+    <span class="nav-icon">◯</span>
+    Profile
+  </a>
+
+</div>
+
+
+<script>
+
+const API_KEY =
+"AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+
+const PROJECT_ID =
+"crockcell-cd2e6";
+
+const BASE =
+`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+
+/* ===============================
+   SESSION
+================================ */
+
+let token =
+localStorage.getItem("crockcell_idToken") ||
+sessionStorage.getItem("crockcell_idToken") ||
+localStorage.getItem("crockcellIdToken") ||
+sessionStorage.getItem("crockcellIdToken") ||
+"";
+
+let currentUID =
+localStorage.getItem("crockcell_uid") ||
+sessionStorage.getItem("crockcell_uid") ||
+localStorage.getItem("crockcellUid") ||
+sessionStorage.getItem("crockcellUid") ||
+"";
+
+
+if(!token || !currentUID){
+
+  window.location.replace("index.html");
+
+}
+
+
+/* ===============================
+   ELEMENTS
+================================ */
+
+const searchInput =
+document.getElementById("searchInput");
+
+const searchButton =
+document.getElementById("searchButton");
+
+const results =
+document.getElementById("results");
+
+const message =
+document.getElementById("message");
+
+
+let allUsers = [];
+
+let searchTimer = null;
+
+
+/* ===============================
+   ESCAPE HTML
+================================ */
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* ===============================
+   PLACEHOLDER
+================================ */
+
+function placeholderPhoto(){
+
+  return "data:image/svg+xml;charset=UTF-8," +
+  encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="100"
+         height="100">
+
+      <rect width="100"
+            height="100"
+            fill="#222"/>
+
+      <circle
+        cx="50"
+        cy="38"
+        r="18"
+        fill="#666"/>
+
+      <path
+        d="M20 90c5-23 55-23 60 0"
+        fill="#666"/>
+
+    </svg>
+  `);
+
+}
+
+
+/* ===============================
+   FIRESTORE VALUE
+================================ */
+
+function getValue(field){
+
+  if(!field){
+    return "";
+  }
+
+  if(field.stringValue !== undefined){
+    return field.stringValue;
+  }
+
+  if(field.integerValue !== undefined){
+    return Number(field.integerValue);
+  }
+
+  if(field.doubleValue !== undefined){
+    return Number(field.doubleValue);
+  }
+
+  if(field.booleanValue !== undefined){
+    return field.booleanValue;
+  }
+
+  return "";
+
+}
+
+
+/* ===============================
+   LOAD USERS
+================================ */
+
+async function loadUsers(){
+
+  message.textContent =
+    "Users load ho rahe hain...";
+
+  try{
+
+    const url =
+      BASE +
+      "/users?pageSize=100&key=" +
+      encodeURIComponent(API_KEY);
+
+
+    let response =
+      await fetch(url,{
+        headers:{
+          Authorization:
+            "Bearer " + token
+        }
+      });
+
+
+    if(
+      response.status === 401 ||
+      response.status === 403
+    ){
+
+      if(
+        window.CrockCell &&
+        typeof window.CrockCell.refreshToken === "function"
+      ){
+
+        const refreshed =
+          await window.CrockCell.refreshToken();
+
+        if(refreshed){
+
+          token =
+            localStorage.getItem(
+              "crockcell_idToken"
+            ) ||
+            sessionStorage.getItem(
+              "crockcell_idToken"
+            ) ||
+            token;
+
+          response =
+            await fetch(url,{
+              headers:{
+                Authorization:
+                  "Bearer " + token
+              }
+            });
+
+        }
+
+      }
+
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "USERS_LOAD_FAILED_" +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const documents =
+      data.documents || [];
+
+
+    allUsers =
+      documents
+      .map(document => {
+
+        const fields =
+          document.fields || {};
+
+        const uid =
+          document.name
+          ? document.name.split("/").pop()
+          : "";
+
+
+        return {
+
+          uid: uid,
+
+          username:
+            getValue(fields.username),
+
+          name:
+            getValue(fields.name) ||
+            getValue(fields.fullName),
+
+          bio:
+            getValue(fields.bio),
+
+          photoURL:
+            getValue(fields.photoURL) ||
+            getValue(fields.profilePhoto)
+
+        };
+
+      })
+      .filter(user => user.uid);
+
+
+    message.textContent =
+      allUsers.length +
+      " users available";
+
+
+    if(searchInput.value.trim()){
+
+      searchUsers();
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "CROCKCELL SEARCH ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Users load nahi ho paaye.";
+
+    results.innerHTML = `
+      <div class="empty">
+        Search data load nahi hua.
+        <br><br>
+        Please try again.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* ===============================
+   SEARCH USERS
+================================ */
+
+function searchUsers(){
+
+  const text =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  if(!text){
+
+    message.textContent = "";
+
+    results.innerHTML = `
+      <div class="empty">
+        Username ya name search karo
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const matches =
+    allUsers.filter(user => {
+
+      if(user.uid === currentUID){
+        return false;
+      }
+
+
+      const username =
+        String(
+          user.username || ""
+        ).toLowerCase();
+
+
+      const name =
+        String(
+          user.name || ""
+        ).toLowerCase();
+
+
+      return (
+        username.includes(text) ||
+        name.includes(text)
+      );
+
+    });
+
+
+  renderResults(matches);
+
+}
+
+
+/* ===============================
+   RENDER RESULTS
+================================ */
+
+function renderResults(users){
+
+  if(!users.length){
+
+    message.textContent =
+      "Koi user nahi mila.";
+
+    results.innerHTML = `
+      <div class="empty">
+        No users found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  message.textContent =
+    users.length +
+    " user" +
+    (users.length === 1 ? "" : "s") +
+    " found";
+
+
+  results.innerHTML =
+    users
+    .map(user => {
+
+      const photo =
+        user.photoURL ||
+        placeholderPhoto();
+
+
+      const safePhoto =
+        escapeHTML(photo);
+
+
+      const safeName =
+        escapeHTML(
+          user.name ||
+          user.username ||
+          "CROCKCELL User"
+        );
+
+
+      const safeUsername =
+        escapeHTML(
+          user.username ||
+          "username"
+        );
+
+
+      return `
+
+        <div
+          class="user-card"
+          data-uid="${escapeHTML(user.uid)}"
+        >
+
+          <img
+            class="avatar"
+            src="${safePhoto}"
+            onerror="this.src=placeholderPhoto()"
+          >
+
+          <div class="user-info">
+
+            <div class="name">
+              ${safeName}
+            </div>
+
+            <div class="username">
+              @${safeUsername}
+            </div>
+
+          </div>
+
+          <div class="profile-arrow">
+            ›
+          </div>
+
+        </div>
+
+      `;
+
+    })
+    .join("");
+
+
+  document
+    .querySelectorAll(".user-card")
+    .forEach(card => {
+
+      card.addEventListener(
+        "click",
+        function(){
+
+          const uid =
+            this.dataset.uid;
+
+          openProfile(uid);
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ===============================
+   OPEN PROFILE
+================================ */
+
+function openProfile(uid){
+
+  const user =
+    allUsers.find(
+      item => item.uid === uid
+    );
+
+
+  if(!user){
+    return;
+  }
+
+
+  sessionStorage.setItem(
+    "crockcell_profile_target",
+    JSON.stringify(user)
+  );
+
+
+  window.location.href =
+    "profile.html";
+
+}
+
+
+/* ===============================
+   EVENTS
+================================ */
+
+searchInput.addEventListener(
+  "input",
+  function(){
+
+    clearTimeout(
+      searchTimer
+    );
+
+
+    searchTimer =
+      setTimeout(
+        searchUsers,
+        150
+      );
+
+  }
+);
+
+
+searchInput.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
+      searchUsers();
+
+    }
+
+  }
+);
+
+
+searchButton.addEventListener(
+  "click",
+  searchUsers
+);
+
+
+/* ===============================
+   START
+================================ */
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
