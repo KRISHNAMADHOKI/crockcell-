@@ -1,259 +1,98 @@
-(function () {
-  "use strict";
-
-  const API_KEY = "AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
-
-  const keys = {
-    idToken: "crockcell_idToken",
-    refreshToken: "crockcell_refreshToken",
-    uid: "crockcell_uid",
-    profile: "crockcell_profile"
+(function(){
+  const KEYS = {
+    token:"crockcell_idToken",
+    refresh:"crockcell_refreshToken",
+    uid:"crockcell_uid",
+    profile:"crockcell_profile"
   };
 
-  // --------------------------------------------------
-  // OLD KEY MIGRATION
-  // --------------------------------------------------
+  const OLD = {
+    token:["crockcellIdToken"],
+    refresh:["crockcellRefreshToken"],
+    uid:["crockcellUid"],
+    profile:["crockcellProfile"]
+  };
 
-  function migrate(oldKey, newKey) {
-    const current = localStorage.getItem(newKey);
-    const old = localStorage.getItem(oldKey);
-
-    if (!current && old) {
-      localStorage.setItem(newKey, old);
-    }
+  function read(key){
+    return localStorage.getItem(key) || sessionStorage.getItem(key) || "";
   }
-
-  migrate("crockcellIdToken", keys.idToken);
-  migrate("crockcellRefreshToken", keys.refreshToken);
-  migrate("crockcellUid", keys.uid);
-  migrate("crockcellProfile", keys.profile);
-
-  // --------------------------------------------------
-  // NATIVE FETCH
-  // --------------------------------------------------
-
-  const nativeFetch = window.fetch.bind(window);
-
-  // --------------------------------------------------
-  // TOKEN HELPERS
-  // --------------------------------------------------
-
-  function getToken() {
-    return (
-      localStorage.getItem(keys.idToken) ||
-      sessionStorage.getItem(keys.idToken) ||
-      ""
-    );
+  function write(key,value){
+    localStorage.setItem(key,value);
   }
-
-  function getRefreshToken() {
-    return (
-      localStorage.getItem(keys.refreshToken) ||
-      sessionStorage.getItem(keys.refreshToken) ||
-      ""
-    );
-  }
-
-  function getUID() {
-    return (
-      localStorage.getItem(keys.uid) ||
-      sessionStorage.getItem(keys.uid) ||
-      ""
-    );
-  }
-
-  function getProfile() {
-    const raw =
-      localStorage.getItem(keys.profile) ||
-      sessionStorage.getItem(keys.profile) ||
-      "";
-
-    if (!raw) return null;
-
-    try {
-      return JSON.parse(raw);
-    } catch (e) {
-      return raw;
-    }
-  }
-
-  // --------------------------------------------------
-  // REFRESH TOKEN
-  // --------------------------------------------------
-
-  let refreshPromise = null;
-
-  async function refreshToken() {
-    const refresh = getRefreshToken();
-
-    if (!refresh) {
-      return false;
-    }
-
-    try {
-      const response = await nativeFetch(
-        "https://securetoken.googleapis.com/v1/token?key=" +
-          encodeURIComponent(API_KEY),
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body:
-            "grant_type=refresh_token&refresh_token=" +
-            encodeURIComponent(refresh)
+  function migrate(){
+    Object.keys(KEYS).forEach(k=>{
+      if(!read(KEYS[k])){
+        for(const oldKey of OLD[k]){
+          const v=read(oldKey);
+          if(v){ write(KEYS[k],v); break; }
         }
-      );
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok || !data || !data.id_token) {
-        return false;
       }
+    });
+  }
+  migrate();
 
-      localStorage.setItem(keys.idToken, data.id_token);
+  const API_KEY="AIzaSyDOfo32KHl1r6LZotgqj8WAgcjHzt2ORJk";
+  const PROJECT_ID="crockcell-cd2e6";
+  const BASE=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-      if (data.refresh_token) {
-        localStorage.setItem(
-          keys.refreshToken,
-          data.refresh_token
-        );
-      }
+  let refreshPromise=null;
 
-      if (data.user_id) {
-        localStorage.setItem(keys.uid, data.user_id);
-      }
-
-      return true;
-    } catch (error) {
-      console.error("CROCKCELL token refresh failed:", error);
-      return false;
-    }
+  async function refreshToken(){
+    const refresh=read(KEYS.refresh);
+    if(!refresh) return "";
+    if(refreshPromise) return refreshPromise;
+    refreshPromise=(async()=>{
+      try{
+        const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,{
+          method:"POST",
+          headers:{"Content-Type":"application/x-www-form-urlencoded"},
+          body:new URLSearchParams({
+            grant_type:"refresh_token",
+            refresh_token:refresh
+          })
+        });
+        if(!r.ok) return "";
+        const d=await r.json();
+        if(d.id_token) write(KEYS.token,d.id_token);
+        if(d.refresh_token) write(KEYS.refresh,d.refresh_token);
+        if(d.user_id) write(KEYS.uid,d.user_id);
+        return d.id_token||"";
+      }finally{ refreshPromise=null; }
+    })();
+    return refreshPromise;
   }
 
-  // --------------------------------------------------
-  // SINGLE REFRESH LOCK
-  // --------------------------------------------------
-
-  async function refreshOnce() {
-    if (!refreshPromise) {
-      refreshPromise = refreshToken().finally(() => {
-        refreshPromise = null;
-      });
+  async function request(path, options={}){
+    let token=read(KEYS.token);
+    options.headers={...(options.headers||{}),...(token?{Authorization:"Bearer "+token}:{})};
+    let r=await fetch(`${BASE}/${path}${path.includes("?")?"&":"?"}key=${API_KEY}`,options);
+    if((r.status===401||r.status===403) && read(KEYS.refresh)){
+      const t=await refreshToken();
+      if(t){
+        options.headers.Authorization="Bearer "+t;
+        r=await fetch(`${BASE}/${path}${path.includes("?")?"&":"?"}key=${API_KEY}`,options);
+      }
     }
-
-    return await refreshPromise;
+    return r;
   }
 
-  // --------------------------------------------------
-  // GLOBAL CROCKCELL OBJECT
-  // --------------------------------------------------
+  function uid(){ return read(KEYS.uid); }
+  function token(){ return read(KEYS.token); }
+  function profile(){
+    try{return JSON.parse(read(KEYS.profile)||"{}")}catch{return {}}
+  }
+  function setSession({idToken,refreshTokenValue,userId,profileValue}){
+    if(idToken) write(KEYS.token,idToken);
+    if(refreshTokenValue) write(KEYS.refresh,refreshTokenValue);
+    if(userId) write(KEYS.uid,userId);
+    if(profileValue) write(KEYS.profile,JSON.stringify(profileValue));
+  }
+  function logout(){
+    Object.values(KEYS).forEach(k=>localStorage.removeItem(k));
+    Object.values(KEYS).forEach(k=>sessionStorage.removeItem(k));
+    location.href="index.html";
+  }
+  function isLoggedIn(){ return !!(uid() && token()); }
 
-  window.CrockCell = {
-    keys,
-
-    getToken,
-
-    getRefreshToken,
-
-    getUID,
-
-    getProfile,
-
-    refreshToken,
-
-    async ensureToken() {
-      const token = getToken();
-
-      if (token) {
-        return token;
-      }
-
-      const refreshed = await refreshOnce();
-
-      if (!refreshed) {
-        return "";
-      }
-
-      return getToken();
-    },
-
-    isLoggedIn() {
-      return !!getToken() || !!getRefreshToken();
-    },
-
-    logout() {
-      localStorage.removeItem(keys.idToken);
-      localStorage.removeItem(keys.refreshToken);
-      localStorage.removeItem(keys.uid);
-      localStorage.removeItem(keys.profile);
-
-      sessionStorage.removeItem(keys.idToken);
-      sessionStorage.removeItem(keys.refreshToken);
-      sessionStorage.removeItem(keys.uid);
-      sessionStorage.removeItem(keys.profile);
-    }
-  };
-
-  // --------------------------------------------------
-  // FETCH INTERCEPTOR
-  // --------------------------------------------------
-
-  window.fetch = async function (input, init) {
-    let response;
-
-    try {
-      response = await nativeFetch(input, init);
-    } catch (error) {
-      throw error;
-    }
-
-    // Normal successful response
-    if (response.status !== 401 && response.status !== 403) {
-      return response;
-    }
-
-    // No refresh token available
-    if (!getRefreshToken()) {
-      return response;
-    }
-
-    // Try refreshing the token
-    const refreshed = await refreshOnce();
-
-    if (!refreshed) {
-      return response;
-    }
-
-    const newToken = getToken();
-
-    if (!newToken) {
-      return response;
-    }
-
-    // Rebuild request headers
-    const retryInit = Object.assign({}, init || {});
-
-    const headers = new Headers(
-      (init && init.headers) || {}
-    );
-
-    headers.set(
-      "Authorization",
-      "Bearer " + newToken
-    );
-
-    retryInit.headers = headers;
-
-    // Retry request
-    try {
-      return await nativeFetch(input, retryInit);
-    } catch (error) {
-      console.error("CROCKCELL request retry failed:", error);
-      return response;
-    }
-  };
-
-  console.log("CROCKCELL Core loaded successfully.");
-
+  window.CrockCell={API_KEY,PROJECT_ID,BASE,uid,token,profile,setSession,refreshToken,request,logout,isLoggedIn,KEYS};
 })();
