@@ -110,7 +110,6 @@ header h1{
   font-weight:700;
   background:#fff;
   color:#111;
-  cursor:pointer;
 }
 
 .btn.alt{
@@ -171,6 +170,7 @@ header h1{
 }
 
 .loading{
+  grid-column:1/-1;
   text-align:center;
   color:#999;
   padding:30px;
@@ -202,7 +202,7 @@ nav a{
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,.78);
   display:none;
   align-items:center;
   justify-content:center;
@@ -251,8 +251,8 @@ nav a{
     <img
       id="avatar"
       class="avatar"
-      alt="Profile"
       src="https://via.placeholder.com/160"
+      alt="Profile"
     >
 
     <div>
@@ -317,6 +317,7 @@ nav a{
 
 </main>
 
+
 <nav>
   <a href="home_cloud.html">Home</a>
   <a href="search.html">Search</a>
@@ -324,6 +325,7 @@ nav a{
   <a href="messages.html">Messages</a>
   <a class="active" href="profile.html">Profile</a>
 </nav>
+
 
 <div id="postModal" class="modal">
 
@@ -338,7 +340,7 @@ nav a{
 
     <p id="modalCaption" style="color:#ccc"></p>
 
-    <button id="deletePost" class="btn" style="background:#e8e8e8">
+    <button id="deletePost" class="btn">
       Delete Post
     </button>
 
@@ -349,6 +351,7 @@ nav a{
   </div>
 
 </div>
+
 
 <script>
 
@@ -361,12 +364,20 @@ const PROJECT_ID =
 const BASE =
 `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
+
+/* =========================
+   HELPERS
+========================= */
+
 const $ = id => document.getElementById(id);
 
 function getToken(){
 
-  if(window.CrockCell && window.CrockCell.getToken){
-    return window.CrockCell.getToken();
+  if(window.CrockCell &&
+     typeof window.CrockCell.getToken === 'function'){
+
+    return window.CrockCell.getToken() || '';
+
   }
 
   return localStorage.getItem('crockcell_idToken') ||
@@ -377,10 +388,14 @@ function getToken(){
 
 }
 
+
 function getUID(){
 
-  if(window.CrockCell && window.CrockCell.getUID){
-    return window.CrockCell.getUID();
+  if(window.CrockCell &&
+     typeof window.CrockCell.getUID === 'function'){
+
+    return window.CrockCell.getUID() || '';
+
   }
 
   return localStorage.getItem('crockcell_uid') ||
@@ -390,6 +405,7 @@ function getUID(){
          '';
 
 }
+
 
 const uid = getUID();
 
@@ -401,35 +417,43 @@ params.get('uid') ||
 sessionStorage.getItem('crockcell_target_uid') ||
 uid;
 
-let selectedPost = null;
+let selectedPost = '';
+
+
+function getString(field){
+
+  if(!field) return '';
+
+  return field.stringValue || '';
+
+}
 
 
 /* =========================
-   FIRESTORE API
+   FIRESTORE REQUEST
 ========================= */
 
-async function api(path, options={}){
+async function request(path,options={}){
 
-  let token = getToken();
+  let token=getToken();
 
-  options.headers = {
+  options.headers={
     ...(options.headers || {}),
     ...(token ? {
       Authorization:'Bearer '+token
     } : {})
   };
 
-  let response =
-    await fetch(
-      `${BASE}/${path}?key=${API_KEY}`,
-      options
-    );
+  let response=await fetch(
+    `${BASE}/${path}?key=${API_KEY}`,
+    options
+  );
 
   if(
-    (response.status === 401 ||
-     response.status === 403) &&
+    (response.status===401 ||
+     response.status===403) &&
     window.CrockCell &&
-    window.CrockCell.refreshToken
+    typeof window.CrockCell.refreshToken==='function'
   ){
 
     try{
@@ -439,20 +463,19 @@ async function api(path, options={}){
 
       if(newToken){
 
-        options.headers.Authorization =
+        options.headers.Authorization=
           'Bearer '+newToken;
 
-        response =
-          await fetch(
-            `${BASE}/${path}?key=${API_KEY}`,
-            options
-          );
+        response=await fetch(
+          `${BASE}/${path}?key=${API_KEY}`,
+          options
+        );
 
       }
 
     }catch(e){
 
-      console.log('Token refresh failed');
+      console.log('Token refresh error',e);
 
     }
 
@@ -464,47 +487,34 @@ async function api(path, options={}){
 
 
 /* =========================
-   FIELD HELPERS
+   USER PROFILE
 ========================= */
 
-function stringValue(field){
-
-  if(!field) return '';
-
-  return field.stringValue || '';
-
-}
-
-function intValue(field){
-
-  if(!field) return 0;
-
-  return Number(field.integerValue || 0);
-
-}
-
-
-/* =========================
-   LOAD USER
-========================= */
-
-async function loadUser(){
+async function loadProfile(){
 
   if(!target){
 
     $('username').textContent='User';
-    $('bio').textContent='Please login first.';
+    $('bio').textContent='Login required';
     return;
 
   }
 
   const response =
-    await api(`users/${target}`);
+    await request(`users/${target}`);
 
   if(!response.ok){
 
-    $('username').textContent='User not found';
-    $('bio').textContent='Profile could not be loaded.';
+    console.log(
+      'Profile error:',
+      response.status
+    );
+
+    $('username').textContent='User';
+
+    $('bio').textContent=
+      'Profile load nahi ho payi.';
+
     return;
 
   }
@@ -512,25 +522,25 @@ async function loadUser(){
   const data =
     await response.json();
 
-  const fields =
+  const f =
     data.fields || {};
 
   $('username').textContent =
-    stringValue(fields.username) ||
-    stringValue(fields.name) ||
+    getString(f.username) ||
+    getString(f.name) ||
     'User';
 
   $('bio').textContent =
-    stringValue(fields.bio) ||
+    getString(f.bio) ||
     'No bio yet';
 
   const photo =
-    stringValue(fields.profilePhoto) ||
-    stringValue(fields.photoURL);
+    getString(f.profilePhoto) ||
+    getString(f.photoURL);
 
   if(photo){
 
-    $('avatar').src = photo;
+    $('avatar').src=photo;
 
   }
 
@@ -538,102 +548,205 @@ async function loadUser(){
 
 
 /* =========================
-   LOAD POSTS
+   DIRECT USER POST QUERY
 ========================= */
 
-async function loadPosts(){
+async function loadUserPosts(){
 
-  $('postGrid').innerHTML =
+  $('postGrid').innerHTML=
     '<div class="loading">Loading posts...</div>';
 
-  const response =
-    await api('posts?pageSize=100');
+  if(!target){
 
-  if(!response.ok){
+    $('posts').textContent='0';
 
-    $('postGrid').innerHTML =
-      '<div class="empty">Posts load nahi ho paaye.</div>';
+    $('postGrid').innerHTML=
+      '<div class="empty">Login required.</div>';
 
     return;
 
   }
 
-  const data =
+  const query={
+
+    structuredQuery:{
+
+      from:[
+        {
+          collectionId:'posts'
+        }
+      ],
+
+      where:{
+
+        fieldFilter:{
+
+          field:{
+            fieldPath:'userId'
+          },
+
+          op:'EQUAL',
+
+          value:{
+            stringValue:target
+          }
+
+        }
+
+      },
+
+      orderBy:[
+
+        {
+          field:{
+            fieldPath:'createdAt'
+          },
+
+          direction:'DESCENDING'
+        }
+
+      ]
+
+    }
+
+  };
+
+
+  let response;
+
+  try{
+
+    response=await fetch(
+      `${BASE}:runQuery?key=${API_KEY}`,
+      {
+        method:'POST',
+
+        headers:{
+          'Content-Type':'application/json',
+
+          ...(getToken()
+            ? {
+                Authorization:
+                'Bearer '+getToken()
+              }
+            : {})
+        },
+
+        body:JSON.stringify(query)
+
+      }
+    );
+
+  }catch(error){
+
+    console.log('Posts request error:',error);
+
+    $('posts').textContent='0';
+
+    $('postGrid').innerHTML=
+      '<div class="empty">Posts load nahi ho paayi.</div>';
+
+    return;
+
+  }
+
+
+  if(!response.ok){
+
+    console.log(
+      'Posts query error:',
+      response.status
+    );
+
+    $('posts').textContent='0';
+
+    $('postGrid').innerHTML=
+      '<div class="empty">Posts load nahi ho paayi.</div>';
+
+    return;
+
+  }
+
+
+  const results =
     await response.json();
 
-  const documents =
-    data.documents || [];
 
-  const userPosts =
-    documents
-      .filter(doc => {
+  const docs =
+    results
+      .filter(x=>x.document)
+      .map(x=>x.document);
 
-        const fields =
-          doc.fields || {};
 
-        return stringValue(fields.userId) === target;
+  /* POST COUNT */
 
-      })
-      .sort((a,b)=>{
+  $('posts').textContent=
+    docs.length;
 
-        const aTime =
-          stringValue(a.fields?.createdAt);
-
-        const bTime =
-          stringValue(b.fields?.createdAt);
-
-        return bTime.localeCompare(aTime);
-
-      });
-
-  $('posts').textContent =
-    userPosts.length;
 
   $('postGrid').innerHTML='';
 
-  if(userPosts.length===0){
 
-    $('postGrid').innerHTML =
+  if(docs.length===0){
+
+    $('postGrid').innerHTML=
       '<div class="empty">Abhi koi post nahi hai.</div>';
 
     return;
 
   }
 
-  userPosts.forEach(doc => {
 
-    const fields =
+  docs.forEach(doc=>{
+
+    const f=
       doc.fields || {};
 
-    const image =
-      stringValue(fields.image) ||
-      stringValue(fields.photoURL);
+    const image=
+      getString(f.image) ||
+      getString(f.photoURL);
 
     if(!image) return;
 
-    const postId =
-      stringValue(fields.postId) ||
+
+    const postId=
+      getString(f.postId) ||
       doc.name.split('/').pop();
 
-    const box =
+
+    const caption=
+      getString(f.caption);
+
+
+    const box=
       document.createElement('div');
 
     box.className='post';
 
-    const img =
+
+    const img=
       document.createElement('img');
 
     img.src=image;
     img.alt='Post';
 
+
     box.appendChild(img);
 
-    box.onclick =
-      ()=>openPost(
-        postId,
-        image,
-        stringValue(fields.caption)
-      );
+
+    box.onclick=()=>{
+
+      selectedPost=postId;
+
+      $('modalImage').src=image;
+
+      $('modalCaption').textContent=
+        caption || '';
+
+      $('postModal').style.display='flex';
+
+    };
+
 
     $('postGrid').appendChild(box);
 
@@ -650,68 +763,62 @@ async function loadFollowCounts(){
 
   try{
 
-    const followerQuery = {
+    const token=getToken();
+
+
+    const makeQuery=(field,value)=>({
 
       structuredQuery:{
 
         from:[
-          {collectionId:'follows'}
+          {
+            collectionId:'follows'
+          }
         ],
 
         where:{
           fieldFilter:{
             field:{
-              fieldPath:'followingId'
+              fieldPath:field
             },
             op:'EQUAL',
             value:{
-              stringValue:target
+              stringValue:value
             }
           }
         }
 
       }
 
-    };
+    });
 
-    const followingQuery = {
 
-      structuredQuery:{
-
-        from:[
-          {collectionId:'follows'}
-        ],
-
-        where:{
-          fieldFilter:{
-            field:{
-              fieldPath:'followerId'
-            },
-            op:'EQUAL',
-            value:{
-              stringValue:target
-            }
-          }
-        }
-
-      }
-
-    };
-
-    const [followersRes,followingRes] =
+    const [followersRes,followingRes]=
       await Promise.all([
 
         fetch(
           `${BASE}:runQuery?key=${API_KEY}`,
           {
             method:'POST',
+
             headers:{
-              'Content-Type':'application/json',
-              ...(getToken() ? {
-                Authorization:'Bearer '+getToken()
-              } : {})
+              'Content-Type':
+              'application/json',
+
+              ...(token
+                ? {
+                    Authorization:
+                    'Bearer '+token
+                  }
+                : {})
             },
-            body:JSON.stringify(followerQuery)
+
+            body:JSON.stringify(
+              makeQuery(
+                'followingId',
+                target
+              )
+            )
           }
         ),
 
@@ -719,37 +826,57 @@ async function loadFollowCounts(){
           `${BASE}:runQuery?key=${API_KEY}`,
           {
             method:'POST',
+
             headers:{
-              'Content-Type':'application/json',
-              ...(getToken() ? {
-                Authorization:'Bearer '+getToken()
-              } : {})
+              'Content-Type':
+              'application/json',
+
+              ...(token
+                ? {
+                    Authorization:
+                    'Bearer '+token
+                  }
+                : {})
             },
-            body:JSON.stringify(followingQuery)
+
+            body:JSON.stringify(
+              makeQuery(
+                'followerId',
+                target
+              )
+            )
           }
         )
 
       ]);
 
-    const followers =
+
+    const followers=
       followersRes.ok
       ? await followersRes.json()
       : [];
 
-    const following =
+
+    const following=
       followingRes.ok
       ? await followingRes.json()
       : [];
 
-    $('followers').textContent =
+
+    $('followers').textContent=
       followers.filter(x=>x.document).length;
 
-    $('following').textContent =
+
+    $('following').textContent=
       following.filter(x=>x.document).length;
+
 
   }catch(error){
 
-    console.log('Follow count error:',error);
+    console.log(
+      'Follow count error:',
+      error
+    );
 
   }
 
@@ -757,132 +884,126 @@ async function loadFollowCounts(){
 
 
 /* =========================
-   PROFILE BUTTONS
+   BUTTONS
 ========================= */
 
 function setupButtons(){
 
-  if(uid === target){
+  if(uid && target && uid===target){
 
-    $('mainAction').textContent =
+    $('mainAction').textContent=
       'Edit Profile';
 
-    $('mainAction').onclick =
-      ()=>location.href='edit-profile.html';
+    $('mainAction').onclick=()=>{
+      location.href='edit-profile.html';
+    };
 
     $('message').style.display='none';
 
   }else{
 
-    $('mainAction').textContent =
+    $('mainAction').textContent=
       'Follow';
 
-    $('mainAction').onclick =
-      ()=>alert(
+    $('mainAction').onclick=()=>{
+      alert(
         'Follow system next update me connect karenge.'
       );
+    };
 
     $('message').style.display='block';
 
-    $('message').onclick =
-      ()=>location.href=
+    $('message').onclick=()=>{
+      location.href=
         `messages.html?uid=${encodeURIComponent(target)}`;
+    };
 
   }
 
 }
-
-
-/* =========================
-   POST MODAL
-========================= */
-
-function openPost(id,image,caption){
-
-  selectedPost=id;
-
-  $('modalImage').src=image;
-
-  $('modalCaption').textContent =
-    caption || '';
-
-  $('postModal').style.display='flex';
-
-  $('deletePost').style.display =
-    uid===target
-    ? 'block'
-    : 'none';
-
-}
-
-
-$('closeModal').onclick =
-  ()=>{
-    $('postModal').style.display='none';
-  };
-
-
-$('postModal').onclick =
-  e=>{
-
-    if(e.target === $('postModal')){
-
-      $('postModal').style.display='none';
-
-    }
-
-  };
 
 
 /* =========================
    DELETE POST
 ========================= */
 
-$('deletePost').onclick =
-async ()=>{
+$('deletePost').onclick=async()=>{
 
   if(!selectedPost) return;
 
-  if(uid !== target){
+  if(uid!==target){
 
-    alert('Aap sirf apni post delete kar sakte ho.');
+    alert(
+      'Aap sirf apni post delete kar sakte ho.'
+    );
 
     return;
 
   }
 
-  const ok =
-    confirm('Kya aap ye post delete karna chahte ho?');
 
-  if(!ok) return;
+  const confirmDelete=
+    confirm(
+      'Kya aap ye post delete karna chahte ho?'
+    );
+
+  if(!confirmDelete) return;
+
 
   try{
 
-    const response =
-      await api(
+    const response=
+      await request(
         `posts/${selectedPost}`,
         {
           method:'DELETE'
         }
       );
 
+
     if(!response.ok){
 
-      alert('Post delete nahi hui.');
+      alert(
+        'Post delete nahi hui.'
+      );
 
       return;
 
     }
 
+
     $('postModal').style.display='none';
 
-    await loadPosts();
+    await loadUserPosts();
+
 
   }catch(error){
 
     console.log(error);
 
-    alert('Post delete karte waqt error aaya.');
+    alert(
+      'Post delete karte waqt error aaya.'
+    );
+
+  }
+
+};
+
+
+/* =========================
+   MODAL
+========================= */
+
+$('closeModal').onclick=()=>{
+  $('postModal').style.display='none';
+};
+
+
+$('postModal').onclick=(event)=>{
+
+  if(event.target===$('postModal')){
+
+    $('postModal').style.display='none';
 
   }
 
@@ -893,32 +1014,46 @@ async ()=>{
    SETTINGS
 ========================= */
 
-$('settings').onclick =
-  ()=>{
-    location.href='settings.html';
-  };
+$('settings').onclick=()=>{
+  location.href='settings.html';
+};
 
 
 /* =========================
    START
 ========================= */
 
-async function startProfile(){
+async function start(){
 
-  await loadUser();
+  console.log(
+    'CROCKCELL Profile UID:',
+    uid
+  );
+
+  console.log(
+    'CROCKCELL Target UID:',
+    target
+  );
+
+
+  await loadProfile();
 
   await Promise.all([
-    loadPosts(),
+
+    loadUserPosts(),
+
     loadFollowCounts()
+
   ]);
 
   setupButtons();
 
 }
 
-startProfile();
+
+start();
 
 </script>
 
 </body>
-    </html>
+</html>
